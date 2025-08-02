@@ -459,8 +459,8 @@ const generateExtendedHighlight = (title: string) => {
   return `This article, "${title}", delves deep into the latest advancements and implications of its core subject. It provides a comprehensive overview, exploring both the opportunities and challenges presented by this rapidly evolving field. Experts weigh in on future trends, offering valuable insights for professionals and enthusiasts alike. The piece highlights key innovations, discusses their potential impact on various industries, and offers a nuanced perspective on the ethical considerations involved. A must-read for anyone looking to stay informed on cutting-edge developments.`
 }
 
-// Helper to generate a random comment with replies
-const generateRandomComment = (depth = 0): Comment => {
+// Helper to generate a deterministic comment with replies
+const generateRandomComment = (depth = 0, seed: number): Comment => {
   const authors = ["Alice", "Bob", "Charlie", "Diana", "Eve", "Frank"]
   const texts = [
     "Great article! Very insightful.",
@@ -474,18 +474,24 @@ const generateRandomComment = (depth = 0): Comment => {
   ]
   const timeAgoes = ["just now", "2 hours ago", "5 hours ago", "1 day ago", "2 days ago", "1 week ago"]
 
-  const comment: Comment = {
-    id: `c${Date.now()}-${Math.random()}`,
-    author: authors[Math.floor(Math.random() * authors.length)],
-    text: texts[Math.floor(Math.random() * texts.length)],
-    timeAgo: timeAgoes[Math.floor(Math.random() * timeAgoes.length)],
-    score: Math.floor(Math.random() * 50) - 10, // Scores can be negative
+  // Simple deterministic random function
+  const seededRandom = (max: number) => {
+    const x = Math.sin(seed) * 10000
+    return Math.floor((x - Math.floor(x)) * max)
   }
 
-  if (depth < 2 && Math.random() > 0.5) {
+  const comment: Comment = {
+    id: `c${seed}-${depth}`,
+    author: authors[seededRandom(authors.length)],
+    text: texts[seededRandom(texts.length)],
+    timeAgo: timeAgoes[seededRandom(timeAgoes.length)],
+    score: seededRandom(50) - 10, // Scores can be negative
+  }
+
+  if (depth < 2 && seededRandom(2) > 0) {
     // Max 2 levels of replies for simplicity
-    const numReplies = Math.floor(Math.random() * 3) // 0-2 replies
-    comment.replies = Array.from({ length: numReplies }, () => generateRandomComment(depth + 1))
+    const numReplies = seededRandom(3) // 0-2 replies
+    comment.replies = Array.from({ length: numReplies }, (_, i) => generateRandomComment(depth + 1, seed + i + 1))
   }
 
   return comment
@@ -513,19 +519,25 @@ export const allNewsItems: NewsItem[] = Array.from({ length: 1000 }, (_, i) => {
     // Every 5th item is sponsored
     return generateSponsoredItem(i)
   } else {
+    // Simple deterministic random function
+    const seededRandom = (max: number, seed: number) => {
+      const x = Math.sin(seed) * 10000
+      return Math.floor((x - Math.floor(x)) * max)
+    }
+
     return {
       id: `${i + 1}`,
-      title: techTitles[Math.floor(Math.random() * techTitles.length)],
+      title: techTitles[seededRandom(techTitles.length, i)],
       domain: ["appwrite.io", "www.bbc.co.uk/news", "techcrunch.com", "github.com", "stackoverflow.com", "www.theverge.com", "arstechnica.com"][
-        Math.floor(Math.random() * 7)
+        seededRandom(7, i + 1000)
       ],
-      daysAgo: `${Math.floor(Math.random() * 30)} days ago`,
-      score: Math.floor(Math.random() * 1000) + 1,
-      icon: availableIcons[Math.floor(Math.random() * availableIcons.length)],
-      bgColorClass: backgroundColors[Math.floor(Math.random() * backgroundColors.length)],
-      shapeClass: shapes[Math.floor(Math.random() * shapes.length)],
-      extendedHighlight: generateExtendedHighlight(techTitles[Math.floor(Math.random() * techTitles.length)]),
-      comments: Array.from({ length: Math.floor(Math.random() * 5) + 1 }, () => generateRandomComment()),
+      daysAgo: `${seededRandom(30, i + 2000)} days ago`,
+      score: seededRandom(1000, i + 3000) + 1,
+      icon: availableIcons[seededRandom(availableIcons.length, i + 4000)],
+      bgColorClass: backgroundColors[seededRandom(backgroundColors.length, i + 5000)],
+      shapeClass: shapes[seededRandom(shapes.length, i + 6000)],
+      extendedHighlight: generateExtendedHighlight(techTitles[seededRandom(techTitles.length, i + 7000)]),
+      comments: Array.from({ length: seededRandom(5, i + 8000) + 1 }, (_, j) => generateRandomComment(0, i * 1000 + j)),
       isSponsored: false, // Explicitly mark as not sponsored
     }
   }
