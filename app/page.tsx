@@ -1,5 +1,5 @@
 "use client"
-import { ChevronUp, ChevronDown } from "lucide-react"
+import { ChevronUp, ChevronDown, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect, useCallback, useRef } from "react"
 import Image from "next/image"
@@ -13,6 +13,7 @@ import { handleVote } from "@/lib/voteHandler" // Declare handleVote variable
 import { SponsoredAd } from "@/components/sponsored-ad" // Import SponsoredAd
 import { SearchAndFilter } from "@/components/search-and-filter" // Import SearchAndFilter
 import { Favicon } from "@/components/favicon" // Import Favicon component
+import { MobileNavigation } from "@/components/mobile-navigation" // Import MobileNavigation
 
 // --- Constants for virtualization ---
 // This height should accurately represent one news item including its bottom margin.
@@ -26,6 +27,7 @@ export default function RefetchHomePage() {
   const [paddingTop, setPaddingTop] = useState(0)
   const [paddingBottom, setPaddingBottom] = useState(0)
   const [logoLoaded, setLogoLoaded] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Ref to measure the position of the news list within the document
   const newsListContainerRef = useRef<HTMLDivElement>(null)
@@ -97,8 +99,17 @@ export default function RefetchHomePage() {
     <div className="min-h-screen bg-gray-100 font-body">
       {/* Header - Fixed to Top */}
       <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center sm:justify-between px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
+            {/* Hamburger Menu Button - Only visible on mobile */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden p-2 hover:bg-[#5d2bc4] rounded-lg transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5 text-white" />
+            </button>
+            
             <Image 
               src="/logo.png" 
               alt="Refetch Logo" 
@@ -110,12 +121,11 @@ export default function RefetchHomePage() {
             />
           </div>
 
-          {/* Removed search bar from header */}
-          <div className="flex items-center gap-2 mt-2 sm:mt-0">
+          {/* Sign In Button - Always on the right */}
+          <div className="flex items-center gap-2">
             <Button variant="ghost" className="text-white hover:bg-[#5d2bc4] h-8 px-3 text-sm">
               Sign In
             </Button>
-            {/* Removed separator and Sign Up button */}
           </div>
         </div>
       </header>
@@ -127,7 +137,7 @@ export default function RefetchHomePage() {
 
         {/* Main Content and Right Sidebar */}
 
-        <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-0 lg:pt-4 mt-0 lg:mt-1">
+        <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-0 lg:mt-1">
           {/* Main Content */}
           <main className="flex-1 space-y-6 min-w-0">
             {/* Stories Carousel */}
@@ -223,18 +233,27 @@ export default function RefetchHomePage() {
           </main>
 
           {/* Right Sidebar and Sponsored Ad - now wrapped in a single sticky aside */}
-          <aside className="w-full sm:w-64 lg:w-64 sticky top-16 h-fit flex flex-col gap-4">
+          <aside className="hidden lg:block w-full sm:w-64 lg:w-64 sticky top-16 h-fit">
             <RightSidebar />
-            <SponsoredAd
-              logoUrl="https://appwrite.io/images/logos/logo.svg"
-              logoAlt="Appwrite Logo"
-              title="Appwrite Cloud"
-              description="Build faster with our fully managed backend platform."
-              linkUrl="https://appwrite.io"
-            />
+            <div className="mt-6">
+              <SponsoredAd
+                logoUrl="https://appwrite.io/images/logos/logo.svg"
+                logoAlt="Appwrite Logo"
+                title="Appwrite Cloud"
+                description="Build faster with our fully managed backend platform."
+                linkUrl="https://appwrite.io"
+              />
+            </div>
           </aside>
         </div>
       </div>
+      
+      {/* Mobile Navigation */}
+      <MobileNavigation 
+        isOpen={mobileMenuOpen} 
+        onClose={() => setMobileMenuOpen(false)} 
+      />
+      
       <BackToTopButton />
     </div>
   )

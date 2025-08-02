@@ -13,7 +13,7 @@ export function RightSidebar() {
   ]
 
   return (
-    <div className="bg-white rounded-lg pb-2">
+    <div className="bg-white rounded-lg pb-4">
       <h3 className="font-normal text-gray-900 mb-2 px-4 pt-4 font-heading">Trending Now</h3>
       {/* Separator between title and first item */}
       <div className="h-px bg-gray-100 my-1" />

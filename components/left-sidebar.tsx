@@ -6,7 +6,7 @@ import Image from "next/image"
 
 export function LeftSidebar() {
   return (
-    <aside className="w-full sm:w-56 lg:w-56 sticky top-16 h-fit">
+    <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-16 h-fit">
       <div className="p-4 mb-7">
         <div className="space-y-1">
           <div className="flex items-center justify-between p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer h-10">
