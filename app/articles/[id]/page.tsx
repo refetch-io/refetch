@@ -44,7 +44,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center sm:justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
             <Link href="/" passHref>
-              <Image src="/logo.png" alt="Refetch Logo" width={100} height={32} className="rounded cursor-pointer" />
+              <Image src="/logo.png" alt="Refetch Logo" width={102} height={23} className="rounded cursor-pointer" style={{ width: '102px', height: '23px' }} />
             </Link>
           </div>
 

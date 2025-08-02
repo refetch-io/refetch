@@ -98,7 +98,7 @@ export default function RefetchHomePage() {
       <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center sm:justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Refetch Logo" width={100} height={32} className="rounded" />
+            <Image src="/logo.png" alt="Refetch Logo" width={102} height={23} className="rounded" style={{ width: '102px', height: '23px' }} />
           </div>
 
           {/* Removed search bar from header */}
@@ -117,7 +117,8 @@ export default function RefetchHomePage() {
         <LeftSidebar />
 
         {/* Main Content and Right Sidebar */}
-        <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 pt-0 lg:pt-4 mt-0 lg:mt-10 min-w-0">
+
+        <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-0 lg:pt-4 mt-0 lg:mt-1">
           {/* Main Content */}
           <main className="flex-1 space-y-6 min-w-0">
             {/* Stories Carousel */}
