@@ -8,7 +8,6 @@ export function LeftSidebar() {
   return (
     <aside className="w-full sm:w-56 lg:w-56 sticky top-16 h-fit">
       <div className="p-4 mb-7">
-
         <div className="space-y-1">
           <div className="flex items-center justify-between p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer h-10">
             <div className="flex items-center gap-3">
@@ -54,10 +53,13 @@ export function LeftSidebar() {
           <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
         </div>
         {/* Short description added here */}
-        <div className="text-xs text-gray-500 mb-4 mt-2 leading-4">
+        <div className="text-xs text-gray-500 mb-6 mt-2 leading-5">
           Your daily dose of curated tech news, without the noise. We're all about transparency and community-driven
           content.
         </div>
+
+        {/* Separator */}
+        <div className="h-px bg-gray-200 mb-6 mt-6 opacity-50"></div>
 
         <div className="text-xs text-gray-500 mb-3 leading-4">Copyright © 2025 Refetch</div>
 

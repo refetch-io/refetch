@@ -10,7 +10,7 @@ import { BackToTopButton } from "@/components/back-to-top-button"
 import { StoriesCarousel } from "@/components/stories-carousel" // Import the new component
 import { allNewsItems, type NewsItem } from "@/lib/data" // Import allNewsItems and NewsItem from data.ts
 import { handleVote } from "@/lib/voteHandler" // Declare handleVote variable
-import { AdPlaceholder } from "@/components/ad-placeholder" // Import AdPlaceholder
+import { SponsoredAd } from "@/components/sponsored-ad" // Import SponsoredAd
 import { SearchAndFilter } from "@/components/search-and-filter" // Import SearchAndFilter
 import { Favicon } from "@/components/favicon" // Import Favicon component
 
@@ -25,6 +25,7 @@ export default function RefetchHomePage() {
   const [visibleItems, setVisibleItems] = useState<NewsItem[]>([])
   const [paddingTop, setPaddingTop] = useState(0)
   const [paddingBottom, setPaddingBottom] = useState(0)
+  const [logoLoaded, setLogoLoaded] = useState(false)
 
   // Ref to measure the position of the news list within the document
   const newsListContainerRef = useRef<HTMLDivElement>(null)
@@ -98,7 +99,15 @@ export default function RefetchHomePage() {
       <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center sm:justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Refetch Logo" width={102} height={23} className="rounded" style={{ width: '102px', height: '23px' }} />
+            <Image 
+              src="/logo.png" 
+              alt="Refetch Logo" 
+              width={102} 
+              height={23} 
+              className={`rounded transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+              style={{ width: '102px', height: '23px' }}
+              onLoad={() => setLogoLoaded(true)}
+            />
           </div>
 
           {/* Removed search bar from header */}
@@ -129,7 +138,7 @@ export default function RefetchHomePage() {
 
             {/* Virtualized News Items List */}
             {/* The ref is crucial here to measure the list's position from the top of the document */}
-            <div ref={newsListContainerRef} className="news-list-container">
+            <div ref={newsListContainerRef} className="news-list-container min-h-[600px]">
               {/* This div creates the virtualized empty space above the visible items */}
               <div style={{ height: paddingTop }} />
 
@@ -213,10 +222,16 @@ export default function RefetchHomePage() {
             </div>
           </main>
 
-          {/* Right Sidebar and Ad Placeholder - now wrapped in a single sticky aside */}
+          {/* Right Sidebar and Sponsored Ad - now wrapped in a single sticky aside */}
           <aside className="w-full sm:w-64 lg:w-64 sticky top-16 h-fit flex flex-col gap-4">
             <RightSidebar />
-            <AdPlaceholder />
+            <SponsoredAd
+              logoUrl="https://appwrite.io/images/logos/logo.svg"
+              logoAlt="Appwrite Logo"
+              title="Appwrite Cloud"
+              description="Build faster with our fully managed backend platform."
+              linkUrl="https://appwrite.io"
+            />
           </aside>
         </div>
       </div>
