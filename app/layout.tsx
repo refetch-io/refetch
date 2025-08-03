@@ -20,6 +20,7 @@ export default function RootLayout({
       <head>
         <title>Refetch</title>
         <link rel="icon" href="/favicon.png" />
+        <script defer data-domain="refetch.io" src="https://plausible.io/js/script.js"></script>
         <style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};
