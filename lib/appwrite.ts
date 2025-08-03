@@ -11,15 +11,8 @@ export const avatars = new Avatars(client);
 // Helper function to get favicon URL for a domain
 export const getFaviconUrl = (domain: string): string => {
   try {
-    // Clean the domain - remove protocol, www, and any paths
-    let cleanDomain = domain.replace(/^https?:\/\//, ''); // Remove protocol
-    cleanDomain = cleanDomain.replace(/^www\./, ''); // Remove www
-    cleanDomain = cleanDomain.split('/')[0]; // Remove any paths
-    cleanDomain = cleanDomain.split('?')[0]; // Remove query strings
-    cleanDomain = cleanDomain.split('#')[0]; // Remove fragments
-    
-    // Construct full URL with protocol for Appwrite avatars service
-    const fullUrl = `https://${cleanDomain}`;
+    // Keep domain as is, just add protocol if missing
+    const fullUrl = domain.startsWith('http') ? domain : `https://${domain}`;
     
     // Return the favicon URL using the full URL
     return avatars.getFavicon(fullUrl);

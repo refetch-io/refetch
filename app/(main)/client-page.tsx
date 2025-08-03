@@ -375,6 +375,11 @@ const getIconComponent = (iconName: string) => {
   return iconMap[iconName] || Globe // Fallback to Globe if icon not found
 }
 
+// Helper function to clean domain for display (remove www prefix)
+const cleanDomainForDisplay = (domain: string) => {
+  return domain.replace(/^www\./, '')
+}
+
 // Rotating ad copy component
 function RotatingAdCopy() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -569,7 +574,7 @@ export function ClientPage({ initialPosts }: ClientPageProps) {
                     </h3>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <Favicon domain={item.domain} size={16} className="rounded" />
-                      <span>{item.domain}</span>
+                      <span>{cleanDomainForDisplay(item.domain)}</span>
                       {!item.isSponsored && item.daysAgo && (
                         <>
                           <span>•</span>
