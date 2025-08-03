@@ -46,13 +46,13 @@ export default function MainLayout({
             
             {/* Tagline */}
             <span className="text-white/80 text-sm font-thin hidden sm:block">
-              Open-source alternative to YC controlled HN 
+              Open-source alternative to YC-controlled HN 
             </span>
           </div>
 
           {/* Sign In Button - Always on the right */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" className="text-white hover:bg-[#5d2bc4] h-8 px-3 text-sm">
+            <Button variant="ghost" className="text-white bg-[#5d2bc4] hover:bg-white/10 hover:text-white h-8 px-3 text-sm">
               Sign In
             </Button>
           </div>

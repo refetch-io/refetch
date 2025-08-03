@@ -8,16 +8,16 @@ export function RightSidebar() {
   
   const trendingTopics = [
     "AI",
-    "Cloud Computing",
-    "Web Development",
+    "CloudComputing",
+    "WebDevelopment",
     "Cybersecurity",
-    "Data Science",
-    "Open Source",
+    "DataScience",
+    "OpenSource",
     "DevOps",
-    "Machine Learning",
+    "MachineLearning",
   ]
 
-  // Sample data for the chart - memoized to prevent regeneration on scroll
+  // Sample data for the chart - deterministic to prevent hydration issues
   const chartData = useMemo(() => {
     if (selectedTab === "24h") {
       return Array.from({ length: 24 }, (_, i) => {
@@ -28,9 +28,11 @@ export function RightSidebar() {
         if (hour >= 19 && hour <= 22) baseVisitors = 45 // Evening
         if (hour >= 0 && hour <= 6) baseVisitors = 15 // Night
         
+        // Use deterministic values based on hour
+        const variation = (hour * 7 + 13) % 20 // Deterministic variation
         return {
           hour: i,
-          visitors: Math.floor(Math.random() * 20) + baseVisitors
+          visitors: baseVisitors + variation
         }
       })
     } else {
@@ -42,9 +44,11 @@ export function RightSidebar() {
         if (dayOfWeek === 0 || dayOfWeek === 6) baseVisitors = 80 // Weekend
         if (dayOfWeek >= 1 && dayOfWeek <= 5) baseVisitors = 150 // Weekday
         
+        // Use deterministic values based on day
+        const variation = (day * 11 + 17) % 50 // Deterministic variation
         return {
           day: i + 1,
-          visitors: Math.floor(Math.random() * 50) + baseVisitors
+          visitors: baseVisitors + variation
         }
       })
     }
@@ -107,16 +111,16 @@ export function RightSidebar() {
       </div>
 
       {/* Trending Section */}
-      <div className="bg-white rounded-lg pb-4">
-        <h3 className="font-normal text-gray-900 mb-2 px-4 pt-4 font-heading">Trending Now</h3>
+      <div className="bg-white rounded-lg pb-2">
+        <h3 className="font-normal text-gray-900 mb-2 px-4 pt-2 font-heading">Trending Now</h3>
         {/* Separator between title and first item */}
         <div className="h-px bg-gray-100 my-1" />
         <div className="space-y-0">
           {trendingTopics.map((topic, index) => (
             <div key={topic}>
-              <div className="text-sm text-gray-700 py-1 px-4">
-                <p className="font-light">#{topic}</p> {/* Added # and font-light to the topic */}
-              </div>
+                          <div className="text-sm text-gray-700 py-1 px-4">
+              <p className="font-light"># {topic}</p> {/* Added # and font-light to the topic */}
+            </div>
               {index < trendingTopics.length - 1 && <div className="h-px bg-gray-100 my-1" />}
             </div>
           ))}

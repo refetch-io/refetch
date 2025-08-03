@@ -68,8 +68,7 @@ export function LeftSidebar() {
         </div>
         {/* Short description added here */}
         <div className="text-xs text-gray-500 mb-2 leading-5">
-          Your daily dose of curated tech news, without the noise. We're all about transparency and community-driven
-          content.
+          Your daily drop of curated tech news - signal over noise. Transparent. Community-driven.
         </div>
 
         {/* Separator */}

@@ -23,8 +23,8 @@ export function SponsoredAd({
   description,
   linkUrl,
   linkText = "Learn more",
-  backgroundColor = "bg-transparent",
-  borderColor = "border border-gray-200",
+  backgroundColor = "bg-[#ededed]",
+  borderColor = "",
   textColor = "text-gray-700",
   accentColor = "text-blue-500"
 }: SponsoredAdProps) {
