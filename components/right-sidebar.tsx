@@ -2,15 +2,13 @@
 
 import { BarChart3 } from "lucide-react"
 import { useState, useMemo } from "react"
+import { StatsChart } from "@/components/ui/chart"
 
 export function RightSidebar() {
   const [selectedTab, setSelectedTab] = useState("24h")
   
   const trendingTopics = [
     "AI",
-    "CloudComputing",
-    "WebDevelopment",
-    "Cybersecurity",
     "DataScience",
     "OpenSource",
     "DevOps",
@@ -54,26 +52,18 @@ export function RightSidebar() {
     }
   }, [selectedTab])
 
-  const maxValue = Math.max(...chartData.map(d => d.visitors))
-
   return (
     <div className="space-y-6">
       {/* Chart and Tabs Group */}
       <div className="space-y-1">
         {/* Chart Card */}
-        <div className="bg-white rounded-lg px-2 pt-2" style={{ paddingBottom: '5px' }}>
-          <div className="flex items-end gap-1 h-10">
-            {chartData.map((data, index) => (
-              <div
-                key={index}
-                className="flex-1 bg-[#4a4f59] rounded-t-sm"
-                style={{
-                  height: `${(data.visitors / maxValue) * 100}%`,
-                  minHeight: '4px'
-                }}
-              />
-            ))}
+        <div className="bg-white rounded-lg p-1">
+          <h3 className="font-normal text-gray-900 mb-2 px-1 pt-1 font-heading">Stats</h3>
+          <div className="h-px bg-gray-100 mb-2 -mx-1" />
+          <div className="text-xs text-gray-600 px-1 py-0.5 font-medium mb-5">
+            {selectedTab === "24h" ? "Last 24 Hours" : "Last 30 Days"}
           </div>
+          <StatsChart data={chartData} selectedTab={selectedTab} />
         </div>
 
         {/* Tab Buttons */}

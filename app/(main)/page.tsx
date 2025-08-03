@@ -15,10 +15,13 @@ import { Favicon } from "@/components/favicon" // Import Favicon component
 // This height should accurately represent one news item including its bottom margin.
 // Adjust if item design changes significantly.
 const ESTIMATED_ITEM_HEIGHT = 75 // px (e.g., 60px for content + 15px for mb-4)
-const TOTAL_ITEMS_COUNT = 1000 // Generate a large pool of items for virtualization
+const MAX_ITEMS_DISPLAY = 50 // Limit the number of items displayed on the main page
 const BUFFER_ITEMS = 10 // Number of items to render above and below the viewport
 
 export default function RefetchHomePage() {
+  // Limit the items to the first 50
+  const limitedNewsItems = allNewsItems.slice(0, MAX_ITEMS_DISPLAY)
+  
   const [visibleItems, setVisibleItems] = useState<NewsItem[]>([])
   const [paddingTop, setPaddingTop] = useState(0)
   const [paddingBottom, setPaddingBottom] = useState(0)
@@ -44,16 +47,16 @@ export default function RefetchHomePage() {
     const lastVisibleIndex = Math.ceil((adjustedScrollTop + viewportHeight) / ESTIMATED_ITEM_HEIGHT)
 
     const newStartIndex = Math.max(0, firstVisibleIndex - BUFFER_ITEMS)
-    const newEndIndex = Math.min(allNewsItems.length, lastVisibleIndex + BUFFER_ITEMS)
+    const newEndIndex = Math.min(limitedNewsItems.length, lastVisibleIndex + BUFFER_ITEMS)
 
     // Use a temporary object on the ref to store previous indices for comparison
     // This avoids adding startIndex/endIndex to useCallback dependencies, preventing infinite loops
     const prevIndices = (container as any)._virtualizationIndices || { startIndex: -1, endIndex: -1 }
 
     if (newStartIndex !== prevIndices.startIndex || newEndIndex !== prevIndices.endIndex) {
-      setVisibleItems(allNewsItems.slice(newStartIndex, newEndIndex))
+      setVisibleItems(limitedNewsItems.slice(newStartIndex, newEndIndex))
       setPaddingTop(newStartIndex * ESTIMATED_ITEM_HEIGHT)
-      setPaddingBottom((allNewsItems.length - newEndIndex) * ESTIMATED_ITEM_HEIGHT)
+      setPaddingBottom((limitedNewsItems.length - newEndIndex) * ESTIMATED_ITEM_HEIGHT)
 
       // Store current indices for next comparison
       ;(container as any)._virtualizationIndices = {
@@ -61,7 +64,7 @@ export default function RefetchHomePage() {
         endIndex: newEndIndex,
       }
     }
-  }, [allNewsItems]) // allNewsItems is stable due to useState initialization
+  }, [limitedNewsItems]) // limitedNewsItems is stable due to slice operation
 
   useEffect(() => {
     // Initial update on mount
@@ -173,6 +176,15 @@ export default function RefetchHomePage() {
                         <>
                           <span>•</span>
                           <span>{item.daysAgo}</span>
+                        </>
+                      )}
+                      {/* Show author and comment count for non-sponsored items */}
+                      {!item.isSponsored && (
+                        <>
+                          <span>•</span>
+                          <span>{item.author}</span>
+                          <span>•</span>
+                          <span>{item.comments.length} comments</span>
                         </>
                       )}
                     </div>

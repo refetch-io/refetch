@@ -80,6 +80,15 @@ export default function ThreadPage({ params }: ThreadPageProps) {
                       <span>{article.daysAgo}</span>
                     </>
                   )}
+                  {/* Show author and comment count for non-sponsored items */}
+                  {!article.isSponsored && (
+                    <>
+                      <span>•</span>
+                      <span>{article.author}</span>
+                      <span>•</span>
+                      <span>{article.comments.length} comments</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

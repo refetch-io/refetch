@@ -196,6 +196,7 @@ export interface NewsItem {
   shapeClass: string
   extendedHighlight: string
   comments: Comment[]
+  author: string
   isSponsored?: boolean // Added isSponsored flag
 }
 
@@ -510,6 +511,7 @@ const generateSponsoredItem = (index: number): NewsItem => {
     shapeClass: "rounded-md",
     extendedHighlight: `This is a sponsored message: ${title}. Click to learn more about how this product can help you.`,
     comments: [], // No comments for sponsored items
+    author: "Sponsored Content",
     isSponsored: true,
   }
 }
@@ -525,6 +527,8 @@ export const allNewsItems: NewsItem[] = Array.from({ length: 1000 }, (_, i) => {
       return Math.floor((x - Math.floor(x)) * max)
     }
 
+    const authors = ["sarah_dev", "mike_tech", "alex_coder", "emma_ai", "david_cloud", "lisa_web", "james_data", "maria_sec", "tom_ops", "rachel_ux"]
+    
     return {
       id: `${i + 1}`,
       title: techTitles[seededRandom(techTitles.length, i)],
@@ -538,6 +542,7 @@ export const allNewsItems: NewsItem[] = Array.from({ length: 1000 }, (_, i) => {
       shapeClass: shapes[seededRandom(shapes.length, i + 6000)],
       extendedHighlight: generateExtendedHighlight(techTitles[seededRandom(techTitles.length, i + 7000)]),
       comments: Array.from({ length: seededRandom(5, i + 8000) + 1 }, (_, j) => generateRandomComment(0, i * 1000 + j)),
+      author: authors[seededRandom(authors.length, i + 9000)],
       isSponsored: false, // Explicitly mark as not sponsored
     }
   }

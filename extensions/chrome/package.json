@@ -1,0 +1,22 @@
+{
+  "name": "refetch-new-tab-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension that sets refetch.io as the new tab page",
+  "main": "newtab.html",
+  "scripts": {
+    "generate-icons": "node generate-icons.js",
+    "build": "echo 'Extension is ready to load in Chrome'",
+    "test": "echo 'Open chrome://extensions/ and load the chrome-extension folder'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "new-tab",
+    "refetch",
+    "browser-extension"
+  ],
+  "author": "Refetch Team",
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^21.0.0"
+  }
+} 
