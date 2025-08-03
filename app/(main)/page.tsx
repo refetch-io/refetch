@@ -181,10 +181,10 @@ export default function RefetchHomePage() {
                       {/* Show author and comment count for non-sponsored items */}
                       {!item.isSponsored && (
                         <>
-                          <span>•</span>
-                          <span>{item.author}</span>
-                          <span>•</span>
-                          <span>{item.comments.length} comments</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="hidden sm:inline">{item.author}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span className="hidden sm:inline">{item.comments.length} comments</span>
                         </>
                       )}
                     </div>
