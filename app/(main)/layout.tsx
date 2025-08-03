@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { LeftSidebar } from "@/components/left-sidebar"
 import { BackToTopButton } from "@/components/back-to-top-button"
 import { MobileNavigation } from "@/components/mobile-navigation"
+import { BrowserExtensionCTA } from "@/components/browser-extension-cta"
 import { useState } from "react"
 
 export default function MainLayout({
@@ -19,7 +20,7 @@ export default function MainLayout({
     <div className="min-h-screen bg-gray-100 font-body">
       {/* Header - Fixed to Top */}
       <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto flex items-center justify-between pr-4 sm:pr-6">
           <div className="flex items-center gap-3">
             {/* Hamburger Menu Button - Only visible on mobile */}
             <button
@@ -59,8 +60,13 @@ export default function MainLayout({
         </div>
       </header>
 
+      {/* Browser Extension CTA - Above all sections */}
+      <div className="max-w-7xl mx-auto pr-4 sm:pr-6 pt-[60px]">
+        <BrowserExtensionCTA />
+      </div>
+
       {/* Main content wrapper with padding to account for fixed header */}
-      <div className="max-w-7xl mx-auto flex flex-wrap gap-4 lg:gap-6 px-4 sm:px-6 pt-[60px] pb-[50px]">
+      <div className="max-w-7xl mx-auto flex flex-wrap gap-4 lg:gap-6 pr-4 sm:pr-6 pb-[50px]">
         {/* Left Sidebar */}
         <LeftSidebar />
 

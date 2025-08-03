@@ -8,7 +8,7 @@ import Link from "next/link"
 export function LeftSidebar() {
   return (
     <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-16 h-fit">
-      <div className="p-4">
+      <div className="pt-4 pr-4 pb-4">
         <div className="space-y-1">
           <Link href="/" passHref>
             <div className="flex items-center justify-between p-2 bg-white rounded-lg hover:bg-gray-50 cursor-pointer h-10">
@@ -62,7 +62,7 @@ export function LeftSidebar() {
       </div>
       
       {/* Footer positioned below sidebar */}
-      <div className="p-4 mt-6">
+      <div className="pt-4 pr-4 pb-4 mt-6">
         <div className="flex items-center gap-2 mb-2 h-6">
           <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
         </div>
