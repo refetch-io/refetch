@@ -1,11 +1,12 @@
 "use client"
 
 import { BarChart3 } from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { StatsChart } from "@/components/ui/chart"
 
 export function RightSidebar() {
   const [selectedTab, setSelectedTab] = useState("24h")
+  const [onlineUsers, setOnlineUsers] = useState(0)
   
   const trendingTopics = [
     "AI",
@@ -14,6 +15,49 @@ export function RightSidebar() {
     "DevOps",
     "MachineLearning",
   ]
+
+  // Simulate live updating online users count
+  useEffect(() => {
+    // Set initial count based on current time
+    const now = new Date()
+    const hour = now.getHours()
+    let baseUsers = 150
+    
+    // Simulate realistic user patterns
+    if (hour >= 9 && hour <= 17) baseUsers = 300 // Work hours - higher activity
+    else if (hour >= 18 && hour <= 22) baseUsers = 250 // Evening - moderate activity
+    else if (hour >= 23 || hour <= 6) baseUsers = 80 // Night - low activity
+    else baseUsers = 120 // Early morning
+    
+    setOnlineUsers(baseUsers + Math.floor(Math.random() * 100))
+    
+    // Update every 15 seconds with realistic patterns
+    const interval = setInterval(() => {
+      const currentHour = new Date().getHours()
+      setOnlineUsers(prev => {
+        // Base variation
+        let variation = Math.floor(Math.random() * 30) - 15 // -15 to +15
+        
+        // Time-based adjustments
+        if (currentHour >= 9 && currentHour <= 17) {
+          // Work hours - more stable, slight upward trend
+          variation += Math.floor(Math.random() * 10) - 5
+        } else if (currentHour >= 18 && currentHour <= 22) {
+          // Evening - moderate fluctuations
+          variation += Math.floor(Math.random() * 20) - 10
+        } else {
+          // Night/Early morning - more dramatic changes
+          variation += Math.floor(Math.random() * 40) - 20
+        }
+        
+        // Ensure realistic bounds
+        const newCount = prev + variation
+        return Math.max(30, Math.min(500, newCount))
+      })
+    }, 15000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   // Sample data for the chart - deterministic to prevent hydration issues
   const chartData = useMemo(() => {
@@ -58,7 +102,9 @@ export function RightSidebar() {
       <div className="space-y-1">
         {/* Chart Card */}
         <div className="bg-white rounded-lg p-1">
-          <h3 className="font-normal text-gray-900 mb-2 px-1 pt-1 font-heading">Stats</h3>
+          <h3 className="font-normal text-gray-900 mb-2 px-1 pt-1 font-heading">
+            {onlineUsers} users online
+          </h3>
           <div className="h-px bg-gray-100 mb-2 -mx-1" />
           <div className="text-xs text-gray-600 px-1 py-0.5 font-medium mb-5">
             {selectedTab === "24h" ? "Last 24 Hours" : "Last 30 Days"}
