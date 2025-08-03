@@ -191,191 +191,208 @@ export interface NewsItem {
   domain: string
   daysAgo?: string
   score: number
-  icon: LucideIcon
+  iconName: string // Changed from icon: LucideIcon to iconName: string
   bgColorClass: string
   shapeClass: string
   extendedHighlight: string
   comments: Comment[]
   author: string
-  isSponsored?: boolean // Added isSponsored flag
+  isSponsored?: boolean
+  link?: string
+  type?: string
 }
 
-// Define a list of icons to choose from
-const availableIcons: LucideIcon[] = [
-  Globe,
-  Zap,
-  Lightbulb,
-  Rocket,
-  Cpu,
-  Cloud,
-  Database,
-  Code,
-  Terminal,
-  Server,
-  Shield,
-  Bug,
-  Atom,
-  Network,
-  Activity,
-  BarChart,
-  BookOpen,
-  Briefcase,
-  Calendar,
-  Camera,
-  Car,
-  Cast,
-  CheckCircle,
-  Chrome,
-  Circle,
-  Clipboard,
-  Clock,
-  Compass,
-  CreditCard,
-  Crosshair,
-  Crown,
-  Cube,
-  Dices,
-  Disc,
-  DollarSign,
-  Download,
-  Droplet,
-  Edit,
-  ExternalLink,
-  Eye,
-  Feather,
-  FileText,
-  Film,
-  Filter,
-  Flag,
-  Folder,
-  Frown,
-  Gift,
-  GitBranch,
-  GitCommit,
-  GitMerge,
-  GitPullRequest,
-  Github,
-  Globe2,
-  GraduationCap,
-  Grid,
-  HardDrive,
-  Hash,
-  Headphones,
-  Heart,
-  HelpCircle,
-  Home,
-  ImageIcon,
-  Inbox,
-  Info,
-  Key,
-  Laptop,
-  Layers,
-  Layout,
-  LifeBuoy,
-  Link,
-  List,
-  Loader,
-  Lock,
-  LogOut,
-  Mail,
-  Map,
-  Maximize,
-  Megaphone,
-  Menu,
-  MessageCircle,
-  Mic,
-  Minimize,
-  Monitor,
-  Moon,
-  MoreHorizontal,
-  MoreVertical,
-  Mountain,
-  MousePointer,
-  Move,
-  Music,
-  Navigation,
-  Newspaper,
-  Octagon,
-  Package,
-  Paperclip,
-  PauseCircle,
-  PenTool,
-  Percent,
-  Phone,
-  PieChart,
-  Pin,
-  PlayCircle,
-  Plus,
-  Pocket,
-  Power,
-  Printer,
-  Puzzle,
-  QrCode,
-  MessageCircleQuestionIcon,
-  Radio,
-  RefreshCw,
-  Repeat,
-  Reply,
-  Rewind,
-  Rss,
-  Save,
-  Scissors,
-  SearchIcon,
-  Send,
-  Settings,
-  Share2,
-  ShieldOff,
-  ShoppingCart,
-  Shuffle,
-  Sidebar,
-  SkipBack,
-  SkipForward,
-  Slack,
-  Sliders,
-  Smile,
-  Speaker,
-  Square,
-  Star,
-  StopCircle,
-  Sun,
-  Sunrise,
-  Sunset,
-  Tablet,
-  Tag,
-  Target,
-  Tent,
-  Thermometer,
-  ThumbsDown,
-  ThumbsUp,
-  Ticket,
-  Timer,
-  ToggleLeft,
-  ToggleRight,
-  Trash2,
-  TrendingDown,
-  TrendingUp,
-  Triangle,
-  Truck,
-  Tv,
-  Type,
-  Umbrella,
-  Unlock,
-  Upload,
-  User,
-  Users,
-  Verified,
-  Video,
-  Voicemail,
-  Volume,
-  Wallet,
-  Watch,
-  Wifi,
-  Wind,
-  X,
-  Youtube,
-  ZapOff,
-  ZoomIn,
-  ZoomOut,
+// Appwrite post interface matching the collection structure
+export interface AppwritePost {
+  $id: string
+  title: string
+  description: string
+  userId: string
+  userName: string
+  countUp: number
+  countDown: number
+  link?: string
+  type?: string
+  $createdAt: string
+  $updatedAt: string
+}
+
+// Define a list of icon names to choose from
+const availableIconNames = [
+  "Globe",
+  "Zap",
+  "Lightbulb",
+  "Rocket",
+  "Cpu",
+  "Cloud",
+  "Database",
+  "Code",
+  "Terminal",
+  "Server",
+  "Shield",
+  "Bug",
+  "Atom",
+  "Network",
+  "Activity",
+  "BarChart",
+  "BookOpen",
+  "Briefcase",
+  "Calendar",
+  "Camera",
+  "Car",
+  "Cast",
+  "CheckCircle",
+  "Chrome",
+  "Circle",
+  "Clipboard",
+  "Clock",
+  "Compass",
+  "CreditCard",
+  "Crosshair",
+  "Crown",
+  "Cube",
+  "Dices",
+  "Disc",
+  "DollarSign",
+  "Download",
+  "Droplet",
+  "Edit",
+  "ExternalLink",
+  "Eye",
+  "Feather",
+  "FileText",
+  "Film",
+  "Filter",
+  "Flag",
+  "Folder",
+  "Frown",
+  "Gift",
+  "GitBranch",
+  "GitCommit",
+  "GitMerge",
+  "GitPullRequest",
+  "Github",
+  "Globe2",
+  "GraduationCap",
+  "Grid",
+  "HardDrive",
+  "Hash",
+  "Headphones",
+  "Heart",
+  "HelpCircle",
+  "Home",
+  "ImageIcon",
+  "Inbox",
+  "Info",
+  "Key",
+  "Laptop",
+  "Layers",
+  "Layout",
+  "LifeBuoy",
+  "Link",
+  "List",
+  "Loader",
+  "Lock",
+  "LogOut",
+  "Mail",
+  "Map",
+  "Maximize",
+  "Megaphone",
+  "Menu",
+  "MessageCircle",
+  "Mic",
+  "Minimize",
+  "Monitor",
+  "Moon",
+  "MoreHorizontal",
+  "MoreVertical",
+  "Mountain",
+  "MousePointer",
+  "Move",
+  "Music",
+  "Navigation",
+  "Newspaper",
+  "Octagon",
+  "Package",
+  "Paperclip",
+  "PauseCircle",
+  "PenTool",
+  "Percent",
+  "Phone",
+  "PieChart",
+  "Pin",
+  "PlayCircle",
+  "Plus",
+  "Pocket",
+  "Power",
+  "Printer",
+  "Puzzle",
+  "QrCode",
+  "MessageCircleQuestionIcon",
+  "Radio",
+  "RefreshCw",
+  "Repeat",
+  "Reply",
+  "Rewind",
+  "Rss",
+  "Save",
+  "Scissors",
+  "SearchIcon",
+  "Send",
+  "Settings",
+  "Share2",
+  "ShieldOff",
+  "ShoppingCart",
+  "Shuffle",
+  "Sidebar",
+  "SkipBack",
+  "SkipForward",
+  "Slack",
+  "Sliders",
+  "Smile",
+  "Speaker",
+  "Square",
+  "Star",
+  "StopCircle",
+  "Sun",
+  "Sunrise",
+  "Sunset",
+  "Tablet",
+  "Tag",
+  "Target",
+  "Tent",
+  "Thermometer",
+  "ThumbsDown",
+  "ThumbsUp",
+  "Ticket",
+  "Timer",
+  "ToggleLeft",
+  "ToggleRight",
+  "Trash2",
+  "TrendingDown",
+  "TrendingUp",
+  "Triangle",
+  "Truck",
+  "Tv",
+  "Type",
+  "Umbrella",
+  "Unlock",
+  "Upload",
+  "User",
+  "Users",
+  "Verified",
+  "Video",
+  "Voicemail",
+  "Volume",
+  "Wallet",
+  "Watch",
+  "Wifi",
+  "Wind",
+  "X",
+  "Youtube",
+  "ZapOff",
+  "ZoomIn",
+  "ZoomOut",
 ]
 
 // Define a list of background colors
@@ -506,13 +523,81 @@ const generateSponsoredItem = (index: number): NewsItem => {
     domain: "sponsor.com", // A generic domain for sponsored content
     daysAgo: "Ad", // Indicate it's an ad
     score: 0, // Sponsored items don't have a score in this context
-    icon: Rocket, // A generic icon for sponsored content
+    iconName: "Rocket", // A generic icon for sponsored content
     bgColorClass: "bg-gray-700", // A distinct background color for sponsored items
     shapeClass: "rounded-md",
     extendedHighlight: `This is a sponsored message: ${title}. Click to learn more about how this product can help you.`,
     comments: [], // No comments for sponsored items
     author: "Sponsored Content",
     isSponsored: true,
+  }
+}
+
+// Helper function to convert Appwrite post to NewsItem
+const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
+  const score = post.countUp - post.countDown
+  const domain = post.link ? new URL(post.link).hostname : "appwrite.io"
+  
+  // Calculate days ago from createdAt
+  const createdAt = new Date(post.$createdAt)
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - createdAt.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const daysAgo = diffDays === 1 ? "1 day ago" : `${diffDays} days ago`
+
+  return {
+    id: post.$id,
+    title: post.title,
+    domain: domain,
+    daysAgo: daysAgo,
+    score: score,
+    iconName: availableIconNames[index % availableIconNames.length], // Use string instead of component
+    bgColorClass: backgroundColors[index % backgroundColors.length],
+    shapeClass: shapes[index % shapes.length],
+    extendedHighlight: post.description,
+    comments: [], // We'll add comments later if needed
+    author: post.userName,
+    isSponsored: false,
+    link: post.link,
+    type: post.type,
+  }
+}
+
+// Server-side function to fetch posts from Appwrite
+export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me') // Dummy key for now
+
+    const databases = new Databases(client)
+    
+    const posts = await databases.listDocuments(
+      '688f787e002c78bd299f', // Database ID
+      '688f78a20022f61836ff', // Collection ID
+      [
+        Query.orderDesc('$createdAt') // Sort by creation date, oldest first
+      ]
+    )
+
+    const appwritePosts = posts.documents.map((post: any, index: number) => 
+      convertAppwritePostToNewsItem(post as AppwritePost, index)
+    )
+
+    // If no posts found, return empty array (will fallback to dummy data)
+    if (appwritePosts.length === 0) {
+      console.log('No posts found in Appwrite, will use dummy data')
+      return []
+    }
+
+    return appwritePosts
+  } catch (error) {
+    console.error('Error fetching posts from Appwrite:', error)
+    // Return empty array if there's an error (will fallback to dummy data)
+    return []
   }
 }
 
@@ -532,12 +617,12 @@ export const allNewsItems: NewsItem[] = Array.from({ length: 1000 }, (_, i) => {
     return {
       id: `${i + 1}`,
       title: techTitles[seededRandom(techTitles.length, i)],
-      domain: ["appwrite.io", "www.bbc.co.uk/news", "techcrunch.com", "github.com", "stackoverflow.com", "www.theverge.com", "arstechnica.com"][
+      domain: ["appwrite.io", "bbc.co.uk", "techcrunch.com", "github.com", "stackoverflow.com", "theverge.com", "arstechnica.com"][
         seededRandom(7, i + 1000)
       ],
       daysAgo: `${seededRandom(30, i + 2000)} days ago`,
       score: seededRandom(1000, i + 3000) + 1,
-      icon: availableIcons[seededRandom(availableIcons.length, i + 4000)],
+      iconName: availableIconNames[seededRandom(availableIconNames.length, i + 4000)],
       bgColorClass: backgroundColors[seededRandom(backgroundColors.length, i + 5000)],
       shapeClass: shapes[seededRandom(shapes.length, i + 6000)],
       extendedHighlight: generateExtendedHighlight(techTitles[seededRandom(techTitles.length, i + 7000)]),
