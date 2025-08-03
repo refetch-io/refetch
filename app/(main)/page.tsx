@@ -20,7 +20,8 @@ const BUFFER_ITEMS = 10 // Number of items to render above and below the viewpor
 
 // Rotating ad copy component
 function RotatingAdCopy() {
-  const [currentIndex, setCurrentIndex] = useState(() => Math.floor(Math.random() * 2))
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isClient, setIsClient] = useState(false)
   
   const adCopies = [
     {
@@ -38,6 +39,11 @@ function RotatingAdCopy() {
       linkUrl: "https://imagine.dev"
     }
   ]
+
+  useEffect(() => {
+    setIsClient(true)
+    setCurrentIndex(Math.floor(Math.random() * 2))
+  }, [])
 
   const currentAd = adCopies[currentIndex]
 
