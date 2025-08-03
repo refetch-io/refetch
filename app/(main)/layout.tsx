@@ -20,7 +20,7 @@ export default function MainLayout({
     <div className="min-h-screen bg-gray-100 font-body">
       {/* Header - Fixed to Top */}
       <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between pr-4 sm:pr-6">
+        <div className="max-w-7xl mx-auto flex items-center justify-between pr-4 pl-4 sm:pr-6">
           <div className="flex items-center gap-3">
             {/* Hamburger Menu Button - Only visible on mobile */}
             <button
@@ -61,12 +61,12 @@ export default function MainLayout({
       </header>
 
       {/* Browser Extension CTA - Above all sections */}
-      <div className="max-w-7xl mx-auto pr-4 sm:pr-6 pt-[60px]">
+      <div className="max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 pt-[60px]">
         <BrowserExtensionCTA />
       </div>
 
       {/* Main content wrapper with padding to account for fixed header */}
-      <div className="max-w-7xl mx-auto flex flex-wrap gap-4 lg:gap-6 pr-4 sm:pr-6 pb-[50px]">
+      <div className="max-w-7xl mx-auto flex flex-wrap gap-4 lg:gap-6 pr-4 pl-4 sm:pr-6 pb-[50px]">
         {/* Left Sidebar */}
         <LeftSidebar />
 
