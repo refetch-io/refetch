@@ -533,23 +533,41 @@ const generateSponsoredItem = (index: number): NewsItem => {
   }
 }
 
+// Improved time ago function
+function getTimeAgo(createdAt: string): string {
+  const created = new Date(createdAt)
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - created.getTime())
+  
+  const seconds = Math.floor(diffTime / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+  
+  if (seconds < 60) {
+    return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`
+  } else if (minutes < 60) {
+    return minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`
+  } else if (hours < 24) {
+    return hours === 1 ? "1 hour ago" : `${hours} hours ago`
+  } else {
+    return days === 1 ? "1 day ago" : `${days} days ago`
+  }
+}
+
 // Helper function to convert Appwrite post to NewsItem
 const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
   const score = post.countUp - post.countDown
   const domain = post.link ? new URL(post.link).hostname : "appwrite.io"
   
-  // Calculate days ago from createdAt
-  const createdAt = new Date(post.$createdAt)
-  const now = new Date()
-  const diffTime = Math.abs(now.getTime() - createdAt.getTime())
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  const daysAgo = diffDays === 1 ? "1 day ago" : `${diffDays} days ago`
+  // Use improved time ago function
+  const timeAgo = getTimeAgo(post.$createdAt)
 
   return {
     id: post.$id,
     title: post.title,
     domain: domain,
-    daysAgo: daysAgo,
+    daysAgo: timeAgo,
     score: score,
     iconName: availableIconNames[index % availableIconNames.length], // Use string instead of component
     bgColorClass: backgroundColors[index % backgroundColors.length],
