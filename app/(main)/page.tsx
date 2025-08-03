@@ -106,11 +106,18 @@ export default function RefetchHomePage() {
           <div style={{ height: paddingTop }} />
 
           {/* Render only the currently visible items */}
-          {visibleItems.map((item) => {
+          {visibleItems.map((item, index) => {
+            // Calculate the actual position in the full list
+            const actualIndex = (newsListContainerRef.current as any)?._virtualizationIndices?.startIndex || 0
+            const position = actualIndex + index + 1
+            
+            // Determine if this is a top 3 article
+            const isTop3 = position <= 3
+            
             return (
               <Link key={item.id} href={`/threads/${item.id}`} passHref>
                 <div
-                  className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 cursor-pointer ${item.isSponsored ? "bg-neutral-50" : ""}`}
+                  className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 cursor-pointer relative ${item.isSponsored ? "bg-neutral-50" : ""}`}
                   style={{ height: `${ESTIMATED_ITEM_HEIGHT - 15}px` }} // Adjust for mb-4 spacing
                 >
                   {/* Upvote/Downvote Section */}
@@ -119,7 +126,7 @@ export default function RefetchHomePage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-5 w-5 hover:bg-gray-100"
+                        className="h-5 w-5 hover:bg-green-50 text-gray-400 hover:text-green-600"
                         onClick={(e) => {
                           e.preventDefault() // Prevent navigation on vote click
                           handleVote(item.id, "up")
@@ -128,11 +135,11 @@ export default function RefetchHomePage() {
                       >
                         <ChevronUp className="h-4 w-4" />
                       </Button>
-                      <span className="text-[0.65rem] text-gray-600">{item.score}</span>
+                      <span className="text-[0.65rem] text-gray-700 font-medium">{item.score}</span>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-5 w-5 hover:bg-gray-100"
+                        className="h-5 w-5 hover:bg-red-50 text-gray-400 hover:text-red-600"
                         onClick={(e) => {
                           e.preventDefault() // Prevent navigation on vote click
                           handleVote(item.id, "down")
@@ -170,6 +177,8 @@ export default function RefetchHomePage() {
                       )}
                     </div>
                   </div>
+
+
                 </div>
               </Link>
             )
