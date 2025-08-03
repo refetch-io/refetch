@@ -1,8 +1,8 @@
 import { fetchPostsFromAppwrite, allNewsItems } from "@/lib/data"
 import { ClientPage } from "./client-page"
 
-// Force revalidation every 30 seconds
-export const revalidate = 30
+// Disable cache completely - fetch fresh data on every request
+export const revalidate = 0
 
 export default async function RefetchHomePage() {
   // Fetch posts from Appwrite on the server
