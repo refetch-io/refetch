@@ -62,7 +62,7 @@ export function LeftSidebar() {
       </div>
       
       {/* Footer positioned below sidebar */}
-      <div className="p-4">
+      <div className="p-4 mt-6">
         <div className="flex items-center gap-2 mb-2 h-6">
           <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
         </div>
@@ -72,7 +72,7 @@ export function LeftSidebar() {
         </div>
 
         {/* Separator */}
-        <div className="h-px bg-gray-200 mb-3 mt-3 opacity-50"></div>
+        <div className="h-px bg-gray-200 mb-6 mt-6 opacity-50"></div>
 
         <div className="text-xs text-gray-500 mb-3 leading-4">Copyright © 2025 Refetch</div>
 

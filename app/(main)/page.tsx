@@ -18,6 +18,40 @@ const ESTIMATED_ITEM_HEIGHT = 75 // px (e.g., 60px for content + 15px for mb-4)
 const MAX_ITEMS_DISPLAY = 50 // Limit the number of items displayed on the main page
 const BUFFER_ITEMS = 10 // Number of items to render above and below the viewport
 
+// Rotating ad copy component
+function RotatingAdCopy() {
+  const [currentIndex, setCurrentIndex] = useState(() => Math.floor(Math.random() * 2))
+  
+  const adCopies = [
+    {
+      logoUrl: "https://appwrite.io/images/logos/logo.svg",
+      logoAlt: "Appwrite Logo",
+      title: "Appwrite Cloud",
+      description: "Build faster with our fully managed backend platform.",
+      linkUrl: "https://appwrite.io"
+    },
+    {
+      logoUrl: "https://imagine.dev/favicon.png",
+      logoAlt: "Imagine Logo", 
+      title: "Imagine",
+      description: "Build faster with our fullstack vibe coding platform.",
+      linkUrl: "https://imagine.dev"
+    }
+  ]
+
+  const currentAd = adCopies[currentIndex]
+
+  return (
+    <SponsoredAd
+      logoUrl={currentAd.logoUrl}
+      logoAlt={currentAd.logoAlt}
+      title={currentAd.title}
+      description={currentAd.description}
+      linkUrl={currentAd.linkUrl}
+    />
+  )
+}
+
 export default function RefetchHomePage() {
   // Limit the items to the first 50
   const limitedNewsItems = allNewsItems.slice(0, MAX_ITEMS_DISPLAY)
@@ -202,7 +236,7 @@ export default function RefetchHomePage() {
 
         {/* Gen Z Remark */}
         <div className="text-center text-gray-500 text-sm mt-20 mb-10">
-          <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass.</p>
+          <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass 🌱.</p>
         </div>
       </main>
 
@@ -210,13 +244,7 @@ export default function RefetchHomePage() {
       <aside className="hidden lg:block w-full sm:w-64 lg:w-64 sticky top-16 h-fit">
         <RightSidebar />
         <div className="mt-6">
-          <SponsoredAd
-            logoUrl="https://appwrite.io/images/logos/logo.svg"
-            logoAlt="Appwrite Logo"
-            title="Appwrite Cloud"
-            description="Build faster with our fully managed backend platform."
-            linkUrl="https://appwrite.io"
-          />
+          <RotatingAdCopy />
         </div>
       </aside>
     </div>

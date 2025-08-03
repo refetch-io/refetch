@@ -103,7 +103,7 @@ export function RightSidebar() {
         {/* Chart Card */}
         <div className="bg-white rounded-lg p-1">
           <h3 className="font-normal text-gray-900 mb-3 px-1 pt-1 font-heading text-sm">
-            {onlineUsers} users online
+            {onlineUsers} refetchers online
           </h3>
           <div className="h-px bg-gray-100 mb-2 -mx-1" />
           <div className="text-xs text-gray-600 px-1 py-0.5 font-medium mb-5">
