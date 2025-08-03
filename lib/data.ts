@@ -633,7 +633,8 @@ export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
       '688f787e002c78bd299f', // Database ID
       '688f78a20022f61836ff', // Collection ID
       [
-        Query.orderDesc('$createdAt') // Sort by creation date, oldest first
+        Query.orderDesc('countUp'), // Sort by upvotes count, highest first
+        Query.orderDesc('$createdAt') // Then by creation date, newest first
       ]
     )
 
