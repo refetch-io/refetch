@@ -23,12 +23,38 @@ const BROWSERS: { [key: string]: BrowserInfo } = {
   }
 }
 
+// Helper function to detect browser
+function detectBrowser(): BrowserInfo | null {
+  if (typeof window === 'undefined') return null
+  
+  const userAgent = navigator.userAgent.toLowerCase()
+  
+  if (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) {
+    return BROWSERS.chrome
+  } else if (userAgent.includes("firefox")) {
+    return BROWSERS.firefox
+  }
+  
+  return null
+}
+
+// Check if browser is supported during SSR
+function isSupportedBrowser(): boolean {
+  if (typeof window === 'undefined') return false
+  
+  const userAgent = navigator.userAgent.toLowerCase()
+  return (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) || 
+         userAgent.includes("firefox")
+}
+
 export function BrowserExtensionCTA() {
   const [browser, setBrowser] = useState<BrowserInfo | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
   const [isDismissed, setIsDismissed] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
+    setIsHydrated(true)
+    
     // Check if user has already dismissed the CTA
     const dismissed = localStorage.getItem("refetch-extension-dismissed")
     if (dismissed) {
@@ -37,24 +63,13 @@ export function BrowserExtensionCTA() {
     }
 
     // Detect browser
-    const userAgent = navigator.userAgent.toLowerCase()
-    let detectedBrowser: BrowserInfo | null = null
-
-    if (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) {
-      detectedBrowser = BROWSERS.chrome
-    } else if (userAgent.includes("firefox")) {
-      detectedBrowser = BROWSERS.firefox
-    }
-
+    const detectedBrowser = detectBrowser()
     if (detectedBrowser) {
       setBrowser(detectedBrowser)
-      // Show the CTA immediately
-      setIsVisible(true)
     }
   }, [])
 
   const handleDismiss = () => {
-    setIsVisible(false)
     setIsDismissed(true)
     localStorage.setItem("refetch-extension-dismissed", "true")
   }
@@ -65,14 +80,20 @@ export function BrowserExtensionCTA() {
     }
   }
 
-  if (!browser || isDismissed || !isVisible) {
+  // Don't render anything until hydrated to avoid hydration issues
+  if (!isHydrated) {
+    return null
+  }
+
+  // Don't render if dismissed or no supported browser
+  if (isDismissed || !browser) {
     return null
   }
 
   const BrowserIcon = browser.icon
 
   return (
-    <div className="bg-transparent border border-gray-200 rounded-lg p-3 mb-4">
+    <div className="bg-transparent border border-gray-200 rounded-lg p-3 mt-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Browser Icon */}
