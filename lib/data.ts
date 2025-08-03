@@ -563,10 +563,46 @@ const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsI
   }
 }
 
+// Validate environment variables
+function validateAppwriteConfig() {
+  const missingVars = []
+  
+  if (!process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT) {
+    missingVars.push('NEXT_PUBLIC_APPWRITE_ENDPOINT')
+  }
+  
+  if (!process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID) {
+    missingVars.push('NEXT_PUBLIC_APPWRITE_PROJECT_ID')
+  }
+  
+  if (!process.env.APPWRITE_API_KEY) {
+    missingVars.push('APPWRITE_API_KEY')
+  }
+  
+  if (missingVars.length > 0) {
+    console.error('Missing required environment variables:', missingVars.join(', '))
+    return false
+  }
+  
+  return true
+}
+
 // Server-side function to fetch posts from Appwrite
 export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing, falling back to dummy data.')
+    return []
+  }
+
   try {
     const { Client, Databases, Query } = await import('node-appwrite')
+    
+    // Log environment variables for debugging (remove sensitive data in production)
+    console.log('Appwrite Config:', {
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
+      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
+    })
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
@@ -583,6 +619,8 @@ export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
       ]
     )
 
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite`)
+
     const appwritePosts = posts.documents.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post as AppwritePost, index)
     )
@@ -596,6 +634,10 @@ export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
     return appwritePosts
   } catch (error) {
     console.error('Error fetching posts from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
     // Return empty array if there's an error (will fallback to dummy data)
     return []
   }
