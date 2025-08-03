@@ -102,7 +102,7 @@ export function RightSidebar() {
       <div className="space-y-1">
         {/* Chart Card */}
         <div className="bg-white rounded-lg p-1">
-          <h3 className="font-normal text-gray-900 mb-2 px-1 pt-1 font-heading">
+          <h3 className="font-normal text-gray-900 mb-3 px-1 pt-1 font-heading text-sm">
             {onlineUsers} users online
           </h3>
           <div className="h-px bg-gray-100 mb-2 -mx-1" />
@@ -148,14 +148,14 @@ export function RightSidebar() {
 
       {/* Trending Section */}
       <div className="bg-white rounded-lg pb-2">
-        <h3 className="font-normal text-gray-900 mb-2 px-4 pt-2 font-heading">Trending Now</h3>
+        <h3 className="font-normal text-gray-900 mb-2 px-4 pt-2 font-heading text-sm">Trending Now</h3>
         {/* Separator between title and first item */}
         <div className="h-px bg-gray-100 my-1" />
         <div className="space-y-0">
           {trendingTopics.map((topic, index) => (
             <div key={topic}>
                           <div className="text-sm text-gray-700 py-1 px-4">
-              <p className="font-light"># {topic}</p> {/* Added # and font-light to the topic */}
+              <p># {topic}</p> {/* Added # to the topic */}
             </div>
               {index < trendingTopics.length - 1 && <div className="h-px bg-gray-100 my-1" />}
             </div>
