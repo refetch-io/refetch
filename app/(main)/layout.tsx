@@ -8,6 +8,7 @@ import { BackToTopButton } from "@/components/back-to-top-button"
 import { MobileNavigation } from "@/components/mobile-navigation"
 import { BrowserExtensionCTA } from "@/components/browser-extension-cta"
 import { useState } from "react"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function MainLayout({
   children,
@@ -15,6 +16,7 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user, loading, getUserDisplayName, isAuthenticated } = useAuth()
 
   return (
     <div className="min-h-screen bg-gray-100 font-body">
@@ -51,11 +53,31 @@ export default function MainLayout({
             </span>
           </div>
 
-          {/* CTA Buttons - Submit as primary, Sign In as secondary */}
+          {/* CTA Buttons - Submit as primary, Sign In/User as secondary */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm">
-              Sign In
-            </Button>
+            {!loading && (
+              isAuthenticated ? (
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm"
+                  asChild
+                >
+                  <Link href="https://refetch.authui.site/">
+                    {getUserDisplayName()}
+                  </Link>
+                </Button>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm"
+                  asChild
+                >
+                  <Link href="https://refetch.authui.site/">
+                    Sign In
+                  </Link>
+                </Button>
+              )
+            )}
             <Button className="bg-white text-[#4e1cb3] hover:bg-gray-100 h-8 px-4 text-sm font-medium">
               Submit
             </Button>

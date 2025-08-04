@@ -1,12 +1,13 @@
-import { Client, Avatars } from 'appwrite';
+import { Client, Avatars, Account } from 'appwrite';
 
 // Initialize Appwrite client
 const client = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'your-project-id');
 
-// Initialize Avatars service
+// Initialize services
 export const avatars = new Avatars(client);
+export const account = new Account(client);
 
 // Helper function to get favicon URL for a domain
 export const getFaviconUrl = (domain: string): string => {
