@@ -51,10 +51,13 @@ export default function MainLayout({
             </span>
           </div>
 
-          {/* Sign In Button - Always on the right */}
+          {/* CTA Buttons - Submit as primary, Sign In as secondary */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" className="text-white bg-[#5d2bc4] hover:bg-white/10 hover:text-white h-8 px-3 text-sm">
+            <Button variant="ghost" className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm">
               Sign In
+            </Button>
+            <Button className="bg-white text-[#4e1cb3] hover:bg-gray-100 h-8 px-4 text-sm font-medium">
+              Submit
             </Button>
           </div>
         </div>
