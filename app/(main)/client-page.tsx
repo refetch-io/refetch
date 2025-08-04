@@ -500,10 +500,10 @@ export function ClientPage({ initialPosts }: ClientPageProps) {
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
         {/* Stories Carousel */}
-        <StoriesCarousel />
+        {/* <StoriesCarousel /> */}
 
         {/* New Search and Filter Component */}
-        <SearchAndFilter />
+        {/* <SearchAndFilter /> */}
 
         {/* Virtualized News Items List */}
         <div ref={newsListContainerRef} className="news-list-container min-h-[600px]">
