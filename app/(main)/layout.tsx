@@ -47,7 +47,7 @@ export default function MainLayout({
             
             {/* Tagline */}
             <span className="text-white/80 text-sm font-thin hidden sm:block">
-              Open-source & non-profit alternative to YC-controlled HN 
+              Open-source alternative to YC-controlled HN 
             </span>
           </div>
 

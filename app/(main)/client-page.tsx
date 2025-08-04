@@ -522,77 +522,98 @@ export function ClientPage({ initialPosts }: ClientPageProps) {
             // Get the icon component from the icon name
             const IconComponent = getIconComponent(item.iconName)
             
+            // Determine if this item has an external link
+            const hasExternalLink = item.link && item.link.startsWith('http')
+            const titleLinkHref = hasExternalLink ? item.link! : `/threads/${item.id}`
+            const titleLinkTarget = hasExternalLink ? '_blank' : undefined
+            const titleLinkRel = hasExternalLink ? 'noopener noreferrer' : undefined
+            
             return (
-              <Link key={item.id} href={`/threads/${item.id}`} passHref>
-                <div
-                  className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 cursor-pointer relative ${item.isSponsored ? "bg-neutral-50" : ""}`}
-                  style={{ height: `${ESTIMATED_ITEM_HEIGHT - 15}px` }}
-                >
-                  {/* Upvote/Downvote Section */}
-                  {!item.isSponsored && (
-                    <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-5 w-5 hover:bg-green-50 text-gray-400 hover:text-green-600"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleVote(item.id, "up")
-                        }}
-                        aria-label={`Upvote ${item.title}`}
-                      >
-                        <ChevronUp className="h-4 w-4" />
-                      </Button>
-                      <span className="text-[0.65rem] text-gray-700 font-medium">{item.score}</span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-5 w-5 hover:bg-red-50 text-gray-400 hover:text-red-600"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          handleVote(item.id, "down")
-                        }}
-                        aria-label={`Downvote ${item.title}`}
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                  {item.isSponsored && (
-                    <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
-                      <span className="text-[0.65rem] text-gray-600 font-semibold">Ad</span>
-                    </div>
-                  )}
+              <div
+                key={item.id}
+                className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group ${item.isSponsored ? "bg-neutral-50" : ""}`}
+                style={{ height: `${ESTIMATED_ITEM_HEIGHT - 15}px` }}
+              >
+                {/* Upvote/Downvote Section */}
+                {!item.isSponsored && (
+                  <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 hover:bg-green-50 text-gray-400 hover:text-green-600"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleVote(item.id, "up")
+                      }}
+                      aria-label={`Upvote ${item.title}`}
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </Button>
+                    <span className="text-[0.65rem] text-gray-700 font-medium">{item.score}</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 hover:bg-red-50 text-gray-400 hover:text-red-600"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleVote(item.id, "down")
+                      }}
+                      aria-label={`Downvote ${item.title}`}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+                {item.isSponsored && (
+                  <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
+                    <span className="text-[0.65rem] text-gray-600 font-semibold">Ad</span>
+                  </div>
+                )}
 
-                  {/* Article Content */}
-                  <div className="flex-1 flex flex-col justify-center min-w-0">
-                    <h3
-                      className="font-medium text-gray-900 mb-1 font-heading whitespace-nowrap overflow-hidden text-ellipsis"
+                {/* Article Content */}
+                <div className="flex-1 flex flex-col justify-center min-w-0">
+                  {/* Title with external link */}
+                  <div className="flex items-center gap-2 mb-1">
+                    <Link 
+                      href={titleLinkHref} 
+                      target={titleLinkTarget} 
+                      rel={titleLinkRel}
+                      className="font-medium text-gray-900 font-heading whitespace-nowrap overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer"
                       title={item.title}
                     >
                       {item.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Favicon domain={item.domain} size={16} className="rounded" />
-                      <span>{cleanDomainForDisplay(item.domain)}</span>
-                      {!item.isSponsored && item.daysAgo && (
-                        <>
-                          <span>•</span>
-                          <span>{item.daysAgo}</span>
-                        </>
-                      )}
-                      {!item.isSponsored && (
-                        <>
-                          <span className="hidden sm:inline">•</span>
-                          <span className="hidden sm:inline">{item.author}</span>
-                          <span className="hidden sm:inline">•</span>
-                          <span className="hidden sm:inline">{item.comments.length} comments</span>
-                        </>
-                      )}
-                    </div>
+                    </Link>
+                    {hasExternalLink && (
+                      <ExternalLink className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    )}
+                  </div>
+                  
+                  {/* Meta information with thread link */}
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <Favicon domain={item.domain} size={16} className="rounded" />
+                    <span>{cleanDomainForDisplay(item.domain)}</span>
+                    {!item.isSponsored && item.daysAgo && (
+                      <>
+                        <span>•</span>
+                        <span>{item.daysAgo}</span>
+                      </>
+                    )}
+                    {!item.isSponsored && (
+                      <>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="hidden sm:inline">{item.author}</span>
+                        <span className="hidden sm:inline">•</span>
+                        <Link 
+                          href={`/threads/${item.id}`}
+                          className="hidden sm:inline hover:text-blue-600 transition-colors"
+                        >
+                          {item.comments.length} comments
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
-              </Link>
+              </div>
             )
           })}
 
