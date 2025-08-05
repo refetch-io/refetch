@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Chrome, Firefox, X, Download } from "lucide-react"
+import { Chrome, X, Download, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface BrowserInfo {
@@ -18,7 +18,7 @@ const BROWSERS: { [key: string]: BrowserInfo } = {
   },
   firefox: {
     name: "Firefox", 
-    icon: Firefox,
+    icon: Globe,
     extensionUrl: "https://addons.mozilla.org/en-US/firefox/addon/refetch/"
   }
 }
