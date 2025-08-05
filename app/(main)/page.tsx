@@ -6,10 +6,10 @@ export const revalidate = 0
 
 export default async function RefetchHomePage() {
   // Fetch posts from Appwrite on the server
-  const posts = await fetchPostsFromAppwrite()
+  const result = await fetchPostsFromAppwrite()
   
   // Add timestamp for debugging
-  console.log(`Page rendered at ${new Date().toISOString()} with ${posts.length} posts`)
+  console.log(`Page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)
   
-  return <ClientPage initialPosts={posts} />
+  return <ClientPage initialPosts={result.posts} error={result.error} />
 }

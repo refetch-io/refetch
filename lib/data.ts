@@ -305,10 +305,10 @@ function validateAppwriteConfig() {
 }
 
 // Server-side function to fetch posts from Appwrite
-export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
+export async function fetchPostsFromAppwrite(): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
-    return []
+    return { posts: [], error: 'Missing Appwrite configuration' }
   }
 
   try {
@@ -343,14 +343,25 @@ export async function fetchPostsFromAppwrite(): Promise<NewsItem[]> {
       convertAppwritePostToNewsItem(post as AppwritePost, index)
     )
 
-    return appwritePosts
+    return { posts: appwritePosts }
   } catch (error) {
     console.error('Error fetching posts from Appwrite:', error)
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
     })
-    return []
+    
+    // Log additional debugging information
+    console.error('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      hasApiKey: !!process.env.APPWRITE_API_KEY
+    })
+    
+    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
   }
 }
 
@@ -384,8 +395,19 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
     console.error(`Error fetching post ${id} from Appwrite:`, error)
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
     })
+    
+    // Log additional debugging information
+    console.error('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      hasApiKey: !!process.env.APPWRITE_API_KEY
+    })
+    
     return null
   }
 }
