@@ -2,6 +2,7 @@
   "name": "refetch",
   "version": "0.1.0",
   "private": true,
+  "description": "Refetch is an open-source alternative to Hacker News, featuring curated tech news, discussions, and community-driven content. Built with Next.js and Appwrite.",
   "scripts": {
     "build": "next build",
     "dev": "next dev",

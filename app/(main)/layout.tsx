@@ -49,7 +49,7 @@ export default function MainLayout({
             
             {/* Tagline */}
             <span className="text-white/80 text-sm font-thin hidden sm:block">
-              Open-source alternative to YC-controlled HN 
+              Open-source tech news & discussions 
             </span>
           </div>
 

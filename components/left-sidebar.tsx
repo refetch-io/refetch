@@ -39,11 +39,11 @@ const navigationItems: NavigationItem[] = [
     label: "Jobs",
     icon: Briefcase
   },
-  {
-    href: "/rising",
-    label: "Rising",
-    icon: BarChart3
-  },
+  // {
+  //   href: "/rising",
+  //   label: "Rising",
+  //   icon: BarChart3
+  // },
   {
     href: "/saved",
     label: "Saved",

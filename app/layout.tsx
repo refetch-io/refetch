@@ -6,8 +6,20 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Refetch",
-  description: "Created with v0",
-  generator: "v0.dev",
+  description: "Refetch is an open-source alternative to Hacker News, featuring curated tech news, discussions, and community-driven content. Discover the latest in technology, startups, and innovation.",
+  generator: "eldadfux",
+  keywords: "tech news, hacker news alternative, technology, startups, programming, open source",
+  openGraph: {
+    title: "Refetch - Open Source Hacker News Alternative",
+    description: "Discover curated tech news, discussions, and community-driven content on Refetch, the open-source alternative to Hacker News.",
+    type: "website",
+    url: "https://refetch.io",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Refetch - Open Source Hacker News Alternative",
+    description: "Discover curated tech news, discussions, and community-driven content on Refetch, the open-source alternative to Hacker News.",
+  },
 }
 
 export default function RootLayout({

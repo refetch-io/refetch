@@ -1,12 +1,13 @@
 # Refetch.io New Tab Chrome Extension
 
-This Chrome extension sets [refetch.io](https://refetch.io) as your new tab page.
+This Chrome extension sets [refetch.io](https://refetch.io) as your new tab page. Refetch is an open-source alternative to Hacker News, featuring curated tech news, discussions, and community-driven content.
 
 ## Features
 
 - Automatically redirects new tabs to refetch.io
 - Clean, modern loading screen with gradient background
 - Smooth user experience with loading animation
+- Access to the latest tech news, startup updates, and programming discussions
 
 ## Installation
 

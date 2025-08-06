@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Refetch.io New Tab",
   "version": "1.0.0",
-  "description": "Set refetch.io as your new tab page",
+  "description": "Set Refetch.io as your new tab page - an open-source alternative to Hacker News featuring curated tech news, discussions, and community-driven content.",
   "permissions": [
     "tabs"
   ],

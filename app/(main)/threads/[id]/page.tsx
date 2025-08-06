@@ -6,11 +6,35 @@ import { fetchPostById } from "@/lib/data"
 import { handleVote } from "@/lib/voteHandler"
 import { Favicon } from "@/components/favicon"
 import { ThreadClientPage } from "./thread-client-page"
+import type { Metadata } from "next"
 
 interface ThreadPageProps {
   params: Promise<{
     id: string
   }>
+}
+
+// Generate metadata dynamically based on the article
+export async function generateMetadata({ params }: ThreadPageProps): Promise<Metadata> {
+  const unwrappedParams = await params
+  const article = await fetchPostById(unwrappedParams.id)
+
+  if (!article) {
+    return {
+      title: "Thread Not Found - Refetch",
+      description: "The thread you are looking for does not exist on Refetch.",
+    }
+  }
+
+  return {
+    title: `${article.title} - Refetch`,
+    description: article.description || `Read and discuss "${article.title}" on Refetch, the open-source alternative to Hacker News.`,
+    openGraph: {
+      title: `${article.title} - Refetch`,
+      description: article.description || `Read and discuss "${article.title}" on Refetch, the open-source alternative to Hacker News.`,
+      type: "article",
+    },
+  }
 }
 
 export default async function ThreadPage({ params }: ThreadPageProps) {
