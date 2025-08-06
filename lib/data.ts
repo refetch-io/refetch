@@ -254,6 +254,8 @@ function getTimeAgo(createdAt: string): string {
   }
 }
 
+
+
 // Helper function to convert Appwrite post to NewsItem
 const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
   const score = post.countUp - post.countDown
@@ -304,8 +306,13 @@ function validateAppwriteConfig() {
   return true
 }
 
-// Server-side function to fetch posts from Appwrite
+// Server-side function to fetch posts from Appwrite (sorted by score)
 export async function fetchPostsFromAppwrite(): Promise<{ posts: NewsItem[], error?: string }> {
+  return fetchPostsFromAppwriteWithSort('score')
+}
+
+// Server-side function to fetch posts from Appwrite with custom sorting
+export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' | 'show'): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
     return { posts: [], error: 'Missing Appwrite configuration' }
@@ -328,16 +335,40 @@ export async function fetchPostsFromAppwrite(): Promise<{ posts: NewsItem[], err
 
     const databases = new Databases(client)
     
+    let queries = []
+    
+    // Apply different sorting based on sortType
+    switch (sortType) {
+      case 'score':
+        // Sort by score (countUp - countDown) - highest first, then by creation date
+        queries = [
+          Query.orderDesc('countUp'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'new':
+        // Sort by creation date - newest first
+        queries = [
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'show':
+        // Filter by type=show, sort by score first, then by creation date
+        queries = [
+          Query.equal('type', 'show'),
+          Query.orderDesc('countUp'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+    }
+    
     const posts = await databases.listDocuments(
       '688f787e002c78bd299f', // Database ID
       '688f78a20022f61836ff', // Collection ID
-      [
-        Query.orderDesc('countUp'), // Sort by upvotes count, highest first
-        Query.orderDesc('$createdAt') // Then by creation date, newest first
-      ]
+      queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite`)
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
 
     const appwritePosts = posts.documents.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post as AppwritePost, index)

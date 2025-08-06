@@ -5,7 +5,7 @@ import { ClientPage } from "./client-page"
 export const revalidate = 0
 
 export default async function RefetchHomePage() {
-  // Fetch posts from Appwrite on the server
+  // Fetch posts from Appwrite on the server (already sorted by score)
   const result = await fetchPostsFromAppwrite()
   
   // Add timestamp for debugging
