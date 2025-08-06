@@ -497,7 +497,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   }, [updateVisibleItems])
 
   return (
-    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-0 lg:mt-1">
+    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
         {/* Error Display */}
