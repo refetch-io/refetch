@@ -21,15 +21,15 @@ export default function SignUpPage() {
     password: "",
     confirmPassword: ""
   })
-  const { user, isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, refreshUser } = useAuth()
   const router = useRouter()
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (!loading && isAuthenticated) {
+    if (isAuthenticated) {
       router.push("/")
     }
-  }, [isAuthenticated, loading, router])
+  }, [isAuthenticated, router])
 
   const handleChange = (field: string, value: string) => {
     setSignUpData(prev => ({
@@ -69,6 +69,7 @@ export default function SignUpPage() {
       
       // Automatically sign in after successful registration
       await account.createEmailPasswordSession(signUpData.email, signUpData.password)
+      await refreshUser() // Refresh auth context before redirect
       
       // Redirect to home page
       setTimeout(() => {
@@ -83,15 +84,7 @@ export default function SignUpPage() {
     }
   }
 
-  // Show loading while checking authentication
-  if (loading) {
-    return <div className="flex-1 flex items-center justify-center">Loading...</div>
-  }
 
-  // Don't render if already authenticated (will redirect)
-  if (isAuthenticated) {
-    return null
-  }
 
   return (
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
@@ -167,7 +160,7 @@ export default function SignUpPage() {
                 />
               </div>
               <Button type="submit" disabled={isLoading || success} className="w-full">
-                {isLoading ? "Creating Account..." : success ? "Account Created!" : "Create Account"}
+                {success ? "Account Created!" : "Create Account"}
               </Button>
             </form>
             

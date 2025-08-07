@@ -25,15 +25,15 @@ export default function LoginPage() {
     password: "",
     confirmPassword: ""
   })
-  const { user, isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, refreshUser } = useAuth()
   const router = useRouter()
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (!loading && isAuthenticated) {
+    if (isAuthenticated) {
       router.push("/")
     }
-  }, [isAuthenticated, loading, router])
+  }, [isAuthenticated, router])
 
   const handleSignInChange = (field: string, value: string) => {
     setSignInData(prev => ({
@@ -58,6 +58,7 @@ export default function LoginPage() {
 
     try {
       await account.createEmailPasswordSession(signInData.email, signInData.password)
+      await refreshUser() // Refresh auth context before redirect
       router.push("/")
     } catch (error: any) {
       console.error('Sign in error:', error)
@@ -94,6 +95,7 @@ export default function LoginPage() {
 
       // Automatically sign in after successful registration
       await account.createEmailPasswordSession(signUpData.email, signUpData.password)
+      await refreshUser() // Refresh auth context before redirect
       router.push("/")
     } catch (error: any) {
       console.error('Sign up error:', error)
@@ -103,15 +105,7 @@ export default function LoginPage() {
     }
   }
 
-  // Show loading while checking authentication
-  if (loading) {
-    return <div className="flex-1 flex items-center justify-center">Loading...</div>
-  }
 
-  // Don't render if already authenticated (will redirect)
-  if (isAuthenticated) {
-    return null
-  }
 
   return (
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
@@ -169,7 +163,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? "Signing In..." : "Sign In"}
+                    Sign In
                   </Button>
                 </form>
                 
@@ -252,7 +246,7 @@ export default function LoginPage() {
                     />
                   </div>
                   <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    Create Account
                   </Button>
                 </form>
                 

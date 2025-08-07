@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMobileMenuClick, showMobileMenuButton = false }: HeaderProps) {
-  const { user, loading, getUserDisplayName, isAuthenticated, logout } = useAuth()
+  const { user, getUserDisplayName, isAuthenticated, logout, loading } = useAuth()
   const router = useRouter()
 
   const handleLogout = async () => {
@@ -58,8 +58,8 @@ export function Header({ onMobileMenuClick, showMobileMenuButton = false }: Head
 
         {/* CTA Buttons - Submit as primary, Sign In/User as secondary */}
         <div className="flex items-center gap-2">
-          {!loading && (
-            isAuthenticated ? (
+          <div className={`transition-opacity duration-500 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+            {!loading && (isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <span className="text-white/80 text-sm hidden sm:block">
                   {getUserDisplayName()}
@@ -84,10 +84,10 @@ export function Header({ onMobileMenuClick, showMobileMenuButton = false }: Head
                   Sign In
                 </Link>
               </Button>
-            )
-          )}
+            ))}
+          </div>
           <Button className="bg-white text-[#4e1cb3] hover:bg-gray-100 h-8 px-4 text-sm font-medium" asChild>
-            <Link href="/submit" prefetch>
+            <Link href={!loading && isAuthenticated ? "/submit" : "/login"} prefetch>
               Submit
             </Link>
           </Button>
