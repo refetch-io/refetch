@@ -497,7 +497,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   }, [updateVisibleItems])
 
   return (
-    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
+    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-2 lg:pt-4">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
         {/* Error Display */}
@@ -599,6 +599,11 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                 <div className="flex-1 flex flex-col justify-center min-w-0">
                   {/* Title with external link */}
                   <div className="flex items-center gap-2 mb-1">
+                    {item.type === "show" && (
+                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-50 text-purple-600 rounded-md whitespace-nowrap">
+                        RF show
+                      </span>
+                    )}
                     <Link 
                       href={titleLinkHref} 
                       target={titleLinkTarget} 

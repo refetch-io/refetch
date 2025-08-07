@@ -41,7 +41,7 @@ html {
 }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body className="bg-gray-100">{children}</body>
     </html>
   )
 }
