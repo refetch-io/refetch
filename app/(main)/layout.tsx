@@ -28,7 +28,7 @@ export default function MainLayout({
       />
 
       {/* Browser Extension CTA - Above all sections */}
-      <div className="max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 pt-[60px]">
+      <div className="max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 pt-[80px]">
         <BrowserExtensionCTA />
       </div>
 
