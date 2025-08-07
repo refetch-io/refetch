@@ -46,10 +46,36 @@ export function useAuth() {
     return 'Your account';
   };
 
+  const logout = async () => {
+    try {
+      await account.deleteSession('current');
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, clear the user state
+      setUser(null);
+    }
+  };
+
+  const refreshUser = async () => {
+    try {
+      const currentUser = await account.get();
+      setUser({
+        $id: currentUser.$id,
+        name: currentUser.name || '',
+        email: currentUser.email || ''
+      });
+    } catch (error) {
+      setUser(null);
+    }
+  };
+
   return {
     user,
     loading,
     getUserDisplayName,
+    logout,
+    refreshUser,
     isAuthenticated: !!user
   };
 } 

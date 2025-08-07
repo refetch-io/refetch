@@ -44,7 +44,7 @@ export default function SubmitPage() {
     
     if (!isAuthenticated || !user?.$id) {
       // Redirect to login if not authenticated
-      window.location.href = "https://refetch.authui.site/"
+      router.push("/login")
       return
     }
 
@@ -53,7 +53,8 @@ export default function SubmitPage() {
     try {
       // Get JWT token for authentication
       const { account } = await import('@/lib/appwrite')
-      const jwt = await account.createJWT()
+      const jwtResponse = await account.createJWT()
+      const jwt = jwtResponse.jwt
 
       const response = await fetch('/api/submit', {
         method: 'POST',

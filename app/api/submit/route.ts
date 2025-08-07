@@ -39,23 +39,19 @@ export async function POST(request: NextRequest) {
     const jwt = authHeader.replace('Bearer ', '')
 
     // Use the JWT client to validate the token
-    // const jwtAccount = new Account(jwtClient)
-    // let user
-    // try {
-    //   // Set the JWT on the client and get user information
-    //   jwtClient.setJWT(jwt)
-    //   user = await jwtAccount.get()
-    // } catch (error) {
-    //   return NextResponse.json(
-    //     { message: 'Invalid or expired JWT token' },
-    //     { status: 401 }
-    //   )
-    // }
-    const user = {
-      $id: '123',
-      name: 'John Doe',
-      email: 'john.doe@example.com'
-    };
+    const jwtAccount = new Account(jwtClient)
+    let user
+    try {
+      console.log('Received JWT:', jwt)
+      // Set the JWT on the client and get user information
+      jwtClient.setJWT(jwt)
+      user = await jwtAccount.get()
+    } catch (error) {
+      return NextResponse.json(
+        { message: 'Invalid or expired JWT token' },
+        { status: 401 }
+      )
+    }
 
     // Validate required fields based on type
     if (!title || title.trim().length === 0) {

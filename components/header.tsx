@@ -2,9 +2,10 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Menu } from "lucide-react"
+import { Menu, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/use-auth"
+import { useRouter } from "next/navigation"
 
 interface HeaderProps {
   onMobileMenuClick?: () => void
@@ -12,7 +13,13 @@ interface HeaderProps {
 }
 
 export function Header({ onMobileMenuClick, showMobileMenuButton = false }: HeaderProps) {
-  const { user, loading, getUserDisplayName, isAuthenticated } = useAuth()
+  const { user, loading, getUserDisplayName, isAuthenticated, logout } = useAuth()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await logout()
+    router.push("/")
+  }
 
   return (
     <header className="bg-[#4e1cb3] text-white py-2 fixed top-0 w-full z-50">
@@ -53,22 +60,27 @@ export function Header({ onMobileMenuClick, showMobileMenuButton = false }: Head
         <div className="flex items-center gap-2">
           {!loading && (
             isAuthenticated ? (
-              <Button 
-                variant="ghost" 
-                className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm"
-                asChild
-              >
-                <Link href="https://refetch.authui.site/">
+              <div className="flex items-center gap-2">
+                <span className="text-white/80 text-sm hidden sm:block">
                   {getUserDisplayName()}
-                </Link>
-              </Button>
+                </span>
+                <Button 
+                  variant="ghost" 
+                  className="text-white hover:bg-white/10 hover:text-white h-8 px-2 text-sm"
+                  onClick={handleLogout}
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="sr-only">Sign Out</span>
+                </Button>
+              </div>
             ) : (
               <Button 
                 variant="ghost" 
                 className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm"
                 asChild
               >
-                <Link href="https://refetch.authui.site/">
+                <Link href="/login">
                   Sign In
                 </Link>
               </Button>
