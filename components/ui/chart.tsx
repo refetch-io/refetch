@@ -62,6 +62,9 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 0
+    },
     plugins: {
       legend: {
         display: false,
@@ -105,7 +108,7 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
   }
 
   return (
-    <div className="h-20 w-full rounded-lg overflow-hidden">
+    <div className="h-20 overflow-hidden -mx-2 rounded-lg">
       <Line data={chartData} options={options} />
     </div>
   )

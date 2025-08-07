@@ -92,11 +92,6 @@ export default function SubmitPage() {
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
-        {/* Title */}
-        <div className="text-center">
-          <h1 className="text-lg text-gray-900">Submit</h1>
-        </div>
-        
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4">
           <TabsList className="grid w-full grid-cols-3 shadow-none p-0 gap-2">
@@ -118,6 +113,8 @@ export default function SubmitPage() {
             <TabsContent value="link" className="mt-4">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
+                  <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Link</h3>
+                  <div className="h-px bg-gray-100 mb-4 -mx-4" />
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="title" className="text-sm">Title *</Label>
@@ -154,7 +151,7 @@ export default function SubmitPage() {
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
-                      {isSubmitting ? "Submitting..." : "Submit Link"}
+                      {isSubmitting ? "Submitting..." : "Submit"}
                     </Button>
                   </form>
                 </div>
@@ -165,6 +162,8 @@ export default function SubmitPage() {
             <TabsContent value="show" className="mt-4">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
+                  <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Show</h3>
+                  <div className="h-px bg-gray-100 mb-4 -mx-4" />
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="show-title" className="text-sm">Title *</Label>
@@ -201,7 +200,7 @@ export default function SubmitPage() {
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
-                      {isSubmitting ? "Submitting..." : "Submit Show"}
+                      {isSubmitting ? "Submitting..." : "Submit"}
                     </Button>
                   </form>
                 </div>
@@ -212,6 +211,8 @@ export default function SubmitPage() {
             <TabsContent value="job" className="mt-4">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
+                  <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Job</h3>
+                  <div className="h-px bg-gray-100 mb-4 -mx-4" />
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="job-title" className="text-sm">Job Title *</Label>
@@ -281,7 +282,7 @@ export default function SubmitPage() {
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
-                      {isSubmitting ? "Submitting..." : "Submit Job"}
+                      {isSubmitting ? "Submitting..." : "Submit"}
                     </Button>
                   </form>
                 </div>
