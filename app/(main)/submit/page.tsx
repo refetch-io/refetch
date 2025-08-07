@@ -92,44 +92,46 @@ export default function SubmitPage() {
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
+        {/* Title */}
+        <div className="text-center">
+          <h1 className="text-lg text-gray-900">Submit</h1>
+        </div>
+        
         {/* Tabs */}
-        <div className="mb-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="link" className="flex items-center gap-2">
-                <LinkIcon className="w-4 h-4" />
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4">
+          <TabsList className="grid w-full grid-cols-3 shadow-none p-0 gap-2">
+                                        <TabsTrigger value="link" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+                <LinkIcon className="w-4 h-4 -ml-2" />
                 Link
               </TabsTrigger>
-              <TabsTrigger value="show" className="flex items-center gap-2">
-                <Monitor className="w-4 h-4" />
+                                        <TabsTrigger value="show" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+                <Monitor className="w-4 h-4 -ml-2" />
                 Show
               </TabsTrigger>
-              <TabsTrigger value="job" className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4" />
+                                        <TabsTrigger value="job" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+                <Briefcase className="w-4 h-4 -ml-2" />
                 Job
               </TabsTrigger>
-            </TabsList>
+          </TabsList>
 
             {/* Link Tab */}
-            <TabsContent value="link" className="mt-6">
-              <div className="bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group">
+            <TabsContent value="link" className="mt-4">
+              <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">Submit a Link</h3>
-                  </div>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="title">Title *</Label>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="title" className="text-sm">Title *</Label>
                       <Input
                         id="title"
                         value={formData.title}
                         onChange={(e) => handleInputChange('title', e.target.value)}
                         placeholder="Enter the title of your post"
                         required
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="url">URL *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="url" className="text-sm">URL *</Label>
                       <Input
                         id="url"
                         type="url"
@@ -137,16 +139,18 @@ export default function SubmitPage() {
                         onChange={(e) => handleInputChange('url', e.target.value)}
                         placeholder="https://example.com"
                         required
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="description">Description (optional)</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="description" className="text-sm">Description (optional)</Label>
                       <Textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => handleInputChange('description', e.target.value)}
                         placeholder="Add a brief description or context"
                         rows={3}
+                        className="text-sm"
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
@@ -158,35 +162,34 @@ export default function SubmitPage() {
             </TabsContent>
 
             {/* Show Tab */}
-            <TabsContent value="show" className="mt-6">
-              <div className="bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group">
+            <TabsContent value="show" className="mt-4">
+              <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">Submit a Show</h3>
-                  </div>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="show-title">Title *</Label>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="show-title" className="text-sm">Title *</Label>
                       <Input
                         id="show-title"
                         value={formData.title}
                         onChange={(e) => handleInputChange('title', e.target.value)}
                         placeholder="What are you showing?"
                         required
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="show-url">URL (optional)</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="show-url" className="text-sm">URL (optional)</Label>
                       <Input
                         id="show-url"
                         type="url"
                         value={formData.url}
                         onChange={(e) => handleInputChange('url', e.target.value)}
                         placeholder="https://example.com"
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="show-description">Description *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="show-description" className="text-sm">Description *</Label>
                       <Textarea
                         id="show-description"
                         value={formData.description}
@@ -194,6 +197,7 @@ export default function SubmitPage() {
                         placeholder="Tell us about what you're showing"
                         rows={4}
                         required
+                        className="text-sm"
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
@@ -205,55 +209,56 @@ export default function SubmitPage() {
             </TabsContent>
 
             {/* Job Tab */}
-            <TabsContent value="job" className="mt-6">
-              <div className="bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group">
+            <TabsContent value="job" className="mt-4">
+              <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">Submit a Job</h3>
-                  </div>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="job-title">Job Title *</Label>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="job-title" className="text-sm">Job Title *</Label>
                       <Input
                         id="job-title"
                         value={formData.title}
                         onChange={(e) => handleInputChange('title', e.target.value)}
                         placeholder="e.g., Senior Software Engineer"
                         required
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="company">Company *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="company" className="text-sm">Company *</Label>
                       <Input
                         id="company"
                         value={formData.company}
                         onChange={(e) => handleInputChange('company', e.target.value)}
                         placeholder="Company name"
                         required
+                        className="text-sm"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="location">Location</Label>
+                      <div className="space-y-2">
+                        <Label htmlFor="location" className="text-sm">Location</Label>
                         <Input
                           id="location"
                           value={formData.location}
                           onChange={(e) => handleInputChange('location', e.target.value)}
                           placeholder="e.g., Remote, San Francisco"
+                          className="text-sm"
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="salary">Salary Range</Label>
+                      <div className="space-y-2">
+                        <Label htmlFor="salary" className="text-sm">Salary Range</Label>
                         <Input
                           id="salary"
                           value={formData.salary}
                           onChange={(e) => handleInputChange('salary', e.target.value)}
                           placeholder="e.g., $100k-$150k"
+                          className="text-sm"
                         />
                       </div>
                     </div>
-                    <div>
-                      <Label htmlFor="job-url">Application URL *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="job-url" className="text-sm">Application URL *</Label>
                       <Input
                         id="job-url"
                         type="url"
@@ -261,16 +266,18 @@ export default function SubmitPage() {
                         onChange={(e) => handleInputChange('url', e.target.value)}
                         placeholder="https://company.com/careers/job"
                         required
+                        className="text-sm"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="job-description">Job Description</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="job-description" className="text-sm">Job Description</Label>
                       <Textarea
                         id="job-description"
                         value={formData.description}
                         onChange={(e) => handleInputChange('description', e.target.value)}
                         placeholder="Brief description of the role and requirements"
                         rows={4}
+                        className="text-sm"
                       />
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
@@ -281,7 +288,6 @@ export default function SubmitPage() {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
       </main>
     </div>
   )
