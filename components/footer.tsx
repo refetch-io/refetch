@@ -44,6 +44,10 @@ export function Footer({ variant = 'sidebar' }: FooterProps) {
           Cookies
         </a>
         <span>•</span>
+        <a href="#" className="hover:text-gray-700 bg-gray-200/60 px-2 py-1 rounded-md hover:bg-gray-200/80 transition-colors">
+          Donate
+        </a>
+        <span>•</span>
         <div className="flex items-center gap-1">
           {/* Social icons grouped together */}
           <Twitter className="w-3 h-3 text-gray-900 flex-shrink-0" />

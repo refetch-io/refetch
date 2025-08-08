@@ -46,7 +46,7 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
         label: 'Visitors',
         data: values,
         borderColor: '#4e1cb3',
-        backgroundColor: 'rgba(78, 28, 179, 0.1)',
+        backgroundColor: '#faf5ff',
         borderWidth: 2,
         fill: true,
         tension: 0.4,

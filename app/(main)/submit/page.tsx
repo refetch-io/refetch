@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation"
 export default function SubmitPage() {
   const [activeTab, setActiveTab] = useState("link")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+
+  const [submittedPostId, setSubmittedPostId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -49,6 +52,7 @@ export default function SubmitPage() {
     }
 
     setIsSubmitting(true)
+    setIsAnalyzing(true)
 
     try {
       // Get JWT token for authentication
@@ -69,8 +73,8 @@ export default function SubmitPage() {
 
       if (response.ok) {
         const result = await response.json()
-        // Redirect to the submitted post
-        router.push(`/threads/${result.postId}`)
+        setSubmittedPostId(result.postId)
+        // Don't redirect immediately, show metadata first
       } else {
         const error = await response.json()
         alert(`Error submitting post: ${error.message}`)
@@ -80,7 +84,59 @@ export default function SubmitPage() {
       alert('Error submitting post. Please try again.')
     } finally {
       setIsSubmitting(false)
+      setIsAnalyzing(false)
     }
+  }
+
+  const handleViewPost = () => {
+    if (submittedPostId) {
+      router.push(`/threads/${submittedPostId}`)
+    }
+  }
+
+  const handleSubmitAnother = () => {
+    setSubmittedPostId(null)
+    setFormData({
+      title: "",
+      url: "",
+      description: "",
+      company: "",
+      location: "",
+      salary: "",
+      type: "link"
+    })
+    setActiveTab("link")
+  }
+
+  // Show success message if post was submitted successfully
+  if (submittedPostId) {
+    return (
+      <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
+        <main className="flex-1 space-y-6 min-w-0">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-green-600">✅ Post Submitted Successfully!</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-600">
+                Your post has been submitted and analyzed. Here are the results:
+              </p>
+              
+
+              
+              <div className="flex gap-3 pt-4">
+                <Button onClick={handleViewPost} className="flex-1">
+                  View Post
+                </Button>
+                <Button onClick={handleSubmitAnother} variant="outline" className="flex-1">
+                  Submit Another Post
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    )
   }
 
   // Don't show loading screen for static form - just render the form immediately

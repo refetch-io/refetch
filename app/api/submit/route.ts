@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Client, Databases, Account, Users, ID } from 'node-appwrite'
+import { PostMetadataEnhancer } from '@/lib/openai'
+import { PostSubmissionData } from '@/lib/types'
 
 // Initialize Appwrite clients for server-side operations
 // First client for API key operations (database operations)
@@ -90,10 +92,57 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Prepare the document data
-    const documentData: any = {
+    // Step 3: Enhance post with OpenAI metadata analysis
+    const postData: PostSubmissionData = {
       title: title.trim(),
       description: description?.trim() || '',
+      url: url?.trim(),
+      company: company?.trim(),
+      location: location?.trim(),
+      salary: salary?.trim(),
+      type: type
+    }
+
+    let metadata
+    try {
+      console.log('Enhancing post with OpenAI...')
+      // Create a temporary metadata object with original content for OpenAI analysis
+      const enhancedMetadata = await PostMetadataEnhancer.enhancePost(postData)
+      metadata = {
+        ...enhancedMetadata,
+        originalTitle: postData.title,
+        originalDescription: postData.description || ''
+      }
+      console.log('OpenAI enhancement completed:', metadata)
+    } catch (error) {
+      console.error('OpenAI enhancement failed, using default metadata:', error)
+      // Continue with default metadata if OpenAI fails
+      metadata = {
+        language: 'English',
+        category: type === 'show' ? 'show' : 'main',
+        spellingScore: 80,
+        spellingIssues: [],
+        optimizedTitle: postData.title,
+        optimizedDescription: postData.description || '',
+        originalTitle: postData.title,
+        originalDescription: postData.description || '',
+        topics: [],
+        spamScore: 10,
+        spamIssues: [],
+        safetyScore: 90,
+        safetyIssues: [],
+        readingLevel: 'Intermediate',
+        readingTime: 5,
+        titleTranslations: {},
+        qualityScore: 50,
+        qualityIssues: []
+      }
+    }
+
+    // Step 4: Prepare the document data (only essential fields, no metadata)
+    const documentData: any = {
+      title: metadata.optimizedTitle || postData.title,
+      description: metadata.optimizedDescription || postData.description,
       userId: user.$id,
       userName: user.name || user.email || 'Anonymous',
       countUp: 0,
@@ -101,21 +150,20 @@ export async function POST(request: NextRequest) {
       type: type
     }
 
-    console.log(documentData)
-
     // Add type-specific fields
-    if (url) {
-      documentData.link = url.trim()
+    if (postData.url) {
+      documentData.link = postData.url
     }
 
     if (type === 'job') {
-      documentData.company = company.trim()
-      if (location) documentData.location = location.trim()
-      if (salary) documentData.salary = salary.trim()
+      documentData.company = postData.company
+      if (postData.location) documentData.location = postData.location
+      if (postData.salary) documentData.salary = postData.salary
     }
 
+    console.log('Creating document with enhanced metadata:', documentData)
+
     // Create the document in Appwrite using the server-side client
-    // The client is already configured for server-side operations
     const createdDocument = await databases.createDocument(
       DATABASE_ID,
       COLLECTION_ID,
