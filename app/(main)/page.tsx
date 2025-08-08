@@ -1,4 +1,4 @@
-import { fetchPostsFromAppwrite } from "@/lib/data"
+import { fetchPostsFromAppwriteWithVotes } from "@/lib/data"
 import { ClientPage } from "./client-page"
 import type { Metadata } from "next"
 
@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 
 export default async function RefetchHomePage() {
   // Fetch posts from Appwrite on the server (already sorted by score)
-  const result = await fetchPostsFromAppwrite()
+  // Note: We'll fetch votes on the client side since we need the user ID
+  const result = await fetchPostsFromAppwriteWithVotes()
   
   // Add timestamp for debugging
   console.log(`Page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)

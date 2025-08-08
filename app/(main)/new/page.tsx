@@ -1,4 +1,4 @@
-import { fetchPostsFromAppwriteWithSort } from "@/lib/data"
+import { fetchPostsFromAppwriteWithSortAndVotes } from "@/lib/data"
 import { ClientPage } from "../client-page"
 import type { Metadata } from "next"
 
@@ -7,16 +7,16 @@ export const revalidate = 0
 
 export const metadata: Metadata = {
   title: "New - Refetch",
-  description: "Browse the newest posts on Refetch - stay up to date with the latest tech news, discussions, and community submissions as they happen.",
+  description: "Latest technology news and discussions sorted by newest first.",
   openGraph: {
     title: "New - Refetch",
-    description: "Browse the newest posts on Refetch - stay up to date with the latest tech news, discussions, and community submissions as they happen.",
+    description: "Latest technology news and discussions sorted by newest first.",
   },
 }
 
 export default async function NewPage() {
   // Fetch posts from Appwrite on the server (sorted by creation date)
-  const result = await fetchPostsFromAppwriteWithSort('new')
+  const result = await fetchPostsFromAppwriteWithSortAndVotes('new')
   
   // Add timestamp for debugging
   console.log(`New page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)

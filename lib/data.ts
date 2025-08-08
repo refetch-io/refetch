@@ -22,6 +22,8 @@ export interface NewsItem {
   isSponsored?: boolean
   link?: string
   type?: string
+  // Vote information
+  currentVote?: 'up' | 'down' | null
 }
 
 // Appwrite post interface matching the collection structure
@@ -474,6 +476,230 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
     const appwritePosts = posts.documents.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post as AppwritePost, index)
     )
+
+    return { posts: appwritePosts }
+  } catch (error) {
+    console.error('Error fetching user submissions from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+  }
+}
+
+// Function to fetch votes for multiple posts for a specific user
+export async function fetchVotesForPosts(postIds: string[], userId: string): Promise<Map<string, 'up' | 'down' | null>> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return new Map()
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    // Create a map of postId -> vote type
+    const voteMap = new Map<string, 'up' | 'down' | null>()
+    
+    // Initialize all posts with null vote
+    postIds.forEach(postId => {
+      voteMap.set(postId, null)
+    })
+    
+    // Fetch votes for each post ID individually since Appwrite doesn't support OR queries easily
+    for (const postId of postIds) {
+      try {
+        const votes = await databases.listDocuments(
+          process.env.APPWRITE_DATABASE_ID || '', // Database ID
+          process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
+          [
+            Query.equal('postId', postId),
+            Query.equal('userId', userId)
+          ]
+        )
+
+        // Set the vote if found
+        if (votes.documents.length > 0) {
+          const vote = votes.documents[0]
+          const voteType = vote.count === 1 ? 'up' : 'down'
+          voteMap.set(postId, voteType)
+        }
+      } catch (error) {
+        console.error(`Error fetching votes for post ${postId}:`, error)
+        // Continue with other posts even if one fails
+      }
+    }
+
+    console.log(`Successfully fetched votes for ${postIds.length} posts for user ${userId}`)
+
+    return voteMap
+  } catch (error) {
+    console.error('Error fetching votes from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    // Return empty map on error
+    return new Map()
+  }
+}
+
+// Updated function to fetch posts with vote information
+export async function fetchPostsFromAppwriteWithVotes(userId?: string): Promise<{ posts: NewsItem[], error?: string }> {
+  return fetchPostsFromAppwriteWithSortAndVotes('score', userId)
+}
+
+// Updated function to fetch posts with custom sorting and vote information
+export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' | 'new' | 'show', userId?: string): Promise<{ posts: NewsItem[], error?: string }> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return { posts: [], error: 'Missing Appwrite configuration' }
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    // Log environment variables for debugging (remove sensitive data in production)
+    console.log('Appwrite Config:', {
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
+      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
+    })
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    let queries = []
+    
+    // Apply different sorting based on sortType
+    switch (sortType) {
+      case 'score':
+        // Sort by score (countUp - countDown) - highest first, then by creation date
+        queries = [
+          Query.orderDesc('countUp'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'new':
+        // Sort by creation date - newest first
+        queries = [
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'show':
+        // Filter by type=show, sort by score first, then by creation date
+        queries = [
+          Query.equal('type', 'show'),
+          Query.orderDesc('countUp'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+    }
+    
+    const posts = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
+      queries
+    )
+
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
+
+    const appwritePosts = posts.documents.map((post: any, index: number) => 
+      convertAppwritePostToNewsItem(post as AppwritePost, index)
+    )
+
+    // Fetch votes for all posts if userId is provided
+    if (userId && appwritePosts.length > 0) {
+      const postIds = appwritePosts.map(post => post.id)
+      const voteMap = await fetchVotesForPosts(postIds, userId)
+      
+      // Add vote information to each post
+      appwritePosts.forEach(post => {
+        post.currentVote = voteMap.get(post.id) || null
+      })
+    }
+
+    return { posts: appwritePosts }
+  } catch (error) {
+    console.error('Error fetching posts from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    // Log additional debugging information
+    console.error('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      hasApiKey: !!process.env.APPWRITE_API_KEY
+    })
+    
+    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+  }
+}
+
+// Updated function to fetch user submissions with vote information
+export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string): Promise<{ posts: NewsItem[], error?: string }> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return { posts: [], error: 'Missing Appwrite configuration' }
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    const posts = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
+      [
+        Query.equal('userId', userId),
+        Query.orderDesc('$createdAt')
+      ]
+    )
+
+    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}`)
+
+    const appwritePosts = posts.documents.map((post: any, index: number) => 
+      convertAppwritePostToNewsItem(post as AppwritePost, index)
+    )
+
+    // Fetch votes for all posts
+    if (appwritePosts.length > 0) {
+      const postIds = appwritePosts.map(post => post.id)
+      const voteMap = await fetchVotesForPosts(postIds, userId)
+      
+      // Add vote information to each post
+      appwritePosts.forEach(post => {
+        post.currentVote = voteMap.get(post.id) || null
+      })
+    }
 
     return { posts: appwritePosts }
   } catch (error) {

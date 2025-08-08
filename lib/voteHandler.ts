@@ -44,12 +44,6 @@ export const handleVote = async (
   onVoteUpdate?: (newState: VoteState) => void
 ) => {
   try {
-    // Prevent voting if user already voted the same way
-    if (currentVote === direction) {
-      console.log('User already voted this way')
-      return
-    }
-
     // Get JWT token for authentication
     const jwt = await getCachedJWT()
 
@@ -63,22 +57,44 @@ export const handleVote = async (
       let newScore: number
       let newVote: 'up' | 'down' | null
 
-      if (currentVote === null) {
+      console.log('=== VOTE DEBUG ===')
+      console.log('Current state:', {
+        currentVote,
+        direction,
+        currentScore
+      })
+
+      if (currentVote === direction) {
+        // Removing vote - clicking the same vote type
+        newScore = currentScore - (direction === "up" ? 1 : -1)
+        newVote = null
+        console.log('Removing vote - new score:', newScore, 'new vote:', newVote)
+      } else if (currentVote === null) {
         // New vote - add to current score
         newScore = currentScore + (direction === "up" ? 1 : -1)
         newVote = direction
+        console.log('New vote - new score:', newScore, 'new vote:', newVote)
       } else {
         // Changing vote - remove previous vote and add new vote
         const previousVoteValue = currentVote === 'up' ? 1 : -1
         const newVoteValue = direction === 'up' ? 1 : -1
         newScore = currentScore - previousVoteValue + newVoteValue
         newVote = direction
+        console.log('Changing vote:', {
+          previousVote: currentVote,
+          newVote: direction,
+          previousValue: previousVoteValue,
+          newValue: newVoteValue,
+          scoreChange: -previousVoteValue + newVoteValue,
+          newScore
+        })
       }
 
       onVoteUpdate({
         currentVote: newVote,
         score: newScore
       })
+      console.log('=== END VOTE DEBUG ===')
     }
 
     // Make the API call to the vote endpoint

@@ -1,7 +1,7 @@
 "use client"
 import { ChevronUp, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import Link from "next/link"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
@@ -10,6 +10,8 @@ import { handleVote, type VoteState } from "@/lib/voteHandler"
 import { SponsoredAd } from "@/components/sponsored-ad"
 import { SearchAndFilter } from "@/components/search-and-filter"
 import { Favicon } from "@/components/favicon"
+import { useAuth } from "@/contexts/auth-context"
+import { getCachedJWT } from "@/lib/jwtCache"
 import {
   Globe,
   Zap,
@@ -427,16 +429,69 @@ interface ClientPageProps {
 
 export function ClientPage({ initialPosts, error }: ClientPageProps) {
   // Use the posts from Appwrite, fallback to empty array if none
-  const limitedNewsItems = initialPosts.slice(0, MAX_ITEMS_DISPLAY)
+  const limitedNewsItems = useMemo(() => initialPosts.slice(0, MAX_ITEMS_DISPLAY), [initialPosts])
   
   const [visibleItems, setVisibleItems] = useState<NewsItem[]>([])
   const [paddingTop, setPaddingTop] = useState(0)
   const [paddingBottom, setPaddingBottom] = useState(0)
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
+  const { user, isAuthenticated } = useAuth()
 
   // Ref to measure the position of the news list within the document
   const newsListContainerRef = useRef<HTMLDivElement>(null)
+
+  // Fetch votes for the current user when component mounts
+  useEffect(() => {
+    const fetchVotes = async () => {
+      if (!isAuthenticated || !user?.$id || limitedNewsItems.length === 0) {
+        return
+      }
+
+      try {
+        const postIds = limitedNewsItems.map(post => post.id)
+        
+        // Get JWT token for authentication
+        const jwt = await getCachedJWT()
+        
+        if (!jwt) {
+          console.error('No JWT token available')
+          return
+        }
+
+        const response = await fetch('/api/vote/batch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+          },
+          body: JSON.stringify({ postIds })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          
+          // Initialize vote states with fetched data
+          const initialVoteStates: Record<string, VoteState> = {}
+          limitedNewsItems.forEach(post => {
+            const voteType = data.votes[post.id] || null
+            initialVoteStates[post.id] = {
+              currentVote: voteType,
+              score: post.score
+            }
+          })
+          
+          setVoteStates(initialVoteStates)
+        } else {
+          console.error('Failed to fetch votes:', response.status)
+        }
+      } catch (error) {
+        console.error('Error fetching votes:', error)
+      }
+    }
+
+    fetchVotes()
+  }, [isAuthenticated, user?.$id, limitedNewsItems])
 
   // Helper function to get the current vote state for an item
   const getVoteState = (itemId: string): VoteState => {
@@ -471,16 +526,14 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
 
   const handleVoteClick = async (itemId: string, direction: "up" | "down") => {
     const currentState = getVoteState(itemId)
-    const item = limitedNewsItems.find(item => item.id === itemId)
-    const currentScore = item?.score || 0 // Use the actual item score
     
-    if (votingItems.has(itemId) || currentState.currentVote === direction) {
-      return // Prevent voting if already voting or already voted this way
+    if (votingItems.has(itemId)) {
+      return // Prevent voting if already voting
     }
 
     setVotingState(itemId, true)
     try {
-      await handleVote(itemId, direction, currentState.currentVote, currentScore, (newState) => {
+      await handleVote(itemId, direction, currentState.currentVote, currentState.score, (newState) => {
         updateVoteState(itemId, newState)
       })
     } catch (error) {
