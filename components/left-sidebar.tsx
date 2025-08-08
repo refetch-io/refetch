@@ -97,8 +97,8 @@ export function LeftSidebar() {
   const pathname = usePathname()
   
   return (
-    <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-16 h-fit">
-      <div className="pt-4 pr-4 pb-4">
+    <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20 h-fit">
+      <div className="pr-4 pb-4">
         <div className="space-y-1">
           {navigationItems.map((item) => (
             <NavigationLink

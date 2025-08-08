@@ -19,7 +19,7 @@ const users = new Users(apiKeyClient)
 
 // Database and collection IDs
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
-const COLLECTION_ID = process.env.APPWRITE_COLLECTION_ID || ''
+const COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
 
 export async function POST(request: NextRequest) {
   try {

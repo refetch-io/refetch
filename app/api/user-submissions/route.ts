@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     // Fetch posts by the current user
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '',
-      process.env.APPWRITE_COLLECTION_ID || '',
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [
         Query.equal('userId', user.$id),
         Query.orderDesc('$createdAt')
