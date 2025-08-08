@@ -6,7 +6,7 @@ import Link from "next/link"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
 import { type NewsItem } from "@/lib/data"
-import { handleVote } from "@/lib/voteHandler"
+import { handleVote, type VoteState } from "@/lib/voteHandler"
 import { SponsoredAd } from "@/components/sponsored-ad"
 import { SearchAndFilter } from "@/components/search-and-filter"
 import { Favicon } from "@/components/favicon"
@@ -432,9 +432,63 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   const [visibleItems, setVisibleItems] = useState<NewsItem[]>([])
   const [paddingTop, setPaddingTop] = useState(0)
   const [paddingBottom, setPaddingBottom] = useState(0)
+  const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
+  const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
 
   // Ref to measure the position of the news list within the document
   const newsListContainerRef = useRef<HTMLDivElement>(null)
+
+  // Helper function to get the current vote state for an item
+  const getVoteState = (itemId: string): VoteState => {
+    const item = limitedNewsItems.find(item => item.id === itemId)
+    const voteState = voteStates[itemId]
+    return {
+      currentVote: voteState?.currentVote || null,
+      score: voteState?.score !== undefined ? voteState.score : (item?.score || 0)
+    }
+  }
+
+  // Helper function to update vote state for an item
+  const updateVoteState = (itemId: string, newState: VoteState) => {
+    setVoteStates(prev => ({
+      ...prev,
+      [itemId]: newState
+    }))
+  }
+
+  // Helper function to set voting state for an item
+  const setVotingState = (itemId: string, isVoting: boolean) => {
+    setVotingItems(prev => {
+      const newSet = new Set(prev)
+      if (isVoting) {
+        newSet.add(itemId)
+      } else {
+        newSet.delete(itemId)
+      }
+      return newSet
+    })
+  }
+
+  const handleVoteClick = async (itemId: string, direction: "up" | "down") => {
+    const currentState = getVoteState(itemId)
+    const item = limitedNewsItems.find(item => item.id === itemId)
+    const currentScore = item?.score || 0 // Use the actual item score
+    
+    if (votingItems.has(itemId) || currentState.currentVote === direction) {
+      return // Prevent voting if already voting or already voted this way
+    }
+
+    setVotingState(itemId, true)
+    try {
+      await handleVote(itemId, direction, currentState.currentVote, currentScore, (newState) => {
+        updateVoteState(itemId, newState)
+      })
+    } catch (error) {
+      console.error('Error handling vote:', error)
+    } finally {
+      setVotingState(itemId, false)
+    }
+  }
 
   const updateVisibleItems = useCallback(() => {
     const container = newsListContainerRef.current
@@ -497,7 +551,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   }, [updateVisibleItems])
 
   return (
-    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-2 lg:pt-4">
+    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
         {/* Error Display */}
@@ -562,31 +616,51 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                 {/* Upvote/Downvote Section */}
                 {!item.isSponsored && (
                   <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 hover:bg-green-50 text-gray-400 hover:text-green-600"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleVote(item.id, "up")
-                      }}
-                      aria-label={`Upvote ${item.title}`}
-                    >
-                      <ChevronUp className="h-4 w-4" />
-                    </Button>
-                    <span className="text-[0.65rem] text-gray-700 font-medium">{item.score}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 hover:bg-red-50 text-gray-400 hover:text-red-600"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleVote(item.id, "down")
-                      }}
-                      aria-label={`Downvote ${item.title}`}
-                    >
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
+                    {(() => {
+                      const voteState = getVoteState(item.id)
+                      const isVoting = votingItems.has(item.id)
+                      return (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-5 w-5 hover:bg-green-50 ${
+                              voteState.currentVote === 'up' 
+                                ? 'text-green-600 bg-green-50' 
+                                : 'text-gray-400 hover:text-green-600'
+                            }`}
+                            onClick={async (e) => {
+                              e.preventDefault()
+                              await handleVoteClick(item.id, "up")
+                            }}
+                            disabled={isVoting}
+                            aria-label={`Upvote ${item.title}`}
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </Button>
+                          <span className="text-[0.65rem] text-gray-700 font-medium">
+                            {voteState.score}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-5 w-5 hover:bg-red-50 ${
+                              voteState.currentVote === 'down' 
+                                ? 'text-red-600 bg-red-50' 
+                                : 'text-gray-400 hover:text-red-600'
+                            }`}
+                            onClick={async (e) => {
+                              e.preventDefault()
+                              await handleVoteClick(item.id, "down")
+                            }}
+                            disabled={isVoting}
+                            aria-label={`Downvote ${item.title}`}
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </>
+                      )
+                    })()}
                   </div>
                 )}
                 {item.isSponsored && (
@@ -658,7 +732,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
       </main>
 
       {/* Right Sidebar and Sponsored Ad */}
-      <aside className="hidden lg:block w-full sm:w-64 lg:w-64 sticky top-16 h-fit">
+      <aside className="hidden lg:block w-full sm:w-64 lg:w-64 sticky top-20 h-fit">
         <RightSidebar />
         <div className="mt-6">
           <RotatingAdCopy />

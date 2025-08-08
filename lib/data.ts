@@ -364,7 +364,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
-      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
@@ -415,7 +415,7 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
     
     const post = await databases.getDocument(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
-      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       id
     )
 
@@ -462,7 +462,7 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
     
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
-      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
         Query.equal('userId', userId),
         Query.orderDesc('$createdAt')

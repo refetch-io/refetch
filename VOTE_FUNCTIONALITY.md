@@ -26,17 +26,18 @@ The vote system allows authenticated users to upvote or downvote posts. Each vot
 - Other fields: title, description, userId, etc.
 
 ### Votes Collection
-- `userId`: ID of the user who voted
-- `postId`: ID of the post being voted on
-- `voteType`: Either "up" or "down"
-- `createdAt`: Timestamp of when the vote was created
+- `userId`: ID of the user who voted (String, required)
+- `postId`: ID of the post being voted on (String, required)
+- `count`: Vote value (Integer, default: 0)
+  - `1` for upvote
+  - `-1` for downvote
 
 ## Environment Variables
 
 Add the following to your `.env` file:
 
 ```env
-APPWRITE_VOTES_COLLECTION_ID=your-votes-collection-id-here
+APPWRITE_VOTES_COLLECTION_ID=68910fc60001839e0ada
 ```
 
 ## API Endpoint
@@ -68,9 +69,9 @@ Content-Type: application/json
 
 ## Vote Logic
 
-1. **New Vote**: Creates a vote record and increments the post's score
+1. **New Vote**: Creates a vote record with count=1 (upvote) or count=-1 (downvote) and increments the post's score
 2. **Same Vote**: Removes the vote record and decrements the post's score
-3. **Different Vote**: Updates the vote record and adjusts the post's score accordingly
+3. **Different Vote**: Updates the vote record count and adjusts the post's score accordingly
 
 ## Optimistic Updates
 
