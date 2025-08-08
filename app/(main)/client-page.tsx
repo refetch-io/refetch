@@ -728,7 +728,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                   <div className="flex items-center gap-2 mb-1">
                     {item.type === "show" && (
                       <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-50 text-purple-600 rounded-md whitespace-nowrap">
-                        RF show
+                        Show RF
                       </span>
                     )}
                     <Link 
