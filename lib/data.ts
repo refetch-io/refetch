@@ -363,8 +363,8 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     }
     
     const posts = await databases.listDocuments(
-      '688f787e002c78bd299f', // Database ID
-      '688f78a20022f61836ff', // Collection ID
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
       queries
     )
 
@@ -414,8 +414,8 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
     const databases = new Databases(client)
     
     const post = await databases.getDocument(
-      '688f787e002c78bd299f', // Database ID
-      '688f78a20022f61836ff', // Collection ID
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
       id
     )
 
@@ -440,5 +440,51 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
     })
     
     return null
+  }
+}
+
+// Server-side function to fetch user submissions from Appwrite
+export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<{ posts: NewsItem[], error?: string }> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return { posts: [], error: 'Missing Appwrite configuration' }
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    const posts = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_COLLECTION_ID || '', // Collection ID
+      [
+        Query.equal('userId', userId),
+        Query.orderDesc('$createdAt')
+      ]
+    )
+
+    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}`)
+
+    const appwritePosts = posts.documents.map((post: any, index: number) => 
+      convertAppwritePostToNewsItem(post as AppwritePost, index)
+    )
+
+    return { posts: appwritePosts }
+  } catch (error) {
+    console.error('Error fetching user submissions from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
   }
 }

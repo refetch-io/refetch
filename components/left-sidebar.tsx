@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp, Clock, BarChart3, Heart, Monitor, Briefcase } from "lucide-react"
+import { TrendingUp, Clock, BarChart3, Heart, Monitor, Briefcase, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -45,6 +45,11 @@ const navigationItems: NavigationItem[] = [
   //   icon: BarChart3
   // },
   {
+    href: "/mines",
+    label: "Mines",
+    icon: User
+  },
+  {
     href: "/saved",
     label: "Saved",
     icon: Heart
@@ -55,7 +60,7 @@ const navigationItems: NavigationItem[] = [
 function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: boolean }) {
   const IconComponent = item.icon
   
-  const containerClasses = `flex items-center justify-between p-2 rounded-lg cursor-pointer h-10 ${
+  const containerClasses = `flex items-center justify-between p-2 rounded-lg h-10 ${
     isActive 
       ? "bg-white" 
       : "hover:bg-gray-50"
