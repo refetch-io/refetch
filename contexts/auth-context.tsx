@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { account } from '@/lib/appwrite';
+import { clearCachedJWT } from '@/lib/jwtCache';
 
 interface User {
   $id: string;
@@ -61,10 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await account.deleteSession('current');
+      clearCachedJWT(); // Clear cached JWT on logout
       setUser(null);
     } catch (error) {
       console.error('Logout error:', error);
-      // Even if there's an error, clear the user state
+      // Even if there's an error, clear the user state and JWT cache
+      clearCachedJWT();
       setUser(null);
     }
   };

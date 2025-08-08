@@ -29,9 +29,8 @@ export function MinesClientWrapper() {
       setError(null)
 
       // Get JWT token for authentication
-      const { account } = await import('@/lib/appwrite')
-      const jwtResponse = await account.createJWT()
-      const jwt = jwtResponse.jwt
+      const { getCachedJWT } = await import('@/lib/jwtCache')
+      const jwt = await getCachedJWT()
 
       const response = await fetch('/api/user-submissions', {
         method: 'GET',
@@ -93,7 +92,7 @@ export function MinesClientWrapper() {
 
   if (authLoading) {
     // Show empty state while checking authentication
-    return <ClientPage initialPosts={[]} error={null} />
+    return <ClientPage initialPosts={[]} error={undefined} />
   }
 
   if (!isAuthenticated) {

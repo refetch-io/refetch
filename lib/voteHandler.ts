@@ -1,4 +1,4 @@
-import { account } from './appwrite'
+import { getCachedJWT } from './jwtCache'
 
 export interface VoteState {
   currentVote: 'up' | 'down' | null
@@ -8,8 +8,7 @@ export interface VoteState {
 export const fetchUserVote = async (postId: string): Promise<VoteState | null> => {
   try {
     // Get JWT token for authentication
-    const jwtResponse = await account.createJWT()
-    const jwt = jwtResponse.jwt
+    const jwt = await getCachedJWT()
 
     if (!jwt) {
       console.error('No JWT token available')
@@ -52,8 +51,7 @@ export const handleVote = async (
     }
 
     // Get JWT token for authentication
-    const jwtResponse = await account.createJWT()
-    const jwt = jwtResponse.jwt
+    const jwt = await getCachedJWT()
 
     if (!jwt) {
       console.error('No JWT token available')
