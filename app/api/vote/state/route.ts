@@ -63,7 +63,8 @@ export async function GET(request: NextRequest) {
         POSTS_COLLECTION_ID,
         postId
       )
-      postScore = (post.countUp || 0) - (post.countDown || 0)
+      // Use the count field directly instead of calculating from countUp - countDown
+      postScore = post.count || 0
     } catch (error) {
       console.error('Error fetching post score:', error)
       // Continue with score 0 if post not found

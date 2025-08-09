@@ -80,6 +80,22 @@ export async function POST(request: NextRequest) {
     // Convert vote type to count value
     const voteCount = voteType === 'up' ? 1 : -1
 
+    // Get the current post data to access the count field
+    let currentPost
+    try {
+      currentPost = await databases.getDocument(
+        DATABASE_ID,
+        POSTS_COLLECTION_ID,
+        postId
+      )
+    } catch (error) {
+      console.error('Error fetching post:', error)
+      return NextResponse.json(
+        { message: 'Post not found' },
+        { status: 404 }
+      )
+    }
+
     // Step 3: Check if user has already voted on this post
     console.log('Checking existing vote for user:', user.$id, 'post:', postId)
     const existingVote = await databases.listDocuments(
@@ -107,15 +123,16 @@ export async function POST(request: NextRequest) {
           previousVote.$id
         )
 
-        // Update the post score using decrement (decrease by 1)
-        const updateField = voteType === 'up' ? 'countUp' : 'countDown'
-        console.log('Decrementing field:', updateField, 'for post:', postId)
-        await databases.decrementDocumentAttribute(
+        // Update the post count field (decrease by the vote value)
+        const countChange = voteType === 'up' ? -1 : 1
+        console.log('Decrementing count field by:', countChange, 'for post:', postId)
+        await databases.updateDocument(
           DATABASE_ID,
           POSTS_COLLECTION_ID,
           postId,
-          updateField,
-          1
+          {
+            count: currentPost.count + countChange
+          }
         )
 
         return NextResponse.json({
@@ -135,26 +152,19 @@ export async function POST(request: NextRequest) {
           }
         )
 
-        // Update the post score (decrease previous vote, increase new vote)
-        const previousField = previousVote.count === 1 ? 'countUp' : 'countDown'
-        const newField = voteType === 'up' ? 'countUp' : 'countDown'
+        // Update the post count field (remove previous vote effect and add new vote effect)
+        const previousVoteValue = previousVote.count === 1 ? 1 : -1
+        const newVoteValue = voteType === 'up' ? 1 : -1
+        const countChange = -previousVoteValue + newVoteValue
         
-        // Decrease the previous vote count
-        await databases.decrementDocumentAttribute(
+        console.log('Updating count field by:', countChange, 'for post:', postId)
+        await databases.updateDocument(
           DATABASE_ID,
           POSTS_COLLECTION_ID,
           postId,
-          previousField,
-          1
-        )
-        
-        // Increase the new vote count
-        await databases.incrementDocumentAttribute(
-          DATABASE_ID,
-          POSTS_COLLECTION_ID,
-          postId,
-          newField,
-          1
+          {
+            count: currentPost.count + countChange
+          }
         )
 
         return NextResponse.json({
@@ -177,15 +187,16 @@ export async function POST(request: NextRequest) {
         }
       )
 
-      // Step 5: Update the post score using increment
-      const updateField = voteType === 'up' ? 'countUp' : 'countDown'
-      console.log('Incrementing field:', updateField, 'for post:', postId)
-      await databases.incrementDocumentAttribute(
+      // Step 5: Update the post count field
+      const countChange = voteType === 'up' ? 1 : -1
+      console.log('Updating count field by:', countChange, 'for post:', postId)
+      await databases.updateDocument(
         DATABASE_ID,
         POSTS_COLLECTION_ID,
         postId,
-        updateField,
-        1
+        {
+          count: currentPost.count + countChange
+        }
       )
 
       return NextResponse.json({

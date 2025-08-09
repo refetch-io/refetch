@@ -35,6 +35,7 @@ export interface AppwritePost {
   userName: string
   countUp: number
   countDown: number
+  count: number // New field for total score (upvotes - downvotes)
   link?: string
   type?: string
   $createdAt: string
@@ -260,7 +261,8 @@ function getTimeAgo(createdAt: string): string {
 
 // Helper function to convert Appwrite post to NewsItem
 export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
-  const score = post.countUp - post.countDown
+  // Use the count field directly instead of calculating from countUp - countDown
+  const score = post.count || 0
   const domain = post.link ? new URL(post.link).hostname : "appwrite.io"
   
   // Use improved time ago function
@@ -342,9 +344,9 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
-        // Sort by score (countUp - countDown) - highest first, then by creation date
+        // Sort by count (total score) - highest first, then by creation date
         queries = [
-          Query.orderDesc('countUp'),
+          Query.orderDesc('count'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -355,10 +357,10 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
         ]
         break
       case 'show':
-        // Filter by type=show, sort by score first, then by creation date
+        // Filter by type=show, sort by count first, then by creation date
         queries = [
           Query.equal('type', 'show'),
-          Query.orderDesc('countUp'),
+          Query.orderDesc('count'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -591,9 +593,9 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
-        // Sort by score (countUp - countDown) - highest first, then by creation date
+        // Sort by count (total score) - highest first, then by creation date
         queries = [
-          Query.orderDesc('countUp'),
+          Query.orderDesc('count'),
           Query.orderDesc('$createdAt')
         ]
         break

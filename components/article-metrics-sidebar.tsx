@@ -33,7 +33,7 @@ export function ArticleMetricsSidebar({ score, commentsCount }: ArticleMetricsSi
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ThumbsUp className="w-4 h-4 text-gray-500" />
-              <span>Upvote Score:</span>
+              <span>Total Score:</span>
             </div>
             <span className="font-medium text-gray-900">{score}</span>
           </div>

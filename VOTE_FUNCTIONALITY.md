@@ -23,6 +23,7 @@ The vote system allows authenticated users to upvote or downvote posts. Each vot
 ### Posts Collection
 - `countUp`: Number of upvotes
 - `countDown`: Number of downvotes
+- `count`: Total score (upvotes - downvotes)
 - Other fields: title, description, userId, etc.
 
 ### Votes Collection
@@ -69,9 +70,11 @@ Content-Type: application/json
 
 ## Vote Logic
 
-1. **New Vote**: Creates a vote record with count=1 (upvote) or count=-1 (downvote) and increments the post's score
-2. **Same Vote**: Removes the vote record and decrements the post's score
-3. **Different Vote**: Updates the vote record count and adjusts the post's score accordingly
+1. **New Vote**: Creates a vote record with count=1 (upvote) or count=-1 (downvote) and updates the post's count field
+2. **Same Vote**: Removes the vote record and decrements the post's count field
+3. **Different Vote**: Updates the vote record count and adjusts the post's count field accordingly
+
+The `count` field represents the total score (upvotes - downvotes) and is updated directly instead of maintaining separate `countUp` and `countDown` fields.
 
 ## Optimistic Updates
 
