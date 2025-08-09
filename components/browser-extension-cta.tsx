@@ -93,7 +93,7 @@ export function BrowserExtensionCTA() {
   const BrowserIcon = browser.icon
 
   return (
-    <div className="bg-transparent border border-gray-200 rounded-lg p-3 mt-2">
+    <div className="bg-transparent border border-gray-200 rounded-lg p-3 -mt-2 mb-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Browser Icon */}
