@@ -348,9 +348,20 @@ function buildAnalysisPrompt(postData, urlContent) {
         prompt += `URL Description: "${urlContent.description}"\n`;
         
         if (urlContent.rawHtml) {
-            prompt += `\n=== FULL WEBSITE HTML CONTENT ===\n`;
-            prompt += `The following is the raw HTML content from the website. Analyze this directly to understand the full context:\n\n`;
-            prompt += urlContent.rawHtml;
+            prompt += `\n=== WEBSITE HTML CONTENT (TRUNCATED) ===\n`;
+            prompt += `The following is a truncated version of the HTML content from the website. Analyze this to understand the context:\n\n`;
+            
+            // Use token-aware truncation to stay well under limits
+            // Reserve ~80k tokens for the prompt, ~40k for HTML content
+            const maxTokensForHtml = 40000;
+            const truncatedHtml = truncateToTokenLimit(urlContent.rawHtml, maxTokensForHtml);
+            
+            // Log token estimates for debugging
+            const originalTokens = estimateTokenCount(urlContent.rawHtml);
+            const truncatedTokens = estimateTokenCount(truncatedHtml);
+            console.log(`HTML tokens: ${originalTokens} → ${truncatedTokens} (truncated)`);
+            
+            prompt += truncatedHtml;
             prompt += `\n=== END HTML CONTENT ===\n`;
         } else {
             prompt += `URL Content Preview: "${urlContent.content.substring(0, 1000)}..."\n`;
@@ -362,6 +373,12 @@ function buildAnalysisPrompt(postData, urlContent) {
     }
     
     prompt += `\nPlease analyze this content and provide the requested metadata in JSON format.`;
+    
+    // Final safety check: estimate total tokens and warn if approaching limits
+    const totalTokens = estimateTokenCount(prompt);
+    if (totalTokens > 100000) {
+        console.warn(`Warning: Prompt is ${totalTokens} tokens, approaching OpenAI limit of 128k`);
+    }
     
     return prompt;
 }
@@ -419,4 +436,24 @@ function validateTranslations(translations) {
     }
     
     return {};
+}
+
+/**
+ * Estimate token count for a given text
+ * Rough approximation: 1 token ≈ 4 characters for English text
+ */
+function estimateTokenCount(text) {
+    if (!text) return 0;
+    return Math.ceil(text.length / 4);
+}
+
+/**
+ * Truncate text to fit within token limits
+ */
+function truncateToTokenLimit(text, maxTokens) {
+    if (!text) return '';
+    const maxChars = maxTokens * 4; // Rough character estimate
+    if (text.length <= maxChars) return text;
+    
+    return text.substring(0, maxChars) + '\n\n[Content truncated to fit token limits]';
 }
