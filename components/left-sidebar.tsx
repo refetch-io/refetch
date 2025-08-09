@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Footer } from "@/components/footer"
+import { useAuth } from "@/contexts/auth-context"
 
 // Navigation item interface
 interface NavigationItem {
@@ -13,6 +14,7 @@ interface NavigationItem {
   icon: React.ComponentType<{ className?: string }>
   badge?: string
   isSpecial?: boolean // For items that need different styling (like Top)
+  requiresAuth?: boolean // For items that require authentication
 }
 
 // Navigation configuration
@@ -47,18 +49,29 @@ const navigationItems: NavigationItem[] = [
   {
     href: "/mines",
     label: "Mines",
-    icon: User
+    icon: User,
+    requiresAuth: true
   },
   {
     href: "/saved",
     label: "Saved",
-    icon: Heart
+    icon: Heart,
+    requiresAuth: true
   }
 ]
 
 // Navigation link component
 function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: boolean }) {
   const IconComponent = item.icon
+  const { isAuthenticated } = useAuth()
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (item.requiresAuth && !isAuthenticated) {
+      e.preventDefault()
+      window.location.href = '/login'
+      return
+    }
+  }
   
   const containerClasses = `flex items-center justify-between p-2 rounded-lg h-10 ${
     isActive 
@@ -78,7 +91,7 @@ function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: bo
   
   return (
     <Link href={item.href} passHref>
-      <div className={containerClasses}>
+      <div className={containerClasses} onClick={handleClick}>
         <div className="flex items-center gap-3">
           <IconComponent className={iconClasses} />
           <span className={textClasses}>{item.label}</span>
