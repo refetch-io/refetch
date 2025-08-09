@@ -12,6 +12,7 @@ import { SearchAndFilter } from "@/components/search-and-filter"
 import { Favicon } from "@/components/favicon"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
+
 import {
   Globe,
   Zap,
@@ -525,6 +526,12 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   }
 
   const handleVoteClick = async (itemId: string, direction: "up" | "down") => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      console.log('User not authenticated, cannot vote')
+      return
+    }
+    
     const currentState = getVoteState(itemId)
     
     if (votingItems.has(itemId)) {
@@ -677,13 +684,17 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className={`h-5 w-5 hover:bg-green-50 ${
+                            className={`h-5 w-5 ${
                               voteState.currentVote === 'up' 
-                                ? 'text-green-600 bg-green-50' 
-                                : 'text-gray-400 hover:text-green-600'
+                                ? 'text-green-600 bg-green-50 hover:bg-green-50' 
+                                : 'text-gray-400 hover:bg-green-50 hover:text-green-600'
                             }`}
                             onClick={async (e) => {
                               e.preventDefault()
+                              if (!isAuthenticated) {
+                                window.location.href = '/login'
+                                return
+                              }
                               await handleVoteClick(item.id, "up")
                             }}
                             disabled={isVoting}
@@ -697,13 +708,17 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className={`h-5 w-5 hover:bg-red-50 ${
+                            className={`h-5 w-5 ${
                               voteState.currentVote === 'down' 
-                                ? 'text-red-600 bg-red-50' 
-                                : 'text-gray-400 hover:text-red-600'
+                                ? 'text-red-600 bg-red-50 hover:bg-red-50' 
+                                : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
                             }`}
                             onClick={async (e) => {
                               e.preventDefault()
+                              if (!isAuthenticated) {
+                                window.location.href = '/login'
+                                return
+                              }
                               await handleVoteClick(item.id, "down")
                             }}
                             disabled={isVoting}

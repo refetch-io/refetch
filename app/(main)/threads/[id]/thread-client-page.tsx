@@ -6,6 +6,8 @@ import { CommentsSection } from "@/components/comments-section"
 import { handleVote, fetchUserVote, type VoteState } from "@/lib/voteHandler"
 import { Favicon } from "@/components/favicon"
 import { type NewsItem } from "@/lib/data"
+import { useAuth } from "@/hooks/use-auth"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface ThreadClientPageProps {
   article: NewsItem
@@ -18,6 +20,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   })
   const [isLoading, setIsLoading] = useState(true)
   const [isVoting, setIsVoting] = useState(false)
+  const { isAuthenticated } = useAuth()
 
   // Fetch user's current vote state on component mount
   useEffect(() => {
@@ -42,6 +45,12 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   }, [article.id])
 
   const handleVoteClick = async (direction: "up" | "down") => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      console.log('User not authenticated, cannot vote')
+      return
+    }
+    
     if (isVoting || voteState.currentVote === direction) {
       return // Prevent voting if already voting or already voted this way
     }
@@ -83,37 +92,61 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       {/* Article Card - Same structure as main page */}
       <div className="bg-white px-4 py-2 rounded-lg border-none shadow-none w-full flex">
         {/* Upvote/Downvote Section */}
-        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-10">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`h-6 w-6 hover:bg-gray-100 ${
-              voteState.currentVote === 'up' 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-400'
-            }`}
-            onClick={() => handleVoteClick("up")}
-            disabled={isVoting}
-            aria-label={`Upvote ${article.title}`}
-          >
-            <ChevronUp className="h-5 w-5" />
-          </Button>
-          <span className="text-sm text-gray-600">{voteState.score}</span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`h-6 w-6 hover:bg-gray-100 ${
-              voteState.currentVote === 'down' 
-                ? 'text-red-600 bg-red-50' 
-                : 'text-gray-400'
-            }`}
-            onClick={() => handleVoteClick("down")}
-            disabled={isVoting}
-            aria-label={`Downvote ${article.title}`}
-          >
-            <ChevronDown className="h-5 w-5" />
-          </Button>
-        </div>
+        <TooltipProvider>
+          <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-10">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`h-6 w-6 ${
+                    !isAuthenticated 
+                      ? 'text-gray-300 cursor-not-allowed opacity-50' 
+                      : voteState.currentVote === 'up' 
+                        ? 'text-green-600 bg-green-50 hover:bg-gray-100' 
+                        : 'text-gray-400 hover:bg-gray-100'
+                  }`}
+                  onClick={() => handleVoteClick("up")}
+                  disabled={isVoting || !isAuthenticated}
+                  aria-label={`Upvote ${article.title}`}
+                >
+                  <ChevronUp className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              {!isAuthenticated && (
+                <TooltipContent>
+                  <p>Please log in to vote</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+            <span className="text-sm text-gray-600">{voteState.score}</span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`h-6 w-6 ${
+                    !isAuthenticated 
+                      ? 'text-gray-300 cursor-not-allowed opacity-50' 
+                      : voteState.currentVote === 'down' 
+                        ? 'text-red-600 bg-red-50 hover:bg-gray-100' 
+                        : 'text-gray-400 hover:bg-gray-100'
+                  }`}
+                  onClick={() => handleVoteClick("down")}
+                  disabled={isVoting || !isAuthenticated}
+                  aria-label={`Downvote ${article.title}`}
+                >
+                  <ChevronDown className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              {!isAuthenticated && (
+                <TooltipContent>
+                  <p>Please log in to vote</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </div>
+        </TooltipProvider>
 
         {/* Article Content */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
