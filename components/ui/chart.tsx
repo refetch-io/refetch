@@ -36,6 +36,15 @@ interface StatsChartProps {
 }
 
 export function StatsChart({ data, selectedTab }: StatsChartProps) {
+  // Check if data is empty or undefined
+  if (!data || data.length === 0) {
+    return (
+      <div className="h-20 overflow-hidden -mx-2 rounded-lg flex items-center justify-center">
+        <div className="text-gray-400 text-xs">No data available</div>
+      </div>
+    )
+  }
+
   const labels = data.map(d => selectedTab === "24h" ? `${d.hour}:00` : `Day ${d.day}`)
   const values = data.map(d => d.visitors)
 
