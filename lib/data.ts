@@ -259,7 +259,7 @@ function getTimeAgo(createdAt: string): string {
 
 
 // Helper function to convert Appwrite post to NewsItem
-const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
+export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
   const score = post.countUp - post.countDown
   const domain = post.link ? new URL(post.link).hostname : "appwrite.io"
   

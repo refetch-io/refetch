@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Client, Databases, Account, Query } from 'node-appwrite'
+import { fetchVotesForPosts, convertAppwritePostToNewsItem } from '@/lib/data'
 
 // Initialize Appwrite clients for server-side operations
 const apiKeyClient = new Client()
@@ -49,8 +50,24 @@ export async function GET(request: NextRequest) {
       ]
     )
 
+    // Convert posts to NewsItem format and add vote information
+    const appwritePosts = posts.documents.map((post: any, index: number) => 
+      convertAppwritePostToNewsItem(post, index)
+    )
+
+    // Fetch votes for all posts if there are any
+    if (appwritePosts.length > 0) {
+      const postIds = appwritePosts.map(post => post.id)
+      const voteMap = await fetchVotesForPosts(postIds, user.$id)
+      
+      // Add vote information to each post
+      appwritePosts.forEach(post => {
+        post.currentVote = voteMap.get(post.id) || null
+      })
+    }
+
     return NextResponse.json({
-      posts: posts.documents,
+      posts: appwritePosts,
       total: posts.total
     })
 
