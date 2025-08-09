@@ -39,7 +39,7 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
   // Check if data is empty or undefined
   if (!data || data.length === 0) {
     return (
-      <div className="h-20 overflow-hidden -mx-2 rounded-lg flex items-center justify-center">
+      <div className="h-16 overflow-hidden -mx-2 rounded-lg flex items-center justify-center">
         <div className="text-gray-400 text-xs">No data available</div>
       </div>
     )
@@ -117,7 +117,7 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
   }
 
   return (
-    <div className="h-20 overflow-hidden -mx-2 rounded-lg">
+    <div className="h-16 overflow-hidden -mx-2 rounded-lg">
       <Line data={chartData} options={options} />
     </div>
   )

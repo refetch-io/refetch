@@ -374,11 +374,23 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
 
     console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
 
-    const appwritePosts = posts.documents.map((post: any, index: number) => 
-      convertAppwritePostToNewsItem(post as AppwritePost, index)
-    )
+    const appwritePosts = posts.documents.map((post: any) => ({
+      $id: post.$id,
+      title: post.title,
+      description: post.description,
+      userId: post.userId,
+      userName: post.userName,
+      countUp: post.countUp,
+      countDown: post.countDown,
+      count: post.count,
+      link: post.link,
+      type: post.type,
+      $createdAt: post.$createdAt,
+      $updatedAt: post.$updatedAt,
+      currentVote: null as any
+    }))
 
-    return { posts: appwritePosts }
+    return { posts: appwritePosts.map(post => convertAppwritePostToNewsItem(post as AppwritePost, 0)) }
   } catch (error) {
     console.error('Error fetching posts from Appwrite:', error)
     console.error('Error details:', {
@@ -623,22 +635,34 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
 
     console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
 
-    const appwritePosts = posts.documents.map((post: any, index: number) => 
-      convertAppwritePostToNewsItem(post as AppwritePost, index)
-    )
+    const appwritePosts = posts.documents.map((post: any) => ({
+      $id: post.$id,
+      title: post.title,
+      description: post.description,
+      userId: post.userId,
+      userName: post.userName,
+      countUp: post.countUp,
+      countDown: post.countDown,
+      count: post.count,
+      link: post.link,
+      type: post.type,
+      $createdAt: post.$createdAt,
+      $updatedAt: post.$updatedAt,
+      currentVote: null as any
+    }))
 
     // Fetch votes for all posts if userId is provided
     if (userId && appwritePosts.length > 0) {
-      const postIds = appwritePosts.map(post => post.id)
+      const postIds = appwritePosts.map(post => post.$id)
       const voteMap = await fetchVotesForPosts(postIds, userId)
       
       // Add vote information to each post
       appwritePosts.forEach(post => {
-        post.currentVote = voteMap.get(post.id) || null
+        post.currentVote = voteMap.get(post.$id) || null
       })
     }
 
-    return { posts: appwritePosts }
+    return { posts: appwritePosts.map(post => convertAppwritePostToNewsItem(post as AppwritePost, 0)) }
   } catch (error) {
     console.error('Error fetching posts from Appwrite:', error)
     console.error('Error details:', {
@@ -688,22 +712,34 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
 
     console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}`)
 
-    const appwritePosts = posts.documents.map((post: any, index: number) => 
-      convertAppwritePostToNewsItem(post as AppwritePost, index)
-    )
+    const appwritePosts = posts.documents.map((post: any) => ({
+      $id: post.$id,
+      title: post.title,
+      description: post.description,
+      userId: post.userId,
+      userName: post.userName,
+      countUp: post.countUp,
+      countDown: post.countDown,
+      count: post.count,
+      link: post.link,
+      type: post.type,
+      $createdAt: post.$createdAt,
+      $updatedAt: post.$updatedAt,
+      currentVote: null as any
+    }))
 
     // Fetch votes for all posts
     if (appwritePosts.length > 0) {
-      const postIds = appwritePosts.map(post => post.id)
+      const postIds = appwritePosts.map(post => post.$id)
       const voteMap = await fetchVotesForPosts(postIds, userId)
       
       // Add vote information to each post
       appwritePosts.forEach(post => {
-        post.currentVote = voteMap.get(post.id) || null
+        post.currentVote = voteMap.get(post.$id) || null
       })
     }
 
-    return { posts: appwritePosts }
+    return { posts: appwritePosts.map(post => convertAppwritePostToNewsItem(post as AppwritePost, 0)) }
   } catch (error) {
     console.error('Error fetching user submissions from Appwrite:', error)
     console.error('Error details:', {
