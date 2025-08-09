@@ -1,0 +1,21 @@
+{
+  "name": "enhancement-function",
+  "version": "1.0.0",
+  "description": "Appwrite Function to enhance posts with AI metadata analysis",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "nodejs", "openai", "metadata"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.1",
+    "openai": "^4.28.0",
+    "jsdom": "^24.0.0"
+  }
+}
