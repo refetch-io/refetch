@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Chrome, X, Download, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -23,55 +23,52 @@ const BROWSERS: { [key: string]: BrowserInfo } = {
   }
 }
 
-// Helper function to detect browser
-function detectBrowser(): BrowserInfo | null {
-  if (typeof window === 'undefined') return null
-  
-  const userAgent = navigator.userAgent.toLowerCase()
-  
-  if (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) {
-    return BROWSERS.chrome
-  } else if (userAgent.includes("firefox")) {
-    return BROWSERS.firefox
-  }
-  
-  return null
-}
-
-// Check if browser is supported during SSR
-function isSupportedBrowser(): boolean {
-  if (typeof window === 'undefined') return false
-  
-  const userAgent = navigator.userAgent.toLowerCase()
-  return (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) || 
-         userAgent.includes("firefox")
+// Memoized browser detection to prevent recalculation
+const useBrowserDetection = () => {
+  return useMemo(() => {
+    if (typeof window === 'undefined') return null
+    
+    const userAgent = navigator.userAgent.toLowerCase()
+    
+    if (userAgent.includes("chrome") && !userAgent.includes("edg") && !userAgent.includes("opera")) {
+      return BROWSERS.chrome
+    } else if (userAgent.includes("firefox")) {
+      return BROWSERS.firefox
+    }
+    
+    return null
+  }, [])
 }
 
 export function BrowserExtensionCTA() {
-  const [browser, setBrowser] = useState<BrowserInfo | null>(null)
-  const [isDismissed, setIsDismissed] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const browser = useBrowserDetection()
+  const [isDismissed, setIsDismissed] = useState<boolean | null>(null)
+  const [isClient, setIsClient] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsHydrated(true)
+    setIsClient(true)
     
     // Check if user has already dismissed the CTA
     const dismissed = localStorage.getItem("refetch-extension-dismissed")
-    if (dismissed) {
-      setIsDismissed(true)
-      return
+    const shouldShow = dismissed !== "true" && browser !== null
+    
+    if (shouldShow) {
+      // Small delay for smooth animation
+      const timer = setTimeout(() => setIsVisible(true), 200)
+      return () => clearTimeout(timer)
+    } else {
+      setIsDismissed(dismissed === "true")
     }
-
-    // Detect browser
-    const detectedBrowser = detectBrowser()
-    if (detectedBrowser) {
-      setBrowser(detectedBrowser)
-    }
-  }, [])
+  }, [browser])
 
   const handleDismiss = () => {
-    setIsDismissed(true)
-    localStorage.setItem("refetch-extension-dismissed", "true")
+    setIsVisible(false)
+    // Wait for animation to complete before updating state
+    setTimeout(() => {
+      setIsDismissed(true)
+      localStorage.setItem("refetch-extension-dismissed", "true")
+    }, 400)
   }
 
   const handleInstall = () => {
@@ -80,20 +77,26 @@ export function BrowserExtensionCTA() {
     }
   }
 
-  // Don't render anything until hydrated to avoid hydration issues
-  if (!isHydrated) {
+  // Don't render anything until client-side hydration is complete
+  if (!isClient) {
     return null
   }
 
   // Don't render if dismissed or no supported browser
-  if (isDismissed || !browser) {
+  if (isDismissed === true || !browser) {
     return null
   }
 
   const BrowserIcon = browser.icon
 
   return (
-    <div className="bg-transparent border border-gray-200 rounded-lg p-3 -mt-2 mb-6">
+    <div 
+      className={`bg-transparent border border-gray-200 rounded-lg p-3 -mt-2 mb-6 transition-all duration-400 ease-out ${
+        isVisible 
+          ? 'opacity-100 transform translate-y-0' 
+          : 'opacity-0 transform -translate-y-2'
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Browser Icon */}
