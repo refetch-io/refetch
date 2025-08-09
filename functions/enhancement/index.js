@@ -311,7 +311,9 @@ Guidelines:
         }
 
         const metadata = JSON.parse(response);
-        return validateAndSanitizeMetadata(metadata, postData);
+        metadata = validateAndSanitizeMetadata(metadata, postData);
+        console.log(metadata);
+        return metadata;
         
     } catch (error) {
         throw new Error(`OpenAI analysis failed: ${error.message}`);
