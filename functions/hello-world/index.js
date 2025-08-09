@@ -21,7 +21,7 @@ export default async function ({ req, res, log, error }) {
         
         // Return a JSON response
         return res.json({
-            message: 'Hello World from Appwrite Function!',
+            message: 'Hello World from Appwrite Function! xoxo',
             timestamp: new Date().toISOString(),
             function: 'hello-world',
             status: 'success'
