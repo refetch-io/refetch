@@ -1,0 +1,16 @@
+{
+  "name": "function-template",
+  "version": "1.0.0",
+  "description": "Template for Appwrite Functions",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "nodejs", "template"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
