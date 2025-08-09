@@ -221,7 +221,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
     
     try {
         const completion = await openai.chat.completions.create({
-            model: process.env.OPENAI_MODEL || "gpt-4o",
+            model: process.env.OPENAI_MODEL || "gpt-4o-mini",
             messages: [
                 {
                     role: "system",
