@@ -11,7 +11,7 @@ export function Footer({ variant = 'sidebar' }: FooterProps) {
   const isBottom = variant === 'bottom'
   
   return (
-    <div className="mt-10 pb-5">
+    <div className="mt-10 pb-5 pl-2">
       <div className={`flex items-center gap-2 mb-4 h-6 ${isBottom ? 'justify-center' : ''}`}>
         <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
       </div>
@@ -56,7 +56,7 @@ export function Footer({ variant = 'sidebar' }: FooterProps) {
         </div>
         <span>•</span>
         <a href="#" className="hover:text-gray-700">
-          Powered by Appwrite Cloud
+          Powered by Appwrite
         </a>
       </div>
 

@@ -55,7 +55,7 @@ function LiveViewCard() {
           </div>
         ) : (
           <div className="animate-in fade-in duration-300">
-            <span className="text-2xl font-semibold">{onlineUsers}</span> refetchers online
+            <span className="text-2xl font-semibold">{onlineUsers}</span> {onlineUsers === 1 ? 'refetcher' : 'refetchers'} online
           </div>
         )}
       </h3>
