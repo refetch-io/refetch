@@ -33,9 +33,9 @@ export interface AppwritePost {
   description: string
   userId: string
   userName: string
+  count: number
   countUp: number
   countDown: number
-  count: number // New field for total score (upvotes - downvotes)
   link?: string
   type?: string
   $createdAt: string
@@ -609,7 +609,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
         // Filter by type=show, sort by score first, then by creation date
         queries = [
           Query.equal('type', 'show'),
-          Query.orderDesc('countUp'),
+          Query.orderDesc('count'),
           Query.orderDesc('$createdAt')
         ]
         break

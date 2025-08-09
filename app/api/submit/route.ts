@@ -145,6 +145,7 @@ export async function POST(request: NextRequest) {
       description: metadata.optimizedDescription || postData.description,
       userId: user.$id,
       userName: user.name || user.email || 'Anonymous',
+      count: 0,
       countUp: 0,
       countDown: 0,
       type: type
