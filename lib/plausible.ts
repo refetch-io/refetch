@@ -211,3 +211,38 @@ export function createQuery(siteId: string, dataType: DataType): PlausibleQuery 
       throw new Error(`Unknown data type: ${dataType}`)
   }
 }
+
+// Track post link clicks
+export function trackPostClick(postId: string, postTitle: string, isExternal: boolean = false) {
+  // Check if Plausible is available (script loaded)
+  if (typeof window !== 'undefined' && (window as any).plausible) {
+    const eventName = isExternal ? 'main.posts.ExternalClick' : 'main.posts.InternalClick'
+    const props = {
+      post_id: postId,
+      post_title: postTitle,
+      post_type: isExternal ? 'external' : 'internal',
+      timestamp: new Date().toISOString()
+    }
+    
+    ;(window as any).plausible(eventName, { props })
+    console.log(`Tracked ${eventName}:`, props)
+  } else {
+    console.log('Plausible not available for tracking:', { postId, postTitle, isExternal })
+  }
+}
+
+// Track page views
+export function trackPageView(pageName: string, additionalProps?: Record<string, any>) {
+  if (typeof window !== 'undefined' && (window as any).plausible) {
+    const props = {
+      page_name: pageName,
+      timestamp: new Date().toISOString(),
+      ...additionalProps
+    }
+    
+    ;(window as any).plausible('Page View', { props })
+    console.log('Tracked Page View:', props)
+  } else {
+    console.log('Plausible not available for page view tracking:', { pageName, additionalProps })
+  }
+}

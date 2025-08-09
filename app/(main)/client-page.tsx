@@ -12,6 +12,7 @@ import { SearchAndFilter } from "@/components/search-and-filter"
 import { Favicon } from "@/components/favicon"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
+import { trackPostClick, trackPageView } from "@/lib/plausible"
 
 import {
   Globe,
@@ -750,6 +751,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                       href={titleLinkHref} 
                       target={titleLinkTarget} 
                       rel={titleLinkRel}
+                      onClick={() => trackPostClick(item.id, item.title, !!hasExternalLink)}
                       className="font-medium text-gray-900 font-heading whitespace-nowrap overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer"
                       title={item.title}
                     >
@@ -777,6 +779,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
                         <span className="hidden sm:inline">•</span>
                         <Link 
                           href={`/threads/${item.id}`}
+                          onClick={() => trackPostClick(item.id, item.title, false)}
                           className="hidden sm:inline hover:text-blue-600 transition-colors"
                         >
                           {item.comments.length} comments
