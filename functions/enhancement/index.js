@@ -337,7 +337,10 @@ Guidelines:
 
         const metadata = JSON.parse(response);
         const validatedMetadata = validateAndSanitizeMetadata(metadata, postData);
-        console.log(validatedMetadata);
+        
+        // Log compact post reference
+        console.log(`📝 AI Analysis completed - ID: ${postData.title ? postData.title.substring(0, 50) : 'No title'} | URL: ${postData.url ? postData.url.substring(0, 60) : 'No URL'}`);
+        
         return validatedMetadata;
     } catch (error) {
         throw new Error(`OpenAI analysis failed: ${error.message}`);
