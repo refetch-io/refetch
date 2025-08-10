@@ -36,12 +36,13 @@ export default async function ({ req, res, log, error }) {
         
         log('Fetching posts from Appwrite...');
         
-        // Fetch all posts from the collection
+        // Fetch only posts that haven't been enhanced yet
         const postsResponse = await databases.listDocuments(
             DATABASE_ID,
             COLLECTION_ID,
             [
-                Query.limit(1) // Process up to 100 posts at a time
+                Query.notEqual('enhanced', true),
+                Query.limit(5) // Process up to 100 posts at a time
             ]
         );
         
@@ -52,18 +53,12 @@ export default async function ({ req, res, log, error }) {
         let updatedCount = 0;
         let errorCount = 0;
         
-        // Process each post
-        for (const post of posts) {
+                // Process each post
+        for (let i = 0; i < posts.length; i++) {
+            const post = posts[i];
+            const progress = Math.round(((i + 1) / posts.length) * 100);
+            
             try {
-                log(`Processing post: ${post.$id} - "${post.title}"`);
-                
-                // Check if post already has enhanced metadata
-                if (post.metadata && post.metadata.enhanced) {
-                    log(`Post ${post.$id} already enhanced, skipping`);
-                    processedCount++;
-                    continue;
-                }
-                
                 // Prepare post data for AI analysis
                 const postData = {
                     title: post.title || '',
@@ -79,42 +74,56 @@ export default async function ({ req, res, log, error }) {
                 let urlContent = null;
                 if (postData.url && postData.type === 'link') {
                     try {
-                        log(`Fetching URL content for: ${postData.url}`);
                         urlContent = await fetchURLContent(postData.url);
                     } catch (urlError) {
-                        log(`Failed to fetch URL content: ${urlError.message}`);
+                        log(`⚠️  Failed to fetch URL content for ${post.$id}: ${urlError.message}`);
                         // Continue without URL content
                     }
                 }
                 
                 // Analyze post with AI
-                log(`Analyzing post ${post.$id} with OpenAI...`);
                 const metadata = await analyzePostWithAI(openai, postData, urlContent);
                 
-                // Update post with enhanced metadata
+                // Update post with enhanced attributes
                 const updateData = {
-                    metadata: {
-                        ...metadata,
-                        enhanced: true,
-                        enhancedAt: new Date().toISOString()
-                    }
+                    enhanced: true,
+                    enhancedAt: new Date().toISOString(),
+                    language: metadata.language,
+                    spellingScore: metadata.spellingScore,
+                    spellingIssues: metadata.spellingIssues,
+                    spamScore: metadata.spamScore,
+                    spamIssues: metadata.spamIssues,
+                    safetyScore: metadata.safetyScore,
+                    safetyIssues: metadata.safetyIssues,
+                    qualityScore: metadata.qualityScore,
+                    qualityIssues: metadata.qualityIssues,
+                    optimizedTitle: metadata.optimizedTitle,
+                    optimizedDescription: metadata.optimizedDescription,
+                    readingLevel: metadata.readingLevel,
+                    readingTime: metadata.readingTime,
+                    topics: metadata.topics,
+                    titleTranslations: JSON.stringify(metadata.titleTranslations),
+                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations)
                 };
                 
-                // await databases.updateDocument(
-                //     DATABASE_ID,
-                //     COLLECTION_ID,
-                //     post.$id,
-                //     updateData
-                // );
-                log('skipping update');
-                log(`Successfully updated post ${post.$id} with enhanced metadata`);
+                await databases.updateDocument(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    post.$id,
+                    updateData
+                );
                 updatedCount++;
                 
                 // Add a small delay to avoid rate limiting
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
+                // Log progress every 2 posts or at the end
+                if ((i + 1) % 2 === 0 || i === posts.length - 1) {
+                    log(`📈 Progress: ${i + 1}/${posts.length} (${progress}%) - Enhanced: ${updatedCount}, Errors: ${errorCount}`);
+                }
+                
             } catch (postError) {
-                error(`Error processing post ${post.$id}: ${postError.message}`);
+                error(`❌ Error processing post ${post.$id}: ${postError.message}`);
                 errorCount++;
             }
             
@@ -130,11 +139,29 @@ export default async function ({ req, res, log, error }) {
                 totalPosts: posts.length,
                 processed: processedCount,
                 updated: updatedCount,
-                errors: errorCount
+                errors: errorCount,
+                successRate: posts.length > 0 ? Math.round((updatedCount / posts.length) * 100) : 0
             }
         };
         
-        log(`Enhancement completed. ${updatedCount} posts updated, ${errorCount} errors`);
+        // Comprehensive final summary
+        log('🎯 ENHANCEMENT FUNCTION COMPLETED');
+        log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        log(`📊 Total posts found: ${posts.length}`);
+        log(`✅ Successfully enhanced: ${updatedCount}`);
+        log(`❌ Errors encountered: ${errorCount}`);
+        log(`📈 Success rate: ${result.summary.successRate}%`);
+        log(`⏱️  Processing time: ${new Date().toISOString()}`);
+        log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        
+        if (errorCount > 0) {
+            log(`⚠️  ${errorCount} posts failed to process. Check error logs for details.`);
+        }
+        
+        if (updatedCount === 0) {
+            log('ℹ️  No posts were enhanced. This might indicate all posts are already enhanced or there was an issue with the enhancement process.');
+        }
+        
         return res.json(result);
         
     } catch (err) {
@@ -229,18 +256,19 @@ async function analyzePostWithAI(openai, postData, urlContent) {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
-  "category": "main" or "show" (main for general content, show for announcing new products/initiatives/work)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
-  "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
-  "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
-  "topics": ["array of relevant topics this post relates to"],
   "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
   "spamIssues": ["array explaining why this was marked as spam, or empty if not spam"],
   "safetyScore": number 0-100 (0 = unsafe/inappropriate content, 100 = completely safe)",
   "safetyIssues": ["array of safety concerns, or empty if none found"],
+  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
+  "qualityIssues": ["array explaining the quality score and any issues found"],
+  "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
+  "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
   "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
   "readingTime": number (estimated reading time in minutes)",
+  "topics": ["array of relevant topics this post relates to"],
   "titleTranslations": {
     "en": "title in English (original if English, translated if not)",
     "es": "title in Spanish (original if Spanish, translated if not)",
@@ -265,12 +293,10 @@ async function analyzePostWithAI(openai, postData, urlContent) {
     "ru": "description in Russian (original if Russian, translated if not)",
     "ja": "description in Japanese (original if Japanese, translated if not)",
     "ko": "description in Korean (original if Korean, translated if not)",
-    "zh": "title in Chinese (original if Chinese, translated if not)",
-    "ar": "title in Arabic (original if Arabic, translated if not)",
-    "he": "title in Hebrew (original if Hebrew, translated if not)"
-  },
-  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
-  "qualityIssues": ["array explaining the quality score and any issues found"]
+    "zh": "description in Chinese (original if Chinese, translated if not)",
+    "ar": "description in Arabic (original if Arabic, translated if not)",
+    "he": "description in Hebrew (original if Hebrew, translated if not)"
+  }
 }
 
 Guidelines:
@@ -301,7 +327,7 @@ Guidelines:
                 }
             ],
             temperature: 0.1,
-            max_tokens: 10000,
+            max_tokens: 20000,
             response_format: { type: "json_object" }
         });
 
@@ -389,25 +415,22 @@ function buildAnalysisPrompt(postData, urlContent) {
  */
 function validateAndSanitizeMetadata(metadata, postData) {
     return {
-        language: typeof metadata.language === 'string' ? metadata.language : 'English',
-        category: metadata.category === 'show' ? 'show' : 'main',
+        language: typeof metadata.language === 'string' ? metadata.language.substring(0, 10) : 'English',
         spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
-        spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues : [],
-        optimizedTitle: typeof metadata.optimizedTitle === 'string' ? metadata.optimizedTitle : postData.title,
-        optimizedDescription: typeof metadata.optimizedDescription === 'string' ? metadata.optimizedDescription : postData.description || '',
-        originalTitle: postData.title,
-        originalDescription: postData.description || '',
-        topics: Array.isArray(metadata.topics) ? metadata.topics : [],
+        spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues.slice(0, 50) : [],
         spamScore: Math.max(0, Math.min(100, Number(metadata.spamScore) || 0)),
-        spamIssues: Array.isArray(metadata.spamIssues) ? metadata.spamIssues : [],
+        spamIssues: Array.isArray(metadata.spamIssues) ? metadata.spamIssues.slice(0, 50) : [],
         safetyScore: Math.max(0, Math.min(100, Number(metadata.safetyScore) || 0)),
-        safetyIssues: Array.isArray(metadata.safetyIssues) ? metadata.safetyIssues : [],
+        safetyIssues: Array.isArray(metadata.safetyIssues) ? metadata.safetyIssues.slice(0, 50) : [],
+        qualityScore: Math.max(0, Math.min(100, Number(metadata.qualityScore) || 50)),
+        qualityIssues: Array.isArray(metadata.qualityIssues) ? metadata.qualityIssues.slice(0, 50) : [],
+        optimizedTitle: typeof metadata.optimizedTitle === 'string' ? metadata.optimizedTitle.substring(0, 500) : postData.title.substring(0, 500),
+        optimizedDescription: typeof metadata.optimizedDescription === 'string' ? metadata.optimizedDescription.substring(0, 2000) : (postData.description || '').substring(0, 2000),
         readingLevel: validateReadingLevel(metadata.readingLevel),
         readingTime: Math.max(1, Math.min(480, Number(metadata.readingTime) || 5)),
+        topics: Array.isArray(metadata.topics) ? metadata.topics.slice(0, 20) : [],
         titleTranslations: validateTranslations(metadata.titleTranslations),
-        descriptionTranslations: validateTranslations(metadata.descriptionTranslations),
-        qualityScore: Math.max(0, Math.min(100, Number(metadata.qualityScore) || 50)),
-        qualityIssues: Array.isArray(metadata.qualityIssues) ? metadata.qualityIssues : []
+        descriptionTranslations: validateTranslations(metadata.descriptionTranslations)
     };
 }
 

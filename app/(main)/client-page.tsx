@@ -805,7 +805,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
       {/* Right Sidebar and Sponsored Ad */}
       <aside className="hidden lg:block w-full sm:w-64 lg:w-64 sticky top-20 h-fit">
         <RightSidebar />
-        <div className="mt-6">
+        <div className="mt-4">
           <RotatingAdCopy />
         </div>
       </aside>
