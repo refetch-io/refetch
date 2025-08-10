@@ -87,7 +87,6 @@ export default async function ({ req, res, log, error }) {
                 // Update post with enhanced attributes
                 const updateData = {
                     enhanced: true,
-                    enhancedAt: new Date().toISOString(),
                     language: metadata.language,
                     spellingScore: metadata.spellingScore,
                     spellingIssues: metadata.spellingIssues,
