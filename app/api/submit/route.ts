@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, Users, ID } from 'node-appwrite'
-import { PostMetadataEnhancer } from '@/lib/openai'
-import { PostSubmissionData } from '@/lib/types'
+import { Client, Databases, Account, Users, ID, Query } from 'node-appwrite'
+import { PostSubmissionData, PostDocument } from '@/lib/types'
+import { cleanUrl } from '@/lib/utils'
 
 // Initialize Appwrite clients for server-side operations
 // First client for API key operations (database operations)
@@ -22,6 +22,22 @@ const users = new Users(apiKeyClient)
 // Database and collection IDs
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
 const COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
+
+// Helper function to check for duplicate URLs
+async function checkDuplicateUrl(url: string): Promise<boolean> {
+  try {
+    const cleanUrlString = cleanUrl(url)
+    const existingPosts = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTION_ID,
+      [Query.equal('link', cleanUrlString)]
+    )
+    return existingPosts.documents.length > 0
+  } catch (error) {
+    console.error('Error checking for duplicate URL:', error)
+    return false
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -82,7 +98,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { message: 'Application URL is required for job submissions' },
           { status: 400 }
-        )
+      )
       }
       if (!company || company.trim().length === 0) {
         return NextResponse.json(
@@ -92,77 +108,57 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Step 3: Enhance post with OpenAI metadata analysis
-    const postData: PostSubmissionData = {
+    // Step 3: Check for duplicate URLs if URL is provided
+    if (url && url.trim().length > 0) {
+      const isDuplicate = await checkDuplicateUrl(url)
+      if (isDuplicate) {
+        return NextResponse.json(
+          { message: 'A post with this URL already exists' },
+          { status: 409 }
+        )
+      }
+    }
+
+    // Step 4: Prepare the document data
+    const documentData: {
+      title: string;
+      description: string;
+      userId: string;
+      userName: string;
+      count: number;
+      countUp: number;
+      countDown: number;
+      type: string;
+      enhanced: boolean;
+      link?: string;
+      company?: string;
+      location?: string;
+      salary?: string;
+    } = {
       title: title.trim(),
       description: description?.trim() || '',
-      url: url?.trim(),
-      company: company?.trim(),
-      location: location?.trim(),
-      salary: salary?.trim(),
-      type: type
-    }
-
-    let metadata
-    try {
-      console.log('Enhancing post with OpenAI...')
-      // Create a temporary metadata object with original content for OpenAI analysis
-      const enhancedMetadata = await PostMetadataEnhancer.enhancePost(postData)
-      metadata = {
-        ...enhancedMetadata,
-        originalTitle: postData.title,
-        originalDescription: postData.description || ''
-      }
-      console.log('OpenAI enhancement completed:', metadata)
-    } catch (error) {
-      console.error('OpenAI enhancement failed, using default metadata:', error)
-      // Continue with default metadata if OpenAI fails
-      metadata = {
-        language: 'English',
-        category: type === 'show' ? 'show' : 'main',
-        spellingScore: 80,
-        spellingIssues: [],
-        optimizedTitle: postData.title,
-        optimizedDescription: postData.description || '',
-        originalTitle: postData.title,
-        originalDescription: postData.description || '',
-        topics: [],
-        spamScore: 10,
-        spamIssues: [],
-        safetyScore: 90,
-        safetyIssues: [],
-        readingLevel: 'Intermediate',
-        readingTime: 5,
-        titleTranslations: {},
-        qualityScore: 50,
-        qualityIssues: []
-      }
-    }
-
-    // Step 4: Prepare the document data (only essential fields, no metadata)
-    const documentData: any = {
-      title: metadata.optimizedTitle || postData.title,
-      description: metadata.optimizedDescription || postData.description,
       userId: user.$id,
       userName: user.name || user.email || 'Anonymous',
       count: 0,
       countUp: 0,
       countDown: 0,
-      type: type
+      type: type,
+      enhanced: false // Default to false, will be updated by enhancement function
     }
 
     // Add type-specific fields
-    if (postData.url) {
-      documentData.link = postData.url
+    if (url && url.trim().length > 0) {
+      // Store the cleaned URL (without query strings)
+      documentData.link = cleanUrl(url.trim())
     }
 
     if (type === 'job') {
-      documentData.company = postData.company
-      if (postData.location) documentData.location = postData.location
-      if (postData.salary) documentData.salary = postData.salary
+      documentData.company = company?.trim()
+      if (location) documentData.location = location.trim()
+      if (salary) documentData.salary = salary.trim()
     }
 
-    console.log('Creating document with enhanced metadata:', documentData)
+    console.log('Creating document:', documentData)
 
     // Create the document in Appwrite using the server-side client
     const createdDocument = await databases.createDocument(
