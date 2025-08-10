@@ -327,7 +327,7 @@ Guidelines:
                 }
             ],
             temperature: 0.1,
-            max_tokens: 20000,
+            max_tokens: 16384,
             response_format: { type: "json_object" }
         });
 
