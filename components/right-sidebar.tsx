@@ -45,25 +45,27 @@ function LiveViewCard() {
   }, [])
 
   return (
-    <div className="bg-white rounded-lg px-4 py-2 min-h-[80px]">
-      <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">
-        {isLoading ? (
-          <div className="w-32 h-8"></div>
-        ) : error ? (
-          <div className="w-full h-8 flex items-center justify-center">
-            <span className="bg-gray-100/80 px-2 py-1 rounded-md text-xs text-gray-600">Error loading data</span>
-          </div>
-        ) : (
-          <div className="animate-in fade-in duration-300">
-            <span className="text-2xl font-semibold">{onlineUsers}</span> {onlineUsers === 1 ? 'refetcher' : 'refetchers'} online
-          </div>
-        )}
-      </h3>
-      <div className="h-px bg-gray-100 mb-2 -mx-4" />
-      <div className="text-xs text-gray-600 font-medium h-4">
+    <div className="bg-white rounded-lg overflow-hidden min-h-[80px]">
+      <div className="px-4 pt-2">
+        <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">
+          {isLoading ? (
+            <div className="w-32 h-8"></div>
+          ) : error ? (
+            <div className="w-full h-8 flex items-center justify-center">
+              <span className="bg-gray-100/80 px-2 py-1 rounded-md text-xs text-gray-600">Error loading data</span>
+            </div>
+          ) : (
+            <div className="animate-in fade-in duration-300">
+              <span className="text-2xl font-semibold">{onlineUsers}</span> {onlineUsers === 1 ? 'refetcher' : 'refetchers'} online
+            </div>
+          )}
+        </h3>
+      </div>
+      <div className="h-px bg-gray-100" />
+      <div className="px-4 py-2 text-xs text-gray-600 font-medium h-8">
         {isLoading ? 'Connecting to live data...' : 
          error ? '' : 
-         <span>Live • <span className="text-gray-500/80">Updated a few seconds ago</span></span>}
+         <span className="text-gray-500/85">Live • <span className="text-gray-500/70">Updated a few seconds ago</span></span>}
       </div>
     </div>
   )
@@ -164,7 +166,7 @@ function ChartCard() {
     <div className="space-y-1">
       {/* Chart Card */}
       <div className="bg-white rounded-lg px-4 py-2 min-h-[100px]">
-        <div className="text-xs text-gray-600 font-medium mb-3">
+        <div className="text-xs text-gray-500/85 font-medium mb-3">
           {selectedTab === "24h" ? "Last 24 Hours" : "Last 30 Days"}
         </div>
         {isLoading ? (
