@@ -23,6 +23,7 @@ export interface NewsItem {
   isSponsored?: boolean
   link?: string
   type?: string
+  countComments?: number
   // Vote information
   currentVote?: 'up' | 'down' | null
 }
@@ -37,6 +38,7 @@ export interface AppwritePost {
   count: number
   countUp: number
   countDown: number
+  countComments?: number
   link?: string
   type?: string
   $createdAt: string
@@ -247,7 +249,9 @@ function getTimeAgo(createdAt: string): string {
   const hours = Math.floor(minutes / 60)
   const days = Math.floor(hours / 24)
   
-  if (seconds < 60) {
+  if (seconds < 1) {
+    return "Just now"
+  } else if (seconds < 60) {
     return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`
   } else if (minutes < 60) {
     return minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`
@@ -285,6 +289,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     isSponsored: false,
     link: post.link,
     type: post.type,
+    countComments: post.countComments || 0,
   }
 }
 
@@ -385,6 +390,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       countUp: post.countUp,
       countDown: post.countDown,
       count: post.count,
+      countComments: post.countComments,
       link: post.link,
       type: post.type,
       $createdAt: post.$createdAt,
@@ -414,7 +420,49 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
   }
 }
 
-// Server-side function to fetch a single post by ID from Appwrite
+// Server-side function to fetch comments for a specific post
+export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing for comments fetch.')
+    return []
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    const comments = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '',
+      process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
+      [
+        Query.equal('postId', postId),
+        Query.orderDesc('$createdAt')
+      ]
+    )
+
+    // Transform the comments to match the Comment interface
+    const transformedComments = comments.documents.map(doc => ({
+      id: doc.$id,
+      author: doc.userName || 'Anonymous',
+      text: doc.content || '',
+      timeAgo: getTimeAgo(doc.$createdAt),
+      score: 0, // Default score since it's not stored in the collection
+      replies: [] // TODO: Implement nested replies using replyId
+    }))
+
+    return transformedComments
+  } catch (error) {
+    console.error(`Error fetching comments for post ${postId}:`, error)
+    return []
+  }
+}
+
 export async function fetchPostById(id: string): Promise<NewsItem | null> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
@@ -439,7 +487,14 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
 
     console.log(`Successfully fetched post ${id} from Appwrite`)
 
-    return convertAppwritePostToNewsItem(post as unknown as AppwritePost, 0)
+    // Convert the post to NewsItem format
+    const newsItem = convertAppwritePostToNewsItem(post as unknown as AppwritePost, 0)
+    
+    // Fetch comments for this post
+    const comments = await fetchCommentsForPost(id)
+    newsItem.comments = comments
+
+    return newsItem
   } catch (error) {
     console.error(`Error fetching post ${id} from Appwrite:`, error)
     console.error('Error details:', {
@@ -646,6 +701,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
       countUp: post.countUp,
       countDown: post.countDown,
       count: post.count,
+      countComments: post.countComments,
       link: post.link,
       type: post.type,
       $createdAt: post.$createdAt,
@@ -723,6 +779,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
       countUp: post.countUp,
       countDown: post.countDown,
       count: post.count,
+      countComments: post.countComments,
       link: post.link,
       type: post.type,
       $createdAt: post.$createdAt,

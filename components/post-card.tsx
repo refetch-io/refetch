@@ -144,7 +144,7 @@ export function PostCard({
                     onClick={() => trackPostClick(item.id, item.title, false)}
                     className="hidden sm:inline hover:text-blue-600 transition-colors"
                   >
-                    {item.comments.length} comments
+                    {item.countComments || 0} comments
                   </Link>
                 </>
               )}

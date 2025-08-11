@@ -5,13 +5,14 @@ import { Twitter, Facebook, Github } from "lucide-react"
 
 interface FooterProps {
   variant?: 'sidebar' | 'bottom'
+  bottomPadding?: number
 }
 
-export function Footer({ variant = 'sidebar' }: FooterProps) {
+export function Footer({ variant = 'sidebar', bottomPadding }: FooterProps) {
   const isBottom = variant === 'bottom'
   
   return (
-    <div className="mt-10 pb-5 pl-2">
+    <div className="mt-10 pl-2" style={{ paddingBottom: bottomPadding ? `${bottomPadding}px` : '1.25rem' }}>
       <div className={`flex items-center gap-2 mb-4 h-6 ${isBottom ? 'justify-center' : ''}`}>
         <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
       </div>
