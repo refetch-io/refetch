@@ -1,6 +1,7 @@
 "use client"
 
 import { CommentForm } from "@/components/comment-form"
+import { CommentVote } from "@/components/comment-vote"
 import { useEffect, useState } from "react"
 import type { NewsItem, Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/voteHandler"
@@ -10,7 +11,7 @@ import { getCachedJWT } from "@/lib/jwtCache"
 import { PostCard } from "@/components/post-card"
 import { avatars } from "@/lib/appwrite"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useCommentFormHeight } from "@/app/(main)/layout"
+
 
 interface ThreadClientPageProps {
   article: NewsItem
@@ -19,11 +20,12 @@ interface ThreadClientPageProps {
 export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, score: article.score })
   const [isVoting, setIsVoting] = useState(false)
+  const [commentVoteStates, setCommentVoteStates] = useState<Record<string, VoteState>>({})
+  const [isCommentVoting, setIsCommentVoting] = useState(false)
   const [comments, setComments] = useState<Comment[]>(article.comments || [])
-  const [commentFormHeight, setCommentFormHeight] = useState(0)
+  const [isCommentFormMinimized, setIsCommentFormMinimized] = useState(false)
   
   const { isAuthenticated, user } = useAuth()
-  const { setHeight: setLayoutHeight } = useCommentFormHeight()
 
   // Fetch votes for the current user when component mounts
   useEffect(() => {
@@ -75,6 +77,22 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     fetchVotes()
   }, [isAuthenticated, user?.$id, article.id, article.score])
 
+  // Initialize comment vote states when component mounts
+  useEffect(() => {
+    const initialVoteStates: Record<string, VoteState> = {}
+    if (comments.length > 0) {
+      comments.forEach((comment: Comment) => {
+        initialVoteStates[comment.id] = { currentVote: null, score: 0 }
+        if (comment.replies) {
+          comment.replies.forEach((reply: Comment) => {
+            initialVoteStates[reply.id] = { currentVote: null, score: 0 }
+          })
+        }
+      })
+      setCommentVoteStates(initialVoteStates)
+    }
+  }, [comments])
+
   const handleVoteClick = async (itemId: string, direction: "up" | "down") => {
     if (!isAuthenticated) {
       return
@@ -103,11 +121,53 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       .then(data => {
         if (data.comments) {
           setComments(data.comments)
+          // Initialize vote states for new comments
+          const newVoteStates: Record<string, VoteState> = {}
+          data.comments.forEach((comment: Comment) => {
+            newVoteStates[comment.id] = { currentVote: null, score: 0 }
+            if (comment.replies) {
+              comment.replies.forEach((reply: Comment) => {
+                newVoteStates[reply.id] = { currentVote: null, score: 0 }
+              })
+            }
+          })
+          setCommentVoteStates(newVoteStates)
         }
       })
       .catch(error => {
         console.error('Error refreshing comments:', error)
       })
+  }
+
+  const handleCommentFormMinimizedChange = (isMinimized: boolean) => {
+    setIsCommentFormMinimized(isMinimized)
+  }
+
+  const handleCommentVote = async (commentId: string, direction: "up" | "down") => {
+    if (!isAuthenticated) {
+      return
+    }
+    
+    if (isCommentVoting) {
+      return
+    }
+
+    setIsCommentVoting(true)
+    try {
+      // Get current vote state for this comment
+      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, score: 0 }
+      
+      await handleVote(commentId, direction, currentVoteState.currentVote, currentVoteState.score, (newState) => {
+        setCommentVoteStates(prev => ({
+          ...prev,
+          [commentId]: newState
+        }))
+      })
+    } catch (error) {
+      console.error('Error handling comment vote:', error)
+    } finally {
+      setIsCommentVoting(false)
+    }
   }
 
   return (
@@ -132,14 +192,6 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         </div>
       )}
 
-      {/* Comment Form */}
-      <CommentForm 
-        postId={article.id} 
-        onCommentAdded={handleCommentAdded} 
-        isFixed={true}
-        onHeightChange={setCommentFormHeight}
-      />
-
       {/* Comments Section Title */}
       <div className="bg-gray-200 rounded-lg px-4 py-3">
         <h3 className="text-xs font-medium text-gray-700">
@@ -151,10 +203,10 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       </div>
 
       {/* Comments Section */}
-      <div className="space-y-6 pl-4 min-h-[400px]">
+      <div className="space-y-6 pl-4">
         {comments.length === 0 ? (
           <div className="flex justify-center">
-            <div className="flex items-center justify-center p-6 mt-5 mb-64">
+            <div className="flex items-center justify-center p-6">
               <p className="text-gray-600 text-xs text-center">No comments yet. Start the conversation below</p>
             </div>
           </div>
@@ -171,10 +223,26 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 text-xs mb-2">
                     <span className="text-gray-800">{comment.author}</span>
-                    <span className="text-gray-500">• {comment.timeAgo}</span>
-                    <span className="text-gray-500">• {comment.score} points</span>
+                    {comment.userId === article.userId && (
+                      <>
+                        <span className="text-gray-500">•</span>
+                        <span className="text-gray-500 text-xs">original poster</span>
+                      </>
+                    )}
                   </div>
-                  <p className="text-gray-700 text-sm">{comment.text}</p>
+                  <p className="text-gray-700 text-sm mb-3">{comment.text}</p>
+                  <div className="flex items-center gap-3">
+                    <CommentVote
+                      commentId={comment.id}
+                      voteState={commentVoteStates[comment.id] || { currentVote: null, score: 0 }}
+                      isVoting={isCommentVoting}
+                      onVote={handleCommentVote}
+                      isAuthenticated={isAuthenticated}
+                      layout="horizontal"
+                      size="sm"
+                    />
+                    <div className="text-xs text-gray-500">{comment.timeAgo}</div>
+                  </div>
                   
                   {/* Nested Replies */}
                   {comment.replies && comment.replies.length > 0 && (
@@ -187,10 +255,26 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 text-xs mb-2">
                               <span className="text-gray-800">{reply.author}</span>
-                              <span className="text-gray-500">• {reply.timeAgo}</span>
-                              <span className="text-gray-500">• {reply.score} points</span>
+                              {reply.userId === article.userId && (
+                                <>
+                                  <span className="text-gray-500">•</span>
+                                  <span className="text-gray-500 text-xs">original poster</span>
+                                </>
+                              )}
                             </div>
-                            <p className="text-gray-700 text-sm">{reply.text}</p>
+                            <p className="text-gray-700 text-sm mb-3">{reply.text}</p>
+                            <div className="flex items-center gap-3">
+                              <CommentVote
+                                commentId={reply.id}
+                                voteState={commentVoteStates[reply.id] || { currentVote: null, score: 0 }}
+                                isVoting={isCommentVoting}
+                                onVote={handleCommentVote}
+                                isAuthenticated={isAuthenticated}
+                                layout="horizontal"
+                                size="sm"
+                              />
+                              <div className="text-xs text-gray-500">{reply.timeAgo}</div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -202,6 +286,21 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           </div>
         )}
       </div>
+
+      {/* Comment Form */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-5xl">
+          <CommentForm 
+            postId={article.id} 
+            onCommentAdded={handleCommentAdded} 
+            isFixed={true}
+            onMinimizedChange={handleCommentFormMinimizedChange}
+          />
+        </div>
+      </div>
+
+      {/* Dynamic margin below comment form based on its state */}
+      <div className={`${isCommentFormMinimized ? 'h-8' : 'h-48'}`}></div>
     </main>
   )
 }

@@ -4,6 +4,7 @@ export interface Comment {
   text: string
   timeAgo: string
   score: number
+  userId?: string
   replies?: Comment[]
 }
 
@@ -20,6 +21,7 @@ export interface NewsItem {
   description?: string
   comments: Comment[]
   author: string
+  userId?: string
   isSponsored?: boolean
   link?: string
   type?: string
@@ -286,6 +288,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     description: post.description,
     comments: [], // We'll add comments later if needed
     author: post.userName,
+    userId: post.userId,
     isSponsored: false,
     link: post.link,
     type: post.type,
@@ -453,6 +456,7 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
       score: 0, // Default score since it's not stored in the collection
+      userId: doc.userId || undefined,
       replies: [] // TODO: Implement nested replies using replyId
     }))
 

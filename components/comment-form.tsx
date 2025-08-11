@@ -12,10 +12,10 @@ interface CommentFormProps {
   postId: string
   onCommentAdded?: () => void
   isFixed?: boolean
-  onHeightChange?: (height: number) => void
+  onMinimizedChange?: (isMinimized: boolean) => void
 }
 
-export function CommentForm({ postId, onCommentAdded, isFixed = false, onHeightChange }: CommentFormProps) {
+export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimizedChange }: CommentFormProps) {
   const [commentText, setCommentText] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
@@ -30,7 +30,10 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onHeightC
   useEffect(() => {
     const savedState = localStorage.getItem('commentFormMinimized')
     if (savedState !== null) {
-      setIsMinimized(JSON.parse(savedState))
+      const minimized = JSON.parse(savedState)
+      setIsMinimized(minimized)
+      // Notify parent component about the initial state from localStorage
+      onMinimizedChange?.(minimized)
     }
     setIsHydrated(true)
     
@@ -40,28 +43,14 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onHeightC
     }, 100)
     
     return () => clearTimeout(timer)
-  }, [])
-
-  // Measure and communicate height changes
-  useEffect(() => {
-    if (formRef.current && onHeightChange) {
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          onHeightChange(entry.contentRect.height)
-        }
-      })
-      
-      resizeObserver.observe(formRef.current)
-      
-      return () => resizeObserver.disconnect()
-    }
-  }, [onHeightChange])
+  }, [onMinimizedChange])
 
   // Save minimized state to localStorage whenever it changes
   const toggleMinimized = () => {
     const newState = !isMinimized
     setIsMinimized(newState)
     localStorage.setItem('commentFormMinimized', JSON.stringify(newState))
+    onMinimizedChange?.(newState)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -132,7 +121,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onHeightC
   }
 
   return (
-    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
+    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-3xl mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
       <div className="flex-1 flex flex-col justify-center min-w-0">
         <div 
           className={`flex items-center justify-between ${isMinimized ? 'mb-0' : 'mb-3'} ${isHydrated ? 'cursor-pointer' : ''}`}

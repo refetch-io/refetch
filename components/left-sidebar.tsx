@@ -106,9 +106,31 @@ function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: bo
   )
 }
 
-export function LeftSidebar() {
+interface LeftSidebarProps {
+  isThreadsPage?: boolean
+}
+
+export function LeftSidebar({ isThreadsPage = false }: LeftSidebarProps) {
   const pathname = usePathname()
   
+  if (isThreadsPage) {
+    // On threads pages: only show footer at bottom
+    return (
+      <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20" style={{ height: 'calc(100vh - 5rem)' }}>
+        <div className="h-full flex flex-col">
+          {/* Spacer to push footer to bottom */}
+          <div className="flex-1"></div>
+          
+          {/* Footer positioned at the bottom */}
+          <div className="pb-4">
+            <Footer variant="sidebar" />
+          </div>
+        </div>
+      </aside>
+    )
+  }
+  
+  // On main pages: show navigation with footer below
   return (
     <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20 h-fit">
       <div className="pr-4 pb-4">
@@ -123,8 +145,8 @@ export function LeftSidebar() {
         </div>
       </div>
       
-      {/* Footer positioned below sidebar */}
-      <Footer />
+      {/* Footer positioned below navigation */}
+      <Footer variant="sidebar" />
     </aside>
   )
 }
