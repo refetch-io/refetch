@@ -47,14 +47,15 @@ export default function MainLayout({
 
         {/* Right Sidebar - Only show on threads pages */}
         {isThreadsPage && (
-          <aside className="hidden lg:block w-56 sticky top-20 h-fit">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <h3 className="text-sm font-medium text-gray-900 mb-3">Quick Actions</h3>
-              <div className="space-y-2 text-xs text-gray-600">
-                <p>• Share this thread</p>
-                <p>• Bookmark for later</p>
-                <p>• Report issues</p>
-                <p>• Related threads</p>
+          <aside className="hidden lg:block w-56 sticky top-20 h-fit pl-6">
+            <div className="bg-white rounded-lg pb-2">
+              <h3 className="font-normal text-gray-900 mb-2 px-4 pt-2 font-heading text-sm">Quick Actions</h3>
+              {/* Separator between title and first item */}
+              <div className="h-px bg-gray-100 my-1" />
+              <div className="space-y-0">
+                <div className="text-sm text-gray-700 py-1 px-4">
+                  <p>Coming soon...</p>
+                </div>
               </div>
             </div>
           </aside>

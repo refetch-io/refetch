@@ -22,9 +22,11 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
   const [isMinimized, setIsMinimized] = useState(false)
   const [isHydrated, setIsHydrated] = useState(false)
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [wasMinimized, setWasMinimized] = useState(false)
   const { user, isAuthenticated, loading } = useAuth()
   const router = useRouter()
   const formRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Load minimized state from localStorage after hydration
   useEffect(() => {
@@ -51,7 +53,23 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
     setIsMinimized(newState)
     localStorage.setItem('commentFormMinimized', JSON.stringify(newState))
     onMinimizedChange?.(newState)
+    
+    // Track when we're expanding from a minimized state
+    if (newState === false) {
+      setWasMinimized(true)
+    }
   }
+
+  // Auto-focus textarea when form is expanded (but not on initial load)
+  useEffect(() => {
+    if (isHydrated && !isMinimized && wasMinimized && textareaRef.current) {
+      // Small delay to ensure the form is fully rendered
+      const timer = setTimeout(() => {
+        textareaRef.current?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [isMinimized, isHydrated, wasMinimized])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -176,6 +194,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
                   rows={1}
                   required
                   className="text-lg h-12 resize-none"
+                  ref={textareaRef}
                 />
               </div>
               <Button type="submit" disabled={isSubmitting} className="w-full">

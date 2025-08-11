@@ -214,7 +214,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   }
 
   return (
-    <main className="w-full space-y-6">
+    <main className="w-full space-y-6 px-4 lg:px-6">
       {/* Article Card - Using PostCard component for consistency */}
       <PostCard
         item={article}
@@ -235,7 +235,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         </div>
       )}
 
-      {/* Comments Section Title with Sort Buttons */}
+      {/* Comments Section Title with Sort Controls */}
       <div className="bg-gray-200 rounded-lg px-4 py-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-medium text-gray-700">
@@ -245,27 +245,30 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
             </span>
           </h3>
           
-          {/* Sort Buttons */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 mr-2">Sort by:</span>
-            <Button
-              variant={sortType === 'date' ? 'default' : 'outline'}
-              size="sm"
+          {/* Sort Controls */}
+          <div className="flex items-center gap-3 text-xs">
+            <button
               onClick={() => handleSortChange('date')}
-              className="flex items-center gap-1 text-xs h-6 px-2"
+              className={`flex items-center gap-1 transition-colors ${
+                sortType === 'date' 
+                  ? 'text-black font-medium' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
             >
-              <Clock className="h-3 w-3" />
-              Date
-            </Button>
-            <Button
-              variant={sortType === 'votes' ? 'default' : 'outline'}
-              size="sm"
+              <Clock className="h-2.5 w-2.5" />
+              Newest
+            </button>
+            <button
               onClick={() => handleSortChange('votes')}
-              className="flex items-center gap-1 text-xs h-6 px-2"
+              className={`flex items-center gap-1 transition-colors ${
+                sortType === 'votes' 
+                  ? 'text-black font-medium' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
             >
-              <TrendingUp className="h-3 w-3" />
-              Votes
-            </Button>
+              <TrendingUp className="h-2.5 w-2.5" />
+              Popular
+            </button>
           </div>
         </div>
       </div>
