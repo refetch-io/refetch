@@ -39,14 +39,14 @@ export function PostCard({
   const titleLinkRel = hasExternalLink ? 'noopener noreferrer' : undefined
 
   return (
-    <div className={`bg-white px-4 py-1 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group ${item.isSponsored ? "bg-neutral-50" : ""} ${className}`}>
+    <div className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group ${item.isSponsored ? "bg-neutral-50" : ""} ${className}`}>
       {/* Upvote/Downvote Section */}
       {showVoting && !item.isSponsored && (
-        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
+        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8 self-center">
           <Button
             variant="ghost"
             size="icon"
-            className={`h-5 w-5 ${
+            className={`h-4 w-4 ${
               voteState.currentVote === 'up' 
                 ? 'text-green-600 bg-green-50 hover:bg-green-50' 
                 : 'text-gray-400 hover:bg-green-50 hover:text-green-600'
@@ -62,7 +62,7 @@ export function PostCard({
             disabled={isVoting}
             aria-label={`Upvote ${item.title}`}
           >
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="h-3 w-3" />
           </Button>
           <span className="text-[0.65rem] text-gray-700 font-medium">
             {voteState.score}
@@ -70,7 +70,7 @@ export function PostCard({
           <Button
             variant="ghost"
             size="icon"
-            className={`h-5 w-5 ${
+            className={`h-4 w-4 ${
               voteState.currentVote === 'down' 
                 ? 'text-red-600 bg-red-50 hover:bg-red-50' 
                 : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
@@ -86,12 +86,12 @@ export function PostCard({
             disabled={isVoting}
             aria-label={`Downvote ${item.title}`}
           >
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-3 w-3" />
           </Button>
         </div>
       )}
       {showVoting && item.isSponsored && (
-        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
+        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8 self-center">
           <span className="text-[0.65rem] text-gray-600 font-semibold">Ad</span>
         </div>
       )}

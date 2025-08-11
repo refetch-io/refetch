@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation"
 interface CommentFormProps {
   postId: string
   onCommentAdded?: () => void
+  isFixed?: boolean
 }
 
-export function CommentForm({ postId, onCommentAdded }: CommentFormProps) {
+export function CommentForm({ postId, onCommentAdded, isFixed = false }: CommentFormProps) {
   const [commentText, setCommentText] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
@@ -75,28 +76,27 @@ export function CommentForm({ postId, onCommentAdded }: CommentFormProps) {
   }
 
   return (
-    <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
+    <div className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg' : 'rounded-lg'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''}`}>
       <div className="flex-1 flex flex-col justify-center min-w-0">
-        <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Add a Comment</h3>
+        <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Comment</h3>
         <div className="h-px bg-gray-100 mb-4 -mx-4" />
-        
+      
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
             {error}
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div className="space-y-2">
-            <Label htmlFor="comment-text" className="text-sm">Comment *</Label>
             <Textarea
               id="comment-text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Share your thoughts on this post..."
-              rows={4}
+              rows={1}
               required
-              className="text-sm"
+              className="text-lg h-12 resize-none"
             />
           </div>
           <Button type="submit" disabled={isSubmitting} className="w-full">

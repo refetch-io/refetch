@@ -47,6 +47,10 @@ export default function MainLayout({
       {isFullWidth && (
         <div className="max-w-2xl mx-auto pr-4 pl-4 sm:pr-6">
           <Footer variant="bottom" />
+          {/* Add extra margin below footer when comment form is fixed (thread pages) */}
+          {pathname.startsWith('/threads/') && (
+            <div className="h-56"></div>
+          )}
         </div>
       )}
       
