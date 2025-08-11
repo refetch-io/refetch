@@ -155,24 +155,67 @@ export const fetchUserVotesForResources = async (
       return new Map()
     }
 
-    // Fetch votes for all resources in parallel
-    const votePromises = resources.map(async (resource) => {
-      const voteState = await fetchUserVote(resource.id, resource.type)
-      return { id: resource.id, voteState }
+    if (resources.length === 0) {
+      return new Map()
+    }
+
+    // Make a single POST API call instead of individual calls
+    // Using POST to avoid URL length issues with many resource IDs
+    const response = await fetch('/api/vote/batch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      },
+      body: JSON.stringify({ resources })
     })
 
-    const results = await Promise.all(votePromises)
+    if (!response.ok) {
+      console.error('Failed to fetch batch vote states:', response.status)
+      // Fallback to individual fetching if batch fails
+      return await fetchUserVotesForResourcesFallback(resources)
+    }
+
+    const data = await response.json()
     const voteMap = new Map<string, VoteState>()
 
-    results.forEach(({ id, voteState }) => {
-      if (voteState) {
-        voteMap.set(id, voteState)
-      }
+    // Convert the response to the expected format
+    Object.entries(data.voteMap).forEach(([resourceId, voteData]: [string, any]) => {
+      voteMap.set(resourceId, {
+        currentVote: voteData.currentVote,
+        score: voteData.score,
+        countUp: voteData.countUp,
+        countDown: voteData.countDown
+      })
     })
 
     return voteMap
   } catch (error) {
     console.error('Error fetching user votes for resources:', error)
-    return new Map()
+    // Fallback to individual fetching if batch fails
+    return await fetchUserVotesForResourcesFallback(resources)
   }
+}
+
+// Fallback function to fetch votes individually if batch fails
+async function fetchUserVotesForResourcesFallback(
+  resources: Array<{ id: string; type: 'post' | 'comment' }>
+): Promise<Map<string, VoteState>> {
+  console.log('Falling back to individual vote fetching for', resources.length, 'resources')
+  
+  const voteMap = new Map<string, VoteState>()
+  
+  // Fetch votes for each resource individually as fallback
+  for (const resource of resources) {
+    try {
+      const voteState = await fetchUserVote(resource.id, resource.type)
+      if (voteState) {
+        voteMap.set(resource.id, voteState)
+      }
+    } catch (error) {
+      console.error(`Error fetching vote for ${resource.type} ${resource.id}:`, error)
+    }
+  }
+  
+  return voteMap
 }

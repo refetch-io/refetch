@@ -591,29 +591,33 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
       voteMap.set(postId, null)
     })
     
-    // Fetch votes for each post ID individually since Appwrite doesn't support OR queries easily
-    for (const postId of postIds) {
-      try {
-        const votes = await databases.listDocuments(
-          process.env.APPWRITE_DATABASE_ID || '', // Database ID
-          process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
-          [
-            Query.equal('resourceId', postId),
-            Query.equal('resourceType', 'post'),
-            Query.equal('userId', userId)
-          ]
-        )
+    if (postIds.length === 0) {
+      return voteMap
+    }
 
-        // Set the vote if found
-        if (votes.documents.length > 0) {
-          const vote = votes.documents[0]
+    // Fetch all votes for the user in a single query instead of individual queries
+    try {
+      const votes = await databases.listDocuments(
+        process.env.APPWRITE_DATABASE_ID || '', // Database ID
+        process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
+        [
+          Query.equal('userId', userId),
+          Query.equal('resourceType', 'post'),
+          Query.limit(100) // Limit to prevent too many results
+        ]
+      )
+
+      // Filter votes by the requested post IDs and set the vote types
+      votes.documents.forEach((vote: any) => {
+        const postId = vote.resourceId
+        if (postIds.includes(postId)) {
           const voteType = vote.count === 1 ? 'up' : 'down'
           voteMap.set(postId, voteType)
         }
-      } catch (error) {
-        console.error(`Error fetching votes for post ${postId}:`, error)
-        // Continue with other posts even if one fails
-      }
+      })
+    } catch (error) {
+      console.error('Error fetching votes for posts:', error)
+      // Continue with null votes if the query fails
     }
 
     console.log(`Successfully fetched votes for ${postIds.length} posts for user ${userId}`)
@@ -795,7 +799,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
     // Fetch votes for all posts
     if (appwritePosts.length > 0) {
       const postIds = appwritePosts.map(post => post.$id)
-      const voteMap = await fetchVotesForPosts(postIds, userId)
+      const voteMap = await fetchVotesForPostsBatchServer(postIds, userId)
       
       // Add vote information to each post
       appwritePosts.forEach(post => {
@@ -811,6 +815,330 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
       stack: error instanceof Error ? error.stack : undefined,
       name: error instanceof Error ? error.name : 'Unknown',
       cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+  }
+}
+
+// New function to fetch comments for multiple posts in batch (server-side)
+export async function fetchCommentsForPostsBatchServer(postIds: string[]): Promise<Record<string, Comment[]>> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing for batch comments fetch.')
+    return {}
+  }
+
+  if (postIds.length === 0) {
+    return {}
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    // Fetch comments for all posts in a single query
+    const comments = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '',
+      process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
+      [
+        Query.equal('postId', postIds), // This will match any of the post IDs
+        Query.orderDesc('$createdAt'),
+        Query.limit(1000) // Increase limit to get more comments
+      ]
+    )
+
+    // Group comments by postId
+    const commentsByPost: Record<string, Comment[]> = {}
+    postIds.forEach(postId => {
+      commentsByPost[postId] = []
+    })
+
+    // Transform and group the comments
+    comments.documents.forEach(doc => {
+      const postId = doc.postId
+      if (commentsByPost[postId]) {
+        const transformedComment = {
+          id: doc.$id,
+          author: doc.userName || 'Anonymous',
+          text: doc.content || '',
+          timeAgo: getTimeAgo(doc.$createdAt),
+          score: doc.count || 0, // Use the count field if available
+          userId: doc.userId || '', // Include userId for original poster detection
+          replies: [] // TODO: Implement nested replies using replyId
+        }
+        commentsByPost[postId].push(transformedComment)
+      }
+    })
+
+    return commentsByPost
+  } catch (error) {
+    console.error('Error fetching batch comments from database:', error)
+    return {}
+  }
+}
+
+// Client-side function to fetch comments for multiple posts in batch
+export async function fetchCommentsForPostsBatch(postIds: string[]): Promise<Record<string, Comment[]>> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing for batch comments fetch.')
+    return {}
+  }
+
+  if (postIds.length === 0) {
+    return {}
+  }
+
+  try {
+    // Make a single POST API call to fetch comments for all posts
+    // Using POST to avoid URL length issues with many post IDs
+    const response = await fetch('/api/comments/batch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ postIds })
+    })
+    
+    if (!response.ok) {
+      console.error('Failed to fetch batch comments:', response.status)
+      // Fallback to individual fetching if batch fails
+      return await fetchCommentsForPostsFallback(postIds)
+    }
+
+    const data = await response.json()
+    return data.commentsByPost || {}
+  } catch (error) {
+    console.error('Error fetching batch comments:', error)
+    // Fallback to individual fetching if batch fails
+    return await fetchCommentsForPostsFallback(postIds)
+  }
+}
+
+// Fallback function to fetch comments individually if batch fails
+async function fetchCommentsForPostsFallback(postIds: string[]): Promise<Record<string, Comment[]>> {
+  console.log('Falling back to individual comment fetching for', postIds.length, 'posts')
+  
+  const commentsByPost: Record<string, Comment[]> = {}
+  
+  // Initialize empty arrays for all posts
+  postIds.forEach(postId => {
+    commentsByPost[postId] = []
+  })
+  
+  // Fetch comments for each post individually as fallback
+  for (const postId of postIds) {
+    try {
+      const comments = await fetchCommentsForPost(postId)
+      commentsByPost[postId] = comments
+    } catch (error) {
+      console.error(`Error fetching comments for post ${postId}:`, error)
+      commentsByPost[postId] = []
+    }
+  }
+  
+  return commentsByPost
+}
+
+// New function to fetch votes for multiple posts in batch (server-side)
+export async function fetchVotesForPostsBatchServer(postIds: string[], userId: string): Promise<Map<string, 'up' | 'down' | null>> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return new Map()
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    // Create a map of postId -> vote type
+    const voteMap = new Map<string, 'up' | 'down' | null>()
+    
+    // Initialize all posts with null vote
+    postIds.forEach(postId => {
+      voteMap.set(postId, null)
+    })
+    
+    if (postIds.length === 0) {
+      return voteMap
+    }
+
+    // Fetch all votes for the user in a single query instead of individual queries
+    try {
+      const votes = await databases.listDocuments(
+        process.env.APPWRITE_DATABASE_ID || '', // Database ID
+        process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
+        [
+          Query.equal('userId', userId),
+          Query.equal('resourceType', 'post'),
+          Query.limit(100) // Limit to prevent too many results
+        ]
+      )
+
+      // Filter votes by the requested post IDs and set the vote types
+      votes.documents.forEach((vote: any) => {
+        const postId = vote.resourceId
+        if (postIds.includes(postId)) {
+          const voteType = vote.count === 1 ? 'up' : 'down'
+          voteMap.set(postId, voteType)
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching votes for posts:', error)
+      // Continue with null votes if the query fails
+    }
+
+    console.log(`Successfully fetched votes for ${postIds.length} posts for user ${userId}`)
+
+    return voteMap
+  } catch (error) {
+    console.error('Error fetching votes from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    // Return empty map on error
+    return new Map()
+  }
+}
+
+// Updated function to fetch posts with comments in batch
+export async function fetchPostsFromAppwriteWithCommentsAndVotes(
+  sortType: 'score' | 'new' | 'show' = 'score', 
+  userId?: string
+): Promise<{ posts: NewsItem[], error?: string }> {
+  if (!validateAppwriteConfig()) {
+    console.warn('Appwrite configuration missing.')
+    return { posts: [], error: 'Missing Appwrite configuration' }
+  }
+
+  try {
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    // Log environment variables for debugging (remove sensitive data in production)
+    console.log('Appwrite Config:', {
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
+      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
+    })
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
+
+    const databases = new Databases(client)
+    
+    let queries = []
+    
+    // Apply different sorting based on sortType
+    switch (sortType) {
+      case 'score':
+        // Sort by count (total score) - highest first, then by creation date
+        queries = [
+          Query.orderDesc('count'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'new':
+        // Sort by creation date - newest first
+        queries = [
+          Query.orderDesc('$createdAt')
+        ]
+        break
+      case 'show':
+        // Filter by type=show, sort by score first, then by creation date
+        queries = [
+          Query.equal('type', 'show'),
+          Query.orderDesc('count'),
+          Query.orderDesc('$createdAt')
+        ]
+        break
+    }
+    
+    const posts = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '', // Database ID
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
+      queries
+    )
+
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
+
+    const appwritePosts = posts.documents.map((post: any) => ({
+      $id: post.$id,
+      title: post.title,
+      description: post.description,
+      userId: post.userId,
+      userName: post.userName,
+      countUp: post.countUp,
+      countDown: post.countDown,
+      count: post.count,
+      countComments: post.countComments,
+      link: post.link,
+      type: post.type,
+      $createdAt: post.$createdAt,
+      $updatedAt: post.$updatedAt,
+      currentVote: null as any
+    }))
+
+    // Fetch votes for all posts if userId is provided
+    if (userId && appwritePosts.length > 0) {
+      const postIds = appwritePosts.map(post => post.$id)
+      const voteMap = await fetchVotesForPostsBatchServer(postIds, userId)
+      
+      // Add vote information to each post
+      appwritePosts.forEach(post => {
+        post.currentVote = voteMap.get(post.$id) || null
+      })
+    }
+
+    // Fetch comments for all posts in batch
+    let commentsByPost: Record<string, Comment[]> = {}
+    if (appwritePosts.length > 0) {
+      const postIds = appwritePosts.map(post => post.$id)
+      commentsByPost = await fetchCommentsForPostsBatchServer(postIds)
+    }
+
+    // Convert to NewsItem format and add comments
+    const newsItems = appwritePosts.map(post => {
+      const newsItem = convertAppwritePostToNewsItem(post as AppwritePost, 0)
+      // Add comments if available
+      if (commentsByPost[post.$id]) {
+        newsItem.comments = commentsByPost[post.$id]
+      }
+      return newsItem
+    })
+
+    return { posts: newsItems }
+  } catch (error) {
+    console.error('Error fetching posts from Appwrite:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+      cause: error instanceof Error ? error.cause : undefined
+    })
+    
+    // Log additional debugging information
+    console.error('Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      hasApiKey: !!process.env.APPWRITE_API_KEY
     })
     
     return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }

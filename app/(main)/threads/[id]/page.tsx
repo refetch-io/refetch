@@ -7,14 +7,14 @@ import { notFound } from "next/navigation"
 export const revalidate = 0
 
 interface ThreadPageProps {
-  params: Promise<{
-    id: string
-  }>
+  params: Promise<{ id: string }>
 }
 
 export default async function ThreadPage({ params }: ThreadPageProps) {
   try {
     const unwrappedParams = await params
+    // Note: fetchPostById already fetches comments in a single call
+    // For individual posts, this is already optimized
     const article = await fetchPostById(unwrappedParams.id)
     
     if (!article) {

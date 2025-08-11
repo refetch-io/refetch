@@ -14,33 +14,19 @@ const jwtClient = new Client()
 const databases = new Databases(apiKeyClient)
 const account = new Account(jwtClient)
 
-// Database and collection IDs
+// Environment variables
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
-const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID || ''
 const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
 const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
-
-interface BatchVoteRequest {
-  resources: Array<{
-    id: string
-    type: 'post' | 'comment'
-  }>
-}
-
-interface VoteData {
-  voteType: 'up' | 'down' | null
-  countUp: number
-  countDown: number
-  score: number
-}
+const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID || ''
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse the request body
-    const body: BatchVoteRequest = await request.json()
+    // Get resource IDs and types from request body instead of query parameters
+    const body = await request.json()
     const { resources } = body
 
-    if (!resources || !Array.isArray(resources)) {
+    if (!resources || !Array.isArray(resources) || resources.length === 0) {
       return NextResponse.json(
         { message: 'Resources array is required' },
         { status: 400 }
@@ -76,23 +62,21 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       return NextResponse.json(
         { message: 'Invalid or expired JWT token' },
-        { status: 401 }
+        { status: 400 }
       )
     }
 
-    // Create a map of resourceId -> vote data
-    const voteMap: Record<string, VoteData> = {}
-    
-    // Initialize all resources with default vote data
+    // Initialize vote map with default values
+    const voteMap: Record<string, any> = {}
     resources.forEach(resource => {
       voteMap[resource.id] = {
-        voteType: null,
+        currentVote: null,
+        score: 0,
         countUp: 0,
-        countDown: 0,
-        score: 0
+        countDown: 0
       }
     })
-    
+
     // Fetch all votes for the user in a single call
     try {
       const votes = await databases.listDocuments(
@@ -113,7 +97,7 @@ export async function POST(request: NextRequest) {
         const matchingResource = resources.find(r => r.id === resourceId && r.type === resourceType)
         if (matchingResource) {
           const voteType = vote.count === 1 ? 'up' : 'down'
-          voteMap[resourceId].voteType = voteType
+          voteMap[resourceId].currentVote = voteType
         }
       })
     } catch (error) {
@@ -123,36 +107,58 @@ export async function POST(request: NextRequest) {
 
     // Fetch resource data to get countUp, countDown, and score for each resource
     try {
-      for (const resource of resources) {
-        const targetCollectionId = resource.type === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
-        
+      // Separate posts and comments to fetch them in batches
+      const postIds = resources.filter(r => r.type === 'post').map(r => r.id)
+      const commentIds = resources.filter(r => r.type === 'comment').map(r => r.id)
+      
+      // Fetch all posts in a single query
+      if (postIds.length > 0) {
         try {
-          const resourceDoc = await databases.getDocument(
+          const posts = await databases.listDocuments(
             DATABASE_ID,
-            targetCollectionId,
-            resource.id
+            POSTS_COLLECTION_ID,
+            [Query.equal('$id', postIds)]
           )
           
-          // Use atomic operations to ensure we get the most up-to-date values
-          voteMap[resource.id].countUp = resourceDoc.countUp || 0
-          voteMap[resource.id].countDown = resourceDoc.countDown || 0
-          voteMap[resource.id].score = resourceDoc.count || 0
+          // Update vote map with post data
+          posts.documents.forEach((post: any) => {
+            voteMap[post.$id].countUp = post.countUp || 0
+            voteMap[post.$id].countDown = post.countDown || 0
+            voteMap[post.$id].score = post.count || 0
+          })
         } catch (error) {
-          console.error(`Error fetching ${resource.type} data for ${resource.id}:`, error)
-          // Keep default values if resource not found
+          console.error('Error fetching posts data:', error)
+        }
+      }
+      
+      // Fetch all comments in a single query
+      if (commentIds.length > 0) {
+        try {
+          const comments = await databases.listDocuments(
+            DATABASE_ID,
+            COMMENTS_COLLECTION_ID,
+            [Query.equal('$id', commentIds)]
+          )
+          
+          // Update vote map with comment data
+          comments.documents.forEach((comment: any) => {
+            voteMap[comment.$id].countUp = comment.countUp || 0
+            voteMap[comment.$id].countDown = comment.countDown || 0
+            voteMap[comment.$id].score = comment.count || 0
+          })
+        } catch (error) {
+          console.error('Error fetching comments data:', error)
         }
       }
     } catch (error) {
       console.error('Error fetching resource data:', error)
-      // Continue with default values
+      // Continue with default values if the query fails
     }
 
-    return NextResponse.json({
-      votes: voteMap
-    })
+    return NextResponse.json({ voteMap })
 
   } catch (error) {
-    console.error('Error fetching batch votes:', error)
+    console.error('Error in batch vote state endpoint:', error)
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }
