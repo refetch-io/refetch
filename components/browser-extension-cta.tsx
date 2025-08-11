@@ -73,7 +73,8 @@ export function BrowserExtensionCTA() {
 
   const handleInstall = () => {
     if (browser) {
-      window.open(browser.extensionUrl, "_blank", "noopener,noreferrer")
+      const urlWithRef = `${browser.extensionUrl}${browser.extensionUrl.includes('?') ? '&' : '?'}ref=refetch.io`
+      window.open(urlWithRef, "_blank", "noopener,noreferrer")
     }
   }
 

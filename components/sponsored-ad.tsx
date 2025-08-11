@@ -30,7 +30,7 @@ export function SponsoredAd({
 }: SponsoredAdProps) {
   return (
     <Link 
-      href={linkUrl} 
+      href={`${linkUrl}${linkUrl.includes('?') ? '&' : '?'}ref=refetch.io`} 
       target="_blank" 
       rel="noopener noreferrer"
       className={`block p-3 ${backgroundColor} ${borderColor} rounded-lg transition-all duration-200 group`}

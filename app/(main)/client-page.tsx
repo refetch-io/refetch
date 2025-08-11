@@ -664,7 +664,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
             
             // Determine if this item has an external link
             const hasExternalLink = item.link && item.link.startsWith('http')
-            const titleLinkHref = hasExternalLink ? item.link! : `/threads/${item.id}`
+            const titleLinkHref = hasExternalLink && item.link ? `${item.link}${item.link.includes('?') ? '&' : '?'}ref=refetch.io` : `/threads/${item.id}`
             const titleLinkTarget = hasExternalLink ? '_blank' : undefined
             const titleLinkRel = hasExternalLink ? 'noopener noreferrer' : undefined
             
