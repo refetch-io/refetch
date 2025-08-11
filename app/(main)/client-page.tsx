@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
 import { type NewsItem } from "@/lib/data"
@@ -187,10 +187,7 @@ import {
   ZoomOut,
 } from "lucide-react"
 
-// --- Constants for virtualization ---
 
-const MAX_ITEMS_DISPLAY = 50
-const BUFFER_ITEMS = 10
 
 // Icon mapping object
 const iconMap: { [key: string]: any } = {
@@ -426,28 +423,22 @@ interface ClientPageProps {
 }
 
 export function ClientPage({ initialPosts, error }: ClientPageProps) {
-  // Use the posts from Appwrite, fallback to empty array if none
-  const limitedNewsItems = useMemo(() => initialPosts.slice(0, MAX_ITEMS_DISPLAY), [initialPosts])
+  // Use all posts from Appwrite, no more limiting
+  const newsItems = useMemo(() => initialPosts, [initialPosts])
   
-  const [visibleItems, setVisibleItems] = useState<NewsItem[]>([])
-  const [paddingTop, setPaddingTop] = useState(0)
-  const [paddingBottom, setPaddingBottom] = useState(0)
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
   const { user, isAuthenticated } = useAuth()
 
-  // Ref to measure the position of the news list within the document
-  const newsListContainerRef = useRef<HTMLDivElement>(null)
-
   // Fetch votes for the current user when component mounts
   useEffect(() => {
     const fetchVotes = async () => {
-      if (!isAuthenticated || !user?.$id || limitedNewsItems.length === 0) {
+      if (!isAuthenticated || !user?.$id || newsItems.length === 0) {
         return
       }
 
       try {
-        const postIds = limitedNewsItems.map(post => post.id)
+        const postIds = newsItems.map(post => post.id)
         
         // Get JWT token for authentication
         const jwt = await getCachedJWT()
@@ -471,7 +462,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
           
           // Initialize vote states with fetched data
           const initialVoteStates: Record<string, VoteState> = {}
-          limitedNewsItems.forEach(post => {
+          newsItems.forEach(post => {
             const voteType = data.votes[post.id] || null
             initialVoteStates[post.id] = {
               currentVote: voteType,
@@ -489,11 +480,11 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
     }
 
     fetchVotes()
-  }, [isAuthenticated, user?.$id, limitedNewsItems])
+  }, [isAuthenticated, user?.$id, newsItems])
 
   // Helper function to get the current vote state for an item
   const getVoteState = (itemId: string): VoteState => {
-    const item = limitedNewsItems.find(item => item.id === itemId)
+    const item = newsItems.find(item => item.id === itemId)
     const voteState = voteStates[itemId]
     return {
       currentVote: voteState?.currentVote || null,
@@ -547,69 +538,6 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
     }
   }
 
-  const updateVisibleItems = useCallback(() => {
-    const container = newsListContainerRef.current
-    if (!container) return
-
-    const scrollTop = window.scrollY
-    const viewportHeight = window.innerHeight
-
-    // Calculate the offset of the news list from the top of the document.
-    const offsetFromDocumentTop = container.offsetTop
-
-    // Adjust scrollTop relative to the start of the virtualized list
-    const adjustedScrollTop = Math.max(0, scrollTop - offsetFromDocumentTop)
-
-    // Use a more flexible approach for variable heights
-    // Estimate that each item takes roughly 80px (including margins)
-    const estimatedItemHeightWithMargin = 80
-    const firstVisibleIndex = Math.floor(adjustedScrollTop / estimatedItemHeightWithMargin)
-    const lastVisibleIndex = Math.ceil((adjustedScrollTop + viewportHeight) / estimatedItemHeightWithMargin)
-
-    const newStartIndex = Math.max(0, firstVisibleIndex - BUFFER_ITEMS)
-    const newEndIndex = Math.min(limitedNewsItems.length, lastVisibleIndex + BUFFER_ITEMS)
-
-    // Use a temporary object on the ref to store previous indices for comparison
-    const prevIndices = (container as any)._virtualizationIndices || { startIndex: -1, endIndex: -1 }
-
-    if (newStartIndex !== prevIndices.startIndex || newEndIndex !== prevIndices.endIndex) {
-      setVisibleItems(limitedNewsItems.slice(newStartIndex, newEndIndex))
-      setPaddingTop(newStartIndex * estimatedItemHeightWithMargin)
-      setPaddingBottom((limitedNewsItems.length - newEndIndex) * estimatedItemHeightWithMargin)
-
-      // Store current indices for next comparison
-      ;(container as any)._virtualizationIndices = {
-        startIndex: newStartIndex,
-        endIndex: newEndIndex,
-      }
-    }
-  }, [limitedNewsItems])
-
-  useEffect(() => {
-    // Initial update on mount
-    updateVisibleItems()
-
-    let animationFrameId: number | null = null
-
-    const handleScroll = () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId)
-      }
-      animationFrameId = requestAnimationFrame(updateVisibleItems)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    window.addEventListener("resize", handleScroll)
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId)
-      }
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleScroll)
-    }
-  }, [updateVisibleItems])
-
   return (
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0">
       {/* Main Content */}
@@ -644,16 +572,11 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
         {/* New Search and Filter Component */}
         {/* <SearchAndFilter /> */}
 
-        {/* Virtualized News Items List */}
-        <div ref={newsListContainerRef} className="news-list-container min-h-[600px]">
-          {/* This div creates the virtualized empty space above the visible items */}
-          <div style={{ height: paddingTop }} />
-
-          {/* Render only the currently visible items */}
-          {visibleItems.map((item, index) => {
-            // Calculate the actual position in the full list
-            const actualIndex = (newsListContainerRef.current as any)?._virtualizationIndices?.startIndex || 0
-            const position = actualIndex + index + 1
+        {/* News Items List - All posts rendered at once */}
+        <div className="space-y-4">
+          {newsItems.map((item, index) => {
+            // Calculate the position in the list
+            const position = index + 1
             
             // Determine if this is a top 3 article
             const isTop3 = position <= 3
@@ -679,9 +602,6 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
               </div>
             )
           })}
-
-          {/* This div creates the virtualized empty space below the visible items */}
-          <div style={{ height: paddingBottom }} />
         </div>
 
         {/* Gen Z Remark */}
