@@ -17,17 +17,26 @@ const account = new Account(jwtClient)
 // Database and collection IDs
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
 const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
+const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
 const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID || ''
 
 export async function GET(request: NextRequest) {
   try {
-    // Get postId from query parameters
+    // Get resourceId and resourceType from query parameters
     const { searchParams } = new URL(request.url)
-    const postId = searchParams.get('postId')
+    const resourceId = searchParams.get('resourceId')
+    const resourceType = searchParams.get('resourceType')
 
-    if (!postId) {
+    if (!resourceId || !resourceType) {
       return NextResponse.json(
-        { message: 'Post ID is required' },
+        { message: 'Resource ID and resource type are required' },
+        { status: 400 }
+      )
+    }
+
+    if (resourceType !== 'post' && resourceType !== 'comment') {
+      return NextResponse.json(
+        { message: 'Resource type must be either "post" or "comment"' },
         { status: 400 }
       )
     }
@@ -51,32 +60,40 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       return NextResponse.json(
         { message: 'Invalid or expired JWT token' },
-        { status: 401 }
+        { status: 400 }
       )
     }
 
-    // Get the post to get the current score
-    let postScore = 0
+    // Determine which collection to use based on resource type
+    const targetCollectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
+
+    // Get the resource to get the current score and vote counts
+    let resourceScore = 0
+    let countUp = 0
+    let countDown = 0
     try {
-      const post = await databases.getDocument(
+      const resource = await databases.getDocument(
         DATABASE_ID,
-        POSTS_COLLECTION_ID,
-        postId
+        targetCollectionId,
+        resourceId
       )
       // Use the count field directly instead of calculating from countUp - countDown
-      postScore = post.count || 0
+      resourceScore = resource.count || 0
+      countUp = resource.countUp || 0
+      countDown = resource.countDown || 0
     } catch (error) {
-      console.error('Error fetching post score:', error)
-      // Continue with score 0 if post not found
+      console.error(`Error fetching ${resourceType} score:`, error)
+      // Continue with score 0 if resource not found
     }
 
-    // Check if user has already voted on this post
+    // Check if user has already voted on this resource
     const existingVote = await databases.listDocuments(
       DATABASE_ID,
       VOTES_COLLECTION_ID,
       [
         Query.equal('userId', user.$id),
-        Query.equal('postId', postId)
+        Query.equal('resourceId', resourceId),
+        Query.equal('resourceType', resourceType)
       ]
     )
 
@@ -86,12 +103,16 @@ export async function GET(request: NextRequest) {
       
       return NextResponse.json({
         currentVote,
-        score: postScore
+        score: resourceScore,
+        countUp,
+        countDown
       })
     } else {
       return NextResponse.json({
         currentVote: null,
-        score: postScore
+        score: resourceScore,
+        countUp,
+        countDown
       })
     }
 

@@ -1,20 +1,34 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ChevronUp, ChevronDown } from "lucide-react"
-import type { Comment } from "@/lib/data" // Import Comment type
+import { CommentVote } from "@/components/comment-vote"
+import { type Comment } from "@/lib/data"
+import { type VoteState } from "@/lib/voteHandler"
+import { useAuth } from "@/hooks/use-auth"
+import { getCachedJWT } from "@/lib/jwtCache"
+import { ArrowUpDown, Clock, TrendingUp } from "lucide-react"
 
 interface CommentItemProps {
   comment: Comment
   onAddReply: (parentId: string, text: string) => void
   onVote: (commentId: string, direction: "up" | "down") => void
+  voteState: VoteState
+  isVoting: boolean
+  isAuthenticated: boolean
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply, onVote }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ 
+  comment, 
+  onAddReply, 
+  onVote, 
+  voteState, 
+  isVoting, 
+  isAuthenticated 
+}) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
 
@@ -30,27 +44,15 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply, onVote }
   return (
     <div className="flex items-start gap-3">
       {/* Vote Section for Comment */}
-      <div className="flex flex-col items-center justify-center text-gray-500 mt-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5 hover:bg-gray-100"
-          onClick={() => onVote(comment.id, "up")}
-          aria-label={`Upvote comment by ${comment.author}`}
-        >
-          <ChevronUp className="h-4 w-4" />
-        </Button>
-        <span className="text-[0.65rem] text-gray-600">{comment.score}</span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5 hover:bg-gray-100"
-          onClick={() => onVote(comment.id, "down")}
-          aria-label={`Downvote comment by ${comment.author}`}
-        >
-          <ChevronDown className="h-4 w-4" />
-        </Button>
-      </div>
+      <CommentVote
+        commentId={comment.id}
+        voteState={voteState}
+        isVoting={isVoting}
+        onVote={onVote}
+        isAuthenticated={isAuthenticated}
+        layout="vertical"
+        size="sm"
+      />
 
       <div className="flex-1">
         <div className="flex items-center gap-2 text-sm">
@@ -87,7 +89,15 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply, onVote }
         {comment.replies && comment.replies.length > 0 && (
           <div className="ml-6 mt-4 space-y-5 border-l pl-4 border-gray-200">
             {comment.replies.map((reply) => (
-              <CommentItem key={reply.id} comment={reply} onAddReply={onAddReply} onVote={onVote} />
+              <CommentItem 
+                key={reply.id} 
+                comment={reply} 
+                onAddReply={onAddReply} 
+                onVote={onVote}
+                voteState={{ currentVote: null, score: reply.score }}
+                isVoting={false}
+                isAuthenticated={isAuthenticated}
+              />
             ))}
           </div>
         )}
@@ -98,11 +108,54 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onAddReply, onVote }
 
 interface CommentsSectionProps {
   initialComments: Comment[]
+  postId: string
 }
 
-export function CommentsSection({ initialComments }: CommentsSectionProps) {
+type SortType = 'date' | 'votes'
+
+export function CommentsSection({ initialComments, postId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newCommentText, setNewCommentText] = useState("")
+  const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
+  const [isVoting, setIsVoting] = useState(false)
+  const [sortType, setSortType] = useState<SortType>('date')
+  const { user } = useAuth()
+
+  // Sort comments based on current sort type
+  const sortedComments = useMemo(() => {
+    const sorted = [...comments]
+    
+    if (sortType === 'date') {
+      // Sort by date (newest first) - assuming timeAgo is a string like "2 hours ago"
+      // For now, we'll keep the original order since we don't have actual timestamps
+      // In a real implementation, you'd want to store actual timestamps
+      return sorted
+    } else if (sortType === 'votes') {
+      // Sort by vote count (highest first)
+      return sorted.sort((a, b) => {
+        const aScore = commentVotes.get(a.id)?.score ?? a.score
+        const bScore = commentVotes.get(b.id)?.score ?? b.score
+        return bScore - aScore
+      })
+    }
+    
+    return sorted
+  }, [comments, sortType, commentVotes])
+
+  // Initialize comment votes with default states
+  useEffect(() => {
+    const initialVotes = new Map<string, VoteState>()
+    const addCommentVotes = (commentList: Comment[]) => {
+      commentList.forEach(comment => {
+        initialVotes.set(comment.id, { currentVote: null, score: comment.score })
+        if (comment.replies) {
+          addCommentVotes(comment.replies)
+        }
+      })
+    }
+    addCommentVotes(initialComments)
+    setCommentVotes(initialVotes)
+  }, [initialComments])
 
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault()
@@ -116,6 +169,8 @@ export function CommentsSection({ initialComments }: CommentsSectionProps) {
         replies: [],
       }
       setComments((prev) => [newComment, ...prev])
+      // Add default vote state for new comment
+      setCommentVotes(prev => new Map(prev).set(newComment.id, { currentVote: null, score: 1 }))
       setNewCommentText("")
     }
   }
@@ -147,31 +202,106 @@ export function CommentsSection({ initialComments }: CommentsSectionProps) {
       })
     }
     setComments((prev) => addReplyRecursive(prev))
+    // Add default vote state for new reply
+    setCommentVotes(prev => new Map(prev).set(newReply.id, { currentVote: null, score: 1 }))
   }
 
-  const handleVote = (commentId: string, direction: "up" | "down") => {
-    const updateVoteRecursive = (currentComments: Comment[]): Comment[] => {
-      return currentComments.map((comment) => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            score: direction === "up" ? comment.score + 1 : comment.score - 1,
-          }
-        } else if (comment.replies && comment.replies.length > 0) {
-          return {
-            ...comment,
-            replies: updateVoteRecursive(comment.replies),
-          }
-        }
-        return comment
+  const handleVote = async (commentId: string, direction: "up" | "down") => {
+    if (!user) return
+
+    setIsVoting(true)
+    try {
+      // Get current vote state
+      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, score: 0 }
+      
+      // Optimistic update
+      const newVoteState = { ...currentVoteState }
+      if (currentVoteState.currentVote === direction) {
+        // Removing vote
+        newVoteState.currentVote = null
+        newVoteState.score = currentVoteState.score - (direction === "up" ? 1 : -1)
+      } else if (currentVoteState.currentVote === null) {
+        // New vote
+        newVoteState.currentVote = direction
+        newVoteState.score = currentVoteState.score + (direction === "up" ? 1 : -1)
+      } else {
+        // Changing vote
+        const previousVoteValue = currentVoteState.currentVote === 'up' ? 1 : -1
+        const newVoteValue = direction === 'up' ? 1 : -1
+        newVoteState.currentVote = direction
+        newVoteState.score = currentVoteState.score - previousVoteValue + newVoteValue
+      }
+
+      // Update local state immediately
+      setCommentVotes(prev => new Map(prev).set(commentId, newVoteState))
+
+      // Get JWT token
+      const jwt = await getCachedJWT()
+      if (!jwt) {
+        throw new Error('No JWT token available')
+      }
+
+      // Make API call
+      const response = await fetch('/api/vote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        },
+        body: JSON.stringify({
+          resourceId: commentId,
+          resourceType: 'comment',
+          voteType: direction
+        })
       })
+
+      if (!response.ok) {
+        // Revert on error
+        setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
+        console.error('Vote failed')
+      }
+    } catch (error) {
+      console.error('Error voting:', error)
+      // Revert on error
+      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, score: 0 }
+      setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
+    } finally {
+      setIsVoting(false)
     }
-    setComments((prev) => updateVoteRecursive(prev))
+  }
+
+  const handleSortChange = (newSortType: SortType) => {
+    setSortType(newSortType)
   }
 
   return (
     <div className="bg-white p-6 rounded-lg border-none shadow-none">
-      <h2 className="text-lg font-semibold mb-4 font-heading">Comments ({comments.length})</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold font-heading">Comments ({comments.length})</h2>
+        
+        {/* Sort Buttons */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+          <Button
+            variant={sortType === 'date' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleSortChange('date')}
+            className="flex items-center gap-2"
+          >
+            <Clock className="h-4 w-4" />
+            Date
+          </Button>
+          <Button
+            variant={sortType === 'votes' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleSortChange('votes')}
+            className="flex items-center gap-2"
+          >
+            <TrendingUp className="h-4 w-4" />
+            Votes
+          </Button>
+        </div>
+      </div>
 
       {/* Comment Input */}
       <form onSubmit={handleAddComment} className="mb-6">
@@ -188,11 +318,19 @@ export function CommentsSection({ initialComments }: CommentsSectionProps) {
 
       {/* Comments List */}
       <div className="space-y-5">
-        {comments.length === 0 ? (
+        {sortedComments.length === 0 ? (
           <p className="text-gray-500 text-sm">No comments yet. Be the first to share your thoughts!</p>
         ) : (
-          comments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} onAddReply={handleAddReply} onVote={handleVote} />
+          sortedComments.map((comment) => (
+            <CommentItem 
+              key={comment.id} 
+              comment={comment} 
+              onAddReply={handleAddReply} 
+              onVote={handleVote}
+              voteState={commentVotes.get(comment.id) || { currentVote: null, score: comment.score }}
+              isVoting={isVoting}
+              isAuthenticated={!!user}
+            />
           ))
         )}
       </div>

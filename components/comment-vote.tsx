@@ -100,7 +100,7 @@ export function CommentVote({
         className={`${buttonSize} ${
           voteState.currentVote === 'down' 
             ? 'text-red-600 bg-red-50 hover:bg-red-50' 
-            : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
+              : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
         }`}
         onClick={() => handleVote("down")}
         disabled={isVoting}

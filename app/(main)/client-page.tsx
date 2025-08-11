@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
 import { type NewsItem } from "@/lib/data"
-import { handleVote, type VoteState } from "@/lib/voteHandler"
+import { handleVote, fetchUserVotesForResources, type VoteState } from "@/lib/voteHandler"
 import { SponsoredAd } from "@/components/sponsored-ad"
 import { SearchAndFilter } from "@/components/search-and-filter"
 import { useAuth } from "@/contexts/auth-context"
@@ -423,9 +423,7 @@ interface ClientPageProps {
 }
 
 export function ClientPage({ initialPosts, error }: ClientPageProps) {
-  // Use all posts from Appwrite, no more limiting
-  const newsItems = useMemo(() => initialPosts, [initialPosts])
-  
+  const [newsItems, setNewsItems] = useState<NewsItem[]>(initialPosts)
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
   const { user, isAuthenticated } = useAuth()
@@ -438,42 +436,25 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
       }
 
       try {
+        // Get all post IDs from the page
         const postIds = newsItems.map(post => post.id)
         
-        // Get JWT token for authentication
-        const jwt = await getCachedJWT()
+        // Use the new helper function to fetch votes for all resources
+        const voteMap = await fetchUserVotesForResources(
+          postIds.map(id => ({ id, type: 'post' as const }))
+        )
         
-        if (!jwt) {
-          console.error('No JWT token available')
-          return
-        }
-
-        const response = await fetch('/api/vote/batch', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`
-          },
-          body: JSON.stringify({ postIds })
+        // Initialize vote states with fetched data
+        const initialVoteStates: Record<string, VoteState> = {}
+        newsItems.forEach(post => {
+          const voteState = voteMap.get(post.id)
+          initialVoteStates[post.id] = voteState || {
+            currentVote: null,
+            score: post.score
+          }
         })
-
-        if (response.ok) {
-          const data = await response.json()
-          
-          // Initialize vote states with fetched data
-          const initialVoteStates: Record<string, VoteState> = {}
-          newsItems.forEach(post => {
-            const voteType = data.votes[post.id] || null
-            initialVoteStates[post.id] = {
-              currentVote: voteType,
-              score: post.score
-            }
-          })
-          
-          setVoteStates(initialVoteStates)
-        } else {
-          console.error('Failed to fetch votes:', response.status)
-        }
+        
+        setVoteStates(initialVoteStates)
       } catch (error) {
         console.error('Error fetching votes:', error)
       }
@@ -528,7 +509,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
 
     setVotingState(itemId, true)
     try {
-      await handleVote(itemId, direction, currentState.currentVote, currentState.score, (newState) => {
+      await handleVote(itemId, 'post', direction, currentState.currentVote, currentState.score, (newState) => {
         updateVoteState(itemId, newState)
       })
     } catch (error) {

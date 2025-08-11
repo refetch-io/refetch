@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Client, Databases, Account, ID, Query } from 'node-appwrite'
+import type { VoteRequest } from '@/lib/types'
 
 // Initialize Appwrite clients for server-side operations
 // First client for API key operations (database operations)
@@ -19,12 +20,14 @@ const account = new Account(jwtClient)
 // Database and collection IDs
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
 const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
+const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
 const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID || ''
 
 // Debug logging
 console.log('Vote API Environment Variables:')
 console.log('DATABASE_ID:', DATABASE_ID)
 console.log('POSTS_COLLECTION_ID:', POSTS_COLLECTION_ID)
+console.log('COMMENTS_COLLECTION_ID:', COMMENTS_COLLECTION_ID)
 console.log('VOTES_COLLECTION_ID:', VOTES_COLLECTION_ID)
 console.log('ENDPOINT:', process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
 console.log('PROJECT_ID:', process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
@@ -32,15 +35,22 @@ console.log('PROJECT_ID:', process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
 export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse the request body
-    const body = await request.json()
-    const { postId, voteType } = body
+    const body: VoteRequest = await request.json()
+    const { resourceId, resourceType, voteType } = body
 
-    console.log('Vote request:', { postId, voteType })
+    console.log('Vote request:', { resourceId, resourceType, voteType })
 
     // Validate required fields
-    if (!postId || !voteType) {
+    if (!resourceId || !resourceType || !voteType) {
       return NextResponse.json(
-        { message: 'Post ID and vote type are required' },
+        { message: 'Resource ID, resource type, and vote type are required' },
+        { status: 400 }
+      )
+    }
+
+    if (resourceType !== 'post' && resourceType !== 'comment') {
+      return NextResponse.json(
+        { message: 'Resource type must be either "post" or "comment"' },
         { status: 400 }
       )
     }
@@ -80,30 +90,34 @@ export async function POST(request: NextRequest) {
     // Convert vote type to count value
     const voteCount = voteType === 'up' ? 1 : -1
 
-    // Get the current post data to access the count field
-    let currentPost
+    // Determine which collection to use based on resource type
+    const targetCollectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
+
+    // Get the current resource data to access the count fields
+    let currentResource
     try {
-      currentPost = await databases.getDocument(
+      currentResource = await databases.getDocument(
         DATABASE_ID,
-        POSTS_COLLECTION_ID,
-        postId
+        targetCollectionId,
+        resourceId
       )
     } catch (error) {
-      console.error('Error fetching post:', error)
+      console.error(`Error fetching ${resourceType}:`, error)
       return NextResponse.json(
-        { message: 'Post not found' },
+        { message: `${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} not found` },
         { status: 404 }
       )
     }
 
-    // Step 3: Check if user has already voted on this post
-    console.log('Checking existing vote for user:', user.$id, 'post:', postId)
+    // Step 3: Check if user has already voted on this resource
+    console.log('Checking existing vote for user:', user.$id, 'resource:', resourceId, 'type:', resourceType)
     const existingVote = await databases.listDocuments(
       DATABASE_ID,
       VOTES_COLLECTION_ID,
       [
         Query.equal('userId', user.$id),
-        Query.equal('postId', postId)
+        Query.equal('resourceId', resourceId),
+        Query.equal('resourceType', resourceType)
       ]
     )
 
@@ -123,16 +137,25 @@ export async function POST(request: NextRequest) {
           previousVote.$id
         )
 
-        // Update the post count field (decrease by the vote value)
-        const countChange = voteType === 'up' ? -1 : 1
-        console.log('Decrementing count field by:', countChange, 'for post:', postId)
+        // Update the resource count fields atomically
+        const updateData: any = {}
+        
+        if (voteType === 'up') {
+          // Removing upvote: decrease countUp and count, increase countDown if it was negative
+          updateData.countUp = Math.max(0, (currentResource.countUp || 0) - 1)
+          updateData.count = (currentResource.count || 0) - 1
+        } else {
+          // Removing downvote: decrease countDown and count, increase countUp if it was positive
+          updateData.countDown = Math.max(0, (currentResource.countDown || 0) - 1)
+          updateData.count = (currentResource.count || 0) + 1
+        }
+
+        console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
         await databases.updateDocument(
           DATABASE_ID,
-          POSTS_COLLECTION_ID,
-          postId,
-          {
-            count: currentPost.count + countChange
-          }
+          targetCollectionId,
+          resourceId,
+          updateData
         )
 
         return NextResponse.json({
@@ -152,19 +175,29 @@ export async function POST(request: NextRequest) {
           }
         )
 
-        // Update the post count field (remove previous vote effect and add new vote effect)
-        const previousVoteValue = previousVote.count === 1 ? 1 : -1
-        const newVoteValue = voteType === 'up' ? 1 : -1
-        const countChange = -previousVoteValue + newVoteValue
+        // Update the resource count fields atomically
+        const updateData: any = {}
         
-        console.log('Updating count field by:', countChange, 'for post:', postId)
+        if (previousVote.count === 1) {
+          // Previous was upvote, new is downvote
+          // Decrease countUp, increase countDown, decrease count by 2
+          updateData.countUp = Math.max(0, (currentResource.countUp || 0) - 1)
+          updateData.countDown = (currentResource.countDown || 0) + 1
+          updateData.count = (currentResource.count || 0) - 2
+        } else {
+          // Previous was downvote, new is upvote
+          // Increase countUp, decrease countDown, increase count by 2
+          updateData.countUp = (currentResource.countUp || 0) + 1
+          updateData.countDown = Math.max(0, (currentResource.countDown || 0) - 1)
+          updateData.count = (currentResource.count || 0) + 2
+        }
+
+        console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
         await databases.updateDocument(
           DATABASE_ID,
-          POSTS_COLLECTION_ID,
-          postId,
-          {
-            count: currentPost.count + countChange
-          }
+          targetCollectionId,
+          resourceId,
+          updateData
         )
 
         return NextResponse.json({
@@ -182,21 +215,31 @@ export async function POST(request: NextRequest) {
         ID.unique(),
         {
           userId: user.$id,
-          postId: postId,
+          resourceId: resourceId,
+          resourceType: resourceType,
           count: voteCount
         }
       )
 
-      // Step 5: Update the post count field
-      const countChange = voteType === 'up' ? 1 : -1
-      console.log('Updating count field by:', countChange, 'for post:', postId)
+      // Step 5: Update the resource count fields atomically
+      const updateData: any = {}
+      
+      if (voteType === 'up') {
+        // New upvote: increase countUp and count
+        updateData.countUp = (currentResource.countUp || 0) + 1
+        updateData.count = (currentResource.count || 0) + 1
+      } else {
+        // New downvote: increase countDown and count
+        updateData.countDown = (currentResource.countDown || 0) + 1
+        updateData.count = (currentResource.count || 0) - 1
+      }
+
+      console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
       await databases.updateDocument(
         DATABASE_ID,
-        POSTS_COLLECTION_ID,
-        postId,
-        {
-          count: currentPost.count + countChange
-        }
+        targetCollectionId,
+        resourceId,
+        updateData
       )
 
       return NextResponse.json({

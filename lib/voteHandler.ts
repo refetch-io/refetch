@@ -1,11 +1,10 @@
 import { getCachedJWT } from './jwtCache'
+import type { VoteState, VoteRequest } from './types'
 
-export interface VoteState {
-  currentVote: 'up' | 'down' | null
-  score: number
-}
-
-export const fetchUserVote = async (postId: string): Promise<VoteState | null> => {
+export const fetchUserVote = async (
+  resourceId: string, 
+  resourceType: 'post' | 'comment'
+): Promise<VoteState | null> => {
   try {
     // Get JWT token for authentication
     const jwt = await getCachedJWT()
@@ -15,8 +14,8 @@ export const fetchUserVote = async (postId: string): Promise<VoteState | null> =
       return null
     }
 
-    // Fetch the user's current vote for this post
-    const response = await fetch(`/api/vote/state?postId=${postId}`, {
+    // Fetch the user's current vote for this resource
+    const response = await fetch(`/api/vote/state?resourceId=${resourceId}&resourceType=${resourceType}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwt}`
@@ -37,7 +36,8 @@ export const fetchUserVote = async (postId: string): Promise<VoteState | null> =
 }
 
 export const handleVote = async (
-  postId: string, 
+  resourceId: string,
+  resourceType: 'post' | 'comment',
   direction: "up" | "down", 
   currentVote: 'up' | 'down' | null,
   currentScore: number,
@@ -61,7 +61,9 @@ export const handleVote = async (
       console.log('Current state:', {
         currentVote,
         direction,
-        currentScore
+        currentScore,
+        resourceId,
+        resourceType
       })
 
       if (currentVote === direction) {
@@ -105,7 +107,8 @@ export const handleVote = async (
         'Authorization': `Bearer ${jwt}`
       },
       body: JSON.stringify({
-        postId,
+        resourceId,
+        resourceType,
         voteType: direction
       })
     })
@@ -125,7 +128,7 @@ export const handleVote = async (
     }
 
     const result = await response.json()
-    console.log(`Vote ${direction} for item ${postId}:`, result.message)
+    console.log(`Vote ${direction} for ${resourceType} ${resourceId}:`, result.message)
     
     return result
 
@@ -138,5 +141,38 @@ export const handleVote = async (
         score: currentScore
       })
     }
+  }
+}
+
+// Helper function to fetch votes for multiple resources
+export const fetchUserVotesForResources = async (
+  resources: Array<{ id: string; type: 'post' | 'comment' }>
+): Promise<Map<string, VoteState>> => {
+  try {
+    const jwt = await getCachedJWT()
+    if (!jwt) {
+      console.error('No JWT token available')
+      return new Map()
+    }
+
+    // Fetch votes for all resources in parallel
+    const votePromises = resources.map(async (resource) => {
+      const voteState = await fetchUserVote(resource.id, resource.type)
+      return { id: resource.id, voteState }
+    })
+
+    const results = await Promise.all(votePromises)
+    const voteMap = new Map<string, VoteState>()
+
+    results.forEach(({ id, voteState }) => {
+      if (voteState) {
+        voteMap.set(id, voteState)
+      }
+    })
+
+    return voteMap
+  } catch (error) {
+    console.error('Error fetching user votes for resources:', error)
+    return new Map()
   }
 }

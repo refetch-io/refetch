@@ -598,7 +598,8 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
           process.env.APPWRITE_DATABASE_ID || '', // Database ID
           process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
           [
-            Query.equal('postId', postId),
+            Query.equal('resourceId', postId),
+            Query.equal('resourceType', 'post'),
             Query.equal('userId', userId)
           ]
         )

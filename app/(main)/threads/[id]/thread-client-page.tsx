@@ -2,20 +2,23 @@
 
 import { CommentForm } from "@/components/comment-form"
 import { CommentVote } from "@/components/comment-vote"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import type { NewsItem, Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/voteHandler"
-import { handleVote } from "@/lib/voteHandler"
+import { handleVote, fetchUserVotesForResources } from "@/lib/voteHandler"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { PostCard } from "@/components/post-card"
 import { avatars } from "@/lib/appwrite"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
+import { Button } from "@/components/ui/button"
+import { Clock, TrendingUp } from "lucide-react"
 
 interface ThreadClientPageProps {
   article: NewsItem
 }
+
+type SortType = 'date' | 'votes'
 
 export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, score: article.score })
@@ -24,8 +27,29 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [isCommentVoting, setIsCommentVoting] = useState(false)
   const [comments, setComments] = useState<Comment[]>(article.comments || [])
   const [isCommentFormMinimized, setIsCommentFormMinimized] = useState(false)
+  const [sortType, setSortType] = useState<SortType>('date')
   
   const { isAuthenticated, user } = useAuth()
+
+  // Sort comments based on current sort type
+  const sortedComments = useMemo(() => {
+    const sorted = [...comments]
+    
+    if (sortType === 'date') {
+      // Sort by date (newest first) - keep original order for now
+      // In a real implementation, you'd want to store actual timestamps
+      return sorted
+    } else if (sortType === 'votes') {
+      // Sort by vote count (highest first)
+      return sorted.sort((a, b) => {
+        const aScore = commentVoteStates[a.id]?.score ?? a.score
+        const bScore = commentVoteStates[b.id]?.score ?? b.score
+        return bScore - aScore
+      })
+    }
+    
+    return sorted
+  }, [comments, sortType, commentVoteStates])
 
   // Fetch votes for the current user when component mounts
   useEffect(() => {
@@ -35,57 +59,67 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       }
 
       try {
-        // Get JWT token for authentication
-        const jwt = await getCachedJWT()
+        // Get all resource IDs from the page (post + comments)
+        const resources = [
+          { id: article.id, type: 'post' as const },
+          ...comments.map(comment => ({ id: comment.id, type: 'comment' as const })),
+          ...comments.flatMap(comment => 
+            comment.replies ? comment.replies.map(reply => ({ id: reply.id, type: 'comment' as const })) : []
+          )
+        ]
+
+        // Use the new helper function to fetch votes for all resources
+        const voteMap = await fetchUserVotesForResources(resources)
         
-        if (!jwt) {
-          console.error('No JWT token available')
-          return
+        // Set post vote state
+        const postVoteState = voteMap.get(article.id)
+        if (postVoteState) {
+          setVoteState(postVoteState)
         }
 
-        const response = await fetch(`/api/vote/state?postId=${article.id}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${jwt}`
+        // Set comment vote states
+        const newCommentVoteStates: Record<string, VoteState> = {}
+        comments.forEach(comment => {
+          const commentVoteState = voteMap.get(comment.id)
+          newCommentVoteStates[comment.id] = commentVoteState || { currentVote: null, score: comment.score }
+          
+          if (comment.replies) {
+            comment.replies.forEach(reply => {
+              const replyVoteState = voteMap.get(reply.id)
+              newCommentVoteStates[reply.id] = replyVoteState || { currentVote: null, score: reply.score }
+            })
           }
         })
-
-        if (response.ok) {
-          const data = await response.json()
-          setVoteState({
-            currentVote: data.currentVote || null,
-            score: data.score !== undefined ? data.score : article.score
-          })
-        } else {
-          console.error('Failed to fetch votes:', response.status)
-          // Fallback to article score
-          setVoteState({
-            currentVote: null,
-            score: article.score
-          })
-        }
+        setCommentVoteStates(newCommentVoteStates)
       } catch (error) {
         console.error('Error fetching votes:', error)
-        // Fallback to article score
-        setVoteState({
-          currentVote: null,
-          score: article.score
+        // Fallback to default states
+        setVoteState({ currentVote: null, score: article.score })
+        const defaultCommentVoteStates: Record<string, VoteState> = {}
+        comments.forEach(comment => {
+          defaultCommentVoteStates[comment.id] = { currentVote: null, score: comment.score }
+          if (comment.replies) {
+            comment.replies.forEach(reply => {
+              defaultCommentVoteStates[reply.id] = { currentVote: null, score: reply.score }
+            })
+          }
         })
+        setCommentVoteStates(defaultCommentVoteStates)
       }
     }
 
     fetchVotes()
-  }, [isAuthenticated, user?.$id, article.id, article.score])
+  }, [isAuthenticated, user?.$id, article.id, article.score, comments])
 
   // Initialize comment vote states when component mounts
   useEffect(() => {
     const initialVoteStates: Record<string, VoteState> = {}
     if (comments.length > 0) {
       comments.forEach((comment: Comment) => {
-        initialVoteStates[comment.id] = { currentVote: null, score: 0 }
+        initialVoteStates[comment.id] = { currentVote: null, score: comment.score }
         if (comment.replies) {
           comment.replies.forEach((reply: Comment) => {
-            initialVoteStates[reply.id] = { currentVote: null, score: 0 }
+            initialVoteStates[reply.id] = { currentVote: null, score: reply.score }
           })
         }
       })
@@ -104,7 +138,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
 
     setIsVoting(true)
     try {
-      await handleVote(itemId, direction, voteState.currentVote, voteState.score, (newState) => {
+      await handleVote(itemId, 'post', direction, voteState.currentVote, voteState.score, (newState) => {
         setVoteState(newState)
       })
     } catch (error) {
@@ -124,10 +158,10 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           // Initialize vote states for new comments
           const newVoteStates: Record<string, VoteState> = {}
           data.comments.forEach((comment: Comment) => {
-            newVoteStates[comment.id] = { currentVote: null, score: 0 }
+            newVoteStates[comment.id] = { currentVote: null, score: comment.score }
             if (comment.replies) {
               comment.replies.forEach((reply: Comment) => {
-                newVoteStates[reply.id] = { currentVote: null, score: 0 }
+                newVoteStates[reply.id] = { currentVote: null, score: reply.score }
               })
             }
           })
@@ -157,7 +191,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       // Get current vote state for this comment
       const currentVoteState = commentVoteStates[commentId] || { currentVote: null, score: 0 }
       
-      await handleVote(commentId, direction, currentVoteState.currentVote, currentVoteState.score, (newState) => {
+      await handleVote(commentId, 'comment', direction, currentVoteState.currentVote, currentVoteState.score, (newState) => {
         setCommentVoteStates(prev => ({
           ...prev,
           [commentId]: newState
@@ -168,6 +202,10 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     } finally {
       setIsCommentVoting(false)
     }
+  }
+
+  const handleSortChange = (newSortType: SortType) => {
+    setSortType(newSortType)
   }
 
   return (
@@ -192,19 +230,44 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         </div>
       )}
 
-      {/* Comments Section Title */}
+      {/* Comments Section Title with Sort Buttons */}
       <div className="bg-gray-200 rounded-lg px-4 py-3">
-        <h3 className="text-xs font-medium text-gray-700">
-          Comments
-          <span className="ml-2 text-gray-700">
-            ({comments.length})
-          </span>
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-medium text-gray-700">
+            Comments
+            <span className="ml-2 text-gray-700">
+              ({comments.length})
+            </span>
+          </h3>
+          
+          {/* Sort Buttons */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 mr-2">Sort by:</span>
+            <Button
+              variant={sortType === 'date' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleSortChange('date')}
+              className="flex items-center gap-1 text-xs h-6 px-2"
+            >
+              <Clock className="h-3 w-3" />
+              Date
+            </Button>
+            <Button
+              variant={sortType === 'votes' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleSortChange('votes')}
+              className="flex items-center gap-1 text-xs h-6 px-2"
+            >
+              <TrendingUp className="h-3 w-3" />
+              Votes
+            </Button>
+          </div>
+        </div>
       </div>
 
-      {/* Comments Section */}
-      <div className="space-y-6 pl-4">
-        {comments.length === 0 ? (
+      {/* Comments List */}
+      <div className="space-y-6">
+        {sortedComments.length === 0 ? (
           <div className="flex justify-center">
             <div className="flex items-center justify-center p-6">
               <p className="text-gray-600 text-xs text-center">No comments yet. Start the conversation below</p>
@@ -212,7 +275,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           </div>
         ) : (
           <div className="space-y-6">
-            {comments.map((comment: Comment) => (
+            {sortedComments.map((comment: Comment) => (
               <div key={comment.id} className="flex items-start gap-3">
                 {/* Avatar on the left */}
                 <Avatar className="w-8 h-8 mt-1">

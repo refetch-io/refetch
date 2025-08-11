@@ -74,7 +74,7 @@ export function PostCard({
             size="icon"
             className={`h-4 w-4 ${
               voteState.currentVote === 'down' 
-                ? 'text-red-600 bg-red-50 hover:bg-red-50' 
+                ? 'text-red-600 bg-red-50 hover:bg-red-50 hover:text-red-50' 
                 : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
             }`}
             onClick={async (e) => {

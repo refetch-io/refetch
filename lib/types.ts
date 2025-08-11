@@ -77,3 +77,26 @@ export interface PostDocument {
   qualityScore?: number;
   qualityIssues?: string[];
 }
+
+export interface VoteDocument {
+  $id: string
+  $createdAt: string
+  $updatedAt: string
+  userId: string
+  resourceId: string
+  resourceType: 'post' | 'comment'
+  count: number
+}
+
+export interface VoteRequest {
+  resourceId: string
+  resourceType: 'post' | 'comment'
+  voteType: 'up' | 'down'
+}
+
+export interface VoteState {
+  currentVote: 'up' | 'down' | null
+  score: number
+  countUp?: number
+  countDown?: number
+}
