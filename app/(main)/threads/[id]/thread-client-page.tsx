@@ -151,7 +151,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       </div>
 
       {/* Comments Section */}
-      <div className="space-y-6 pl-4 min-h-[600px]">
+      <div className="space-y-6 pl-4 min-h-[400px]">
         {comments.length === 0 ? (
           <div className="flex justify-center">
             <div className="flex items-center justify-center p-6 mt-5 mb-64">
