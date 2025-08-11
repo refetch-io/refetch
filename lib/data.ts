@@ -17,6 +17,7 @@ export interface NewsItem {
   bgColorClass: string
   shapeClass: string
   extendedHighlight: string
+  description?: string
   comments: Comment[]
   author: string
   isSponsored?: boolean
@@ -278,6 +279,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     bgColorClass: backgroundColors[index % backgroundColors.length],
     shapeClass: shapes[index % shapes.length],
     extendedHighlight: post.description,
+    description: post.description,
     comments: [], // We'll add comments later if needed
     author: post.userName,
     isSponsored: false,

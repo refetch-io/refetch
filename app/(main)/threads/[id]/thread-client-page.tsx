@@ -108,15 +108,27 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         showVoting={true}
       />
 
+      {/* Post Description */}
+      {article.description && (
+        <div className="px-4 py-3">
+          <p className="text-gray-600 text-sm leading-relaxed">
+            {article.description}
+          </p>
+        </div>
+      )}
+
       {/* Comment Form */}
       <CommentForm postId={article.id} onCommentAdded={handleCommentAdded} isFixed={true} />
 
       {/* Comments Section */}
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-gray-900">Comments ({article.comments.length})</h2>
         
         {article.comments.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No comments yet. Be the first to comment!</p>
+          <div className="flex justify-center">
+            <div className="flex items-center justify-center p-6 mt-32 mb-64">
+              <p className="text-gray-600 text-xs text-center">No comments yet. Comment below!</p>
+            </div>
+          </div>
         ) : (
           <div className="space-y-6">
             {article.comments.map((comment: Comment) => (

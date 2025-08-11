@@ -76,7 +76,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false }: Comment
   }
 
   return (
-    <div className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg' : 'rounded-lg'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''}`}>
+    <div className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''}`}>
       <div className="flex-1 flex flex-col justify-center min-w-0">
         <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Comment</h3>
         <div className="h-px bg-gray-100 mb-4 -mx-4" />
