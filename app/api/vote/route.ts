@@ -93,22 +93,6 @@ export async function POST(request: NextRequest) {
     // Determine which collection to use based on resource type
     const targetCollectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
 
-    // Get the current resource data to access the count fields
-    let currentResource
-    try {
-      currentResource = await databases.getDocument(
-        DATABASE_ID,
-        targetCollectionId,
-        resourceId
-      )
-    } catch (error) {
-      console.error(`Error fetching ${resourceType}:`, error)
-      return NextResponse.json(
-        { message: `${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} not found` },
-        { status: 404 }
-      )
-    }
-
     // Step 3: Check if user has already voted on this resource
     console.log('Checking existing vote for user:', user.$id, 'resource:', resourceId, 'type:', resourceType)
     const existingVote = await databases.listDocuments(
@@ -137,26 +121,42 @@ export async function POST(request: NextRequest) {
           previousVote.$id
         )
 
-        // Update the resource count fields atomically
-        const updateData: any = {}
-        
+        // Use atomic operations to update the resource count fields
         if (voteType === 'up') {
-          // Removing upvote: decrease countUp and count, increase countDown if it was negative
-          updateData.countUp = Math.max(0, (currentResource.countUp || 0) - 1)
-          updateData.count = (currentResource.count || 0) - 1
+          // Removing upvote: decrease countUp and count
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countUp',
+            1,
+            0 // min value to prevent negative counts
+          )
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'count',
+            1
+          )
         } else {
-          // Removing downvote: decrease countDown and count, increase countUp if it was positive
-          updateData.countDown = Math.max(0, (currentResource.countDown || 0) - 1)
-          updateData.count = (currentResource.count || 0) + 1
+          // Removing downvote: decrease countDown and increase count
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countDown',
+            1,
+            0 // min value to prevent negative counts
+          )
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'count',
+            1
+          )
         }
-
-        console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
-        await databases.updateDocument(
-          DATABASE_ID,
-          targetCollectionId,
-          resourceId,
-          updateData
-        )
 
         return NextResponse.json({
           message: 'Vote removed successfully',
@@ -175,30 +175,58 @@ export async function POST(request: NextRequest) {
           }
         )
 
-        // Update the resource count fields atomically
-        const updateData: any = {}
-        
+        // Use atomic operations to update the resource count fields
         if (previousVote.count === 1) {
           // Previous was upvote, new is downvote
           // Decrease countUp, increase countDown, decrease count by 2
-          updateData.countUp = Math.max(0, (currentResource.countUp || 0) - 1)
-          updateData.countDown = (currentResource.countDown || 0) + 1
-          updateData.count = (currentResource.count || 0) - 2
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countUp',
+            1,
+            0 // min value to prevent negative counts
+          )
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countDown',
+            1
+          )
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'count',
+            2
+          )
         } else {
           // Previous was downvote, new is upvote
           // Increase countUp, decrease countDown, increase count by 2
-          updateData.countUp = (currentResource.countUp || 0) + 1
-          updateData.countDown = Math.max(0, (currentResource.countDown || 0) - 1)
-          updateData.count = (currentResource.count || 0) + 2
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countUp',
+            1
+          )
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'countDown',
+            1,
+            0 // min value to prevent negative counts
+          )
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            targetCollectionId,
+            resourceId,
+            'count',
+            2
+          )
         }
-
-        console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
-        await databases.updateDocument(
-          DATABASE_ID,
-          targetCollectionId,
-          resourceId,
-          updateData
-        )
 
         return NextResponse.json({
           message: 'Vote updated successfully',
@@ -221,26 +249,40 @@ export async function POST(request: NextRequest) {
         }
       )
 
-      // Step 5: Update the resource count fields atomically
-      const updateData: any = {}
-      
+      // Step 5: Use atomic operations to update the resource count fields
       if (voteType === 'up') {
         // New upvote: increase countUp and count
-        updateData.countUp = (currentResource.countUp || 0) + 1
-        updateData.count = (currentResource.count || 0) + 1
+        await databases.incrementDocumentAttribute(
+          DATABASE_ID,
+          targetCollectionId,
+          resourceId,
+          'countUp',
+          1
+        )
+        await databases.incrementDocumentAttribute(
+          DATABASE_ID,
+          targetCollectionId,
+          resourceId,
+          'count',
+          1
+        )
       } else {
-        // New downvote: increase countDown and count
-        updateData.countDown = (currentResource.countDown || 0) + 1
-        updateData.count = (currentResource.count || 0) - 1
+        // New downvote: increase countDown and decrease count
+        await databases.incrementDocumentAttribute(
+          DATABASE_ID,
+          targetCollectionId,
+          resourceId,
+          'countDown',
+          1
+        )
+        await databases.decrementDocumentAttribute(
+          DATABASE_ID,
+          targetCollectionId,
+          resourceId,
+          'count',
+          1
+        )
       }
-
-      console.log('Updating resource fields:', updateData, 'for', resourceType, ':', resourceId)
-      await databases.updateDocument(
-        DATABASE_ID,
-        targetCollectionId,
-        resourceId,
-        updateData
-      )
 
       return NextResponse.json({
         message: 'Vote submitted successfully',

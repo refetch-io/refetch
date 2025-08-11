@@ -133,6 +133,7 @@ export async function POST(request: NextRequest) {
             resource.id
           )
           
+          // Use atomic operations to ensure we get the most up-to-date values
           voteMap[resource.id].countUp = resourceDoc.countUp || 0
           voteMap[resource.id].countDown = resourceDoc.countDown || 0
           voteMap[resource.id].score = resourceDoc.count || 0

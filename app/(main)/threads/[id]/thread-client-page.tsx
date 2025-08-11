@@ -4,7 +4,7 @@ import { CommentForm } from "@/components/comment-form"
 import { CommentVote } from "@/components/comment-vote"
 import { useEffect, useState, useMemo } from "react"
 import type { NewsItem, Comment } from "@/lib/data"
-import { type VoteState } from "@/lib/voteHandler"
+import { type VoteState } from "@/lib/types"
 import { handleVote, fetchUserVotesForResources } from "@/lib/voteHandler"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
@@ -208,6 +208,11 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     setSortType(newSortType)
   }
 
+  // Helper function to check if a comment is from the original poster
+  const isOriginalPoster = (commentUserId: string) => {
+    return commentUserId === article.userId
+  }
+
   return (
     <main className="w-full space-y-6">
       {/* Article Card - Using PostCard component for consistency */}
@@ -286,7 +291,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 text-xs mb-2">
                     <span className="text-gray-800">{comment.author}</span>
-                    {comment.userId === article.userId && (
+                    {isOriginalPoster(comment.userId || '') && (
                       <>
                         <span className="text-gray-500">•</span>
                         <span className="text-gray-500 text-xs">original poster</span>
@@ -318,7 +323,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 text-xs mb-2">
                               <span className="text-gray-800">{reply.author}</span>
-                              {reply.userId === article.userId && (
+                              {isOriginalPoster(reply.userId || '') && (
                                 <>
                                   <span className="text-gray-500">•</span>
                                   <span className="text-gray-500 text-xs">original poster</span>

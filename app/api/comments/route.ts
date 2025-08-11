@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      score: 0, // Default score since it's not stored in the collection
+      score: doc.count || 0, // Use the count field if available
+      userId: doc.userId || '', // Include userId for original poster detection
       replies: [] // TODO: Implement nested replies using replyId
     }))
 

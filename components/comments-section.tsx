@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CommentVote } from "@/components/comment-vote"
 import { type Comment } from "@/lib/data"
-import { type VoteState } from "@/lib/voteHandler"
+import { type VoteState } from "@/lib/types"
 import { useAuth } from "@/hooks/use-auth"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { ArrowUpDown, Clock, TrendingUp } from "lucide-react"
@@ -19,6 +19,7 @@ interface CommentItemProps {
   voteState: VoteState
   isVoting: boolean
   isAuthenticated: boolean
+  isOriginalPoster: boolean
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ 
@@ -27,7 +28,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
   onVote, 
   voteState, 
   isVoting, 
-  isAuthenticated 
+  isAuthenticated,
+  isOriginalPoster
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
@@ -61,6 +63,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <AvatarFallback>{comment.author.charAt(0)}</AvatarFallback>
           </Avatar>
           <span className="font-semibold text-gray-800">{comment.author}</span>
+          {isOriginalPoster && (
+            <>
+              <span className="text-gray-500">•</span>
+              <span className="text-gray-500 text-xs">original poster</span>
+            </>
+          )}
           <span className="text-gray-500">• {comment.timeAgo}</span>
         </div>
         <p className="text-gray-700 mt-1 text-sm">{comment.text}</p>
@@ -97,6 +105,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 voteState={{ currentVote: null, score: reply.score }}
                 isVoting={false}
                 isAuthenticated={isAuthenticated}
+                isOriginalPoster={false} // Replies don't have original poster status
               />
             ))}
           </div>
@@ -109,17 +118,23 @@ const CommentItem: React.FC<CommentItemProps> = ({
 interface CommentsSectionProps {
   initialComments: Comment[]
   postId: string
+  postUserId?: string // Add postUserId to identify original poster
 }
 
 type SortType = 'date' | 'votes'
 
-export function CommentsSection({ initialComments, postId }: CommentsSectionProps) {
+export function CommentsSection({ initialComments, postId, postUserId }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newCommentText, setNewCommentText] = useState("")
   const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
   const [isVoting, setIsVoting] = useState(false)
   const [sortType, setSortType] = useState<SortType>('date')
   const { user } = useAuth()
+
+  // Helper function to check if a comment is from the original poster
+  const isOriginalPoster = (commentUserId: string) => {
+    return postUserId && commentUserId === postUserId
+  }
 
   // Sort comments based on current sort type
   const sortedComments = useMemo(() => {
@@ -167,6 +182,7 @@ export function CommentsSection({ initialComments, postId }: CommentsSectionProp
         timeAgo: "just now",
         score: 1, // Default score for new comments
         replies: [],
+        userId: user?.$id || '', // Include userId for original poster detection
       }
       setComments((prev) => [newComment, ...prev])
       // Add default vote state for new comment
@@ -183,6 +199,7 @@ export function CommentsSection({ initialComments, postId }: CommentsSectionProp
       timeAgo: "just now",
       score: 1,
       replies: [],
+      userId: user?.$id || '', // Include userId for original poster detection
     }
 
     const addReplyRecursive = (currentComments: Comment[]): Comment[] => {
@@ -281,7 +298,7 @@ export function CommentsSection({ initialComments, postId }: CommentsSectionProp
         
         {/* Sort Buttons */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+          <span className="text-xs text-gray-500 mr-2">Sort by:</span>
           <Button
             variant={sortType === 'date' ? 'default' : 'outline'}
             size="sm"
@@ -330,6 +347,7 @@ export function CommentsSection({ initialComments, postId }: CommentsSectionProp
               voteState={commentVotes.get(comment.id) || { currentVote: null, score: comment.score }}
               isVoting={isVoting}
               isAuthenticated={!!user}
+              isOriginalPoster={Boolean(isOriginalPoster(comment.userId || ''))}
             />
           ))
         )}
