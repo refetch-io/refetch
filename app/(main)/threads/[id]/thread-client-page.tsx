@@ -106,6 +106,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         onVote={handleVoteClick}
         isAuthenticated={isAuthenticated}
         showVoting={true}
+        showCommentsLink={false}
       />
 
       {/* Post Description */}
@@ -119,6 +120,16 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
 
       {/* Comment Form */}
       <CommentForm postId={article.id} onCommentAdded={handleCommentAdded} isFixed={true} />
+
+      {/* Comments Section Title */}
+      <div className="bg-gray-200 rounded-lg px-4 py-3">
+        <h3 className="text-xs font-medium text-gray-700">
+          Comments
+          <span className="ml-2 text-gray-700">
+            ({article.comments.length})
+          </span>
+        </h3>
+      </div>
 
       {/* Comments Section */}
       <div className="space-y-6">

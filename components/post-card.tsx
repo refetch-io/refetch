@@ -15,6 +15,7 @@ interface PostCardProps {
   onVote: (itemId: string, direction: "up" | "down") => void
   isAuthenticated: boolean
   showVoting?: boolean
+  showCommentsLink?: boolean
   className?: string
 }
 
@@ -30,6 +31,7 @@ export function PostCard({
   onVote, 
   isAuthenticated, 
   showVoting = true,
+  showCommentsLink = true,
   className = ""
 }: PostCardProps) {
   // Determine if this item has an external link
@@ -134,14 +136,18 @@ export function PostCard({
             <>
               <span className="hidden sm:inline">•</span>
               <span className="hidden sm:inline">{item.author}</span>
-              <span className="hidden sm:inline">•</span>
-              <Link 
-                href={`/threads/${item.id}`}
-                onClick={() => trackPostClick(item.id, item.title, false)}
-                className="hidden sm:inline hover:text-blue-600 transition-colors"
-              >
-                {item.comments.length} comments
-              </Link>
+              {showCommentsLink && (
+                <>
+                  <span className="hidden sm:inline">•</span>
+                  <Link 
+                    href={`/threads/${item.id}`}
+                    onClick={() => trackPostClick(item.id, item.title, false)}
+                    className="hidden sm:inline hover:text-blue-600 transition-colors"
+                  >
+                    {item.comments.length} comments
+                  </Link>
+                </>
+              )}
             </>
           )}
         </div>
