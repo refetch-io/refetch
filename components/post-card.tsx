@@ -101,24 +101,24 @@ export function PostCard({
       {/* Article Content */}
       <div className="flex-1 flex flex-col justify-center min-w-0">
         {/* Title with external link */}
-        <div className="flex items-center gap-2 mb-1">
-          {item.type === "show" && (
-            <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-50 text-purple-600 rounded-md whitespace-nowrap">
-              Show RF
-            </span>
-          )}
+        <div className="flex items-start gap-2 mb-1">
           <Link 
             href={titleLinkHref} 
             target={titleLinkTarget} 
             rel={titleLinkRel}
             onClick={() => trackPostClick(item.id, item.title, !!hasExternalLink)}
-            className="font-medium text-gray-900 font-heading whitespace-nowrap overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer"
+            className="font-medium text-gray-900 font-heading overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer leading-normal"
             title={item.title}
           >
+            {item.type === "show" && (
+              <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-50 text-purple-600 rounded-md whitespace-nowrap mr-1">
+                Show RF
+              </span>
+            )}
             {item.title}
           </Link>
           {hasExternalLink && (
-            <ExternalLink className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            <ExternalLink className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 mt-0.5" />
           )}
         </div>
         
@@ -128,8 +128,8 @@ export function PostCard({
           <span>{cleanDomainForDisplay(item.domain)}</span>
           {!item.isSponsored && item.daysAgo && (
             <>
-              <span>•</span>
-              <span>{item.daysAgo}</span>
+              <span className="hidden sm:inline">•</span>
+              <span className="hidden sm:inline">{item.daysAgo}</span>
             </>
           )}
           {!item.isSponsored && (
@@ -138,11 +138,11 @@ export function PostCard({
               <span className="hidden sm:inline">{item.author}</span>
               {showCommentsLink && (
                 <>
-                  <span className="hidden sm:inline">•</span>
+                  <span>•</span>
                   <Link 
                     href={`/threads/${item.id}`}
                     onClick={() => trackPostClick(item.id, item.title, false)}
-                    className="hidden sm:inline hover:text-blue-600 transition-colors"
+                    className="hover:text-blue-600 transition-colors"
                   >
                     {item.countComments || 0} comments
                   </Link>
