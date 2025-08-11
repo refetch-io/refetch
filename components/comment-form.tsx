@@ -132,24 +132,30 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onHeightC
   }
 
   return (
-    <div ref={formRef} className={`bg-white px-4 ${isFixed ? (isMinimized ? 'py-2' : 'py-3') : (isMinimized ? 'py-2' : 'py-4')} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
+    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-2xl mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
       <div className="flex-1 flex flex-col justify-center min-w-0">
-        <div className={`flex items-center justify-between ${isMinimized ? 'mb-0' : 'mb-3'}`}>
+        <div 
+          className={`flex items-center justify-between ${isMinimized ? 'mb-0' : 'mb-3'} ${isHydrated ? 'cursor-pointer' : ''}`}
+          onClick={isHydrated ? toggleMinimized : undefined}
+          role={isHydrated ? "button" : undefined}
+          tabIndex={isHydrated ? 0 : undefined}
+          onKeyDown={isHydrated ? (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              toggleMinimized()
+            }
+          } : undefined}
+          aria-label={isHydrated ? (isMinimized ? "Expand comment form" : "Minimize comment form") : undefined}
+        >
           <h3 className="font-normal text-gray-900 font-heading text-sm">Comment</h3>
           {isHydrated && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleMinimized}
-              className="h-6 w-6 p-0 hover:bg-gray-100"
-              aria-label={isMinimized ? "Expand comment form" : "Minimize comment form"}
-            >
+            <div className="h-6 w-6 flex items-center justify-center">
               {isMinimized ? (
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4 text-gray-500" />
               ) : (
-                <ChevronUp className="h-4 w-4" />
+                <ChevronUp className="h-4 w-4 text-gray-500" />
               )}
-            </Button>
+            </div>
           )}
         </div>
         
