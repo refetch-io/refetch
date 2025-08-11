@@ -17,7 +17,7 @@ export default function MainLayout({
   const pathname = usePathname()
   
   // Check if current page should use full-width layout (no sidebars)
-  const isFullWidth = pathname === '/submit' || pathname === '/login' || pathname === '/signup'
+  const isFullWidth = pathname === '/submit' || pathname === '/login' || pathname === '/signup' || pathname.startsWith('/threads/')
 
   return (
     <div className="min-h-screen bg-gray-100 font-body">

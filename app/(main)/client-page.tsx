@@ -1,18 +1,14 @@
 "use client"
-import { ChevronUp, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useState, useEffect, useCallback, useRef, useMemo } from "react"
-import Link from "next/link"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
 import { type NewsItem } from "@/lib/data"
 import { handleVote, type VoteState } from "@/lib/voteHandler"
 import { SponsoredAd } from "@/components/sponsored-ad"
 import { SearchAndFilter } from "@/components/search-and-filter"
-import { Favicon } from "@/components/favicon"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
-import { trackPostClick, trackPageView } from "@/lib/plausible"
+import { PostCard } from "@/components/post-card"
 
 import {
   Globe,
@@ -192,7 +188,7 @@ import {
 } from "lucide-react"
 
 // --- Constants for virtualization ---
-const ESTIMATED_ITEM_HEIGHT = 75
+
 const MAX_ITEMS_DISPLAY = 50
 const BUFFER_ITEMS = 10
 
@@ -564,8 +560,11 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
     // Adjust scrollTop relative to the start of the virtualized list
     const adjustedScrollTop = Math.max(0, scrollTop - offsetFromDocumentTop)
 
-    const firstVisibleIndex = Math.floor(adjustedScrollTop / ESTIMATED_ITEM_HEIGHT)
-    const lastVisibleIndex = Math.ceil((adjustedScrollTop + viewportHeight) / ESTIMATED_ITEM_HEIGHT)
+    // Use a more flexible approach for variable heights
+    // Estimate that each item takes roughly 80px (including margins)
+    const estimatedItemHeightWithMargin = 80
+    const firstVisibleIndex = Math.floor(adjustedScrollTop / estimatedItemHeightWithMargin)
+    const lastVisibleIndex = Math.ceil((adjustedScrollTop + viewportHeight) / estimatedItemHeightWithMargin)
 
     const newStartIndex = Math.max(0, firstVisibleIndex - BUFFER_ITEMS)
     const newEndIndex = Math.min(limitedNewsItems.length, lastVisibleIndex + BUFFER_ITEMS)
@@ -575,8 +574,8 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
 
     if (newStartIndex !== prevIndices.startIndex || newEndIndex !== prevIndices.endIndex) {
       setVisibleItems(limitedNewsItems.slice(newStartIndex, newEndIndex))
-      setPaddingTop(newStartIndex * ESTIMATED_ITEM_HEIGHT)
-      setPaddingBottom((limitedNewsItems.length - newEndIndex) * ESTIMATED_ITEM_HEIGHT)
+      setPaddingTop(newStartIndex * estimatedItemHeightWithMargin)
+      setPaddingBottom((limitedNewsItems.length - newEndIndex) * estimatedItemHeightWithMargin)
 
       // Store current indices for next comparison
       ;(container as any)._virtualizationIndices = {
@@ -662,132 +661,21 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
             // Get the icon component from the icon name
             const IconComponent = getIconComponent(item.iconName)
             
-            // Determine if this item has an external link
-            const hasExternalLink = item.link && item.link.startsWith('http')
-            const titleLinkHref = hasExternalLink && item.link ? `${item.link}${item.link.includes('?') ? '&' : '?'}ref=refetch.io` : `/threads/${item.id}`
-            const titleLinkTarget = hasExternalLink ? '_blank' : undefined
-            const titleLinkRel = hasExternalLink ? 'noopener noreferrer' : undefined
+            const voteState = getVoteState(item.id)
+            const isVoting = votingItems.has(item.id)
             
             return (
               <div
                 key={item.id}
-                className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group ${item.isSponsored ? "bg-neutral-50" : ""}`}
-                style={{ height: `${ESTIMATED_ITEM_HEIGHT - 15}px` }}
               >
-                {/* Upvote/Downvote Section */}
-                {!item.isSponsored && (
-                  <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
-                    {(() => {
-                      const voteState = getVoteState(item.id)
-                      const isVoting = votingItems.has(item.id)
-                      return (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className={`h-5 w-5 ${
-                              voteState.currentVote === 'up' 
-                                ? 'text-green-600 bg-green-50 hover:bg-green-50' 
-                                : 'text-gray-400 hover:bg-green-50 hover:text-green-600'
-                            }`}
-                            onClick={async (e) => {
-                              e.preventDefault()
-                              if (!isAuthenticated) {
-                                window.location.href = '/login'
-                                return
-                              }
-                              await handleVoteClick(item.id, "up")
-                            }}
-                            disabled={isVoting}
-                            aria-label={`Upvote ${item.title}`}
-                          >
-                            <ChevronUp className="h-4 w-4" />
-                          </Button>
-                          <span className="text-[0.65rem] text-gray-700 font-medium">
-                            {voteState.score}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className={`h-5 w-5 ${
-                              voteState.currentVote === 'down' 
-                                ? 'text-red-600 bg-red-50 hover:bg-red-50' 
-                                : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
-                            }`}
-                            onClick={async (e) => {
-                              e.preventDefault()
-                              if (!isAuthenticated) {
-                                window.location.href = '/login'
-                                return
-                              }
-                              await handleVoteClick(item.id, "down")
-                            }}
-                            disabled={isVoting}
-                            aria-label={`Downvote ${item.title}`}
-                          >
-                            <ChevronDown className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )
-                    })()}
-                  </div>
-                )}
-                {item.isSponsored && (
-                  <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8">
-                    <span className="text-[0.65rem] text-gray-600 font-semibold">Ad</span>
-                  </div>
-                )}
-
-                {/* Article Content */}
-                <div className="flex-1 flex flex-col justify-center min-w-0">
-                  {/* Title with external link */}
-                  <div className="flex items-center gap-2 mb-1">
-                    {item.type === "show" && (
-                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-50 text-purple-600 rounded-md whitespace-nowrap">
-                        Show RF
-                      </span>
-                    )}
-                    <Link 
-                      href={titleLinkHref} 
-                      target={titleLinkTarget} 
-                      rel={titleLinkRel}
-                      onClick={() => trackPostClick(item.id, item.title, !!hasExternalLink)}
-                      className="font-medium text-gray-900 font-heading whitespace-nowrap overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer"
-                      title={item.title}
-                    >
-                      {item.title}
-                    </Link>
-                    {hasExternalLink && (
-                      <ExternalLink className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                    )}
-                  </div>
-                  
-                  {/* Meta information with thread link */}
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
-                    <Favicon domain={item.domain} size={16} className="rounded" />
-                    <span>{cleanDomainForDisplay(item.domain)}</span>
-                    {!item.isSponsored && item.daysAgo && (
-                      <>
-                        <span>•</span>
-                        <span>{item.daysAgo}</span>
-                      </>
-                    )}
-                    {!item.isSponsored && (
-                      <>
-                        <span className="hidden sm:inline">•</span>
-                        <span className="hidden sm:inline">{item.author}</span>
-                        <span className="hidden sm:inline">•</span>
-                        <Link 
-                          href={`/threads/${item.id}`}
-                          onClick={() => trackPostClick(item.id, item.title, false)}
-                          className="hidden sm:inline hover:text-blue-600 transition-colors"
-                        >
-                          {item.comments.length} comments
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </div>
+                <PostCard
+                  item={item}
+                  voteState={voteState}
+                  isVoting={isVoting}
+                  onVote={handleVoteClick}
+                  isAuthenticated={isAuthenticated}
+                  showVoting={true}
+                />
               </div>
             )
           })}
