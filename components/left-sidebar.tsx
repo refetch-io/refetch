@@ -36,11 +36,11 @@ const navigationItems: NavigationItem[] = [
     label: "New",
     icon: Clock
   },
-  {
-    href: "/jobs",
-    label: "Jobs",
-    icon: Briefcase
-  },
+  // {
+  //   href: "/jobs",
+  //   label: "Jobs",
+  //   icon: Briefcase
+  // },
   // {
   //   href: "/rising",
   //   label: "Rising",
@@ -52,12 +52,12 @@ const navigationItems: NavigationItem[] = [
     icon: User,
     requiresAuth: true
   },
-  {
-    href: "/saved",
-    label: "Saved",
-    icon: Heart,
-    requiresAuth: true
-  }
+  // {
+  //   href: "/saved",
+  //   label: "Saved",
+  //   icon: Heart,
+  //   requiresAuth: true
+  // }
 ]
 
 // Navigation link component
