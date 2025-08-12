@@ -1,15 +1,75 @@
 "use client"
 
-import { TrendingUp, Clock, BarChart3, Heart, Twitter, Facebook, Github, Monitor, Briefcase, X } from "lucide-react"
+import { TrendingUp, Clock, Monitor, X, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { Footer } from "@/components/footer"
 
 interface MobileNavigationProps {
   isOpen: boolean
   onClose: () => void
 }
 
+// Navigation item interface - matching left sidebar
+interface NavigationItem {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  badge?: string
+  isSpecial?: boolean
+  requiresAuth?: boolean
+}
+
+// Navigation configuration - matching left sidebar
+const navigationItems: NavigationItem[] = [
+  {
+    href: "/",
+    label: "Top",
+    icon: TrendingUp,
+    badge: "+1k",
+    isSpecial: true
+  },
+  {
+    href: "/show",
+    label: "Show",
+    icon: Monitor
+  },
+  {
+    href: "/new",
+    label: "New",
+    icon: Clock
+  },
+  {
+    href: "/mines",
+    label: "Mines",
+    icon: User,
+    requiresAuth: true
+  }
+]
+
 export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
+  const pathname = usePathname()
+  const { isAuthenticated, user } = useAuth()
+
+  const handleNavigationClick = (item: NavigationItem) => {
+    if (item.requiresAuth && !isAuthenticated) {
+      window.location.href = '/login'
+      return
+    }
+    onClose()
+  }
+
+  const getUserDisplayName = () => {
+    if (!user) return 'Guest';
+    if (user.name && user.name.trim()) {
+      return user.name;
+    }
+    return user.email || 'User';
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -45,94 +105,58 @@ export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
           </button>
         </div>
 
+        {/* User Info Section */}
+        {isAuthenticated && (
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">
+                Welcome back, <span className="font-medium text-gray-900">{getUserDisplayName()}</span>
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Navigation Content */}
         <div className="flex flex-col h-full">
           {/* Navigation Items */}
           <div className="p-4 pb-2 flex-shrink-0">
             <div className="space-y-1">
-              <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg cursor-pointer h-10">
-                <div className="flex items-center gap-3">
-                  <TrendingUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  <span className="text-sm leading-5">Top</span>
-                </div>
-                <Badge variant="secondary" className="bg-[#4e1cb3] text-white text-xs leading-4 flex-shrink-0">
-                  +1k
-                </Badge>
-              </div>
-
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer h-10">
-                <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-600 leading-5">New</span>
-              </div>
-
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer h-10">
-                <Monitor className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-600 leading-5">Show</span>
-              </div>
-
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer h-10">
-                <Briefcase className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-600 leading-5">Jobs</span>
-              </div>
-
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer h-10">
-                <BarChart3 className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-600 leading-5">Rising</span>
-              </div>
-
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer h-10">
-                <Heart className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-sm text-gray-600 leading-5">Saved</span>
-              </div>
+              {navigationItems.map((item) => {
+                const IconComponent = item.icon
+                const isActive = pathname === item.href
+                
+                return (
+                  <div
+                    key={item.href}
+                    className={`flex items-center justify-between p-2 rounded-lg cursor-pointer h-10 ${
+                      isActive ? 'bg-gray-50' : 'hover:bg-gray-50'
+                    }`}
+                    onClick={() => handleNavigationClick(item)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <IconComponent className={`w-4 h-4 flex-shrink-0 ${
+                        isActive ? 'text-gray-600' : 'text-gray-400'
+                      }`} />
+                      <span className={`text-sm leading-5 ${
+                        isActive ? 'text-gray-900' : 'text-gray-600'
+                      }`}>
+                        {item.label}
+                      </span>
+                    </div>
+                    {item.badge && (
+                      <Badge variant="secondary" className="bg-[#4e1cb3] text-white text-xs leading-4 flex-shrink-0">
+                        {item.badge}
+                      </Badge>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
 
           {/* Footer */}
           <div className="p-4 pt-2 border-t border-gray-200 flex-1 overflow-y-auto max-h-[550px]  mb-3">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 h-6 mb-4 mt-6">
-                <Image src="/logo-dark.png" alt="Refetch Logo" width={96} height={21} className="rounded" style={{ width: '96px', height: '21px' }} />
-              </div>
-              
-              <div className="text-xs text-gray-500 leading-5">
-                Your daily drop of curated tech news - signal over noise. Transparent. Community-driven.
-              </div>
-            </div>
-
-            <div className="h-px bg-gray-200 opacity-50 my-6"></div>
-
-            <div className="space-y-4">
-              <div className="text-xs text-gray-500 leading-4">Copyright © 2025 Refetch</div>
-
-              <div className="flex flex-wrap gap-2 text-xs text-gray-500 leading-4">
-                <a href="#" className="hover:text-gray-700">
-                  About
-                </a>
-                <a href="#" className="hover:text-gray-700">
-                  Terms
-                </a>
-                <a href="#" className="hover:text-gray-700">
-                  Privacy
-                </a>
-                <a href="#" className="hover:text-gray-700">
-                  Security
-                </a>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 leading-4">
-                <a href="#" className="hover:text-gray-700">
-                  Cookies
-                </a>
-                <span>•</span>
-                <div className="flex items-center gap-1">
-                  <Twitter className="w-3 h-3 text-gray-900 flex-shrink-0" />
-                  <Facebook className="w-3 h-3 text-gray-900 flex-shrink-0" />
-                  <Github className="w-3 h-3 text-gray-900 flex-shrink-0" />
-                </div>
-              </div>
-
-              <div className="text-xs text-gray-500 leading-4">Powered by Appwrite Cloud</div>
-            </div>
+            <Footer />
           </div>
         </div>
       </div>
