@@ -75,6 +75,9 @@ Guidelines:
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
+- For category classification:
+  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
+  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Translate titles and descriptions accurately while maintaining the meaning and tech terminology
 - When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
 - Writing Style: Make descriptions playful and entertaining by using:

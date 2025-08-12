@@ -258,6 +258,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
+  "category": "main" or "show" (main for general content, show for announcing new products/initiatives/work)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
@@ -291,14 +292,14 @@ async function analyzePostWithAI(openai, postData, urlContent) {
     "es": "description in Spanish (original if Spanish, translated if not)",
     "fr": "description in French (original if French, translated if not)", 
     "de": "description in German (original if German, translated if not)",
-    "it": "description in Italian (original if Italian, translated if not)",
-    "pt": "description in Portuguese (original if Portuguese, translated if not)",
-    "ru": "description in Russian (original if Russian, translated if not)",
-    "ja": "description in Japanese (original if Japanese, translated if not)",
-    "ko": "description in Korean (original if Korean, translated if not)",
-    "zh": "description in Chinese (original if Chinese, translated if not)",
-    "ar": "description in Arabic (original if Arabic, translated if not)",
-    "he": "description in Hebrew (original if Hebrew, translated if not)"
+    "it": "title in Italian (original if Italian, translated if not)",
+    "pt": "title in Portuguese (original if Portuguese, translated if not)",
+    "ru": "title in Russian (original if Russian, translated if not)",
+    "ja": "title in Japanese (original if Japanese, translated if not)",
+    "ko": "title in Korean (original if Korean, translated if not)",
+    "zh": "title in Chinese (original if Chinese, translated if not)",
+    "ar": "title in Arabic (original if Arabic, translated if not)",
+    "he": "title in Hebrew (original if Hebrew, translated if not)"
   }
 }
 
@@ -308,6 +309,9 @@ Guidelines:
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
+- For category classification:
+  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview"
+  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Translate titles and descriptions accurately while maintaining the meaning and tech terminology
 - When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
 - Writing Style: Make descriptions playful and entertaining by using:
