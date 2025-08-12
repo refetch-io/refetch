@@ -440,7 +440,7 @@ function validateAndSanitizeMetadata(metadata, postData) {
         readingLevel: validateReadingLevel(metadata.readingLevel),
         readingTime: Math.max(1, Math.min(480, Number(metadata.readingTime) || 5)),
         topics: Array.isArray(metadata.topics) ? metadata.topics.slice(0, 20) : [],
-        tldr: typeof metadata.tldr === 'string' ? metadata.tldr.substring(0, 200) : (postData.description ? `TL;DR: ${postData.description.substring(0, 150)}...` : 'No summary available'),
+        tldr: typeof metadata.tldr === 'string' ? metadata.tldr.substring(0, 2000) : (postData.description ? `TL;DR: ${postData.description.substring(0, 2000)}...` : 'No summary available'),
         titleTranslations: validateTranslations(metadata.titleTranslations),
         descriptionTranslations: validateTranslations(metadata.descriptionTranslations)
     };
