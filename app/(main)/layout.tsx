@@ -7,7 +7,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
-import { Share2, Flag } from "lucide-react"
+import { Copy, Flag, Check } from "lucide-react"
 
 export default function MainLayout({
   children,
@@ -55,9 +55,22 @@ export default function MainLayout({
               <div className="h-px bg-gray-100" />
               <div className="space-y-0">
                 <div>
-                  <button className="w-full text-left text-xs text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-2 px-4 transition-colors flex items-center gap-2 cursor-pointer">
-                    <Share2 className="h-4 w-4" />
-                    Share
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href)
+                      const button = event?.target as HTMLButtonElement
+                      if (button) {
+                        const originalText = button.innerHTML
+                        button.innerHTML = '<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!'
+                        setTimeout(() => {
+                          button.innerHTML = originalText
+                        }, 2000)
+                      }
+                    }}
+                    className="w-full text-left text-xs text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-2 px-4 transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <Copy className="h-4 w-4" />
+                    Copy Link
                   </button>
                 </div>
                 <div className="h-px bg-gray-100" />
