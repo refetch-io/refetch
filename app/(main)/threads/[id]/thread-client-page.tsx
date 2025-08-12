@@ -227,11 +227,11 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         showReadingTime={true}
       />
 
-      {/* Post Description */}
-      {article.description && (
+      {/* Post TL;DR only - don't show description if TL;DR is missing */}
+      {article.tldr && (
         <div className="px-4 py-3">
           <p className="text-gray-600 text-sm leading-relaxed">
-            {article.description}
+            <span className="text-gray-500">TL;DR:</span> {article.tldr}
           </p>
         </div>
       )}

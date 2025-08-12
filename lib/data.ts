@@ -19,6 +19,7 @@ export interface NewsItem {
   shapeClass: string
   extendedHighlight: string
   description?: string
+  tldr?: string
   comments: Comment[]
   author: string
   userId?: string
@@ -36,6 +37,7 @@ export interface AppwritePost {
   $id: string
   title: string
   description: string
+  tldr?: string
   userId: string
   userName: string
   count: number
@@ -288,6 +290,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     shapeClass: shapes[index % shapes.length],
     extendedHighlight: post.description,
     description: post.description,
+    tldr: post.tldr,
     comments: [], // We'll add comments later if needed
     author: post.userName,
     userId: post.userId,

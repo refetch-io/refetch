@@ -148,6 +148,7 @@ export default function SubmitPage() {
                         rows={3}
                         className="text-sm"
                       />
+
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
                       {isSubmitting ? "Submitting..." : "Submit"}
@@ -197,6 +198,7 @@ export default function SubmitPage() {
                         required
                         className="text-sm"
                       />
+
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
                       {isSubmitting ? "Submitting..." : "Submit"}
@@ -279,6 +281,7 @@ export default function SubmitPage() {
                         rows={4}
                         className="text-sm"
                       />
+
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full">
                       {isSubmitting ? "Submitting..." : "Submit"}

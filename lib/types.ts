@@ -72,6 +72,7 @@ export interface PostDocument {
   safetyIssues?: string[];
   readingLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
   readingTime?: number;
+  tldr?: string;
   titleTranslations?: Record<string, string>;
   descriptionTranslations?: Record<string, string>;
   qualityScore?: number;

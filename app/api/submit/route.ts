@@ -22,6 +22,7 @@ const users = new Users(apiKeyClient)
 // Database and collection IDs
 const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
 const COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
+const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
 
 // Helper function to check for duplicate URLs
 async function checkDuplicateUrl(url: string): Promise<boolean> {
@@ -38,6 +39,47 @@ async function checkDuplicateUrl(url: string): Promise<boolean> {
     return false
   }
 }
+
+// Helper function to create a comment with the user's description
+async function createDescriptionComment(postId: string, userId: string, userName: string, description: string): Promise<string | null> {
+  try {
+    if (!description || !description.trim()) {
+      console.log('No description provided, skipping comment creation')
+      return null
+    }
+
+    // Clean and truncate the description for the comment
+    let commentText = description.trim()
+    
+    // If description is too long, truncate it and add ellipsis
+    if (commentText.length > 2000) {
+      commentText = commentText.substring(0, 1997) + '...'
+    }
+
+    // Create the comment
+    const comment = await databases.createDocument(
+      DATABASE_ID,
+      COMMENTS_COLLECTION_ID,
+      ID.unique(),
+      {
+        postId,
+        userId: userId,
+        userName: userName,
+        content: commentText,
+        replyId: '', // Top-level comment
+        countReports: 0
+      }
+    )
+
+    console.log('Description comment created successfully:', { commentId: comment.$id, postId })
+    return comment.$id
+  } catch (error) {
+    console.error('Error creating description comment:', error)
+    return null
+  }
+}
+
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -167,6 +209,33 @@ export async function POST(request: NextRequest) {
       ID.unique(),
       documentData
     )
+
+    // Step 5: Create comment with user's description if provided
+    if (description && description.trim().length > 0) {
+      try {
+        const commentId = await createDescriptionComment(
+          createdDocument.$id,
+          user.$id,
+          user.name || user.email || 'Anonymous',
+          description.trim()
+        )
+        
+        if (commentId) {
+          console.log('Description comment created, updating post comment count')
+          
+          // Update the post with the comment count
+          await databases.updateDocument(
+            DATABASE_ID,
+            COLLECTION_ID,
+            createdDocument.$id,
+            { countComments: 1 }
+          )
+        }
+      } catch (error) {
+        console.error('Error creating description comment, but post was created successfully:', error)
+        // Don't fail the post creation if comment creation fails
+      }
+    }
 
     return NextResponse.json({
       message: 'Post submitted successfully',
