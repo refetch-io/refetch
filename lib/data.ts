@@ -429,6 +429,9 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
   }
 }
 
+// Comment fetching constants
+const MAX_COMMENTS_PER_POST = 500
+
 // Server-side function to fetch comments for a specific post
 export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
   if (!validateAppwriteConfig()) {
@@ -451,9 +454,12 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
       [
         Query.equal('postId', postId),
-        Query.orderDesc('$createdAt')
+        Query.orderDesc('$createdAt'),
+        Query.limit(MAX_COMMENTS_PER_POST)
       ]
     )
+
+    console.log(`Fetched ${comments.documents.length} comments for post ${postId} (max limit: ${MAX_COMMENTS_PER_POST})`)
 
     // Transform the comments to match the Comment interface
     const transformedComments = comments.documents.map(doc => ({

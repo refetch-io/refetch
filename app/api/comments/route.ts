@@ -16,6 +16,53 @@ const jwtClient = new Client()
 const databases = new Databases(apiKeyClient)
 const account = new Account(jwtClient)
 
+// Database and collection IDs
+const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
+const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
+
+// Abuse protection constants for comments
+const MAX_COMMENTS_PER_HOUR = 50
+const COMMENT_WINDOW_HOURS = 1
+
+// Comment fetching constants
+const MAX_COMMENTS_PER_POST = 500
+
+// Helper function to check user comment count in the last hour
+async function checkUserCommentLimit(userId: string): Promise<{ allowed: boolean; count: number; limit: number }> {
+  try {
+    // Calculate the timestamp for 1 hour ago
+    const oneHourAgo = new Date(Date.now() - (COMMENT_WINDOW_HOURS * 60 * 60 * 1000))
+    
+    console.log(`Checking comments for user ${userId} since ${oneHourAgo.toISOString()}`)
+    
+    // Query for comments created by this user in the last hour
+    const recentComments = await databases.listDocuments(
+      DATABASE_ID,
+      COMMENTS_COLLECTION_ID,
+      [
+        Query.equal('userId', userId),
+        Query.greaterThan('$createdAt', oneHourAgo.toISOString()),
+        Query.limit(MAX_COMMENTS_PER_HOUR+1)
+      ]
+    )
+    
+    const commentCount = recentComments.documents.length
+    const allowed = commentCount < MAX_COMMENTS_PER_HOUR
+    
+    console.log(`Found ${commentCount} comments for user ${userId} in last ${COMMENT_WINDOW_HOURS} hour(s)`)
+    
+    return {
+      allowed,
+      count: commentCount,
+      limit: MAX_COMMENTS_PER_HOUR
+    }
+  } catch (error) {
+    console.error('Error checking user comment limit:', error)
+    // If we can't check the limit, allow the comment to avoid blocking legitimate users
+    return { allowed: true, count: 0, limit: MAX_COMMENTS_PER_HOUR }
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Get the postId from query parameters
@@ -26,15 +73,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Post ID is required' }, { status: 400 })
     }
 
-    // Fetch comments for the specific post
+    // Fetch comments for the specific post (up to 500 comments)
     const comments = await databases.listDocuments(
-      process.env.APPWRITE_DATABASE_ID!,
-      process.env.APPWRITE_COMMENTS_COLLECTION_ID!,
+      DATABASE_ID,
+      COMMENTS_COLLECTION_ID,
       [
         Query.equal('postId', postId),
-        Query.orderDesc('$createdAt')
+        Query.orderDesc('$createdAt'),
+        Query.limit(MAX_COMMENTS_PER_POST)
       ]
     )
+
+    console.log(`Fetched ${comments.documents.length} comments for post ${postId} (max limit: ${MAX_COMMENTS_PER_POST})`)
 
     // Transform the comments to match the Comment interface
     const transformedComments = comments.documents.map(doc => ({
@@ -48,7 +98,12 @@ export async function GET(request: NextRequest) {
     }))
 
     return NextResponse.json({ 
-      comments: transformedComments 
+      comments: transformedComments,
+      metadata: {
+        totalComments: transformedComments.length,
+        maxCommentsPerRequest: MAX_COMMENTS_PER_POST,
+        postId: postId
+      }
     })
 
   } catch (error) {
@@ -100,9 +155,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid user information' }, { status: 401 })
     }
 
+    // Step 3: Check user comment limit (abuse protection)
+    const commentLimitCheck = await checkUserCommentLimit(user.$id)
+    console.log(`User ${user.$id} comment check: ${commentLimitCheck.count}/${commentLimitCheck.limit} in last ${COMMENT_WINDOW_HOURS} hour(s)`)
+    
+    if (!commentLimitCheck.allowed) {
+      console.log(`User ${user.$id} exceeded comment limit: ${commentLimitCheck.count}/${commentLimitCheck.limit}`)
+      return NextResponse.json(
+        { 
+          message: `Comment limit exceeded. You can only post ${commentLimitCheck.limit} comments in a ${COMMENT_WINDOW_HOURS}-hour period. You have posted ${commentLimitCheck.count} comments in the last ${COMMENT_WINDOW_HOURS} hour(s).`,
+          limit: commentLimitCheck.limit,
+          currentCount: commentLimitCheck.count,
+          windowHours: COMMENT_WINDOW_HOURS
+        },
+        { status: 429 }
+      )
+    }
+
     console.log('Creating comment for user:', { userId: user.$id, userName: userName || user.name, postId })
 
-    // Create the comment in the database using the server-side client
+    // Step 4: Create the comment in the database using the server-side client
     const comment = await databases.createDocument(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_COMMENTS_COLLECTION_ID!,
