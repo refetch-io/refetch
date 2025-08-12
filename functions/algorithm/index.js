@@ -22,11 +22,13 @@ import { Client, Databases, Query } from 'node-appwrite';
  * Total should equal 1.0 (100%)
  */
 const SCORING_WEIGHTS = {
-  timeScore: 0.35,      // 35% - Time relevance (newer posts get higher scores)
+  timeScore: 0.25,      // 25% - Time relevance (newer posts get higher scores)
   spellingScore: 0.05,  // 5% - Writing quality and grammar
   spamScore: 0.10,      // 10% - Content legitimacy (inverted - lower spam = higher score)
-  safetyScore: 0.15,    // 15% - Content appropriateness and safety
-  qualityScore: 0.35    // 35% - Overall content value and relevance
+  safetyScore: 0.10,    // 10% - Content appropriateness and safety
+  qualityScore: 0.25,   // 25% - Overall content value and relevance
+  voteCount: 0.15,      // 15% - Community engagement through voting
+  commentCount: 0.10    // 10% - Community discussion and engagement
 };
 
 /**
@@ -210,6 +212,10 @@ function calculateFinalScore(post, newTimeScore) {
     const safetyScore = post.safetyScore ?? 75;        // Assume safe if missing
     const qualityScore = post.qualityScore ?? 50;      // Neutral score if missing
     
+    // Get vote count and comment count with defaults
+    const voteCount = post.count ?? 0;                 // Vote count, default to 0
+    const commentCount = post.countComments ?? 0;      // Comment count, default to 0
+    
     // Calculate weighted components
     const timeScoreComponent = newTimeScore * SCORING_WEIGHTS.timeScore;
     const spellingScoreComponent = spellingScore * SCORING_WEIGHTS.spellingScore;
@@ -220,12 +226,24 @@ function calculateFinalScore(post, newTimeScore) {
     const safetyScoreComponent = safetyScore * SCORING_WEIGHTS.safetyScore;
     const qualityScoreComponent = qualityScore * SCORING_WEIGHTS.qualityScore;
     
+    // Calculate vote count score (0-100 scale)
+    // Apply logarithmic scaling to prevent extremely high vote counts from dominating
+    const voteCountScore = Math.min(100, Math.round(Math.log10(Math.max(1, voteCount + 1)) * 20));
+    const voteCountComponent = voteCountScore * SCORING_WEIGHTS.voteCount;
+    
+    // Calculate comment count score (0-100 scale)
+    // Apply logarithmic scaling to prevent extremely high comment counts from dominating
+    const commentCountScore = Math.min(100, Math.round(Math.log10(Math.max(1, commentCount + 1)) * 25));
+    const commentCountComponent = commentCountScore * SCORING_WEIGHTS.commentCount;
+    
     // Calculate weighted sum
     const finalScore = timeScoreComponent + 
                       spellingScoreComponent + 
                       spamScoreComponent + 
                       safetyScoreComponent + 
-                      qualityScoreComponent;
+                      qualityScoreComponent +
+                      voteCountComponent +
+                      commentCountComponent;
     
     // Ensure score is within 0-100 range and convert to integer
     return Math.max(0, Math.min(100, Math.round(finalScore)));
@@ -295,6 +313,12 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       // Log the structure of the first batch update for debugging
       if (results.batches === 1) {
         log(`🔍 First batch update structure: ${JSON.stringify(batchUpdates[0])}`);
+        
+        // Log sample scoring details for the first post
+        const firstPost = batch[0];
+        const voteCount = firstPost.count ?? 0;
+        const commentCount = firstPost.countComments ?? 0;
+        log(`📊 Sample post scoring - Votes: ${voteCount}, Comments: ${commentCount}, Final Score: ${batchUpdates[0].score}`);
       }
       
       // Update batch using Appwrite's bulk operations
