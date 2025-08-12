@@ -25,7 +25,7 @@ export class PostMetadataEnhancer {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
-  "category": "main" or "show" (IMPORTANT: This is NOT the submission type. "main" = general tech news/analysis, "show" = product launches/announcements/initiatives)",
+  "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
@@ -56,13 +56,13 @@ export class PostMetadataEnhancer {
     "es": "description in Spanish (original if Spanish, translated if not)",
     "fr": "description in French (original if French, translated if not)", 
     "de": "description in German (original if German, translated if not)",
-    "it": "description in Italian (original if Italian, translated if not)",
-    "pt": "description in Portuguese (original if Portuguese, translated if not)",
-    "ru": "description in Russian (original if Russian, translated if not)",
-    "ja": "description in Japanese (original if Japanese, translated if not)",
-    "ko": "description in Korean (original if Korean, translated if not)",
-    "zh": "description in Chinese (original if Chinese, translated if not)",
-    "ar": "description in Arabic (original if Arabic, translated if not)",
+    "it": "title in Italian (original if Italian, translated if not)",
+    "pt": "title in Portuguese (original if Portuguese, translated if not)",
+    "ru": "title in Russian (original if Russian, translated if not)",
+    "ja": "title in Japanese (original if Japanese, translated if not)",
+    "ko": "title in Korean (original if Korean, translated if not)",
+    "zh": "title in Chinese (original if Chinese, translated if not)",
+    "ar": "title in Arabic (original if Arabic, translated if not)",
     "he": "title in Hebrew (original if Hebrew, translated if not)"
   },
   "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
@@ -70,11 +70,10 @@ export class PostMetadataEnhancer {
 }
 
 CRITICAL GUIDELINES:
-- The "category" field MUST be either "main" or "show" - NEVER "link", "job", or any other value
-- "link" is the submission type (external URL), NOT a content category
-- Content categories are:
+- The "type" field MUST be either "link" or "show" - NEVER "main", "job", or any other value
+- Enhanced types are:
   * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
+  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Be strict but fair with scoring
 - Identify clickbait, misleading content, and inappropriate material
 - Consider the context of tech news and community guidelines
@@ -176,7 +175,7 @@ CRITICAL GUIDELINES:
     // Ensure all required fields exist and have proper types
     return {
       language: typeof metadata.language === 'string' ? metadata.language : 'English',
-      category: this.validateCategory(metadata.category),
+      type: this.validateType(metadata.type),
       spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
       spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues : [],
       optimizedTitle: typeof metadata.optimizedTitle === 'string' ? metadata.optimizedTitle : '',
@@ -197,14 +196,14 @@ CRITICAL GUIDELINES:
     };
   }
 
-  private static validateCategory(category: any): 'main' | 'show' {
+  private static validateType(type: any): 'link' | 'show' {
     // Log invalid categories for debugging
-    if (category && !['main', 'show'].includes(category)) {
-      console.warn(`Invalid category returned by LLM: "${category}". Defaulting to "main".`);
+    if (type && !['link', 'show'].includes(type)) {
+      console.warn(`Invalid type returned by LLM: "${type}". Defaulting to "link".`);
     }
     
-    const validCategories = ['main', 'show'];
-    return validCategories.includes(category) ? category : 'main';
+    const validTypes = ['link', 'show'];
+    return validTypes.includes(type) ? type : 'link';
   }
 
   private static validateReadingLevel(level: any): 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' {
@@ -235,7 +234,7 @@ CRITICAL GUIDELINES:
   private static getDefaultMetadata(data: PostSubmissionData): PostMetadata {
     return {
       language: 'English',
-      category: data.type === 'show' ? 'show' : 'main',
+      type: data.type === 'show' ? 'show' : 'link',
       spellingScore: 80,
       spellingIssues: [],
       optimizedTitle: data.title,

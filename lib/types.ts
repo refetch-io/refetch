@@ -1,6 +1,6 @@
 export interface PostMetadata {
   language: string;
-  category: 'main' | 'show';
+  type: 'link' | 'show';
   spellingScore: number;
   spellingIssues: string[];
   optimizedTitle: string;
@@ -58,7 +58,6 @@ export interface PostDocument {
   salary?: string;
   // Metadata fields (populated when enhanced = true)
   language?: string;
-  category?: 'main' | 'show';
   spellingScore?: number;
   spellingIssues?: string[];
   optimizedTitle?: string;

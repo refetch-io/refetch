@@ -87,6 +87,7 @@ export default async function ({ req, res, log, error }) {
                 // Update post with enhanced attributes
                 const updateData = {
                     enhanced: true,
+                    type: metadata.type, // Store the AI-recommended type
                     language: metadata.language,
                     spellingScore: metadata.spellingScore,
                     spellingIssues: metadata.spellingIssues,
@@ -258,7 +259,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
-  "category": "main" or "show" (IMPORTANT: This is NOT the submission type. "main" = general tech news/analysis, "show" = product launches/announcements/initiatives)",
+  "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
@@ -304,11 +305,10 @@ async function analyzePostWithAI(openai, postData, urlContent) {
 }
 
 CRITICAL GUIDELINES:
-- The "category" field MUST be either "main" or "show" - NEVER "link", "job", or any other value
-- "link" is the submission type (external URL), NOT a content category
-- Content categories are:
+- The "type" field MUST be either "link" or "show" - NEVER "main", "job", or any other value
+- Enhanced types are:
   * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
+  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Be strict but fair with scoring
 - Identify clickbait, misleading content, and inappropriate material
 - Consider the context of tech news and community guidelines
@@ -427,12 +427,13 @@ function buildAnalysisPrompt(postData, urlContent) {
  * Validate and sanitize the AI response metadata
  */
 function validateAndSanitizeMetadata(metadata, postData) {
-    // Validate and sanitize category field
-    const validatedCategory = validateCategory(metadata.category);
+    // Validate and sanitize type field
+    const validatedType = validateType(metadata.type);
     
     return {
         language: typeof metadata.language === 'string' ? metadata.language.substring(0, 10) : 'English',
-        category: validatedCategory,
+        type: validatedType,
+        type: validatedType, // Also return type for database update
         spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
         spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues.slice(0, 50) : [],
         spamScore: Math.max(0, Math.min(100, Number(metadata.spamScore) || 0)),
@@ -453,17 +454,17 @@ function validateAndSanitizeMetadata(metadata, postData) {
 }
 
 /**
- * Validate category field - must be 'main' or 'show'
+ * Validate type field - must be 'link' or 'show'
  */
-function validateCategory(category) {
-    const validCategories = ['main', 'show'];
+function validateType(type) {
+    const validTypes = ['link', 'show'];
     
-    // Log invalid categories for debugging
-    if (category && !validCategories.includes(category)) {
-        console.warn(`⚠️ Invalid category returned by LLM: "${category}". Defaulting to "main".`);
+    // Log invalid types for debugging
+    if (type && !validTypes.includes(type)) {
+        console.warn(`⚠️ Invalid type returned by LLM: "${type}". Defaulting to "link".`);
     }
     
-    return validCategories.includes(category) ? category : 'main';
+    return validTypes.includes(type) ? type : 'link';
 }
 
 /**
