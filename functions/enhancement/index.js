@@ -101,6 +101,7 @@ export default async function ({ req, res, log, error }) {
                     readingLevel: metadata.readingLevel,
                     readingTime: metadata.readingTime,
                     topics: metadata.topics,
+                    tldr: metadata.tldr,
                     titleTranslations: JSON.stringify(metadata.titleTranslations),
                     descriptionTranslations: JSON.stringify(metadata.descriptionTranslations)
                 };
@@ -118,7 +119,8 @@ export default async function ({ req, res, log, error }) {
                 
                 // Log progress every 2 posts or at the end
                 if ((i + 1) % 2 === 0 || i === posts.length - 1) {
-                    log(`📈 Progress: ${i + 1}/${posts.length} (${progress}%) - Enhanced: ${updatedCount}, Errors: ${errorCount}`);
+                    const tldrStatus = metadata.tldr ? '✅' : '❌';
+                    log(`📈 Progress: ${i + 1}/${posts.length} (${progress}%) - Enhanced: ${updatedCount}, Errors: ${errorCount}, TL;DR: ${tldrStatus}`);
                 }
                 
             } catch (postError) {
@@ -150,6 +152,7 @@ export default async function ({ req, res, log, error }) {
         log(`✅ Successfully enhanced: ${updatedCount}`);
         log(`❌ Errors encountered: ${errorCount}`);
         log(`📈 Success rate: ${result.summary.successRate}%`);
+        log(`📝 TL;DR summaries generated: ${posts.filter(p => p.tldr).length}/${posts.length}`);
         log(`⏱️  Processing time: ${new Date().toISOString()}`);
         log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
@@ -268,6 +271,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
   "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
   "readingTime": number (estimated reading time in minutes)",
   "topics": ["array of relevant topics this post relates to"],
+  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description.",
   "titleTranslations": {
     "en": "title in English (original if English, translated if not)",
     "es": "title in Spanish (original if Spanish, translated if not)",
@@ -339,7 +343,7 @@ Guidelines:
         const validatedMetadata = validateAndSanitizeMetadata(metadata, postData);
         
         // Log compact post reference
-        console.log(`📝 AI Analysis completed - ID: ${postData.title ? postData.title.substring(0, 50) : 'No title'} | URL: ${postData.url ? postData.url.substring(0, 60) : 'No URL'}`);
+        console.log(`📝 AI Analysis completed - ID: ${postData.title ? postData.title.substring(0, 50) : 'No title'} | URL: ${postData.url ? postData.url.substring(0, 60) : 'No URL'} | TL;DR: ${metadata.tldr ? metadata.tldr.substring(0, 80) + '...' : 'Not generated'}`);
         
         return validatedMetadata;
     } catch (error) {
@@ -398,10 +402,11 @@ function buildAnalysisPrompt(postData, urlContent) {
         
         prompt += `URL Word Count: ${urlContent.wordCount}\n`;
         prompt += `URL Estimated Reading Time: ${urlContent.readingTime} minutes\n`;
+        prompt += `\nIMPORTANT: Use the actual article content above to generate an accurate and informative TL;DR summary. Focus on the main points, key findings, or announcements from the article. The TL;DR should be 2-3 sentences that capture the essence of what the article is about.\n`;
         prompt += `=== END URL CONTENT ===\n`;
     }
     
-    prompt += `\nPlease analyze this content and provide the requested metadata in JSON format.`;
+    prompt += `\nPlease analyze this content and provide the requested metadata in JSON format. Pay special attention to generating an accurate TL;DR summary based on the actual article content when available. If no article content is available, generate a TL;DR based on the title and description provided.`;
     
     // Final safety check: estimate total tokens and warn if approaching limits
     const totalTokens = estimateTokenCount(prompt);
@@ -431,6 +436,7 @@ function validateAndSanitizeMetadata(metadata, postData) {
         readingLevel: validateReadingLevel(metadata.readingLevel),
         readingTime: Math.max(1, Math.min(480, Number(metadata.readingTime) || 5)),
         topics: Array.isArray(metadata.topics) ? metadata.topics.slice(0, 20) : [],
+        tldr: typeof metadata.tldr === 'string' ? metadata.tldr.substring(0, 200) : (postData.description ? `TL;DR: ${postData.description.substring(0, 150)}...` : 'No summary available'),
         titleTranslations: validateTranslations(metadata.titleTranslations),
         descriptionTranslations: validateTranslations(metadata.descriptionTranslations)
     };

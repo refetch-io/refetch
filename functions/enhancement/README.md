@@ -17,6 +17,7 @@ The Enhancement Function:
    - Topic extraction
    - Spam and safety assessment
    - Reading level and time estimation
+   - **TL;DR summaries** based on article content
    - Multilingual translations (12 languages)
    - Quality scoring
 5. **Database Updates**: Updates each post with the enhanced metadata
@@ -26,6 +27,7 @@ The Enhancement Function:
 ### Smart Content Analysis
 - **Comprehensive Scoring**: 0-100 scores for spelling, spam, safety, and quality
 - **Content Optimization**: Improved titles and descriptions that are engaging and accurate
+- **TL;DR Generation**: Intelligent summaries extracted from article content when available
 - **Multilingual Support**: Title and description translations in 12 languages
 - **Reading Assessment**: Beginner to Expert level classification with time estimates
 
@@ -89,6 +91,7 @@ Your posts collection should have a `metadata` field that can store the enhanced
     "safetyIssues": [],
     "readingLevel": "Intermediate",
     "readingTime": 3,
+    "tldr": "A concise 2-3 sentence summary of the key points from the article content",
     "titleTranslations": {
       "es": "Título en español",
       "fr": "Titre en français"
