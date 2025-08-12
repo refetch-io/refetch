@@ -366,7 +366,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
         queries = [
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -380,7 +380,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
         // Filter by type=show, sort by count first, then by creation date
         queries = [
           Query.equal('type', 'show'),
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -691,7 +691,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
         queries = [
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -705,7 +705,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
         // Filter by type=show, sort by score first, then by creation date
         queries = [
           Query.equal('type', 'show'),
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -1072,7 +1072,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
         queries = [
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
@@ -1086,7 +1086,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
         // Filter by type=show, sort by score first, then by creation date
         queries = [
           Query.equal('type', 'show'),
-          Query.orderDesc('count'),
+          Query.orderDesc('score'),
           Query.orderDesc('$createdAt')
         ]
         break
