@@ -8,6 +8,7 @@
 import { Client, Databases, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 import { JSDOM } from 'jsdom';
+import { getContentAnalysisPrompt } from '../../lib/prompts.js';
 
 export default async function ({ req, res, log, error }) {
     try {
@@ -52,6 +53,9 @@ export default async function ({ req, res, log, error }) {
         let processedCount = 0;
         let updatedCount = 0;
         let errorCount = 0;
+        let flaggedCount = 0;
+        let highSpamCount = 0;
+        let lowQualityCount = 0;
         
                 // Process each post
         for (let i = 0; i < posts.length; i++) {
@@ -72,17 +76,23 @@ export default async function ({ req, res, log, error }) {
                 
                 // Fetch URL content if available
                 let urlContent = null;
+                let urlError = null;
                 if (postData.url && postData.type === 'link') {
                     try {
                         urlContent = await fetchURLContent(postData.url);
-                    } catch (urlError) {
-                        log(`⚠️  Failed to fetch URL content for ${post.$id}: ${urlError.message}`);
-                        // Continue without URL content
+                    } catch (fetchError) {
+                        urlError = fetchError;
+                        log(`⚠️  Failed to fetch URL content for ${post.$id}: ${fetchError.message}`);
+                        // Continue without URL content, but we'll use the error info for spam detection
                     }
                 }
                 
                 // Analyze post with AI
-                const metadata = await analyzePostWithAI(openai, postData, urlContent);
+                const metadata = await analyzePostWithAI(openai, postData, urlContent, urlError);
+                
+                // Check for high spam scores and flag accordingly
+                const isHighSpam = metadata.spamScore >= 90;
+                const isLowQuality = metadata.qualityScore <= 20;
                 
                 // Update post with enhanced attributes
                 const updateData = {
@@ -104,8 +114,23 @@ export default async function ({ req, res, log, error }) {
                     topics: metadata.topics,
                     tldr: metadata.tldr,
                     titleTranslations: JSON.stringify(metadata.titleTranslations),
-                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations)
+                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations),
+                    flagged: isHighSpam || isLowQuality, // Flag posts with high spam or low quality
+                    flaggedReason: isHighSpam ? 'High spam score detected' : (isLowQuality ? 'Low quality content' : null)
                 };
+                
+                // Log spam detection
+                if (isHighSpam) {
+                    log(`🚨 HIGH SPAM DETECTED - Post ID: ${post.$id}, Title: "${post.title}", Spam Score: ${metadata.spamScore}, Issues: ${metadata.spamIssues.join(', ')}`);
+                    highSpamCount++;
+                    flaggedCount++;
+                }
+                
+                if (isLowQuality) {
+                    log(`⚠️  LOW QUALITY DETECTED - Post ID: ${post.$id}, Title: "${post.title}", Quality Score: ${metadata.qualityScore}, Issues: ${metadata.qualityIssues.join(', ')}`);
+                    lowQualityCount++;
+                    if (!isHighSpam) flaggedCount++; // Don't double count
+                }
                 
                 await databases.updateDocument(
                     DATABASE_ID,
@@ -142,6 +167,9 @@ export default async function ({ req, res, log, error }) {
                 processed: processedCount,
                 updated: updatedCount,
                 errors: errorCount,
+                flagged: flaggedCount,
+                highSpam: highSpamCount,
+                lowQuality: lowQualityCount,
                 successRate: posts.length > 0 ? Math.round((updatedCount / posts.length) * 100) : 0
             }
         };
@@ -154,6 +182,7 @@ export default async function ({ req, res, log, error }) {
         log(`❌ Errors encountered: ${errorCount}`);
         log(`📈 Success rate: ${result.summary.successRate}%`);
         log(`📝 TL;DR summaries generated: ${posts.filter(p => p.tldr).length}/${posts.length}`);
+        log(`🚨 Posts flagged for review: ${flaggedCount} (${highSpamCount} high spam, ${lowQualityCount} low quality)`);
         log(`⏱️  Processing time: ${new Date().toISOString()}`);
         log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
@@ -163,6 +192,12 @@ export default async function ({ req, res, log, error }) {
         
         if (updatedCount === 0) {
             log('ℹ️  No posts were enhanced. This might indicate all posts are already enhanced or there was an issue with the enhancement process.');
+        }
+        
+        if (flaggedCount > 0) {
+            log(`🚨 ATTENTION: ${flaggedCount} posts were flagged for review due to high spam scores or low quality content.`);
+            log(`   High spam posts: ${highSpamCount} - These should be reviewed and potentially removed.`);
+            log(`   Low quality posts: ${lowQualityCount} - These may need improvement or removal.`);
         }
         
         return res.json(result);
@@ -246,8 +281,8 @@ async function fetchURLContent(url) {
 /**
  * Analyze post content with OpenAI using the same system prompt as the submission script
  */
-async function analyzePostWithAI(openai, postData, urlContent) {
-    const prompt = buildAnalysisPrompt(postData, urlContent);
+async function analyzePostWithAI(openai, postData, urlContent, urlError) {
+            const prompt = buildAnalysisPrompt(postData, urlContent, urlError);
     
     try {
         const completion = await openai.chat.completions.create({
@@ -255,80 +290,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
             messages: [
                 {
                     role: "system",
-                    content: `You are an expert content analyst for a tech news platform. Analyze the provided post content and return a JSON response with the following structure:
-
-{
-  "language": "detected language (e.g., 'English', 'Spanish')",
-  "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
-  "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
-  "spellingIssues": ["array of specific spelling/grammar issues found"],
-  "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
-  "spamIssues": ["array explaining why this was marked as spam, or empty if not spam"],
-  "safetyScore": number 0-100 (0 = unsafe/inappropriate content, 100 = completely safe)",
-  "safetyIssues": ["array of safety concerns, or empty if none found"],
-  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
-  "qualityIssues": ["array explaining the quality score and any issues found"],
-  "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
-  "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
-  "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
-  "readingTime": number (estimated reading time in minutes)",
-  "topics": ["array of relevant topics this post relates to"],
-  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description.",
-  "titleTranslations": {
-    "en": "title in English (original if English, translated if not)",
-    "es": "title in Spanish (original if Spanish, translated if not)",
-    "fr": "title in French (original if French, translated if not)", 
-    "de": "title in German (original if German, translated if not)",
-    "it": "title in Italian (original if Italian, translated if not)",
-    "pt": "title in Portuguese (original if Portuguese, translated if not)",
-    "ru": "title in Russian (original if Russian, translated if not)",
-    "ja": "title in Japanese (original if Japanese, translated if not)",
-    "ko": "title in Korean (original if Korean, translated if not)",
-    "zh": "title in Chinese (original if Chinese, translated if not)",
-    "ar": "title in Arabic (original if Arabic, translated if not)",
-    "he": "title in Hebrew (original if Hebrew, translated if not)"
-  },
-  "descriptionTranslations": {
-    "en": "description in English (original if English, translated if not)",
-    "es": "description in Spanish (original if Spanish, translated if not)",
-    "fr": "description in French (original if French, translated if not)", 
-    "de": "description in German (original if German, translated if not)",
-    "it": "title in Italian (original if Italian, translated if not)",
-    "pt": "title in Portuguese (original if Portuguese, translated if not)",
-    "ru": "title in Russian (original if Russian, translated if not)",
-    "ja": "title in Japanese (original if Japanese, translated if not)",
-    "ko": "title in Korean (original if Korean, translated if not)",
-    "zh": "title in Chinese (original if Chinese, translated if not)",
-    "ar": "title in Arabic (original if Arabic, translated if not)",
-    "he": "title in Hebrew (original if Hebrew, translated if not)"
-  }
-}
-
-CRITICAL GUIDELINES:
-- The "type" field MUST be either "link" or "show" - NEVER "main", "job", or any other value
-- Enhanced types are:
-  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
-- Be strict but fair with scoring
-- Identify clickbait, misleading content, and inappropriate material
-- Consider the context of tech news and community guidelines
-- For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
-- For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-- Translate titles and descriptions accurately while maintaining the meaning and tech terminology
-- When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
-- Writing Style: Make descriptions playful and entertaining by using:
-  * Clever wordplay and tech puns when appropriate
-  * Engaging metaphors and analogies
-  * Light humor that fits the tech context
-  * Dynamic and energetic language
-  * Creative phrasing that makes technical concepts more accessible
-  * A conversational, friendly tone that feels like chatting with a knowledgeable friend
-  * IMPORTANT: Use appropriate tone based on content context:
-    - For serious topics (deaths, tragedies, crises, controversies) → Use respectful, sensitive, and professional language
-    - For technical announcements, product launches, innovations → Use playful and engaging language
-    - For general tech news and updates → Use balanced, informative yet entertaining language
-    - Always prioritize respect and sensitivity over entertainment when the content demands it
-- Return only valid JSON, no additional text`
+                    content: getContentAnalysisPrompt()
                 },
                 {
                     role: "user",
@@ -360,7 +322,7 @@ CRITICAL GUIDELINES:
 /**
  * Build the analysis prompt for OpenAI
  */
-function buildAnalysisPrompt(postData, urlContent) {
+function buildAnalysisPrompt(postData, urlContent, urlError) {
     const { title, description, url, type, company, location, salary } = postData;
     
     let prompt = `Analyze this ${type} post submission:\n\n`;
@@ -410,6 +372,37 @@ function buildAnalysisPrompt(postData, urlContent) {
         prompt += `URL Estimated Reading Time: ${urlContent.readingTime} minutes\n`;
         prompt += `\nIMPORTANT: Use the actual article content above to generate an accurate and informative TL;DR summary. Focus on the main points, key findings, or announcements from the article. The TL;DR should be 2-3 sentences that capture the essence of what the article is about.\n`;
         prompt += `=== END URL CONTENT ===\n`;
+    } else if (urlError) {
+        // Add URL error context for spam detection
+        prompt += `\n=== URL ERROR ANALYSIS ===\n`;
+        prompt += `URL Status: FAILED TO LOAD\n`;
+        prompt += `Error Details: ${urlError.message}\n`;
+        
+        // Extract HTTP status codes if available
+        if (urlError.message.includes('HTTP')) {
+            const httpMatch = urlError.message.match(/HTTP (\d+):/);
+            if (httpMatch) {
+                const statusCode = parseInt(httpMatch[1]);
+                prompt += `HTTP Status Code: ${statusCode}\n`;
+                
+                if (statusCode === 404) {
+                    prompt += `Error Type: Page Not Found - The linked page does not exist\n`;
+                } else if (statusCode === 403) {
+                    prompt += `Error Type: Forbidden - Access to the page is denied\n`;
+                } else if (statusCode >= 500) {
+                    prompt += `Error Type: Server Error - The website is experiencing technical issues\n`;
+                } else if (statusCode >= 400) {
+                    prompt += `Error Type: Client Error - The request cannot be fulfilled\n`;
+                }
+            }
+        } else if (urlError.message.includes('timeout')) {
+            prompt += `Error Type: Connection Timeout - The website took too long to respond\n`;
+        } else if (urlError.message.includes('fetch')) {
+            prompt += `Error Type: Network Error - Unable to connect to the website\n`;
+        }
+        
+        prompt += `\nIMPORTANT: This URL failed to load, which may indicate a broken link, non-existent page, or malicious URL. Consider this when evaluating spam score and quality. Posts with broken URLs should receive higher spam scores as they provide no value to users.\n`;
+        prompt += `=== END URL ERROR ===\n`;
     }
     
     prompt += `\nPlease analyze this content and provide the requested metadata in JSON format. Pay special attention to generating an accurate TL;DR summary based on the actual article content when available. If no article content is available, generate a TL;DR based on the title and description provided.`;
