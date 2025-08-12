@@ -1,0 +1,19 @@
+{
+  "name": "algorithm-function",
+  "version": "1.0.0",
+  "description": "Appwrite Function to calculate ranking scores for posts based on multiple factors",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "nodejs", "algorithm", "ranking", "scoring"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-appwrite": "^17.2.0"
+  }
+}
