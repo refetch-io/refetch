@@ -224,6 +224,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         isAuthenticated={isAuthenticated}
         showVoting={true}
         showCommentsLink={false}
+        showReadingTime={true}
       />
 
       {/* Post Description */}
@@ -301,7 +302,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                       </>
                     )}
                   </div>
-                  <p className="text-gray-700 text-sm mb-3">{comment.text}</p>
+                  <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{comment.text}</div>
                   <div className="flex items-center gap-3">
                     <CommentVote
                       commentId={comment.id}
@@ -333,7 +334,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                                 </>
                               )}
                             </div>
-                            <p className="text-gray-700 text-sm mb-3">{reply.text}</p>
+                            <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{reply.text}</div>
                             <div className="flex items-center gap-3">
                               <CommentVote
                                 commentId={reply.id}

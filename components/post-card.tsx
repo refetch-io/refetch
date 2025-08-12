@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { Favicon } from "@/components/favicon"
 import { type NewsItem } from "@/lib/data"
-import { type VoteState } from "@/lib/voteHandler"
+import { type VoteState } from "@/lib/types"
 import { trackPostClick } from "@/lib/plausible"
 
 interface PostCardProps {
@@ -16,6 +16,7 @@ interface PostCardProps {
   isAuthenticated: boolean
   showVoting?: boolean
   showCommentsLink?: boolean
+  showReadingTime?: boolean
   className?: string
 }
 
@@ -32,6 +33,7 @@ export function PostCard({
   isAuthenticated, 
   showVoting = true,
   showCommentsLink = true,
+  showReadingTime = false,
   className = ""
 }: PostCardProps) {
   // Determine if this item has an external link
@@ -107,7 +109,7 @@ export function PostCard({
             target={titleLinkTarget} 
             rel={titleLinkRel}
             onClick={() => trackPostClick(item.id, item.title, !!hasExternalLink)}
-            className="font-medium text-gray-900 font-heading overflow-hidden text-ellipsis flex-1 hover:text-blue-600 transition-colors cursor-pointer leading-normal"
+            className="font-medium text-gray-900 font-heading flex-1 hover:text-blue-600 transition-colors cursor-pointer leading-normal sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap"
             title={item.title}
           >
             {item.type === "show" && (
@@ -130,6 +132,12 @@ export function PostCard({
             <>
               <span className="hidden sm:inline">•</span>
               <span className="hidden sm:inline">{item.daysAgo}</span>
+            </>
+          )}
+          {!item.isSponsored && showReadingTime && item.readingTime && (
+            <>
+              <span className="hidden sm:inline">•</span>
+              <span className="hidden sm:inline">{item.readingTime} min read</span>
             </>
           )}
           {!item.isSponsored && (

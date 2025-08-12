@@ -26,6 +26,7 @@ export interface NewsItem {
   link?: string
   type?: string
   countComments?: number
+  readingTime?: number
   // Vote information
   currentVote?: 'up' | 'down' | null
 }
@@ -43,6 +44,7 @@ export interface AppwritePost {
   countComments?: number
   link?: string
   type?: string
+  readingTime?: number
   $createdAt: string
   $updatedAt: string
 }
@@ -293,6 +295,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     link: post.link,
     type: post.type,
     countComments: post.countComments || 0,
+    readingTime: post.readingTime,
   }
 }
 
