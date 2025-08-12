@@ -86,7 +86,8 @@ export default async function ({ req, res, log, error }) {
       databases, 
       DATABASE_ID, 
       COLLECTION_ID, 
-      log
+      log,
+      error
     );
     
     // Generate final summary
@@ -230,7 +231,8 @@ function calculateFinalScore(post, newTimeScore) {
     return Math.max(0, Math.min(100, Math.round(finalScore * 100) / 100));
     
   } catch (err) {
-    console.error('Error calculating final score:', err);
+    // Silently handle calculation errors and return 0
+    // This prevents the entire algorithm from failing due to a single post scoring issue
     return 0; // Return 0 if calculation fails
   }
 }
@@ -261,7 +263,7 @@ function applyScoringAlgorithm(post) {
  * Process posts in batches for efficient database updates
  * Uses Appwrite's batch update with 1000 posts per batch
  */
-async function processPostsInBatches(posts, databases, databaseId, collectionId, log) {
+async function processPostsInBatches(posts, databases, databaseId, collectionId, log, error) {
   const results = {
     totalPosts: posts.length,
     processed: 0,
