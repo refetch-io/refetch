@@ -25,7 +25,7 @@ export class PostMetadataEnhancer {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
-  "category": "main" or "show" (main for general content, show for announcing new products/initiatives/work)",
+  "category": "main" or "show" (IMPORTANT: This is NOT the submission type. "main" = general tech news/analysis, "show" = product launches/announcements/initiatives)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
@@ -69,15 +69,17 @@ export class PostMetadataEnhancer {
   "qualityIssues": ["array explaining the quality score and any issues found"]
 }
 
-Guidelines:
+CRITICAL GUIDELINES:
+- The "category" field MUST be either "main" or "show" - NEVER "link", "job", or any other value
+- "link" is the submission type (external URL), NOT a content category
+- Content categories are:
+  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
+  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Be strict but fair with scoring
 - Identify clickbait, misleading content, and inappropriate material
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-- For category classification:
-  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Translate titles and descriptions accurately while maintaining the meaning and tech terminology
 - When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
 - Writing Style: Make descriptions playful and entertaining by using:
@@ -174,7 +176,7 @@ Guidelines:
     // Ensure all required fields exist and have proper types
     return {
       language: typeof metadata.language === 'string' ? metadata.language : 'English',
-      category: metadata.category === 'show' ? 'show' : 'main',
+      category: this.validateCategory(metadata.category),
       spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
       spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues : [],
       optimizedTitle: typeof metadata.optimizedTitle === 'string' ? metadata.optimizedTitle : '',
@@ -193,6 +195,16 @@ Guidelines:
       qualityScore: Math.max(0, Math.min(100, Number(metadata.qualityScore) || 50)),
       qualityIssues: Array.isArray(metadata.qualityIssues) ? metadata.qualityIssues : []
     };
+  }
+
+  private static validateCategory(category: any): 'main' | 'show' {
+    // Log invalid categories for debugging
+    if (category && !['main', 'show'].includes(category)) {
+      console.warn(`Invalid category returned by LLM: "${category}". Defaulting to "main".`);
+    }
+    
+    const validCategories = ['main', 'show'];
+    return validCategories.includes(category) ? category : 'main';
   }
 
   private static validateReadingLevel(level: any): 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert' {

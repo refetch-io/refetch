@@ -258,7 +258,7 @@ async function analyzePostWithAI(openai, postData, urlContent) {
 
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
-  "category": "main" or "show" (main for general content, show for announcing new products/initiatives/work)",
+  "category": "main" or "show" (IMPORTANT: This is NOT the submission type. "main" = general tech news/analysis, "show" = product launches/announcements/initiatives)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
@@ -303,15 +303,17 @@ async function analyzePostWithAI(openai, postData, urlContent) {
   }
 }
 
-Guidelines:
+CRITICAL GUIDELINES:
+- The "category" field MUST be either "main" or "show" - NEVER "link", "job", or any other value
+- "link" is the submission type (external URL), NOT a content category
+- Content categories are:
+  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
+  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Be strict but fair with scoring
 - Identify clickbait, misleading content, and inappropriate material
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-- For category classification:
-  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview"
-  * "main" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
 - Translate titles and descriptions accurately while maintaining the meaning and tech terminology
 - When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
 - Writing Style: Make descriptions playful and entertaining by using:
@@ -425,8 +427,12 @@ function buildAnalysisPrompt(postData, urlContent) {
  * Validate and sanitize the AI response metadata
  */
 function validateAndSanitizeMetadata(metadata, postData) {
+    // Validate and sanitize category field
+    const validatedCategory = validateCategory(metadata.category);
+    
     return {
         language: typeof metadata.language === 'string' ? metadata.language.substring(0, 10) : 'English',
+        category: validatedCategory,
         spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
         spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues.slice(0, 50) : [],
         spamScore: Math.max(0, Math.min(100, Number(metadata.spamScore) || 0)),
@@ -444,6 +450,20 @@ function validateAndSanitizeMetadata(metadata, postData) {
         titleTranslations: validateTranslations(metadata.titleTranslations),
         descriptionTranslations: validateTranslations(metadata.descriptionTranslations)
     };
+}
+
+/**
+ * Validate category field - must be 'main' or 'show'
+ */
+function validateCategory(category) {
+    const validCategories = ['main', 'show'];
+    
+    // Log invalid categories for debugging
+    if (category && !validCategories.includes(category)) {
+        console.warn(`⚠️ Invalid category returned by LLM: "${category}". Defaulting to "main".`);
+    }
+    
+    return validCategories.includes(category) ? category : 'main';
 }
 
 /**
