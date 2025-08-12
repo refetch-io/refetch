@@ -250,8 +250,7 @@ function applyScoringAlgorithm(post) {
   // Return updated data for batch update
   return {
     timeScore: newTimeScore,
-    score: finalScore,
-    lastScored: new Date().toISOString()
+    score: finalScore
   };
 }
 
@@ -283,15 +282,22 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
     
     try {
       // Apply scoring algorithm to all posts in the batch
+      // Create batch updates with only the fields we want to update
       const batchUpdates = batch.map(post => {
         const updatedData = applyScoringAlgorithm(post);
         return {
           $id: post.$id,
-          ...updatedData
+          timeScore: updatedData.timeScore,
+          score: updatedData.score
         };
       });
       
-      // Update batch using Appwrite's batch update (1000 posts per batch)
+      // Log the structure of the first batch update for debugging
+      if (results.batches === 1) {
+        log(`🔍 First batch update structure: ${JSON.stringify(batchUpdates[0])}`);
+      }
+      
+      // Update batch using Appwrite's batch update method
       await databases.updateDocuments(
         databaseId,
         collectionId,
