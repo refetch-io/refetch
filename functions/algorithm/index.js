@@ -298,24 +298,31 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       }
       
       // Update batch using Appwrite's bulk operations
-      // According to Appwrite docs, upsertDocuments expects a documents array
-      // We need to format the data correctly for upsert operations
-      const formattedDocuments = batchUpdates.map(update => ({
-        $id: update.$id,
-        timeScore: update.timeScore,
-        score: update.score
-      }));
+      // Use individual document updates for reliability
+      // Process each document update individually using updateDocument
+      let successfulUpdates = 0;
+      for (const update of batchUpdates) {
+        try {
+          await databases.updateDocument(
+            databaseId,
+            collectionId,
+            update.$id,
+            {
+              timeScore: update.timeScore,
+              score: update.score
+            }
+          );
+          successfulUpdates++;
+        } catch (updateError) {
+          log(`⚠️ Failed to update document ${update.$id}: ${updateError.message}`);
+          results.errors++;
+        }
+      }
       
-      await databases.upsertDocuments(
-        databaseId,
-        collectionId,
-        formattedDocuments
-      );
-      
-      results.updated += batch.length;
+      results.updated += successfulUpdates;
       results.processed += batch.length;
       
-      log(`✅ Batch ${results.batches} completed: ${batch.length} posts updated`);
+      log(`✅ Batch ${results.batches} completed: ${successfulUpdates}/${batch.length} posts updated successfully`);
       
       // Add delay between batches to avoid rate limiting
       if (batchEnd < posts.length) {
