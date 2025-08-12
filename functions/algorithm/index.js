@@ -123,6 +123,8 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
     const allPosts = [];
     let cursor = null;
     let totalFetched = 0;
+    let postsResponse;
+    let posts;
     
     do {
       // Build query with cursor pagination
@@ -139,13 +141,13 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
         queries.push(Query.cursorAfter(cursor));
       }
       
-      const postsResponse = await databases.listDocuments(
+      postsResponse = await databases.listDocuments(
         databaseId,
         collectionId,
         queries
       );
       
-      const posts = postsResponse.documents;
+      posts = postsResponse.documents;
       allPosts.push(...posts);
       totalFetched += posts.length;
       
@@ -159,7 +161,7 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
         await new Promise(resolve => setTimeout(resolve, 50));
       }
       
-    } while (cursor && postsResponse.documents.length === PROCESSING_CONFIG.batchSize);
+    } while (cursor && posts.length === PROCESSING_CONFIG.batchSize);
     
     log(`✅ Successfully fetched ${allPosts.length} posts using cursor pagination`);
     return allPosts;
