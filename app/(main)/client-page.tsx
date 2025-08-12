@@ -3,7 +3,8 @@ import { useState, useEffect, useMemo } from "react"
 import { RightSidebar } from "@/components/right-sidebar"
 import { StoriesCarousel } from "@/components/stories-carousel"
 import { type NewsItem } from "@/lib/data"
-import { handleVote, fetchUserVotesForResources, type VoteState } from "@/lib/voteHandler"
+import { handleVote, fetchUserVotesForResources } from "@/lib/voteHandler"
+import { type VoteState } from "@/lib/types"
 import { SponsoredAd } from "@/components/sponsored-ad"
 import { SearchAndFilter } from "@/components/search-and-filter"
 import { useAuth } from "@/contexts/auth-context"
@@ -427,6 +428,11 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
   const { user, isAuthenticated } = useAuth()
+
+  // Update newsItems when initialPosts changes
+  useEffect(() => {
+    setNewsItems(initialPosts)
+  }, [initialPosts])
 
   // Fetch votes for the current user when component mounts
   useEffect(() => {

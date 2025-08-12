@@ -31,7 +31,7 @@ export function MinesClientWrapper() {
 
       // Get JWT token using the cached JWT function
       const jwt = await getCachedJWT()
-      
+
       const response = await fetch('/api/user-submissions', {
         headers: {
           'Authorization': `Bearer ${jwt}`,
@@ -45,7 +45,7 @@ export function MinesClientWrapper() {
       }
 
       const data = await response.json()
-      setPosts(data.posts)
+      setPosts(data.posts || [])
     } catch (error) {
       console.error('Error fetching user submissions:', error)
       setError('Error fetching submissions. Please try again.')
@@ -53,15 +53,12 @@ export function MinesClientWrapper() {
   }
 
   if (authLoading) {
-    // Show empty state while checking authentication
     return <ClientPage initialPosts={[]} error={undefined} />
   }
 
   if (!isAuthenticated) {
-    // Show authentication required message
     return <ClientPage initialPosts={[]} error="Please log in to view your posts" />
   }
 
-  // Use the same ClientPage component as other pages for consistent layout
   return <ClientPage initialPosts={posts} error={error || undefined} />
 }
