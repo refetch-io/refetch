@@ -159,7 +159,7 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
         await new Promise(resolve => setTimeout(resolve, 50));
       }
       
-    } while (cursor && posts.length === PROCESSING_CONFIG.batchSize);
+    } while (cursor && postsResponse.documents.length === PROCESSING_CONFIG.batchSize);
     
     log(`✅ Successfully fetched ${allPosts.length} posts using cursor pagination`);
     return allPosts;
