@@ -228,6 +228,7 @@ export async function POST(request: NextRequest) {
       countDown: number;
       type: string;
       enhanced: boolean;
+      timeScore: number;
       link?: string;
       company?: string;
       location?: string;
@@ -241,7 +242,8 @@ export async function POST(request: NextRequest) {
       countUp: 0,
       countDown: 0,
       type: type,
-      enhanced: false // Default to false, will be updated by enhancement function
+      enhanced: false, // Default to false, will be updated by enhancement function
+      timeScore: 100 // New posts start with maximum time score
     }
 
     // Add type-specific fields

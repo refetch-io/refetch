@@ -53,6 +53,7 @@ export interface PostDocument {
   countDown: number;
   type: 'link' | 'show' | 'job';
   enhanced: boolean;
+  timeScore?: number; // Time-based score for ranking algorithm
   company?: string;
   location?: string;
   salary?: string;

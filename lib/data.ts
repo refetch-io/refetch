@@ -49,6 +49,7 @@ export interface AppwritePost {
   type?: string
   readingTime?: number
   spamScore?: number
+  timeScore?: number // Time-based score for ranking algorithm
   $createdAt: string
   $updatedAt: string
 }
