@@ -203,9 +203,7 @@ export default async function ({ req, res, log, error }) {
                     topics: metadata.topics,
                     tldr: metadata.tldr,
                     titleTranslations: JSON.stringify(metadata.titleTranslations),
-                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations),
-                    flagged: isHighSpam || isLowQuality, // Flag posts with high spam or low quality
-                    flaggedReason: isHighSpam ? 'High spam score detected' : (isLowQuality ? 'Low quality content' : null)
+                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations)
                 };
                 
                 // Log spam detection
