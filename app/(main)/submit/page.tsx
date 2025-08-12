@@ -88,28 +88,28 @@ export default function SubmitPage() {
   // Authentication will be checked when user tries to submit
 
   return (
-    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
+    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4">
       {/* Main Content */}
       <main className="flex-1 space-y-6 min-w-0">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4">
-          <TabsList className="grid w-full grid-cols-3 shadow-none p-0 gap-2">
-                                        <TabsTrigger value="link" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
-                <LinkIcon className="w-4 h-4 -ml-2" />
-                Link
-              </TabsTrigger>
-                                        <TabsTrigger value="show" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
-                <Monitor className="w-4 h-4 -ml-2" />
-                Show
-              </TabsTrigger>
-                                        <TabsTrigger value="job" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
-                <Briefcase className="w-4 h-4 -ml-2" />
-                Job
-              </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-1 shadow-none p-0 gap-2">
+            {/* <TabsTrigger value="link" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+              <LinkIcon className="w-4 h-4 -ml-2" />
+              Link
+            </TabsTrigger> */}
+            {/* <TabsTrigger value="show" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+              <Monitor className="w-4 h-4 -ml-2" />
+              Show
+            </TabsTrigger>
+            <TabsTrigger value="job" className="flex items-center justify-center gap-2 bg-gray-50 data-[state=active]:bg-white data-[state=active]:shadow-none rounded-lg">
+              <Briefcase className="w-4 h-4 -ml-2" />
+              Job
+            </TabsTrigger> */}
           </TabsList>
 
             {/* Link Tab */}
-            <TabsContent value="link" className="mt-4">
+            <TabsContent value="link">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
                   <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Link</h3>
@@ -139,12 +139,12 @@ export default function SubmitPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="description" className="text-sm">Description (optional)</Label>
+                      <Label htmlFor="description" className="text-sm">Comment (optional)</Label>
                       <Textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => handleInputChange('description', e.target.value)}
-                        placeholder="Add a brief description or context"
+                        placeholder="Start a discussion..."
                         rows={3}
                         className="text-sm"
                       />
@@ -159,7 +159,7 @@ export default function SubmitPage() {
             </TabsContent>
 
             {/* Show Tab */}
-            <TabsContent value="show" className="mt-4">
+            {/* <TabsContent value="show" className="mt-4">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
                   <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Show</h3>
@@ -206,10 +206,10 @@ export default function SubmitPage() {
                   </form>
                 </div>
               </div>
-            </TabsContent>
+            </TabsContent> */}
 
             {/* Job Tab */}
-            <TabsContent value="job" className="mt-4">
+            {/* <TabsContent value="job" className="mt-4">
               <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
                 <div className="flex-1 flex flex-col justify-center min-w-0">
                   <h3 className="font-normal text-gray-900 mb-3 font-heading text-sm">Submit Job</h3>
@@ -289,7 +289,7 @@ export default function SubmitPage() {
                   </form>
                 </div>
               </div>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
       </main>
     </div>
