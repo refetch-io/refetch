@@ -297,11 +297,12 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
         log(`🔍 First batch update structure: ${JSON.stringify(batchUpdates[0])}`);
       }
       
-      // Update batch using Appwrite's batch update method
+      // Update batch using Appwrite's bulk operations
+      // According to Appwrite docs, updateDocuments expects individual document arguments, not an array
       await databases.updateDocuments(
         databaseId,
         collectionId,
-        batchUpdates
+        ...batchUpdates
       );
       
       results.updated += batch.length;
