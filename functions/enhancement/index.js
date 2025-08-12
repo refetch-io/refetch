@@ -63,7 +63,8 @@ CRITICAL GUIDELINES:
 - The "type" field MUST be either "link" or "show" - NEVER "main", "job", or any other value
 - Enhanced types are:
   * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings
+  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings, acquisitions, mergers, business deals, company sales, investment rounds, funding announcements
+- IMPORTANT: Acquisition offers, mergers, company sales, and business transactions should be classified as "link", NOT "show". The "show" type is specifically for product launches and feature announcements, not business deals.
 - SPAM DETECTION: Be extremely strict about identifying low-quality content that adds zero value:
   * Posts with minimal content like "test", "test 2", "hello", "checking", etc. should get spamScore 90-100
   * Posts with no meaningful description or just placeholder text should get spamScore 80-100
