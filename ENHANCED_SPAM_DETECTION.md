@@ -143,11 +143,10 @@ A post with a broken URL would be detected as:
 - `lib/openai.ts` - Unused class with duplicate prompt
 
 **After**: Consolidated to a single, maintainable structure:
-- `lib/prompts.ts` - Centralized prompt configuration
-- `functions/enhancement/index.js` - Uses shared prompt
+- `functions/enhancement/index.js` - Contains the system prompt directly
 - `lib/openai.ts` - Deleted (was unused)
 
-This eliminates duplication, ensures consistency, and makes maintenance easier.
+This eliminates duplication, ensures consistency, and makes maintenance easier. The prompt is now embedded directly in the enhancement function, which is the most reliable approach for serverless environments.
 
 ### Files Modified
 
@@ -156,11 +155,7 @@ This eliminates duplication, ensures consistency, and makes maintenance easier.
    - Automatic flagging of high-spam/low-quality posts
    - Detailed logging of flagged content
    - Counter tracking for flagged posts
-
-2. **`lib/prompts.ts`** (NEW)
-   - Centralized system prompt configuration
-   - Eliminates duplication across the codebase
-   - Single source of truth for AI analysis rules
+   - System prompt embedded directly (no external dependencies)
 
 ### New Database Fields
 
