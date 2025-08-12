@@ -117,6 +117,11 @@ export function PostCard({
                 Show RF
               </span>
             )}
+            {item.spamScore && item.spamScore >= 90 && (
+              <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-red-50 text-red-600 rounded-md whitespace-nowrap mr-1">
+                Spam
+              </span>
+            )}
             {item.title}
           </Link>
           {hasExternalLink && (

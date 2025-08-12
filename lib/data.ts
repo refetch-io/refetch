@@ -28,6 +28,7 @@ export interface NewsItem {
   type?: string
   countComments?: number
   readingTime?: number
+  spamScore?: number
   // Vote information
   currentVote?: 'up' | 'down' | null
 }
@@ -47,6 +48,7 @@ export interface AppwritePost {
   link?: string
   type?: string
   readingTime?: number
+  spamScore?: number
   $createdAt: string
   $updatedAt: string
 }
@@ -299,6 +301,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     type: post.type,
     countComments: post.countComments || 0,
     readingTime: post.readingTime,
+    spamScore: (post as any).spamScore,
   }
 }
 
@@ -402,6 +405,8 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       countComments: post.countComments,
       link: post.link,
       type: post.type,
+      readingTime: post.readingTime,
+      spamScore: post.spamScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -725,6 +730,8 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
       countComments: post.countComments,
       link: post.link,
       type: post.type,
+      readingTime: post.readingTime,
+      spamScore: post.spamScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -803,6 +810,8 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
       countComments: post.countComments,
       link: post.link,
       type: post.type,
+      readingTime: post.readingTime,
+      spamScore: post.spamScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -1102,6 +1111,8 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       countComments: post.countComments,
       link: post.link,
       type: post.type,
+      readingTime: post.readingTime,
+      spamScore: post.spamScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
