@@ -195,8 +195,8 @@ function calculateTimeDecayScore(createdAt, currentTimeScore) {
   const decayRate = 0.1; // Controls how quickly the score decays
   const newTimeScore = currentTimeScore * Math.exp(-decayRate * hoursSinceCreation);
   
-  // Ensure the score doesn't go below 0 and round to 2 decimal places
-  return Math.max(0, Math.round(newTimeScore * 100) / 100);
+  // Ensure the score is within 0-100 range and convert to integer
+  return Math.max(0, Math.min(100, Math.round(newTimeScore)));
 }
 
 /**
@@ -227,8 +227,8 @@ function calculateFinalScore(post, newTimeScore) {
                       safetyScoreComponent + 
                       qualityScoreComponent;
     
-    // Ensure score is within 0-100 range and round to 2 decimal places
-    return Math.max(0, Math.min(100, Math.round(finalScore * 100) / 100));
+    // Ensure score is within 0-100 range and convert to integer
+    return Math.max(0, Math.min(100, Math.round(finalScore)));
     
   } catch (err) {
     // Silently handle calculation errors and return 0
