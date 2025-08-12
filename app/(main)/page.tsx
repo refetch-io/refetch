@@ -22,5 +22,5 @@ export default async function RefetchHomePage() {
   // Add timestamp for debugging
   console.log(`Page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)
   
-  return <ClientPage initialPosts={result.posts} error={result.error} />
+  return <ClientPage initialPosts={result.posts} error={result.error} sortType="score" />
 }

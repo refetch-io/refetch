@@ -10,6 +10,7 @@ import { SearchAndFilter } from "@/components/search-and-filter"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { PostCard } from "@/components/post-card"
+import { Pagination } from "@/components/pagination"
 
 import {
   Globe,
@@ -421,18 +422,67 @@ function RotatingAdCopy() {
 interface ClientPageProps {
   initialPosts: NewsItem[]
   error?: string
+  sortType?: 'score' | 'new' | 'show'
+  userId?: string
 }
 
-export function ClientPage({ initialPosts, error }: ClientPageProps) {
+export function ClientPage({ initialPosts, error, sortType = 'score', userId }: ClientPageProps) {
   const [newsItems, setNewsItems] = useState<NewsItem[]>(initialPosts)
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
+  const [currentPage, setCurrentPage] = useState(1)
   const { user, isAuthenticated } = useAuth()
+
+  const POSTS_PER_PAGE = 25
+  const MAX_PAGES = 10
 
   // Update newsItems when initialPosts changes
   useEffect(() => {
     setNewsItems(initialPosts)
+    setCurrentPage(1)
   }, [initialPosts])
+
+  // Fetch posts for a specific page
+  const fetchPostsForPage = async (page: number) => {
+    if (page < 1 || page > MAX_PAGES) return
+    
+    try {
+      const offset = (page - 1) * POSTS_PER_PAGE
+      
+      let response
+      if (userId) {
+        // For user submissions (mines page)
+        const jwt = await getCachedJWT()
+        response = await fetch(`/api/user-submissions?limit=${POSTS_PER_PAGE}&offset=${offset}`, {
+          headers: {
+            'Authorization': `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+          },
+        })
+      } else {
+        // For main pages (score, new, show)
+        response = await fetch(`/api/posts?sortType=${sortType}&limit=${POSTS_PER_PAGE}&offset=${offset}`)
+      }
+      
+      if (response.ok) {
+        const data = await response.json()
+        setNewsItems(data.posts || [])
+        setCurrentPage(page)
+      }
+    } catch (error) {
+      console.error('Error fetching posts for page:', error)
+    }
+  }
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > MAX_PAGES) return
+    fetchPostsForPage(page)
+  }
+
+  // Calculate pagination state
+  const hasNextPage = currentPage < MAX_PAGES && newsItems.length === POSTS_PER_PAGE
+  const hasPrevPage = currentPage > 1
 
   // Fetch votes for the current user when component mounts
   useEffect(() => {
@@ -560,7 +610,7 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
         {/* <SearchAndFilter /> */}
 
         {/* News Items List - All posts rendered at once */}
-        <div className="space-y-4">
+        <div className="space-y-4 min-h-screen">
           {newsItems.map((item, index) => {
             // Calculate the position in the list
             const position = index + 1
@@ -593,8 +643,16 @@ export function ClientPage({ initialPosts, error }: ClientPageProps) {
 
         {/* Gen Z Remark */}
         <div className="text-center text-gray-500 text-sm mt-20 mb-10">
-          <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass 🌱.</p>
+          <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass 🌱, or paginate below 👇</p>
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+          hasPrevPage={hasPrevPage}
+          onPageChange={handlePageChange}
+        />
       </main>
 
       {/* Right Sidebar and Sponsored Ad */}

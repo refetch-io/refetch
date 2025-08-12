@@ -21,5 +21,5 @@ export default async function ShowPage() {
   // Add timestamp for debugging
   console.log(`Show page rendered at ${new Date().toISOString()} with ${result.posts.length} show posts`)
   
-  return <ClientPage initialPosts={result.posts} error={result.error} />
+  return <ClientPage initialPosts={result.posts} error={result.error} sortType="show" />
 } 

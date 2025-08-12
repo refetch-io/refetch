@@ -660,8 +660,13 @@ export async function fetchPostsFromAppwriteWithVotes(userId?: string): Promise<
   return fetchPostsFromAppwriteWithSortAndVotes('score', userId)
 }
 
-// Updated function to fetch posts with custom sorting and vote information
-export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' | 'new' | 'show', userId?: string): Promise<{ posts: NewsItem[], error?: string }> {
+// Server-side function to fetch posts from Appwrite with custom sorting and vote information
+export async function fetchPostsFromAppwriteWithSortAndVotes(
+  sortType: 'score' | 'new' | 'show', 
+  userId?: string,
+  limit: number = 25,
+  offset: number = 0
+): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
     return { posts: [], error: 'Missing Appwrite configuration' }
@@ -711,13 +716,17 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
         break
     }
     
+    // Add pagination queries
+    queries.push(Query.limit(limit))
+    queries.push(Query.offset(offset))
+    
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}, limit: ${limit}, offset: ${offset}`)
 
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
@@ -727,7 +736,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.count,
+      count: post.score,
       countComments: post.countComments,
       link: post.link,
       type: post.type,
@@ -772,7 +781,11 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(sortType: 'score' |
 }
 
 // Updated function to fetch user submissions with vote information
-export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string): Promise<{ posts: NewsItem[], error?: string }> {
+export async function fetchUserSubmissionsFromAppwriteWithVotes(
+  userId: string,
+  limit: number = 25,
+  offset: number = 0
+): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
     return { posts: [], error: 'Missing Appwrite configuration' }
@@ -793,11 +806,13 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
         Query.equal('userId', userId),
-        Query.orderDesc('$createdAt')
+        Query.orderDesc('$createdAt'),
+        Query.limit(limit),
+        Query.offset(offset)
       ]
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}`)
+    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}, limit: ${limit}, offset: ${offset}`)
 
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
@@ -807,7 +822,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(userId: string):
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.count,
+      count: post.score,
       countComments: post.countComments,
       link: post.link,
       type: post.type,
@@ -1041,7 +1056,9 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
 // Updated function to fetch posts with comments in batch
 export async function fetchPostsFromAppwriteWithCommentsAndVotes(
   sortType: 'score' | 'new' | 'show' = 'score', 
-  userId?: string
+  userId?: string,
+  limit: number = 25,
+  offset: number = 0
 ): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
     console.warn('Appwrite configuration missing.')
@@ -1092,13 +1109,17 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
         break
     }
     
+    // Add pagination queries
+    queries.push(Query.limit(limit))
+    queries.push(Query.offset(offset))
+    
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
+    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}, limit: ${limit}, offset: ${offset}`)
 
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
@@ -1108,7 +1129,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.count,
+      count: post.score,
       countComments: post.countComments,
       link: post.link,
       type: post.type,

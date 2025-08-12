@@ -17,6 +17,11 @@ const account = new Account(jwtClient)
 
 export async function GET(request: NextRequest) {
   try {
+    // Get pagination parameters from query string
+    const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get('limit') || '25')
+    const offset = parseInt(searchParams.get('offset') || '0')
+    
     // Get and validate JWT token from Authorization header
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -40,13 +45,15 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch posts by the current user
+    // Fetch posts by the current user with pagination
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [
         Query.equal('userId', user.$id),
-        Query.orderDesc('$createdAt')
+        Query.orderDesc('$createdAt'),
+        Query.limit(limit),
+        Query.offset(offset)
       ]
     )
 
@@ -62,17 +69,16 @@ export async function GET(request: NextRequest) {
       
       // Add vote information to each post
       appwritePosts.forEach(post => {
-        post.currentVote = voteMap.get(post.id) || null
+        const voteState = voteMap.get(post.id)
+        if (voteState !== undefined) {
+          post.currentVote = voteState
+        }
       })
     }
 
-    return NextResponse.json({
-      posts: appwritePosts,
-      total: posts.total
-    })
-
+    return NextResponse.json({ posts: appwritePosts })
   } catch (error) {
-    console.error('Error fetching user submissions:', error)
+    console.error('Error in user-submissions API:', error)
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

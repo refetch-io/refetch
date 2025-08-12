@@ -25,14 +25,14 @@ export function MinesClientWrapper() {
     }
   }, [isAuthenticated, authLoading, user, router])
 
-  const fetchUserSubmissions = async () => {
+  const fetchUserSubmissions = async (limit: number = 25, offset: number = 0) => {
     try {
       setError(null)
 
       // Get JWT token using the cached JWT function
       const jwt = await getCachedJWT()
 
-      const response = await fetch('/api/user-submissions', {
+      const response = await fetch(`/api/user-submissions?limit=${limit}&offset=${offset}`, {
         headers: {
           'Authorization': `Bearer ${jwt}`,
           'Content-Type': 'application/json',
@@ -53,12 +53,12 @@ export function MinesClientWrapper() {
   }
 
   if (authLoading) {
-    return <ClientPage initialPosts={[]} error={undefined} />
+    return <ClientPage initialPosts={[]} error={undefined} userId={user?.$id} />
   }
 
   if (!isAuthenticated) {
-    return <ClientPage initialPosts={[]} error="Please log in to view your posts" />
+    return <ClientPage initialPosts={[]} error="Please log in to view your posts" userId={user?.$id} />
   }
 
-  return <ClientPage initialPosts={posts} error={error || undefined} />
+  return <ClientPage initialPosts={posts} error={error || undefined} userId={user?.$id} />
 }
