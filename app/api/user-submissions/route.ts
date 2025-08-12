@@ -53,7 +53,25 @@ export async function GET(request: NextRequest) {
         Query.equal('userId', user.$id),
         Query.orderDesc('$createdAt'),
         Query.limit(limit),
-        Query.offset(offset)
+        Query.offset(offset),
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'title', 
+          'description',
+          'userId',
+          'userName',
+          'countUp',
+          'countDown',
+          'score',
+          'countComments',
+          'link',
+          'type',
+          'readingTime',
+          'spamScore',
+          '$createdAt',
+          '$updatedAt'
+        ])
       ]
     )
 

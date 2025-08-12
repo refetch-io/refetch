@@ -139,7 +139,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
   }
 
   return (
-    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-3xl mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
+    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-[738px] mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
       <div className="flex-1 flex flex-col justify-center min-w-0">
         <div 
           className={`flex items-center justify-between ${isMinimized ? 'mb-0' : 'mb-3'} ${isHydrated ? 'cursor-pointer' : ''}`}

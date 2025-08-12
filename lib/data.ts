@@ -386,6 +386,25 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
         break
     }
     
+    // Select only the attributes we actually use to improve performance
+    queries.push(Query.select([
+      '$id',
+      'title', 
+      'description',
+      'userId',
+      'userName',
+      'countUp',
+      'countDown',
+      'score',
+      'countComments',
+      'link',
+      'type',
+      'readingTime',
+      'spamScore',
+      '$createdAt',
+      '$updatedAt'
+    ]))
+    
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
@@ -461,7 +480,15 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       [
         Query.equal('postId', postId),
         Query.orderDesc('$createdAt'),
-        Query.limit(MAX_COMMENTS_PER_POST)
+        Query.limit(MAX_COMMENTS_PER_POST),
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'userName',
+          'content',
+          'userId',
+          '$createdAt'
+        ])
       ]
     )
 
@@ -492,7 +519,7 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
   }
 
   try {
-    const { Client, Databases } = await import('node-appwrite')
+    const { Client, Databases, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
@@ -560,7 +587,25 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
         Query.equal('userId', userId),
-        Query.orderDesc('$createdAt')
+        Query.orderDesc('$createdAt'),
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'title', 
+          'description',
+          'userId',
+          'userName',
+          'countUp',
+          'countDown',
+          'score',
+          'countComments',
+          'link',
+          'type',
+          'readingTime',
+          'spamScore',
+          '$createdAt',
+          '$updatedAt'
+        ])
       ]
     )
 
@@ -621,7 +666,12 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
         [
           Query.equal('userId', userId),
           Query.equal('resourceType', 'post'),
-          Query.limit(100) // Limit to prevent too many results
+          Query.limit(100), // Limit to prevent too many results
+          // Select only the attributes we actually use to improve performance
+          Query.select([
+            'resourceId',
+            'count'
+          ])
         ]
       )
 
@@ -720,6 +770,25 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
     queries.push(Query.limit(limit))
     queries.push(Query.offset(offset))
     
+    // Select only the attributes we actually use to improve performance
+    queries.push(Query.select([
+      '$id',
+      'title', 
+      'description',
+      'userId',
+      'userName',
+      'countUp',
+      'countDown',
+      'score',
+      'countComments',
+      'link',
+      'type',
+      'readingTime',
+      'spamScore',
+      '$createdAt',
+      '$updatedAt'
+    ]))
+    
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
@@ -808,7 +877,25 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
         Query.equal('userId', userId),
         Query.orderDesc('$createdAt'),
         Query.limit(limit),
-        Query.offset(offset)
+        Query.offset(offset),
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'title', 
+          'description',
+          'userId',
+          'userName',
+          'countUp',
+          'countDown',
+          'score',
+          'countComments',
+          'link',
+          'type',
+          'readingTime',
+          'spamScore',
+          '$createdAt',
+          '$updatedAt'
+        ])
       ]
     )
 
@@ -886,7 +973,16 @@ export async function fetchCommentsForPostsBatchServer(postIds: string[]): Promi
       [
         Query.equal('postId', postIds), // This will match any of the post IDs
         Query.orderDesc('$createdAt'),
-        Query.limit(1000) // Increase limit to get more comments
+        Query.limit(1000), // Increase limit to get more comments
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          'postId',
+          'userName',
+          'content',
+          'userId',
+          'count',
+          '$createdAt'
+        ])
       ]
     )
 
@@ -1019,7 +1115,12 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
         [
           Query.equal('userId', userId),
           Query.equal('resourceType', 'post'),
-          Query.limit(100) // Limit to prevent too many results
+          Query.limit(100), // Limit to prevent too many results
+          // Select only the attributes we actually use to improve performance
+          Query.select([
+            'resourceId',
+            'count'
+          ])
         ]
       )
 
@@ -1112,6 +1213,25 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
     // Add pagination queries
     queries.push(Query.limit(limit))
     queries.push(Query.offset(offset))
+    
+    // Select only the attributes we actually use to improve performance
+    queries.push(Query.select([
+      '$id',
+      'title', 
+      'description',
+      'userId',
+      'userName',
+      'countUp',
+      'countDown',
+      'score',
+      'countComments',
+      'link',
+      'type',
+      'readingTime',
+      'spamScore',
+      '$createdAt',
+      '$updatedAt'
+    ]))
     
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
