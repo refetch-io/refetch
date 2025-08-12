@@ -24,6 +24,45 @@ const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || ''
 const COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
 const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
 
+// Abuse protection constants
+const MAX_SUBMISSIONS_PER_16_HOURS = 5
+const SUBMISSION_WINDOW_HOURS = 16
+
+// Helper function to check user submission count in the last 16 hours
+async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: boolean; count: number; limit: number }> {
+  try {
+    // Calculate the timestamp for 16 hours ago
+    const sixteenHoursAgo = new Date(Date.now() - (SUBMISSION_WINDOW_HOURS * 60 * 60 * 1000))
+    
+    console.log(`Checking submissions for user ${userId} since ${sixteenHoursAgo.toISOString()}`)
+    
+    // Query for posts created by this user in the last 16 hours
+    const recentPosts = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTION_ID,
+      [
+        Query.equal('userId', userId),
+        Query.greaterThan('$createdAt', sixteenHoursAgo.toISOString())
+      ]
+    )
+    
+    const submissionCount = recentPosts.documents.length
+    const allowed = submissionCount < MAX_SUBMISSIONS_PER_16_HOURS
+    
+    console.log(`Found ${submissionCount} submissions for user ${userId} in last ${SUBMISSION_WINDOW_HOURS} hours`)
+    
+    return {
+      allowed,
+      count: submissionCount,
+      limit: MAX_SUBMISSIONS_PER_16_HOURS
+    }
+  } catch (error) {
+    console.error('Error checking user submission limit:', error)
+    // If we can't check the limit, allow the submission to avoid blocking legitimate users
+    return { allowed: true, count: 0, limit: MAX_SUBMISSIONS_PER_16_HOURS }
+  }
+}
+
 // Helper function to check for duplicate URLs
 async function checkDuplicateUrl(url: string): Promise<boolean> {
   try {
@@ -150,7 +189,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Step 3: Check for duplicate URLs if URL is provided
+    // Step 3: Check user submission limit (abuse protection)
+    const submissionLimitCheck = await checkUserSubmissionLimit(user.$id)
+    console.log(`User ${user.$id} submission check: ${submissionLimitCheck.count}/${submissionLimitCheck.limit} in last ${SUBMISSION_WINDOW_HOURS} hours`)
+    
+    if (!submissionLimitCheck.allowed) {
+      console.log(`User ${user.$id} exceeded submission limit: ${submissionLimitCheck.count}/${submissionLimitCheck.limit}`)
+      return NextResponse.json(
+        { 
+          message: `Submission limit exceeded. You can only submit ${submissionLimitCheck.limit} posts in a ${SUBMISSION_WINDOW_HOURS}-hour period. You have submitted ${submissionLimitCheck.count} posts in the last ${SUBMISSION_WINDOW_HOURS} hours.`,
+          limit: submissionLimitCheck.limit,
+          currentCount: submissionLimitCheck.count,
+          windowHours: SUBMISSION_WINDOW_HOURS
+        },
+        { status: 429 }
+      )
+    }
+
+    // Step 4: Check for duplicate URLs if URL is provided
     if (url && url.trim().length > 0) {
       const isDuplicate = await checkDuplicateUrl(url)
       if (isDuplicate) {
@@ -161,7 +217,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Step 4: Prepare the document data
+    // Step 5: Prepare the document data
     const documentData: {
       title: string;
       description: string;
@@ -210,7 +266,7 @@ export async function POST(request: NextRequest) {
       documentData
     )
 
-    // Step 5: Create comment with user's description if provided
+    // Step 6: Create comment with user's description if provided
     if (description && description.trim().length > 0) {
       try {
         const commentId = await createDescriptionComment(
