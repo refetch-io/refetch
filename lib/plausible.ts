@@ -226,8 +226,6 @@ export function trackPostClick(postId: string, postTitle: string, isExternal: bo
     
     ;(window as any).plausible(eventName, { props })
     console.log(`Tracked ${eventName}:`, props)
-  } else {
-    console.log('Plausible not available for tracking:', { postId, postTitle, isExternal })
   }
 }
 
@@ -242,7 +240,5 @@ export function trackPageView(pageName: string, additionalProps?: Record<string,
     
     ;(window as any).plausible('Page View', { props })
     console.log('Tracked Page View:', props)
-  } else {
-    console.log('Plausible not available for page view tracking:', { pageName, additionalProps })
   }
 }

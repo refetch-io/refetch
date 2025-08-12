@@ -31,7 +31,6 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
 
   // If no API key or site ID, return mock data for development
   if (!apiKey || !siteId) {
-    console.log(`No API key or site ID configured, using mock data for ${dataType}`)
     return generateMockData(dataType)
   }
 
@@ -39,12 +38,7 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
     // Create proper query using the new Plausible implementation
     const query: PlausibleQuery = createQuery(siteId, dataType)
 
-    console.log(`=== PLAUSIBLE API REQUEST START ===`)
-    console.log(`Data Type: ${dataType}`)
-    console.log(`Site ID: ${siteId}`)
-    console.log(`API Key: ${apiKey ? 'Set' : 'Missing'}`)
-    console.log(`Request Query:`, JSON.stringify(query, null, 2))
-    console.log(`Endpoint: ${PLAUSIBLE_API_URL}`)
+
 
     const response = await fetch(PLAUSIBLE_API_URL, {
       method: 'POST',
@@ -55,9 +49,7 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
       body: JSON.stringify(query)
     })
 
-    console.log(`=== PLAUSIBLE API RESPONSE ===`)
-    console.log(`Status: ${response.status} ${response.statusText}`)
-    console.log(`URL: ${response.url}`)
+
 
     if (!response.ok) {
       const errorText = await response.text()
@@ -69,16 +61,12 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
 
     // Get the response text first for logging
     const responseText = await response.text()
-    console.log(`=== PLAUSIBLE API RESPONSE BODY ===`)
-    console.log(`Response length: ${responseText.length} characters`)
-    console.log(`Raw response:`, responseText)
 
     // Try to parse as JSON
     let result: any
     try {
       result = JSON.parse(responseText)
-      console.log(`=== PARSED JSON RESPONSE ===`)
-      console.log(`Parsed successfully:`, JSON.stringify(result, null, 2))
+
     } catch (parseError) {
       console.error(`=== JSON PARSE ERROR ===`)
       console.error(`Failed to parse response as JSON:`, parseError)
@@ -100,17 +88,12 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
     
     const plausibleResult: PlausibleResponse = result
 
-    console.log(`=== TRANSFORMING DATA ===`)
-    console.log(`Data type: ${dataType}`)
-    console.log(`Results array length: ${plausibleResult.results?.length || 0}`)
-    console.log(`Results structure:`, plausibleResult.results)
+
 
     // Transform the data using the new implementation
     const transformedData = transformData(plausibleResult, dataType)
     
-    console.log(`=== TRANSFORMATION COMPLETE ===`)
-    console.log(`Final transformed data:`, transformedData)
-    console.log(`=== PLAUSIBLE API REQUEST END ===`)
+
     
     return transformedData
   } catch (error) {
