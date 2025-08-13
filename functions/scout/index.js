@@ -28,12 +28,10 @@ Analyze the provided HTML content and return a JSON response with the following 
 {
   "refetchTitle": "A title that feels like refetch style - similar to HN but focused on open source alternatives, tech discussions, and developer interests. Should be clear, informative, and engaging without being clickbait.",
   "discussionStarter": "A short, engaging comment (2-3 sentences) that will kick off a good discussion. Should highlight the key points, ask a thought-provoking question, or share an interesting perspective that will get developers talking.",
+  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality for the refetch community)
 }
 
 CRITICAL GUIDELINES:
-- The "type" field MUST be either "link" or "show"
-  * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
-  * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings, acquisitions, mergers, business deals, company sales, investment rounds, funding announcements
 - "refetchTitle" should be in the style of Hacker News titles - clear, informative, and developer-focused
 - "discussionStarter" should be the kind of comment that would start a good conversation on HN or refetch
 - Focus on content that would be valuable to developers, open source enthusiasts, and tech professionals
@@ -179,6 +177,7 @@ async function addArticleToDatabase(article) {
       count: 0,
       countUp: 0,
       countDown: 0,
+      type: 'link', // Default to 'link' type
       enhanced: false, // Will be enhanced by the enhancement function later
       timeScore: 100,
       link: cleanUrl(article.url)
@@ -311,7 +310,7 @@ async function scoutArticles() {
     // Sort by quality score (highest first) and take top articles
     const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '10');
     const sortedArticles = analyzedArticles
-      .filter(article => article.analysis.qualityScore >= 60) // Basic quality filter
+      .filter(article => article.analysis.qualityScore >= 60 && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
       .sort((a, b) => b.analysis.qualityScore - a.analysis.qualityScore)
       .slice(0, maxArticles);
     
@@ -355,22 +354,22 @@ async function scoutArticles() {
 }
 
 // Main function entry point
-export default async function (req, res) {
+export default async function (req) {
   try {
     console.log('Scout function invoked');
     
     // Run the scout function
     const result = await scoutArticles();
     
-    // Return the result
-    return res.json(result);
+    // Return the result directly (Appwrite Functions handle the response)
+    return result;
     
   } catch (error) {
     console.error('Unexpected error in scout function:', error);
-    return res.json({
+    return {
       success: false,
       error: error.message,
       executionTime: '0s'
-    });
+    };
   }
 }
