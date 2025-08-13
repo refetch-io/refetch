@@ -15,11 +15,21 @@ export const metadata: Metadata = {
     description: "Discover curated tech news, discussions, and community-driven content on Refetch, the open-source alternative to Hacker News.",
     type: "website",
     url: "https://refetch.io",
+    images: [
+      {
+        url: "https://refetch.io/api/og/test",
+        width: 1200,
+        height: 630,
+        alt: "Refetch - Tech news and discussions",
+      },
+    ],
+    siteName: "Refetch",
   },
   twitter: {
     card: "summary_large_image",
     title: "Refetch - Open Source Hacker News Alternative",
     description: "Discover curated tech news, discussions, and community-driven content on Refetch, the open-source alternative to Hacker News.",
+    images: ["https://refetch.io/api/og/test"],
   },
 }
 

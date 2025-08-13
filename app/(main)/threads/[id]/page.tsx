@@ -10,6 +10,54 @@ interface ThreadPageProps {
   params: Promise<{ id: string }>
 }
 
+export async function generateMetadata({ params }: ThreadPageProps): Promise<Metadata> {
+  try {
+    const unwrappedParams = await params
+    const article = await fetchPostById(unwrappedParams.id)
+    
+    if (!article) {
+      return {
+        title: 'Thread Not Found',
+        description: 'The requested thread could not be found.',
+      }
+    }
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://refetch.io'
+    
+    return {
+      title: `${article.title} | Refetch`,
+      description: article.description || `Discussion about ${article.title}`,
+      openGraph: {
+        title: article.title,
+        description: article.description || `Discussion about ${article.title}`,
+        type: 'article',
+        url: `${baseUrl}/threads/${article.id}`,
+        images: [
+          {
+            url: `${baseUrl}/api/og/thread/${article.id}`,
+            width: 1200,
+            height: 630,
+            alt: article.title,
+          },
+        ],
+        siteName: 'Refetch',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: article.title,
+        description: article.description || `Discussion about ${article.title}`,
+        images: [`${baseUrl}/api/og/thread/${article.id}`],
+      },
+    }
+  } catch (error) {
+    console.error('Error generating metadata:', error)
+    return {
+      title: 'Thread | Refetch',
+      description: 'Tech news and discussions on Refetch.',
+    }
+  }
+}
+
 export default async function ThreadPage({ params }: ThreadPageProps) {
   try {
     const unwrappedParams = await params
