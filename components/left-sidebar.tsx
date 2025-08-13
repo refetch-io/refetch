@@ -23,7 +23,7 @@ const navigationItems: NavigationItem[] = [
     href: "/",
     label: "Top",
     icon: TrendingUp,
-    badge: "+1k",
+    // badge: "+1k",
     isSpecial: true
   },
   {
