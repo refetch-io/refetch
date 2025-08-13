@@ -23,20 +23,24 @@ const TARGET_WEBSITES = [
 // System prompt for AI content analysis
 const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platform called "refetch" (similar to Hacker News but an open source alternative). 
 
+IMPORTANT: You must respond with ONLY valid JSON. Do not include any text before or after the JSON response.
+
 Analyze the provided HTML content and return a JSON response with the following structure:
 
 {
   "refetchTitle": "A title that feels like refetch style - similar to HN but focused on open source alternatives, tech discussions, and developer interests. Should be clear, informative, and engaging without being clickbait.",
   "discussionStarter": "A short, engaging comment (2-3 sentences) that will kick off a good discussion. Should highlight the key points, ask a thought-provoking question, or share an interesting perspective that will get developers talking.",
-  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality for the refetch community)
+  "qualityScore": 75
 }
 
 CRITICAL GUIDELINES:
+- Respond with ONLY the JSON object, no additional text
 - "refetchTitle" should be in the style of Hacker News titles - clear, informative, and developer-focused
 - "discussionStarter" should be the kind of comment that would start a good conversation on HN or refetch
 - Focus on content that would be valuable to developers, open source enthusiasts, and tech professionals
-- Quality score should reflect how well the content fits the refetch community's interests
-- Look for articles with substantial content, not just headlines or minimal text`;
+- Quality score should reflect how well the content fits the refetch community's interests (0-100)
+- Look for articles with substantial content, not just headlines or minimal text
+- If you cannot analyze the content properly, return null for all fields`;
 
 // Initialize clients
 let appwriteClient, databases, openai;
@@ -125,13 +129,31 @@ Please return a JSON response with the structure specified in the system prompt.
     const response = completion.choices[0].message.content;
     
     try {
-      const analysis = JSON.parse(response);
+      // Try to extract JSON from the response
+      let jsonResponse = response;
+      
+      // If the response contains text before JSON, try to extract just the JSON part
+      if (response.includes('{') && response.includes('}')) {
+        const startIndex = response.indexOf('{');
+        const endIndex = response.lastIndexOf('}') + 1;
+        jsonResponse = response.substring(startIndex, endIndex);
+      }
+      
+      const analysis = JSON.parse(jsonResponse);
+      
+      // Validate that we have the required fields
+      if (!analysis.refetchTitle || !analysis.discussionStarter || typeof analysis.qualityScore !== 'number') {
+        console.error(`AI response missing required fields for ${url}:`, analysis);
+        return null;
+      }
+      
       return {
         url: url,
         analysis: analysis
       };
     } catch (parseError) {
       console.error(`Error parsing AI response for ${url}:`, parseError);
+      console.error(`Raw response:`, response.substring(0, 200) + '...');
       return null;
     }
     
@@ -153,6 +175,9 @@ async function checkDuplicateUrl(url) {
     return existingPosts.documents.length > 0;
   } catch (error) {
     console.error('Error checking for duplicate URL:', error);
+    if (error.message.includes('not authorized')) {
+      console.error('Database permission error - check function scopes');
+    }
     return false;
   }
 }
@@ -192,10 +217,12 @@ async function addArticleToDatabase(article) {
       documentData
     );
     
+    console.log(`Successfully created post: ${createdDocument.$id}`);
+    
     // Create the discussion starter comment
     if (analysis.discussionStarter) {
       try {
-        await databases.createDocument(
+        const commentDocument = await databases.createDocument(
           process.env.APPWRITE_DATABASE_ID || '',
           process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
           ID.unique(),
@@ -208,6 +235,8 @@ async function addArticleToDatabase(article) {
           }
         );
         
+        console.log(`Successfully created comment: ${commentDocument.$id}`);
+        
         // Update the post with the comment count
         await databases.updateDocument(
           process.env.APPWRITE_DATABASE_ID || '',
@@ -219,6 +248,9 @@ async function addArticleToDatabase(article) {
         console.log(`Successfully added article with discussion starter: ${analysis.refetchTitle}`);
       } catch (commentError) {
         console.error(`Error creating discussion starter comment for ${article.url}:`, commentError);
+        if (commentError.message.includes('not authorized')) {
+          console.error('Comment creation permission error - check function scopes');
+        }
         // Don't fail the post creation if comment creation fails
       }
     }
@@ -227,6 +259,10 @@ async function addArticleToDatabase(article) {
     
   } catch (error) {
     console.error(`Error adding article ${article.url} to database:`, error);
+    if (error.message.includes('not authorized')) {
+      console.error('Database permission error - check function scopes');
+      return { success: false, reason: 'permission_error', error: 'Function lacks database write permissions' };
+    }
     return { success: false, reason: 'database_error', error: error.message };
   }
 }

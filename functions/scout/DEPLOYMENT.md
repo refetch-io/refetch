@@ -60,8 +60,10 @@ First, create a dedicated user account that will be the author of all auto-disco
 1. Go to **Settings** → **Scopes**
 2. Select the following scopes:
    - `databases.read` - To read existing posts and check for duplicates
-   - `databases.write` - To create new posts
+   - `databases.write` - To create new posts and comments
    - `users.read` - To read user information
+
+**Important**: Make sure your function has the `databases.write` scope, as this is required to create posts and comments in your database.
 
 ### 3.2 Configure Environment Variables
 
@@ -181,7 +183,24 @@ For most use cases, we recommend running every 6-12 hours:
 
 ### Common Issues
 
-#### 1. Build Failures
+#### 1. Database Permission Errors
+```
+Error: The current user is not authorized to perform the requested action
+```
+**Solution**: 
+1. Go to **Settings** → **Scopes** in your function
+2. Make sure `databases.write` is selected
+3. Redeploy the function after changing scopes
+
+#### 2. AI Response Parsing Errors
+```
+Error: SyntaxError: Unexpected token 'T', "The provid"... is not valid JSON
+```
+**Solution**: The AI is returning text instead of JSON. This usually means:
+- The system prompt wasn't clear enough (fixed in latest version)
+- The AI model is having issues (try again or check OpenAI API status)
+
+#### 3. Build Failures
 ```
 Error: npm install failed
 ```
