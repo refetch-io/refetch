@@ -16,6 +16,7 @@
   "dependencies": {
     "node-appwrite": "^17.2.0",
     "openai": "^5.12.2",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "jsdom": "^24.0.0"
   }
 }

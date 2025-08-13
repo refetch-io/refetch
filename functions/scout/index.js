@@ -8,6 +8,7 @@
 import { Client, Databases, ID, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 import axios from 'axios';
+import { JSDOM } from 'jsdom';
 
 // Target websites to scout
 const TARGET_WEBSITES = [
@@ -119,52 +120,24 @@ function extractArticleUrls(html, baseUrl) {
   try {
     const articleUrls = [];
     
-    // Special handling for Hacker News
-    if (baseUrl.includes('news.ycombinator.com')) {
-      console.log(`  - Using Hacker News specific extraction`);
-      
-      // HN story links are in <a> tags with class "storylink" or similar
-      const hnStoryPattern = /<a[^>]*href=["']([^"']*)["'][^>]*class=["'][^"']*storylink[^"']*["'][^>]*>/gi;
-      const hnMatches = html.matchAll(hnStoryPattern);
-      
-      for (const match of hnMatches) {
-        let articleUrl = match[1];
-        
-        // Skip empty or invalid URLs
-        if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
-          continue;
-        }
-        
-        // HN has external links, so we don't restrict to same domain
-        if (articleUrl.startsWith('/')) {
-          articleUrl = new URL(articleUrl, baseUrl).href;
-        } else if (!articleUrl.startsWith('http')) {
-          continue;
-        }
-        
-        // Skip HN internal pages
-        if (articleUrl.includes('news.ycombinator.com') && !articleUrl.includes('item?id=')) {
-          continue;
-        }
-        
-        articleUrls.push(articleUrl);
-      }
-      
-      // If we didn't find any with the specific pattern, fall back to generic
-      if (articleUrls.length === 0) {
-        console.log(`  - No HN story links found, falling back to generic extraction`);
-      }
-    }
+    // Use jsdom to properly parse HTML and extract <a> tags
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
     
-    // Simple, universal approach: extract all <a href> values
-    const hrefPattern = /href=["']([^"']*)["']/gi;
-    const matches = html.matchAll(hrefPattern);
+    // Get all anchor tags
+    const anchorTags = document.querySelectorAll('a[href]');
+    console.log(`  - Found ${anchorTags.length} anchor tags with href attributes`);
     
-    for (const match of matches) {
-      let articleUrl = match[1];
+    let processedUrls = 0;
+    let skippedUrls = 0;
+    
+    for (const anchor of anchorTags) {
+      let articleUrl = anchor.getAttribute('href');
+      processedUrls++;
       
       // Skip empty or invalid URLs
       if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+        skippedUrls++;
         continue;
       }
       
@@ -173,24 +146,33 @@ function extractArticleUrls(html, baseUrl) {
         articleUrl = new URL(articleUrl, baseUrl).href;
       } else if (!articleUrl.startsWith('http')) {
         // Skip relative URLs that don't start with /
+        skippedUrls++;
         continue;
       }
       
       // Only include URLs from the same domain (except for HN)
       if (!baseUrl.includes('news.ycombinator.com') && !articleUrl.startsWith(baseUrl)) {
+        skippedUrls++;
         continue;
       }
       
       // Filter out common non-article URLs
       const skipPatterns = [
-        /\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf|zip|rar)$/i,
+        // File extensions
+        /\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf|zip|rar|xml|txt|log)$/i,
+        // WordPress and CMS specific
         /wp-content\/uploads/i,
         /wp-includes/i,
+        /wp-admin/i,
         /_static/i,
+        /_media/i,
+        // RSS and feeds
         /feed/i,
         /rss/i,
+        /atom/i,
         /sitemap/i,
         /robots\.txt/i,
+        // UI elements
         /favicon/i,
         /search/i,
         /tag\//i,
@@ -200,15 +182,77 @@ function extractArticleUrls(html, baseUrl) {
         /comment/i,
         /login/i,
         /register/i,
-        /admin/i
+        /admin/i,
+        /user/i,
+        /profile/i,
+        /settings/i,
+        /preferences/i,
+        // Navigation and utility
+        /about/i,
+        /contact/i,
+        /privacy/i,
+        /terms/i,
+        /help/i,
+        /support/i,
+        /faq/i,
+        /newsletter/i,
+        /subscribe/i,
+        /unsubscribe/i,
+        // Social and sharing
+        /share/i,
+        /social/i,
+        /facebook/i,
+        /twitter/i,
+        /linkedin/i,
+        /reddit/i,
+        // Common non-article paths
+        /archive/i,
+        /archives/i,
+        /index\.php/i,
+        /default\.asp/i
       ];
       
       if (skipPatterns.some(pattern => pattern.test(articleUrl))) {
+        skippedUrls++;
         continue;
       }
       
       // Skip the homepage itself
       if (articleUrl === baseUrl || articleUrl === baseUrl + '/') {
+        skippedUrls++;
+        continue;
+      }
+      
+      // Skip URLs that are too short (likely not articles)
+      const urlPath = new URL(articleUrl).pathname;
+      if (urlPath.length < 10) {
+        skippedUrls++;
+        continue;
+      }
+      
+      // Skip URLs with too few slashes (likely not articles)
+      const slashCount = (urlPath.match(/\//g) || []).length;
+      if (slashCount < 2) {
+        skippedUrls++;
+        continue;
+      }
+      
+      // Look for article-like patterns in the URL
+      const articlePatterns = [
+        /\d{4}\/\d{2}\/\d{2}/i,  // Date patterns (YYYY/MM/DD)
+        /\d{4}\/\d{2}/i,          // Date patterns (YYYY/MM)
+        /article/i,
+        /story/i,
+        /news/i,
+        /post/i,
+        /blog/i,
+        /entry/i,
+        /item/i
+      ];
+      
+      // Only include URLs that match at least one article pattern
+      if (!articlePatterns.some(pattern => pattern.test(articleUrl))) {
+        skippedUrls++;
         continue;
       }
       
@@ -216,10 +260,11 @@ function extractArticleUrls(html, baseUrl) {
     }
     
     // Remove duplicates and limit to reasonable number
-    const uniqueUrls = [...new Set(articleUrls)].slice(0, 30); // Increased from 20 to 30
+    const uniqueUrls = [...new Set(articleUrls)].slice(0, 100);
     
     console.log(`📊 URL Extraction Results for ${baseUrl}:`);
-    console.log(`  - Raw URLs found: ${articleUrls.length}`);
+    console.log(`  - Raw URLs found: ${processedUrls}`);
+    console.log(`  - Skipped due to empty/invalid/relative/domain/pattern: ${skippedUrls}`);
     console.log(`  - After deduplication: ${uniqueUrls.length}`);
     
     // Log a few sample URLs for debugging
@@ -227,6 +272,11 @@ function extractArticleUrls(html, baseUrl) {
       console.log(`  - Sample URLs: ${uniqueUrls.slice(0, 5).join(', ')}`);
     } else {
       console.log(`  - ⚠️ No valid article URLs found for ${baseUrl}`);
+    }
+    
+    // Log some examples of what was filtered out (for debugging)
+    if (processedUrls > uniqueUrls.length) {
+      console.log(`  - Note: ${processedUrls - uniqueUrls.length} URLs were filtered out during processing`);
     }
     
     return uniqueUrls;
@@ -581,7 +631,7 @@ async function scoutArticles() {
     console.log('\n📄 Step 2: Scraping individual articles...');
     console.log('-'.repeat(60));
     const scrapedArticles = [];
-    const maxArticlesToScrape = parseInt(process.env.MAX_ARTICLES_TO_SCRAPE || '30');
+    const maxArticlesToScrape = parseInt(process.env.MAX_ARTICLES_TO_SCRAPE || '100');
     
     console.log(`  - Will attempt to scrape up to ${maxArticlesToScrape} articles`);
     
