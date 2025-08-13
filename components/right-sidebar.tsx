@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3 } from "lucide-react"
+// import { BarChart3 } from "lucide-react"
 import { useState, useMemo, useEffect } from "react"
 import { StatsChart } from "@/components/ui/chart"
 
@@ -212,8 +212,11 @@ function ChartCard() {
           }`}
         >
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-3 h-3 flex-shrink-0" />
-            <span className="text-xs leading-4">24h</span>
+            <span className={`text-xs leading-4 ${
+              selectedTab === "24h" 
+                ? "text-gray-600" 
+                : "text-gray-400"
+            }`}>24h</span>
           </div>
           <span className="text-xs font-semibold">
             {isLoading ? "..." : formatVisitorCount(totalVisitors24h)}
@@ -229,8 +232,11 @@ function ChartCard() {
           }`}
         >
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-3 h-3 flex-shrink-0" />
-            <span className="text-xs leading-4">30d</span>
+            <span className={`text-xs leading-4 ${
+              selectedTab === "30d" 
+                ? "text-gray-600" 
+                : "text-gray-400"
+            }`}>30d</span>
           </div>
           <span className="text-xs font-semibold">
             {isLoading ? "..." : formatVisitorCount(totalVisitors30d)}
@@ -246,8 +252,11 @@ function ChartCard() {
           }`}
         >
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-3 h-3 flex-shrink-0" />
-            <span className="text-xs leading-4">1y</span>
+            <span className={`text-xs leading-4 ${
+              selectedTab === "1y" 
+                ? "text-gray-600" 
+                : "text-gray-400"
+            }`}>1y</span>
           </div>
           <span className="text-xs font-semibold">
             {isLoading ? "..." : formatVisitorCount(totalVisitors1y)}
