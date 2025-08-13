@@ -3,6 +3,36 @@ import { ImageResponse } from '@vercel/og'
 export const runtime = 'edge'
 
 export async function GET() {
+  // Fetch logo and favicon on server side
+  let logoBase64 = ''
+  let faviconBase64 = ''
+  
+  try {
+    // Fetch purple logo from Appwrite
+    const logoResponse = await fetch('https://refetch.appwrite.network/logo-purple.png')
+    if (logoResponse.ok) {
+      const logoBuffer = await logoResponse.arrayBuffer()
+      logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`
+    }
+  } catch (error) {
+    console.error('Error fetching logo:', error)
+    // Fallback to base64 SVG if fetch fails
+    logoBase64 = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzA2IiBoZWlnaHQ9IjY5IiB2aWV3Qm94PSIwIDAgMzA2IDY5IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMzA2IiBoZWlnaHQ9IjY5IiByeD0iMTIiIGZpbGw9IiM0ZTFjYjMiLz4KPHRleHQgeD0iMTUzIiB5PSI0MCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+cmVmZXRjaDwvdGV4dD4KPC9zdmc+"
+  }
+  
+  try {
+    // Fetch favicon from Appwrite avatars service
+    const faviconResponse = await fetch('https://cloud.appwrite.io/v1/avatars/favicon?url=https://example.com&fallback=1')
+    if (faviconResponse.ok) {
+      const faviconBuffer = await faviconResponse.arrayBuffer()
+      faviconBase64 = `data:image/png;base64,${Buffer.from(faviconBuffer).toString('base64')}`
+    }
+  } catch (error) {
+    console.error('Error fetching favicon:', error)
+    // Fallback to base64 SVG if fetch fails
+    faviconBase64 = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iMTIiIGZpbGw9IiM0ZTFjYjMiLz4KPHRleHQgeD0iMjQiIHk9IjMwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5mPC90ZXh0Pgo8L3N2Zz4="
+  }
+
   return new ImageResponse(
     (
       <div
@@ -29,7 +59,7 @@ export async function GET() {
           }}
         >
           <img
-            src="https://refetch.io/logo-dark.png"
+            src={logoBase64}
             alt="Refetch"
             width="306"
             height="69"
@@ -150,9 +180,9 @@ export async function GET() {
                 gap: '40px',
               }}
             >
-              {/* Domain favicon - using Appwrite avatars service with fallback */}
+              {/* Domain favicon - using base64-encoded inline SVG */}
               <img
-                src="https://cloud.appwrite.io/v1/avatars/favicon?url=https://example.com&fallback=1"
+                src={faviconBase64}
                 alt="Domain favicon"
                 width="48"
                 height="48"
@@ -161,8 +191,6 @@ export async function GET() {
                   height: '48px',
                   borderRadius: '12px',
                   display: 'block',
-                  objectFit: 'contain',
-                  backgroundColor: '#f3f4f6', // Fallback background if image fails
                 }}
               />
               
