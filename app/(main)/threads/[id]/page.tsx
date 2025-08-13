@@ -66,6 +66,7 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
             height: 1260,
             alt: article.title,
             type: 'image/png',
+            secureUrl: `${baseUrl}/api/og/thread/${article.id}`,
           },
         ],
         authors: article.author ? [article.author] : undefined,
@@ -78,7 +79,15 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
         card: 'summary_large_image',
         title: article.title,
         description: article.description || `Discussion about ${article.title}. Join the conversation on Refetch.`,
-        images: [`${baseUrl}/api/og/thread/${article.id}`],
+        images: [
+          {
+            url: `${baseUrl}/api/og/thread/${article.id}`,
+            alt: article.title,
+            width: 2400,
+            height: 1260,
+            type: 'image/png',
+          }
+        ],
         creator: '@refetch_io',
         site: '@refetch_io',
       },
@@ -105,8 +114,14 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
         'og:image:width': '2400',
         'og:image:height': '1260',
         'og:image:type': 'image/png',
+        'og:image:secure_url': `${baseUrl}/api/og/thread/${article.id}`,
         'twitter:image:width': '2400',
         'twitter:image:height': '1260',
+        // LinkedIn specific optimizations
+        'og:image:alt': article.title,
+        'og:image:url': `${baseUrl}/api/og/thread/${article.id}`,
+        // Cache busting for social platforms
+        'og:image:updated_time': new Date().toISOString(),
       },
     }
   } catch (error) {
