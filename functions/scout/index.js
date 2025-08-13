@@ -49,17 +49,29 @@ let appwriteClient, databases, openai;
 function initializeClients() {
   if (!appwriteClient) {
     // In Appwrite Functions, these environment variables are automatically available
+    const endpoint = process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1';
+    const projectId = process.env.APPWRITE_PROJECT_ID || '';
+    const apiKey = process.env.APPWRITE_API_KEY || '';
+    
+    console.log('Appwrite Client Configuration:');
+    console.log(`- Endpoint: ${endpoint}`);
+    console.log(`- Project ID: ${projectId ? `${projectId.substring(0, 8)}...` : 'NOT SET'}`);
+    console.log(`- API Key: ${apiKey ? `${apiKey.substring(0, 8)}... (length: ${apiKey.length})` : 'NOT SET'}`);
+    
     appwriteClient = new Client()
-      .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
-      .setProject(process.env.APPWRITE_PROJECT_ID || '')
-      .setKey(process.env.APPWRITE_API_KEY || '');
+      .setEndpoint(endpoint)
+      .setProject(projectId)
+      .setKey(apiKey);
     
     databases = new Databases(appwriteClient);
   }
   
   if (!openai) {
+    const openaiKey = process.env.OPENAI_API_KEY || '';
+    console.log(`OpenAI API Key: ${openaiKey ? `${openaiKey.substring(0, 8)}... (length: ${openaiKey.length})` : 'NOT SET'}`);
+    
     openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || '',
+      apiKey: openaiKey,
     });
   }
 }
