@@ -19,7 +19,7 @@ export default async function NewPage() {
   const result = await fetchPostsFromAppwriteWithSortAndVotes('new')
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <ClientPage initialPosts={result.posts} error={result.error} sortType="new" />
     </div>
   )
