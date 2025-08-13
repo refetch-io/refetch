@@ -180,7 +180,7 @@ export async function GET(request: NextRequest) {
     // Validate data type
     if (!Object.keys(TTL_CONFIG).includes(dataType)) {
       return NextResponse.json(
-        { error: 'Invalid data type. Supported types: realtime, 24h, 30d, config' },
+        { error: 'Invalid data type. Supported types: realtime, 24h, 30d, 1y, config' },
         { status: 400 }
       )
     }
