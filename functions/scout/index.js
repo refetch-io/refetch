@@ -193,25 +193,58 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
   try {
     const articleData = [];
     
-    // Use jsdom to properly parse HTML and extract <a> tags
-    // Disable CSS parsing to avoid stylesheet errors
-    const dom = new JSDOM(html, {
-      runScripts: 'outside-only',
-      resources: 'usable',
-      includeNodeLocations: false,
-      pretendToBeVisual: false,
-      // Disable CSS parsing to avoid stylesheet errors
-      features: {
-        FetchExternalResources: false,
-        ProcessExternalResources: false,
-        SkipExternalResources: false
+    // Pre-process HTML to remove CSS content that causes parsing errors
+    const cleanedHtml = html
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '') // Remove <style> tags
+      .replace(/<link[^>]*rel=["']stylesheet["'][^>]*>/gi, '') // Remove stylesheet links
+      .replace(/<!--[\s\S]*?-->/g, ''); // Remove HTML comments
+    
+    // Try to create JSDOM with CSS completely disabled
+    let dom;
+    try {
+      dom = new JSDOM(cleanedHtml, {
+        runScripts: 'outside-only',
+        resources: 'usable',
+        includeNodeLocations: false,
+        pretendToBeVisual: false,
+        // Completely disable CSS parsing
+        features: {
+          FetchExternalResources: false,
+          ProcessExternalResources: false,
+          SkipExternalResources: false
+        },
+        // Additional CSS disabling options
+        virtualConsole: new (require('jsdom').VirtualConsole)(),
+        // Disable all CSS processing
+        beforeParse(window) {
+          // Remove CSS processing capabilities
+          window.CSS = undefined;
+          window.StyleSheet = undefined;
+        }
+      });
+    } catch (jsdomError) {
+      // If JSDOM fails due to CSS issues, use regex fallback immediately
+      if (jsdomError.message.includes('CSS') || jsdomError.message.includes('stylesheet')) {
+        console.log(`  CSS parsing failed, using regex extraction`);
+        return extractUrlsWithRegex(html, baseUrl);
       }
-    });
+      throw jsdomError; // Re-throw non-CSS related errors
+    }
+    
     const document = dom.window.document;
     
-    // Get all anchor tags
-    const anchorTags = document.querySelectorAll('a[href]');
-    console.log(`  - Found ${anchorTags.length} anchor tags with href attributes`);
+    // Get all anchor tags - wrap in try-catch to handle any CSS parsing errors
+    let anchorTags;
+    try {
+      anchorTags = document.querySelectorAll('a[href]');
+      console.log(`  - Found ${anchorTags.length} anchor tags with href attributes`);
+    } catch (parseError) {
+      if (parseError.message.includes('CSS') || parseError.message.includes('stylesheet')) {
+        console.log(`  CSS parsing error during query, using regex extraction`);
+        return extractUrlsWithRegex(html, baseUrl);
+      }
+      throw parseError;
+    }
     
     let processedUrls = 0;
     let skippedUrls = 0;
@@ -373,11 +406,14 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     return finalArticles;
     
   } catch (error) {
-    console.error(`❌ Error extracting article URLs from ${baseUrl}: ${error.message}`);
-    if (error.message.includes('CSS stylesheet')) {
-      console.error(`  - CSS parsing error, trying fallback regex extraction`);
+    // Check for any CSS-related errors and use fallback
+    if (error.message.includes('CSS') || error.message.includes('stylesheet') || 
+        error.stack?.includes('stylesheets.js') || error.stack?.includes('HTMLStyleElement')) {
+      console.log(`  CSS parsing error, using regex extraction`);
       return extractUrlsWithRegex(html, baseUrl);
     }
+    
+    console.error(`❌ Error extracting article URLs from ${baseUrl}: ${error.message}`);
     return [];
   }
 }
