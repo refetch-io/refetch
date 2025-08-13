@@ -1,0 +1,21 @@
+{
+  "name": "scout-function",
+  "version": "1.0.0",
+  "description": "Appwrite Function to scout websites for tech articles and add them to the database",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "nodejs", "openai", "scraping", "scout"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-appwrite": "^17.2.0",
+    "openai": "^5.12.2",
+    "axios": "^1.6.0"
+  }
+}
