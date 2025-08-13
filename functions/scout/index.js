@@ -678,7 +678,7 @@ async function scoutArticles() {
     // Step 3: Add articles to database
     console.log('\n💾 Step 3: Adding articles to database...');
     
-    const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '20');
+    const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '100');
     const articlesToProcess = analyzedArticles.slice(0, maxArticles);
     
     console.log(`Processing ${articlesToProcess.length} articles (max: ${maxArticles})`);
