@@ -90,7 +90,7 @@ function cleanUrl(url) {
 // Helper function to scrape a website's main page and extract article links
 async function scrapeWebsiteForArticles(url) {
   try {
-    console.log(`Scraping ${url} for article links...`);
+    console.log(`\n🔍 Scraping ${url} for article links...`);
     
     const response = await axios.get(url, {
       headers: {
@@ -100,15 +100,15 @@ async function scrapeWebsiteForArticles(url) {
     });
     
     if (response.status === 200) {
-      console.log(`Successfully scraped ${url} for article links`);
+      console.log(`✅ Successfully scraped ${url} (${(response.data.length / 1024).toFixed(1)}KB)`);
       return response.data;
     } else {
-      console.error(`Failed to scrape ${url}: HTTP ${response.status}`);
+      console.error(`❌ Failed to scrape ${url}: HTTP ${response.status}`);
       return null;
     }
     
   } catch (error) {
-    console.error(`Error scraping ${url}:`, error.message);
+    console.error(`❌ Error scraping ${url}:`, error.message);
     return null;
   }
 }
@@ -349,12 +349,16 @@ function extractArticleUrls(html, baseUrl) {
       return !skipPatterns.some(pattern => pattern.test(url));
     });
     
-    console.log(`Found ${uniqueUrls.length} potential article URLs from ${baseUrl}`);
-    console.log(`After filtering: ${filteredUrls.length} valid article URLs`);
+    console.log(`📊 URL Extraction Results for ${baseUrl}:`);
+    console.log(`  - Raw URLs found: ${articleUrls.length}`);
+    console.log(`  - After deduplication: ${uniqueUrls.length}`);
+    console.log(`  - After filtering: ${filteredUrls.length}`);
     
     // Log a few sample URLs for debugging
     if (filteredUrls.length > 0) {
-      console.log(`Sample URLs: ${filteredUrls.slice(0, 3).join(', ')}`);
+      console.log(`  - Sample URLs: ${filteredUrls.slice(0, 3).join(', ')}`);
+    } else {
+      console.log(`  - ⚠️ No valid article URLs found for ${baseUrl}`);
     }
     
     return filteredUrls;
@@ -368,7 +372,7 @@ function extractArticleUrls(html, baseUrl) {
 // Helper function to scrape an individual article and get its content
 async function scrapeArticle(url) {
   try {
-    console.log(`Scraping article: ${url}`);
+    console.log(`\n📄 Scraping article: ${url}`);
     
     const response = await axios.get(url, {
       headers: {
@@ -378,15 +382,22 @@ async function scrapeArticle(url) {
     });
     
     if (response.status === 200) {
-      console.log(`Successfully scraped article: ${url}`);
+      const contentLength = response.data.length;
+      const contentKB = (contentLength / 1024).toFixed(1);
+      console.log(`✅ Successfully scraped article: ${url} (${contentKB}KB)`);
+      
+      // Log content preview for debugging
+      const preview = response.data.substring(0, 200).replace(/\s+/g, ' ').trim();
+      console.log(`  - Content preview: "${preview}..."`);
+      
       return response.data;
     } else {
-      console.error(`Failed to scrape article ${url}: HTTP ${response.status}`);
+      console.error(`❌ Failed to scrape article ${url}: HTTP ${response.status}`);
       return null;
     }
     
   } catch (error) {
-    console.error(`Error scraping article ${url}:`, error.message);
+    console.error(`❌ Error scraping article ${url}:`, error.message);
     return null;
   }
 }
@@ -394,11 +405,14 @@ async function scrapeArticle(url) {
 // Helper function to analyze HTML with AI
 async function analyzeHTMLWithAI(html, url) {
   try {
-    console.log(`Analyzing HTML from ${url}...`);
+    console.log(`\n🤖 Analyzing HTML from ${url}...`);
     
     // Truncate HTML if it's too long for the AI
     const maxLength = 6000; // Reduced to avoid token limit issues
     const truncatedHTML = html.length > maxLength ? html.substring(0, maxLength) + '...' : html;
+    
+    console.log(`  - Original HTML length: ${html.length} chars`);
+    console.log(`  - Truncated to: ${truncatedHTML.length} chars for AI analysis`);
     
     const prompt = `Please analyze this HTML content from a tech website and identify the best articles for a tech news platform called "refetch".
 
@@ -434,36 +448,36 @@ Please return a JSON response with the structure specified in the system prompt.
       
       // Validate that we have the required fields and they meet length requirements
       if (!analysis.refetchTitle || !analysis.discussionStarter || typeof analysis.qualityScore !== 'number') {
-        console.error(`AI response missing required fields for ${url}:`, analysis);
+        console.error(`❌ AI response missing required fields for ${url}:`, analysis);
         return null;
       }
       
       // Log title and comment lengths for monitoring (no truncation)
       if (analysis.refetchTitle.length > 60) {
-        console.warn(`Title is long for ${url}: ${analysis.refetchTitle.length} chars (will be handled on client side)`);
+        console.warn(`  - ⚠️ Title is long: ${analysis.refetchTitle.length} chars (will be handled on client side)`);
       }
       
       if (analysis.discussionStarter.length > 200) {
-        console.warn(`Comment is long for ${url}: ${analysis.discussionStarter.length} chars (will be handled on client side)`);
+        console.warn(`  - ⚠️ Comment is long: ${analysis.discussionStarter.length} chars (will be handled on client side)`);
       }
       
-      console.log(`AI analysis validated for ${url}:`);
-      console.log(`- Title: "${analysis.refetchTitle}" (${analysis.refetchTitle.length} chars)`);
-      console.log(`- Comment: "${analysis.discussionStarter}" (${analysis.discussionStarter.length} chars)`);
-      console.log(`- Quality Score: ${analysis.qualityScore}`);
+      console.log(`✅ AI analysis completed for ${url}:`);
+      console.log(`  - Title: "${analysis.refetchTitle}" (${analysis.refetchTitle.length} chars)`);
+      console.log(`  - Comment: "${analysis.discussionStarter}" (${analysis.discussionStarter.length} chars)`);
+      console.log(`  - Quality Score: ${analysis.qualityScore}/100`);
       
       return {
         url: url,
         analysis: analysis
       };
     } catch (parseError) {
-      console.error(`Error parsing AI response for ${url}:`, parseError);
-      console.error(`Raw response:`, response.substring(0, 200) + '...');
+      console.error(`❌ Error parsing AI response for ${url}:`, parseError);
+      console.error(`  - Raw response:`, response.substring(0, 200) + '...');
       return null;
     }
     
   } catch (error) {
-    console.error(`Error analyzing HTML from ${url} with AI:`, error.message);
+    console.error(`❌ Error analyzing HTML from ${url} with AI:`, error.message);
     return null;
   }
 }
@@ -472,16 +486,26 @@ Please return a JSON response with the structure specified in the system prompt.
 async function checkDuplicateUrl(url) {
   try {
     const cleanUrlString = cleanUrl(url);
+    console.log(`  - Checking for duplicates: ${cleanUrlString}`);
+    
     const existingPosts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [Query.equal('link', cleanUrlString)]
     );
-    return existingPosts.documents.length > 0;
+    
+    const isDuplicate = existingPosts.documents.length > 0;
+    if (isDuplicate) {
+      console.log(`  - ⚠️ Duplicate found: ${existingPosts.documents.length} existing posts with same URL`);
+    } else {
+      console.log(`  - ✅ No duplicates found`);
+    }
+    
+    return isDuplicate;
   } catch (error) {
-    console.error('Error checking for duplicate URL:', error);
+    console.error('❌ Error checking for duplicate URL:', error);
     if (error.message.includes('not authorized')) {
-      console.error('Database permission error - check function scopes');
+      console.error('  - Database permission error - check function scopes');
     }
     return false;
   }
@@ -492,10 +516,15 @@ async function addArticleToDatabase(article) {
   try {
     const analysis = article.analysis;
     
+    console.log(`\n💾 Adding article to database: ${article.url}`);
+    console.log(`  - Title: "${analysis.refetchTitle}"`);
+    console.log(`  - Quality Score: ${analysis.qualityScore}/100`);
+    console.log(`  - Comment Length: ${analysis.discussionStarter.length} chars`);
+    
     // Check for duplicates
     const isDuplicate = await checkDuplicateUrl(article.url);
     if (isDuplicate) {
-      console.log(`Skipping duplicate: ${article.url}`);
+      console.log(`⏭️ Skipping duplicate: ${article.url}`);
       return { success: false, reason: 'duplicate' };
     }
     
@@ -514,6 +543,13 @@ async function addArticleToDatabase(article) {
       link: cleanUrl(article.url)
     };
     
+    console.log(`  - Creating post with data:`, {
+      title: documentData.title,
+      userId: documentData.userId,
+      userName: documentData.userName,
+      link: documentData.link
+    });
+    
     // Create the document
     const createdDocument = await databases.createDocument(
       process.env.APPWRITE_DATABASE_ID || '',
@@ -522,13 +558,13 @@ async function addArticleToDatabase(article) {
       documentData
     );
     
-    console.log(`Successfully created post: ${createdDocument.$id}`);
+    console.log(`✅ Successfully created post: ${createdDocument.$id}`);
     
     // Create the discussion starter comment
     if (analysis.discussionStarter && analysis.discussionStarter.trim().length > 0) {
       try {
-        console.log(`Creating discussion starter comment for: ${analysis.refetchTitle}`);
-        console.log(`Comment content: "${analysis.discussionStarter}"`);
+        console.log(`  - Creating discussion starter comment...`);
+        console.log(`  - Comment content: "${analysis.discussionStarter}"`);
         
         const commentDocument = await databases.createDocument(
           process.env.APPWRITE_DATABASE_ID || '',
@@ -543,7 +579,7 @@ async function addArticleToDatabase(article) {
           }
         );
         
-        console.log(`Successfully created comment: ${commentDocument.$id}`);
+        console.log(`✅ Successfully created comment: ${commentDocument.$id}`);
         
         // Update the post with the comment count
         await databases.updateDocument(
@@ -553,26 +589,27 @@ async function addArticleToDatabase(article) {
           { countComments: 1 }
         );
         
-        console.log(`Successfully added article with discussion starter: ${analysis.refetchTitle}`);
-        console.log(`Post ID: ${createdDocument.$id}, Comment ID: ${commentDocument.$id}`);
+        console.log(`✅ Successfully added article with discussion starter: ${analysis.refetchTitle}`);
+        console.log(`  - Post ID: ${createdDocument.$id}`);
+        console.log(`  - Comment ID: ${commentDocument.$id}`);
         
       } catch (commentError) {
-        console.error(`Error creating discussion starter comment for ${article.url}:`, commentError);
+        console.error(`❌ Error creating discussion starter comment for ${article.url}:`, commentError);
         if (commentError.message.includes('not authorized')) {
-          console.error('Comment creation permission error - check function scopes');
+          console.error('  - Comment creation permission error - check function scopes');
         }
         // Don't fail the post creation if comment creation fails
       }
     } else {
-      console.log(`No discussion starter provided for: ${analysis.refetchTitle}`);
+      console.log(`⚠️ No discussion starter provided for: ${analysis.refetchTitle}`);
     }
     
     return { success: true, documentId: createdDocument.$id };
     
   } catch (error) {
-    console.error(`Error adding article ${article.url} to database:`, error);
+    console.error(`❌ Error adding article ${article.url} to database:`, error);
     if (error.message.includes('not authorized')) {
-      console.error('Database permission error - check function scopes');
+      console.error('  - Database permission error - check function scopes');
       return { success: false, reason: 'permission_error', error: 'Function lacks database write permissions' };
     }
     return { success: false, reason: 'database_error', error: error.message };
@@ -584,6 +621,26 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Helper function to log URL processing status
+function logUrlStatus(url, status, details = '') {
+  const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+  const statusIcon = {
+    'scraping': '🔍',
+    'scraped': '✅',
+    'failed_scrape': '❌',
+    'analyzing': '🤖',
+    'analyzed': '✅',
+    'failed_analysis': '❌',
+    'filtered_out': '⚠️',
+    'adding': '💾',
+    'added': '✅',
+    'duplicate': '⏭️',
+    'failed_add': '❌'
+  }[status] || '❓';
+  
+  console.log(`[${timestamp}] ${statusIcon} ${status.toUpperCase()}: ${url}${details ? ` - ${details}` : ''}`);
+}
+
 // Main scout function
 async function scoutArticles() {
   const startTime = Date.now();
@@ -593,11 +650,25 @@ async function scoutArticles() {
     articlesAdded: 0,
     duplicatesSkipped: 0,
     errors: [],
-    executionTime: ''
+    executionTime: '',
+    urlBreakdown: {
+      totalUrlsFound: 0,
+      urlsScraped: 0,
+      urlsAnalyzed: 0,
+      urlsFilteredOut: 0,
+      urlsFailedAnalysis: 0
+    },
+    failedUrls: {
+      scraping: [],
+      analysis: [],
+      quality: [],
+      database: []
+    }
   };
   
   try {
-    console.log('Starting scout function...');
+    console.log('🚀 Starting scout function...');
+    console.log('=' .repeat(80));
     
     // Initialize clients
     initializeClients();
@@ -614,84 +685,174 @@ async function scoutArticles() {
     }
     
     // Step 1: Scrape main pages and extract article URLs
-    console.log('Step 1: Scraping main pages and extracting article URLs...');
+    console.log('\n📋 Step 1: Scraping main pages and extracting article URLs...');
+    console.log('-'.repeat(60));
     const allArticleUrls = [];
     
-    for (const url of TARGET_WEBSITES) {
+    for (let i = 0; i < TARGET_WEBSITES.length; i++) {
+      const url = TARGET_WEBSITES[i];
+      console.log(`\n[${i + 1}/${TARGET_WEBSITES.length}] Processing website: ${url}`);
+      
       const mainPageHtml = await scrapeWebsiteForArticles(url);
       if (mainPageHtml) {
         const articleUrls = extractArticleUrls(mainPageHtml, url);
         allArticleUrls.push(...articleUrls);
         results.websitesScraped++;
+        results.urlBreakdown.totalUrlsFound += articleUrls.length;
       }
       
       // Delay between requests to be respectful
       await delay(parseInt(process.env.SCRAPING_DELAY_MS || '3000'));
     }
     
-    console.log(`Found ${allArticleUrls.length} total article URLs from ${results.websitesScraped} websites`);
+    console.log(`\n📊 Step 1 Summary:`);
+    console.log(`  - Websites scraped: ${results.websitesScraped}/${TARGET_WEBSITES.length}`);
+    console.log(`  - Total article URLs found: ${allArticleUrls.length}`);
     
     // Step 2: Scrape individual articles
-    console.log('Step 2: Scraping individual articles...');
+    console.log('\n📄 Step 2: Scraping individual articles...');
+    console.log('-'.repeat(60));
     const scrapedArticles = [];
     const maxArticlesToScrape = parseInt(process.env.MAX_ARTICLES_TO_SCRAPE || '30');
     
+    console.log(`  - Will attempt to scrape up to ${maxArticlesToScrape} articles`);
+    
     for (let i = 0; i < Math.min(allArticleUrls.length, maxArticlesToScrape); i++) {
       const articleUrl = allArticleUrls[i];
+      console.log(`\n[${i + 1}/${Math.min(allArticleUrls.length, maxArticlesToScrape)}] Processing: ${articleUrl}`);
+      
+      logUrlStatus(articleUrl, 'scraping');
       const articleHtml = await scrapeArticle(articleUrl);
       if (articleHtml) {
         scrapedArticles.push({ url: articleUrl, html: articleHtml });
+        results.urlBreakdown.urlsScraped++;
+        logUrlStatus(articleUrl, 'scraped', `(${(articleHtml.length / 1024).toFixed(1)}KB)`);
+      } else {
+        results.urlBreakdown.urlsFailedAnalysis++;
+        results.failedUrls.scraping.push({ url: articleUrl, reason: 'Failed to scrape HTML content' });
+        logUrlStatus(articleUrl, 'failed_scrape', 'No HTML content returned');
       }
       
       // Delay between article requests
       await delay(parseInt(process.env.ARTICLE_SCRAPING_DELAY_MS || '2000'));
     }
     
-    console.log(`Successfully scraped ${scrapedArticles.length} individual articles`);
+    console.log(`\n📊 Step 2 Summary:`);
+    console.log(`  - Articles successfully scraped: ${scrapedArticles.length}/${Math.min(allArticleUrls.length, maxArticlesToScrape)}`);
+    console.log(`  - Scraping failures: ${results.urlBreakdown.urlsFailedAnalysis}`);
     
     // Step 3: Analyze individual articles with AI
-    console.log('Step 3: Analyzing individual articles with AI...');
+    console.log('\n🤖 Step 3: Analyzing individual articles with AI...');
+    console.log('-'.repeat(60));
     const analyzedArticles = [];
     
-    for (const article of scrapedArticles) {
+    for (let i = 0; i < scrapedArticles.length; i++) {
+      const article = scrapedArticles[i];
+      console.log(`\n[${i + 1}/${scrapedArticles.length}] AI Analysis: ${article.url}`);
+      
+      logUrlStatus(article.url, 'analyzing');
       const analyzedArticle = await analyzeHTMLWithAI(article.html, article.url);
       if (analyzedArticle) {
         analyzedArticles.push(analyzedArticle);
         results.articlesAnalyzed++;
+        results.urlBreakdown.urlsAnalyzed++;
+        logUrlStatus(article.url, 'analyzed', `Score: ${analyzedArticle.analysis.qualityScore}/100`);
+      } else {
+        results.urlBreakdown.urlsFailedAnalysis++;
+        results.failedUrls.analysis.push({ url: article.url, reason: 'AI analysis failed or returned invalid data' });
+        logUrlStatus(article.url, 'failed_analysis', 'AI analysis failed');
       }
       
       // Delay between AI requests
       await delay(1000);
     }
     
-    console.log(`Successfully analyzed ${results.articlesAnalyzed} individual articles`);
+    console.log(`\n📊 Step 3 Summary:`);
+    console.log(`  - Articles successfully analyzed: ${results.articlesAnalyzed}/${scrapedArticles.length}`);
+    console.log(`  - Analysis failures: ${results.urlBreakdown.urlsFailedAnalysis}`);
     
     // Step 4: Filter and add articles to database
-    console.log('Step 4: Adding articles to database...');
+    console.log('\n💾 Step 4: Adding articles to database...');
+    console.log('-'.repeat(60));
     
     // Sort by quality score (highest first) and take top articles
     const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '10');
+    const qualityThreshold = 60;
+    
+    console.log(`  - Quality threshold: ${qualityThreshold}/100`);
+    console.log(`  - Max articles per run: ${maxArticles}`);
+    
     const sortedArticles = analyzedArticles
-      .filter(article => (article.analysis.qualityScore || 0) >= 60 && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
+      .filter(article => (article.analysis.qualityScore || 0) >= qualityThreshold && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
       .sort((a, b) => (b.analysis.qualityScore || 0) - (a.analysis.qualityScore || 0))
       .slice(0, maxArticles);
     
-    console.log(`Filtered to ${sortedArticles.length} high-quality articles (quality score >= 60)`);
-    console.log(`Articles to process: ${sortedArticles.map(a => a.analysis.refetchTitle).join(', ')}`);
+    const filteredOutCount = analyzedArticles.length - sortedArticles.length;
+    results.urlBreakdown.urlsFilteredOut = filteredOutCount;
+    
+    // Track which URLs were filtered out and why
+    const filteredOutArticles = analyzedArticles.filter(article => 
+      !sortedArticles.some(sorted => sorted.url === article.url)
+    );
+    
+    filteredOutArticles.forEach(article => {
+      let reason = '';
+      if (!article.analysis.qualityScore || article.analysis.qualityScore < qualityThreshold) {
+        reason = `Quality score too low: ${article.analysis.qualityScore || 'undefined'}/${qualityThreshold}`;
+      } else if (!article.analysis.refetchTitle) {
+        reason = 'Missing title';
+      } else if (!article.analysis.discussionStarter) {
+        reason = 'Missing discussion starter';
+      }
+      
+      results.failedUrls.quality.push({ 
+        url: article.url, 
+        reason: reason,
+        qualityScore: article.analysis.qualityScore,
+        hasTitle: !!article.analysis.refetchTitle,
+        hasDiscussionStarter: !!article.analysis.discussionStarter
+      });
+      
+      logUrlStatus(article.url, 'filtered_out', reason);
+    });
+    
+    console.log(`\n📊 Quality Filtering Results:`);
+    console.log(`  - Articles meeting quality threshold (>=${qualityThreshold}): ${sortedArticles.length}/${analyzedArticles.length}`);
+    console.log(`  - Articles filtered out: ${filteredOutCount}`);
+    
+    if (sortedArticles.length > 0) {
+      console.log(`  - Articles to process:`);
+      sortedArticles.forEach((article, index) => {
+        console.log(`    ${index + 1}. "${article.analysis.refetchTitle}" (Score: ${article.analysis.qualityScore}/100)`);
+        console.log(`       URL: ${article.url}`);
+        console.log(`       Comment: "${article.analysis.discussionStarter.substring(0, 100)}${article.analysis.discussionStarter.length > 100 ? '...' : ''}"`);
+      });
+    } else {
+      console.log(`  - ⚠️ No articles met the quality threshold`);
+    }
     
     for (const article of sortedArticles) {
       console.log(`\n--- Processing article: ${article.analysis.refetchTitle} ---`);
+      logUrlStatus(article.url, 'adding');
       const result = await addArticleToDatabase(article);
       
       if (result.success) {
         results.articlesAdded++;
         console.log(`✅ Successfully added: ${article.analysis.refetchTitle}`);
+        logUrlStatus(article.url, 'added', `Post ID: ${result.documentId}`);
       } else if (result.reason === 'duplicate') {
         results.duplicatesSkipped++;
         console.log(`⏭️ Skipped duplicate: ${article.analysis.refetchTitle}`);
+        logUrlStatus(article.url, 'duplicate', 'Already exists in database');
       } else {
         results.errors.push(`Failed to add ${article.url}: ${result.reason}`);
         console.log(`❌ Failed to add: ${article.analysis.refetchTitle} - ${result.reason}`);
+        results.failedUrls.database.push({ 
+          url: article.url, 
+          reason: result.reason,
+          error: result.error || 'Unknown error'
+        });
+        logUrlStatus(article.url, 'failed_add', result.reason);
       }
       
       // Small delay between database operations
@@ -702,14 +863,65 @@ async function scoutArticles() {
     const executionTime = ((Date.now() - startTime) / 1000).toFixed(1);
     results.executionTime = `${executionTime}s`;
     
-    console.log('Scout function completed successfully!');
+    console.log('\n🎉 Scout function completed successfully!');
+    console.log('=' .repeat(80));
     console.log(`\n📊 Final Results:`);
-    console.log(`- Websites scraped: ${results.websitesScraped}`);
-    console.log(`- Articles analyzed: ${results.articlesAnalyzed}`);
-    console.log(`- Articles added to database: ${results.articlesAdded}`);
-    console.log(`- Duplicates skipped: ${results.duplicatesSkipped}`);
-    console.log(`- Comments created: ${results.articlesAdded}`); // Each article gets a comment
-    console.log(`- Execution time: ${results.executionTime}`);
+    console.log(`  - Websites scraped: ${results.websitesScraped}/${TARGET_WEBSITES.length}`);
+    console.log(`  - Total URLs found: ${results.urlBreakdown.totalUrlsFound}`);
+    console.log(`  - URLs successfully scraped: ${results.urlBreakdown.urlsScraped}`);
+    console.log(`  - URLs successfully analyzed: ${results.urlBreakdown.urlsAnalyzed}`);
+    console.log(`  - URLs filtered out (quality): ${results.urlBreakdown.urlsFilteredOut}`);
+    console.log(`  - URLs failed analysis: ${results.urlBreakdown.urlsFailedAnalysis}`);
+    console.log(`  - Articles added to database: ${results.articlesAdded}`);
+    console.log(`  - Duplicates skipped: ${results.duplicatesSkipped}`);
+    console.log(`  - Comments created: ${results.articlesAdded}`); // Each article gets a comment
+    console.log(`  - Execution time: ${results.executionTime}`);
+    
+    // Log failed URLs summary
+    if (results.failedUrls.scraping.length > 0 || results.failedUrls.analysis.length > 0 || 
+        results.failedUrls.quality.length > 0 || results.failedUrls.database.length > 0) {
+      console.log(`\n❌ Failed URLs Summary:`);
+      
+      if (results.failedUrls.scraping.length > 0) {
+        console.log(`  - Scraping failures (${results.failedUrls.scraping.length}):`);
+        results.failedUrls.scraping.slice(0, 5).forEach(failure => {
+          console.log(`    • ${failure.url} - ${failure.reason}`);
+        });
+        if (results.failedUrls.scraping.length > 5) {
+          console.log(`    ... and ${results.failedUrls.scraping.length - 5} more`);
+        }
+      }
+      
+      if (results.failedUrls.analysis.length > 0) {
+        console.log(`  - AI Analysis failures (${results.failedUrls.analysis.length}):`);
+        results.failedUrls.analysis.slice(0, 5).forEach(failure => {
+          console.log(`    • ${failure.url} - ${failure.reason}`);
+        });
+        if (results.failedUrls.analysis.length > 5) {
+          console.log(`    ... and ${results.failedUrls.analysis.length - 5} more`);
+        }
+      }
+      
+      if (results.failedUrls.quality.length > 0) {
+        console.log(`  - Quality filter failures (${results.failedUrls.quality.length}):`);
+        results.failedUrls.quality.slice(0, 5).forEach(failure => {
+          console.log(`    • ${failure.url} - ${failure.reason}`);
+        });
+        if (results.failedUrls.quality.length > 5) {
+          console.log(`    ... and ${results.failedUrls.quality.length - 5} more`);
+        }
+      }
+      
+      if (results.failedUrls.database.length > 0) {
+        console.log(`  - Database failures (${results.failedUrls.database.length}):`);
+        results.failedUrls.database.slice(0, 5).forEach(failure => {
+          console.log(`    • ${failure.url} - ${failure.reason}${failure.error ? ` (${failure.error})` : ''}`);
+        });
+        if (results.failedUrls.database.length > 5) {
+          console.log(`    ... and ${results.failedUrls.database.length - 5} more`);
+        }
+      }
+    }
     
     if (results.errors.length > 0) {
       console.log(`\n❌ Errors encountered: ${results.errors.length}`);
@@ -722,7 +934,7 @@ async function scoutArticles() {
     };
     
   } catch (error) {
-    console.error('Scout function failed:', error);
+    console.error('❌ Scout function failed:', error);
     results.errors.push(error.message);
     results.executionTime = `${((Date.now() - startTime) / 1000).toFixed(1)}s`;
     
