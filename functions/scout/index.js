@@ -214,8 +214,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
           ProcessExternalResources: false,
           SkipExternalResources: false
         },
-        // Additional CSS disabling options
-        virtualConsole: new (require('jsdom').VirtualConsole)(),
         // Disable all CSS processing
         beforeParse(window) {
           // Remove CSS processing capabilities
