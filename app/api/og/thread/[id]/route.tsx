@@ -71,7 +71,7 @@ export async function GET(
             }}
           >
             <img
-              src="https://refetch.io/logo-purple.png"
+              src="https://refetch.appwrite.network/logo-purple.png"
               alt="Refetch"
               width="306"
               height="69"

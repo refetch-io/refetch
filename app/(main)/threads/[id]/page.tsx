@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
         images: [
           {
             url: `${baseUrl}/api/og/thread/${article.id}`,
-            width: 1200,
-            height: 630,
+            width: 2400,
+            height: 1260,
             alt: article.title,
           },
         ],
