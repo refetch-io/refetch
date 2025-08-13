@@ -141,7 +141,8 @@ function extractUrlsWithRegex(html, baseUrl) {
       if (label && label.length > 5 && label.length < 200) {
         articleData.push({
           url: fullUrl,
-          label: label
+          label: label,
+          source: baseUrl
         });
       }
     }
@@ -269,8 +270,12 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         continue;
       }
       
-      // Only include URLs from the same domain (except for HN)
-      if (!baseUrl.includes('news.ycombinator.com') && !articleUrl.startsWith(baseUrl)) {
+      // For Hacker News, include external URLs (they link to other sites)
+      // For other sites, only include URLs from the same domain
+      if (baseUrl.includes('news.ycombinator.com')) {
+        // HN links to external sites, so we need to handle this differently
+        // We'll include external URLs but mark them as HN-sourced
+      } else if (!articleUrl.startsWith(baseUrl)) {
         skippedUrls++;
         continue;
       }
@@ -379,7 +384,8 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       if (linkText && linkText.length > 5 && linkText.length < 200) {
         articleData.push({
           url: articleUrl,
-          label: linkText
+          label: linkText,
+          source: baseUrl // Track which website this URL came from
         });
       }
     }
@@ -635,17 +641,16 @@ async function scoutArticles() {
     // Process each website's URLs separately for better context
     for (let i = 0; i < TARGET_WEBSITES.length; i++) {
       const sourceUrl = TARGET_WEBSITES[i];
+      
       const sourceArticles = allArticlesData.filter(article => {
-        try {
-          return new URL(article.url).hostname === new URL(sourceUrl).hostname;
-        } catch {
-          return false;
-        }
+        // Use the source field we tracked during extraction
+        return article.source === sourceUrl;
       });
       
-      if (sourceArticles.length === 0) continue;
-      
-      console.log(`[${i + 1}/${TARGET_WEBSITES.length}] ${sourceUrl} (${sourceArticles.length} URLs)`);
+      if (sourceArticles.length === 0) {
+        console.log(`  ⚠️ No URLs found for ${sourceUrl}`);
+        continue;
+      }
       
       const analyzedSourceArticles = await analyzeUrlsWithAI(sourceArticles, sourceUrl);
       analyzedArticles.push(...analyzedSourceArticles);
