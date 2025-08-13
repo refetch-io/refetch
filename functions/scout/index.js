@@ -632,6 +632,18 @@ async function scoutArticles() {
     
     console.log(`✅ Found ${allArticlesData.length} total URLs from ${results.websitesScraped} websites`);
     
+    // Show breakdown by source
+    const sourceBreakdown = {};
+    allArticlesData.forEach(article => {
+      sourceBreakdown[article.source] = (sourceBreakdown[article.source] || 0) + 1;
+    });
+    
+    console.log('📊 URLs by source:');
+    Object.entries(sourceBreakdown).forEach(([source, count]) => {
+      const shortSource = source.replace('https://', '').replace('www.', '');
+      console.log(`  ${shortSource}: ${count} URLs`);
+    });
+    
     // Step 2: Analyze URLs with AI
     console.log('\n🤖 Step 2: AI analysis of URLs...');
     const analyzedArticles = [];
@@ -650,9 +662,13 @@ async function scoutArticles() {
         continue;
       }
       
+      console.log(`  📤 Sending ${sourceArticles.length} URLs to LLM from ${sourceUrl}`);
+      
       const analyzedSourceArticles = await analyzeUrlsWithAI(sourceArticles, sourceUrl);
       analyzedArticles.push(...analyzedSourceArticles);
       results.urlBreakdown.urlsAnalyzed += analyzedSourceArticles.length;
+      
+      console.log(`  ✅ LLM returned ${analyzedSourceArticles.length} valid articles from ${sourceUrl}`);
       
       await delay(2000);
     }
@@ -667,18 +683,34 @@ async function scoutArticles() {
     
     console.log(`Processing ${articlesToProcess.length} articles (max: ${maxArticles})`);
     
+    // Show breakdown of articles by source
+    const articleSourceBreakdown = {};
+    articlesToProcess.forEach(article => {
+      const source = article.source || 'unknown';
+      articleSourceBreakdown[source] = (articleSourceBreakdown[source] || 0) + 1;
+    });
+    
+    console.log('📊 Articles to process by source:');
+    Object.entries(articleSourceBreakdown).forEach(([source, count]) => {
+      const shortSource = source.replace('https://', '').replace('www.', '');
+      console.log(`  ${shortSource}: ${count} articles`);
+    });
+    
     for (const article of articlesToProcess) {
       const result = await addArticleToDatabase(article);
       
       if (result.success) {
         results.articlesAdded++;
-        console.log(`✅ Added: ${article.refetchTitle.substring(0, 60)}...`);
+        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        console.log(`✅ Added [${shortSource}]: ${article.refetchTitle.substring(0, 60)}...`);
       } else if (result.reason === 'duplicate') {
         results.duplicatesSkipped++;
-        console.log(`⏭️ Duplicate: ${article.refetchTitle.substring(0, 60)}...`);
+        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        console.log(`⏭️ Duplicate [${shortSource}]: ${article.refetchTitle.substring(0, 60)}...`);
       } else {
         results.errors.push(`Failed to add ${article.url}: ${result.reason}`);
-        console.log(`❌ Failed: ${article.refetchTitle.substring(0, 60)}... - ${result.reason}`);
+        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        console.log(`❌ Failed [${shortSource}]: ${article.refetchTitle.substring(0, 60)}... - ${result.reason}`);
         results.failedUrls.database.push({ 
           url: article.url, 
           reason: result.reason,
@@ -695,6 +727,21 @@ async function scoutArticles() {
     
     console.log('\n🎉 Scout completed successfully!');
     console.log(`📊 Results: ${results.websitesScraped} sites → ${results.urlBreakdown.totalUrlsFound} URLs → ${results.articlesAdded} articles added (${results.duplicatesSkipped} duplicates) in ${results.executionTime}s`);
+    
+    // Show final breakdown by source
+    if (analyzedArticles.length > 0) {
+      const finalSourceBreakdown = {};
+      analyzedArticles.forEach(article => {
+        const source = article.source || 'unknown';
+        finalSourceBreakdown[source] = (finalSourceBreakdown[source] || 0) + 1;
+      });
+      
+      console.log('📊 Final articles by source:');
+      Object.entries(finalSourceBreakdown).forEach(([source, count]) => {
+        const shortSource = source.replace('https://', '').replace('www.', '');
+        console.log(`  ${shortSource}: ${count} articles`);
+      });
+    }
     
     // Log failures only if they exist
     const totalFailures = results.failedUrls.analysis.length + results.failedUrls.database.length;
