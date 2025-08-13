@@ -399,7 +399,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       }
     }
     
-    const finalArticles = uniqueArticles.slice(0, 100);
+    const finalArticles = uniqueArticles.slice(0, 1000);
     
     if (finalArticles.length > 0) {
       console.log(`  ${finalArticles.length} articles found`);
@@ -442,7 +442,7 @@ Please return a JSON response with the structure specified in the system prompt.
         { role: "user", content: prompt }
       ],
       temperature: 0.3,
-      max_tokens: 4000
+      max_tokens: 8000
     });
     
     const response = completion.choices[0].message.content;
@@ -571,6 +571,18 @@ async function addArticleToDatabase(article) {
   }
 }
 
+// Helper function to extract domain from URL
+function extractDomainFromUrl(url) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname;
+  } catch (error) {
+    // If URL parsing fails, try to extract domain manually
+    const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/);
+    return match ? match[1] : 'unknown-domain';
+  }
+}
+
 // Helper function to delay between requests
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -678,7 +690,7 @@ async function scoutArticles() {
     // Step 3: Add articles to database
     console.log('\n💾 Step 3: Adding articles to database...');
     
-    const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '100');
+    const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '1000');
     const articlesToProcess = analyzedArticles.slice(0, maxArticles);
     
     console.log(`Processing ${articlesToProcess.length} articles (max: ${maxArticles})`);
@@ -686,7 +698,7 @@ async function scoutArticles() {
     // Show breakdown of articles by source
     const articleSourceBreakdown = {};
     articlesToProcess.forEach(article => {
-      const source = article.source || 'unknown';
+      const source = article.source || extractDomainFromUrl(article.url);
       articleSourceBreakdown[source] = (articleSourceBreakdown[source] || 0) + 1;
     });
     
@@ -701,15 +713,15 @@ async function scoutArticles() {
       
       if (result.success) {
         results.articlesAdded++;
-        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        const shortSource = (article.source || extractDomainFromUrl(article.url)).replace('https://', '').replace('www.', '');
         console.log(`✅ Added [${shortSource}]: ${article.refetchTitle.substring(0, 60)}...`);
       } else if (result.reason === 'duplicate') {
         results.duplicatesSkipped++;
-        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        const shortSource = (article.source || extractDomainFromUrl(article.url)).replace('https://', '').replace('www.', '');
         console.log(`⏭️ Duplicate [${shortSource}]: ${article.refetchTitle.substring(0, 60)}...`);
       } else {
         results.errors.push(`Failed to add ${article.url}: ${result.reason}`);
-        const shortSource = (article.source || 'unknown').replace('https://', '').replace('www.', '');
+        const shortSource = (article.source || extractDomainFromUrl(article.url)).replace('https://', '').replace('www.', '');
         console.log(`❌ Failed [${shortSource}]: ${article.refetchTitle.substring(0, 60)}... - ${result.reason}`);
         results.failedUrls.database.push({ 
           url: article.url, 
@@ -732,7 +744,7 @@ async function scoutArticles() {
     if (analyzedArticles.length > 0) {
       const finalSourceBreakdown = {};
       analyzedArticles.forEach(article => {
-        const source = article.source || 'unknown';
+        const source = article.source || extractDomainFromUrl(article.url);
         finalSourceBreakdown[source] = (finalSourceBreakdown[source] || 0) + 1;
       });
       
