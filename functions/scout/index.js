@@ -86,10 +86,10 @@ function cleanUrl(url) {
   }
 }
 
-// Helper function to scrape a website and get HTML
-async function scrapeWebsite(url) {
+// Helper function to scrape a website's main page and extract article links
+async function scrapeWebsiteForArticles(url) {
   try {
-    console.log(`Scraping ${url}...`);
+    console.log(`Scraping ${url} for article links...`);
     
     const response = await axios.get(url, {
       headers: {
@@ -99,7 +99,7 @@ async function scrapeWebsite(url) {
     });
     
     if (response.status === 200) {
-      console.log(`Successfully scraped ${url}`);
+      console.log(`Successfully scraped ${url} for article links`);
       return response.data;
     } else {
       console.error(`Failed to scrape ${url}: HTTP ${response.status}`);
@@ -108,6 +108,86 @@ async function scrapeWebsite(url) {
     
   } catch (error) {
     console.error(`Error scraping ${url}:`, error.message);
+    return null;
+  }
+}
+
+// Helper function to extract article URLs from a website's main page
+function extractArticleUrls(html, baseUrl) {
+  try {
+    const articleUrls = [];
+    
+    // Common patterns for article links on tech news sites
+    const patterns = [
+      // Look for links that contain article-like paths
+      /href=["']([^"']*\/\d{4}\/[^"']*\.html?[^"']*)["']/gi,
+      /href=["']([^"']*\/\d{4}\/[^"']*)["']/gi,
+      /href=["']([^"']*\/article\/[^"']*)["']/gi,
+      /href=["']([^"']*\/story\/[^"']*)["']/gi,
+      /href=["']([^"']*\/news\/[^"']*)["']/gi,
+      // Look for links with dates in the path
+      /href=["']([^"']*\/\d{4}-\d{2}-\d{2}[^"']*)["']/gi,
+      // Look for links that don't contain common non-article paths
+      /href=["']([^"']*(?!\/about|\/contact|\/privacy|\/terms|\/advertise|\/subscribe|\/login|\/signup|\/search|\/category|\/tag|\/author|\/page|\/feed|\/rss|\/sitemap)[^"']*)["']/gi
+    ];
+    
+    for (const pattern of patterns) {
+      const matches = html.matchAll(pattern);
+      for (const match of matches) {
+        let articleUrl = match[1];
+        
+        // Convert relative URLs to absolute URLs
+        if (articleUrl.startsWith('/')) {
+          articleUrl = new URL(articleUrl, baseUrl).href;
+        } else if (!articleUrl.startsWith('http')) {
+          articleUrl = new URL(articleUrl, baseUrl).href;
+        }
+        
+        // Only include URLs from the same domain
+        if (articleUrl.startsWith(baseUrl) && 
+            !articleUrl.includes('#') && 
+            !articleUrl.includes('javascript:') &&
+            articleUrl !== baseUrl &&
+            !articleUrl.endsWith('/')) {
+          articleUrls.push(articleUrl);
+        }
+      }
+    }
+    
+    // Remove duplicates and limit to reasonable number
+    const uniqueUrls = [...new Set(articleUrls)].slice(0, 20);
+    
+    console.log(`Found ${uniqueUrls.length} potential article URLs from ${baseUrl}`);
+    return uniqueUrls;
+    
+  } catch (error) {
+    console.error(`Error extracting article URLs from ${baseUrl}:`, error.message);
+    return [];
+  }
+}
+
+// Helper function to scrape an individual article and get its content
+async function scrapeArticle(url) {
+  try {
+    console.log(`Scraping article: ${url}`);
+    
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      },
+      timeout: 30000
+    });
+    
+    if (response.status === 200) {
+      console.log(`Successfully scraped article: ${url}`);
+      return response.data;
+    } else {
+      console.error(`Failed to scrape article ${url}: HTTP ${response.status}`);
+      return null;
+    }
+    
+  } catch (error) {
+    console.error(`Error scraping article ${url}:`, error.message);
     return null;
   }
 }
@@ -313,14 +393,15 @@ async function scoutArticles() {
       throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
     }
     
-    // Step 1: Scrape all websites
-    console.log('Step 1: Scraping websites...');
-    const scrapedData = [];
+    // Step 1: Scrape main pages and extract article URLs
+    console.log('Step 1: Scraping main pages and extracting article URLs...');
+    const allArticleUrls = [];
     
     for (const url of TARGET_WEBSITES) {
-      const html = await scrapeWebsite(url);
-      if (html) {
-        scrapedData.push({ url, html });
+      const mainPageHtml = await scrapeWebsiteForArticles(url);
+      if (mainPageHtml) {
+        const articleUrls = extractArticleUrls(mainPageHtml, url);
+        allArticleUrls.push(...articleUrls);
         results.websitesScraped++;
       }
       
@@ -328,14 +409,32 @@ async function scoutArticles() {
       await delay(parseInt(process.env.SCRAPING_DELAY_MS || '3000'));
     }
     
-    console.log(`Successfully scraped ${results.websitesScraped} websites`);
+    console.log(`Found ${allArticleUrls.length} total article URLs from ${results.websitesScraped} websites`);
     
-    // Step 2: Analyze HTML with AI
-    console.log('Step 2: Analyzing content with AI...');
+    // Step 2: Scrape individual articles
+    console.log('Step 2: Scraping individual articles...');
+    const scrapedArticles = [];
+    const maxArticlesToScrape = parseInt(process.env.MAX_ARTICLES_TO_SCRAPE || '30');
+    
+    for (let i = 0; i < Math.min(allArticleUrls.length, maxArticlesToScrape); i++) {
+      const articleUrl = allArticleUrls[i];
+      const articleHtml = await scrapeArticle(articleUrl);
+      if (articleHtml) {
+        scrapedArticles.push({ url: articleUrl, html: articleHtml });
+      }
+      
+      // Delay between article requests
+      await delay(parseInt(process.env.ARTICLE_SCRAPING_DELAY_MS || '2000'));
+    }
+    
+    console.log(`Successfully scraped ${scrapedArticles.length} individual articles`);
+    
+    // Step 3: Analyze individual articles with AI
+    console.log('Step 3: Analyzing individual articles with AI...');
     const analyzedArticles = [];
     
-    for (const data of scrapedData) {
-      const analyzedArticle = await analyzeHTMLWithAI(data.html, data.url);
+    for (const article of scrapedArticles) {
+      const analyzedArticle = await analyzeHTMLWithAI(article.html, article.url);
       if (analyzedArticle) {
         analyzedArticles.push(analyzedArticle);
         results.articlesAnalyzed++;
@@ -345,10 +444,10 @@ async function scoutArticles() {
       await delay(1000);
     }
     
-    console.log(`Successfully analyzed ${results.articlesAnalyzed} websites`);
+    console.log(`Successfully analyzed ${results.articlesAnalyzed} individual articles`);
     
-    // Step 3: Filter and add articles to database
-    console.log('Step 3: Adding articles to database...');
+    // Step 4: Filter and add articles to database
+    console.log('Step 4: Adding articles to database...');
     
     // Sort by quality score (highest first) and take top articles
     const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '10');

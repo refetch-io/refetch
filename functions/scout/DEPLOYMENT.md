@@ -81,14 +81,18 @@ SCOUT_USER_ID=scout-user
 SCOUT_USER_NAME=Scout
 MAX_ARTICLES_PER_RUN=10
 SCRAPING_DELAY_MS=3000
+MAX_ARTICLES_TO_SCRAPE=30
+ARTICLE_SCRAPING_DELAY_MS=2000
 ```
 
 **Important Notes:**
 - **Required**: `OPENAI_API_KEY` and `SCOUT_USER_ID` must be set
 - **Automatic**: Appwrite automatically provides `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT_ID`, `APPWRITE_API_KEY`, `APPWRITE_DATABASE_ID`, `APPWRITE_POSTS_COLLECTION_ID`, and `APPWRITE_COMMENTS_COLLECTION_ID`
 - The `SCOUT_USER_ID` should match the user ID you created in Step 1
-- `SCRAPING_DELAY_MS` controls the delay between requests (3000ms = 3 seconds recommended)
-- `MAX_ARTICLES_PER_RUN` limits how many articles are added per execution
+- `SCRAPING_DELAY_MS` controls the delay between main page requests (3000ms = 3 seconds recommended)
+- `MAX_ARTICLES_PER_RUN` limits how many articles are added to database per execution
+- `MAX_ARTICLES_TO_SCRAPE` limits how many individual articles to scrape (30 recommended)
+- `ARTICLE_SCRAPING_DELAY_MS` controls delay between individual article requests (2000ms = 2 seconds recommended)
 
 ### 3.3 Get Your Appwrite Configuration
 
@@ -121,14 +125,13 @@ SCRAPING_DELAY_MS=3000
 Look for these success indicators:
 ```
 Starting scout function...
-Step 1: Scraping websites for articles...
-Found X articles from TechCrunch
-Found X articles from The Verge
-...
-Step 2: Fetching article content...
-Step 3: Analyzing articles with AI...
-Step 4: Filtering articles based on quality...
-Step 5: Adding articles to database...
+Step 1: Scraping main pages and extracting article URLs...
+Found X total article URLs from Y websites
+Step 2: Scraping individual articles...
+Successfully scraped X individual articles
+Step 3: Analyzing individual articles with AI...
+Successfully analyzed X individual articles
+Step 4: Adding articles to database...
 Successfully added article: [Article Title]
 Scout function completed successfully!
 ```
