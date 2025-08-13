@@ -69,7 +69,7 @@ export function PostCard({
             <ChevronUp className="h-3 w-3" />
           </Button>
           <span className="text-[0.65rem] text-gray-700 font-medium">
-            {voteState.score}
+            {voteState.count}
           </span>
           <Button
             variant="ghost"

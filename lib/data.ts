@@ -3,7 +3,7 @@ export interface Comment {
   author: string
   text: string
   timeAgo: string
-  score: number
+  count: number
   userId?: string
   replies?: Comment[]
 }
@@ -13,7 +13,7 @@ export interface NewsItem {
   title: string
   domain: string
   daysAgo?: string
-  score: number
+  count: number
   iconName: string
   bgColorClass: string
   shapeClass: string
@@ -276,7 +276,6 @@ function getTimeAgo(createdAt: string): string {
 // Helper function to convert Appwrite post to NewsItem
 export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number): NewsItem => {
   // Use the count field directly instead of calculating from countUp - countDown
-  const score = post.count || 0
   const domain = post.link ? new URL(post.link).hostname : "appwrite.io"
   
   // Use improved time ago function
@@ -287,7 +286,7 @@ export const convertAppwritePostToNewsItem = (post: AppwritePost, index: number)
     title: post.title,
     domain: domain,
     daysAgo: timeAgo,
-    score: score,
+    count: post.count,
     iconName: availableIconNames[index % availableIconNames.length],
     bgColorClass: backgroundColors[index % backgroundColors.length],
     shapeClass: shapes[index % shapes.length],
@@ -395,7 +394,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       'userName',
       'countUp',
       'countDown',
-      'score',
+      'count',
       'countComments',
       'link',
       'type',
@@ -500,7 +499,7 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      score: 0, // Default score since it's not stored in the collection
+      count: 0, // Default score since it's not stored in the collection
       userId: doc.userId || undefined,
       replies: [] // TODO: Implement nested replies using replyId
     }))
@@ -597,7 +596,7 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
           'userName',
           'countUp',
           'countDown',
-          'score',
+          'count',
           'countComments',
           'link',
           'type',
@@ -779,7 +778,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       'userName',
       'countUp',
       'countDown',
-      'score',
+      'count',
       'countComments',
       'link',
       'type',
@@ -805,7 +804,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.score,
+      count: post.count,
       countComments: post.countComments,
       link: post.link,
       type: post.type,
@@ -887,7 +886,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
           'userName',
           'countUp',
           'countDown',
-          'score',
+          'count',
           'countComments',
           'link',
           'type',
@@ -909,7 +908,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.score,
+      count: post.count,
       countComments: post.countComments,
       link: post.link,
       type: post.type,
@@ -1001,7 +1000,7 @@ export async function fetchCommentsForPostsBatchServer(postIds: string[]): Promi
           author: doc.userName || 'Anonymous',
           text: doc.content || '',
           timeAgo: getTimeAgo(doc.$createdAt),
-          score: doc.count || 0, // Use the count field if available
+          count: doc.count || 0, // Use the count field if available
           userId: doc.userId || '', // Include userId for original poster detection
           replies: [] // TODO: Implement nested replies using replyId
         }
@@ -1223,7 +1222,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       'userName',
       'countUp',
       'countDown',
-      'score',
+      'count',
       'countComments',
       'link',
       'type',
@@ -1249,7 +1248,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       userName: post.userName,
       countUp: post.countUp,
       countDown: post.countDown,
-      count: post.score,
+      count: post.count,
       countComments: post.countComments,
       link: post.link,
       type: post.type,

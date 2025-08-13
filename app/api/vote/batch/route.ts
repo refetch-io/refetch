@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     resources.forEach(resource => {
       voteMap[resource.id] = {
         currentVote: null,
-        score: 0,
+        count: 0,
         countUp: 0,
         countDown: 0
       }
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
           posts.documents.forEach((post: any) => {
             voteMap[post.$id].countUp = post.countUp || 0
             voteMap[post.$id].countDown = post.countDown || 0
-            voteMap[post.$id].score = post.count || 0
+            voteMap[post.$id].count = post.count || 0
           })
         } catch (error) {
           console.error('Error fetching posts data:', error)
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
           comments.documents.forEach((comment: any) => {
             voteMap[comment.$id].countUp = comment.countUp || 0
             voteMap[comment.$id].countDown = comment.countDown || 0
-            voteMap[comment.$id].score = comment.count || 0
+            voteMap[comment.$id].count = comment.count || 0
           })
         } catch (error) {
           console.error('Error fetching comments data:', error)

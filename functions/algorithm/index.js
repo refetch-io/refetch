@@ -306,7 +306,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
         return {
           $id: post.$id,
           timeScore: updatedData.timeScore,
-          score: updatedData.score
+          count: updatedData.count
         };
       });
       
@@ -318,7 +318,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
         const firstPost = batch[0];
         const voteCount = firstPost.count ?? 0;
         const commentCount = firstPost.countComments ?? 0;
-        log(`📊 Sample post scoring - Votes: ${voteCount}, Comments: ${commentCount}, Final Score: ${batchUpdates[0].score}`);
+        log(`📊 Sample post scoring - Votes: ${voteCount}, Comments: ${commentCount}, Final Count: ${batchUpdates[0].count}`);
       }
       
       // Update batch using Appwrite's bulk operations
@@ -333,7 +333,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
             update.$id,
             {
               timeScore: update.timeScore,
-              score: update.score
+              score: update.count
             }
           );
           successfulUpdates++;

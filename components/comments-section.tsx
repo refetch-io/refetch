@@ -102,7 +102,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 comment={reply} 
                 onAddReply={onAddReply} 
                 onVote={onVote}
-                voteState={{ currentVote: null, score: reply.score }}
+                voteState={{ currentVote: null, count: reply.count }}
                 isVoting={false}
                 isAuthenticated={isAuthenticated}
                 isOriginalPoster={false} // Replies don't have original poster status
@@ -148,8 +148,8 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     } else if (sortType === 'votes') {
       // Sort by vote count (highest first)
       return sorted.sort((a, b) => {
-        const aScore = commentVotes.get(a.id)?.score ?? a.score
-        const bScore = commentVotes.get(b.id)?.score ?? b.score
+        const aScore = commentVotes.get(a.id)?.count ?? a.count
+        const bScore = commentVotes.get(b.id)?.count ?? b.count
         return bScore - aScore
       })
     }
@@ -162,7 +162,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     const initialVotes = new Map<string, VoteState>()
     const addCommentVotes = (commentList: Comment[]) => {
       commentList.forEach(comment => {
-        initialVotes.set(comment.id, { currentVote: null, score: comment.score })
+        initialVotes.set(comment.id, { currentVote: null, count: comment.count })
         if (comment.replies) {
           addCommentVotes(comment.replies)
         }
@@ -180,13 +180,13 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
         author: "You", // Assuming the current user is "You"
         text: newCommentText.trim(),
         timeAgo: "just now",
-        score: 1, // Default score for new comments
+        count: 1, // Default score for new comments
         replies: [],
         userId: user?.$id || '', // Include userId for original poster detection
       }
       setComments((prev) => [newComment, ...prev])
       // Add default vote state for new comment
-      setCommentVotes(prev => new Map(prev).set(newComment.id, { currentVote: null, score: 1 }))
+      setCommentVotes(prev => new Map(prev).set(newComment.id, { currentVote: null, count: 1 }))
       setNewCommentText("")
     }
   }
@@ -197,7 +197,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
       author: "You",
       text: text,
       timeAgo: "just now",
-      score: 1,
+      count: 1,
       replies: [],
       userId: user?.$id || '', // Include userId for original poster detection
     }
@@ -220,7 +220,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     }
     setComments((prev) => addReplyRecursive(prev))
     // Add default vote state for new reply
-    setCommentVotes(prev => new Map(prev).set(newReply.id, { currentVote: null, score: 1 }))
+    setCommentVotes(prev => new Map(prev).set(newReply.id, { currentVote: null, count: 1 }))
   }
 
   const handleVote = async (commentId: string, direction: "up" | "down") => {
@@ -229,24 +229,24 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     setIsVoting(true)
     try {
       // Get current vote state
-      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, score: 0 }
+      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, count: 0 }
       
       // Optimistic update
       const newVoteState = { ...currentVoteState }
       if (currentVoteState.currentVote === direction) {
         // Removing vote
         newVoteState.currentVote = null
-        newVoteState.score = currentVoteState.score - (direction === "up" ? 1 : -1)
+        newVoteState.count = currentVoteState.count - (direction === "up" ? 1 : -1)
       } else if (currentVoteState.currentVote === null) {
         // New vote
         newVoteState.currentVote = direction
-        newVoteState.score = currentVoteState.score + (direction === "up" ? 1 : -1)
+        newVoteState.count = currentVoteState.count + (direction === "up" ? 1 : -1)
       } else {
         // Changing vote
         const previousVoteValue = currentVoteState.currentVote === 'up' ? 1 : -1
         const newVoteValue = direction === 'up' ? 1 : -1
         newVoteState.currentVote = direction
-        newVoteState.score = currentVoteState.score - previousVoteValue + newVoteValue
+        newVoteState.count = currentVoteState.count - previousVoteValue + newVoteValue
       }
 
       // Update local state immediately
@@ -280,7 +280,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     } catch (error) {
       console.error('Error voting:', error)
       // Revert on error
-      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, score: 0 }
+      const currentVoteState = commentVotes.get(commentId) || { currentVote: null, count: 0 }
       setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
     } finally {
       setIsVoting(false)
@@ -344,7 +344,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
               comment={comment} 
               onAddReply={handleAddReply} 
               onVote={handleVote}
-              voteState={commentVotes.get(comment.id) || { currentVote: null, score: comment.score }}
+              voteState={commentVotes.get(comment.id) || { currentVote: null, count: comment.count }}
               isVoting={isVoting}
               isAuthenticated={!!user}
               isOriginalPoster={Boolean(isOriginalPoster(comment.userId || ''))}

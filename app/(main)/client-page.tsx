@@ -506,7 +506,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
           const voteState = voteMap.get(post.id)
           initialVoteStates[post.id] = voteState || {
             currentVote: null,
-            score: post.score
+            count: post.count
           }
         })
         
@@ -525,7 +525,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
     const voteState = voteStates[itemId]
     return {
       currentVote: voteState?.currentVote || null,
-      score: voteState?.score !== undefined ? voteState.score : (item?.score || 0)
+      count: voteState?.count !== undefined ? voteState.count : (item?.count || 0)
     }
   }
 
@@ -565,7 +565,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
 
     setVotingState(itemId, true)
     try {
-      await handleVote(itemId, 'post', direction, currentState.currentVote, currentState.score, (newState) => {
+      await handleVote(itemId, 'post', direction, currentState.currentVote, currentState.count, (newState) => {
         updateVoteState(itemId, newState)
       })
     } catch (error) {

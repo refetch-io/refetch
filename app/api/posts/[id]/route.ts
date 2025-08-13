@@ -72,7 +72,7 @@ export async function GET(
           author: comment.authorName || 'Anonymous',
           text: comment.text,
           timeAgo: getTimeAgo(comment.createdAt || comment.$createdAt),
-          score: comment.score || 0,
+          score: comment.count || 0,
           replies: [] // For now, no nested replies
         }))
 

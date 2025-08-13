@@ -18,7 +18,6 @@ export default async function RefetchHomePage() {
   // Fetch posts from Appwrite on the server with comments and votes in batch
   // This is much more efficient than individual API calls
   const result = await fetchPostsFromAppwriteWithCommentsAndVotes()
-  
   // Add timestamp for debugging
   console.log(`Page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)
   

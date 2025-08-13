@@ -54,7 +54,7 @@ export function CommentVote({
           <ChevronUp className={iconSize} />
         </Button>
         <span className={`${scoreTextSize} text-gray-700 font-medium`}>
-          {voteState.score}
+          {voteState.count}
         </span>
         <Button
           variant="ghost"
@@ -92,7 +92,7 @@ export function CommentVote({
         <ChevronUp className={iconSize} />
       </Button>
       <span className={`${scoreTextSize} text-gray-700 font-medium min-w-[1.5rem] text-center mx-0`}>
-        {voteState.score}
+        {voteState.count}
       </span>
       <Button
         variant="ghost"

@@ -21,7 +21,7 @@ interface ThreadClientPageProps {
 type SortType = 'date' | 'votes'
 
 export function ThreadClientPage({ article }: ThreadClientPageProps) {
-  const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, score: article.score })
+  const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, count: article.count })
   const [isVoting, setIsVoting] = useState(false)
   const [commentVoteStates, setCommentVoteStates] = useState<Record<string, VoteState>>({})
   const [isCommentVoting, setIsCommentVoting] = useState(false)
@@ -42,8 +42,8 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     } else if (sortType === 'votes') {
       // Sort by vote count (highest first)
       return sorted.sort((a, b) => {
-        const aScore = commentVoteStates[a.id]?.score ?? a.score
-        const bScore = commentVoteStates[b.id]?.score ?? b.score
+        const aScore = commentVoteStates[a.id]?.count ?? a.count
+        const bScore = commentVoteStates[b.id]?.count ?? b.count
         return bScore - aScore
       })
     }
@@ -81,12 +81,12 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         const newCommentVoteStates: Record<string, VoteState> = {}
         comments.forEach(comment => {
           const commentVoteState = voteMap.get(comment.id)
-          newCommentVoteStates[comment.id] = commentVoteState || { currentVote: null, score: comment.score }
+          newCommentVoteStates[comment.id] = commentVoteState || { currentVote: null, count: comment.count }
           
           if (comment.replies) {
             comment.replies.forEach(reply => {
               const replyVoteState = voteMap.get(reply.id)
-              newCommentVoteStates[reply.id] = replyVoteState || { currentVote: null, score: reply.score }
+              newCommentVoteStates[reply.id] = replyVoteState || { currentVote: null, count: reply.count }
             })
           }
         })
@@ -94,13 +94,13 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       } catch (error) {
         console.error('Error fetching votes:', error)
         // Fallback to default states
-        setVoteState({ currentVote: null, score: article.score })
+        setVoteState({ currentVote: null, count: article.count || 0 })
         const defaultCommentVoteStates: Record<string, VoteState> = {}
         comments.forEach(comment => {
-          defaultCommentVoteStates[comment.id] = { currentVote: null, score: comment.score }
+          defaultCommentVoteStates[comment.id] = { currentVote: null, count: comment.count }
           if (comment.replies) {
             comment.replies.forEach(reply => {
-              defaultCommentVoteStates[reply.id] = { currentVote: null, score: reply.score }
+              defaultCommentVoteStates[reply.id] = { currentVote: null, count: reply.count }
             })
           }
         })
@@ -109,17 +109,17 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     }
 
     fetchVotes()
-  }, [isAuthenticated, user?.$id, article.id, article.score, comments])
+  }, [isAuthenticated, user?.$id, article.id, article.count, comments])
 
   // Initialize comment vote states when component mounts
   useEffect(() => {
     const initialVoteStates: Record<string, VoteState> = {}
     if (comments.length > 0) {
       comments.forEach((comment: Comment) => {
-        initialVoteStates[comment.id] = { currentVote: null, score: comment.score }
+        initialVoteStates[comment.id] = { currentVote: null, count: comment.count }
         if (comment.replies) {
           comment.replies.forEach((reply: Comment) => {
-            initialVoteStates[reply.id] = { currentVote: null, score: reply.score }
+            initialVoteStates[reply.id] = { currentVote: null, count: reply.count }
           })
         }
       })
@@ -138,7 +138,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
 
     setIsVoting(true)
     try {
-      await handleVote(itemId, 'post', direction, voteState.currentVote, voteState.score, (newState) => {
+      await handleVote(itemId, 'post', direction, voteState.currentVote, voteState.count, (newState) => {
         setVoteState(newState)
       })
     } catch (error) {
@@ -158,10 +158,10 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           // Initialize vote states for new comments
           const newVoteStates: Record<string, VoteState> = {}
           data.comments.forEach((comment: Comment) => {
-            newVoteStates[comment.id] = { currentVote: null, score: comment.score }
+            newVoteStates[comment.id] = { currentVote: null, count: comment.count }
             if (comment.replies) {
               comment.replies.forEach((reply: Comment) => {
-                newVoteStates[reply.id] = { currentVote: null, score: reply.score }
+                newVoteStates[reply.id] = { currentVote: null, count: reply.count }
               })
             }
           })
@@ -189,9 +189,9 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     setIsCommentVoting(true)
     try {
       // Get current vote state for this comment
-      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, score: 0 }
+      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, count: 0 }
       
-      await handleVote(commentId, 'comment', direction, currentVoteState.currentVote, currentVoteState.score, (newState) => {
+      await handleVote(commentId, 'comment', direction, currentVoteState.currentVote, currentVoteState.count, (newState) => {
         setCommentVoteStates(prev => ({
           ...prev,
           [commentId]: newState
@@ -306,7 +306,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                   <div className="flex items-center gap-3">
                     <CommentVote
                       commentId={comment.id}
-                      voteState={commentVoteStates[comment.id] || { currentVote: null, score: 0 }}
+                      voteState={commentVoteStates[comment.id] || { currentVote: null, count: 0 }}
                       isVoting={isCommentVoting}
                       onVote={handleCommentVote}
                       isAuthenticated={isAuthenticated}
@@ -338,7 +338,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                             <div className="flex items-center gap-3">
                               <CommentVote
                                 commentId={reply.id}
-                                voteState={commentVoteStates[reply.id] || { currentVote: null, score: 0 }}
+                                voteState={commentVoteStates[reply.id] || { currentVote: null, count: 0 }}
                                 isVoting={isCommentVoting}
                                 onVote={handleCommentVote}
                                 isAuthenticated={isAuthenticated}

@@ -97,7 +97,7 @@ export interface VoteRequest {
 
 export interface VoteState {
   currentVote: 'up' | 'down' | null
-  score: number
+  count: number
   countUp?: number
   countDown?: number
 }

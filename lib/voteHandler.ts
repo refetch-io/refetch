@@ -94,7 +94,7 @@ export const handleVote = async (
 
       onVoteUpdate({
         currentVote: newVote,
-        score: newScore
+        count: newScore
       })
       console.log('=== END VOTE DEBUG ===')
     }
@@ -121,7 +121,7 @@ export const handleVote = async (
         // Revert to previous state
         onVoteUpdate({
           currentVote: currentVote,
-          score: currentScore
+          count: currentScore
         })
       }
       return
@@ -138,7 +138,7 @@ export const handleVote = async (
     if (onVoteUpdate) {
       onVoteUpdate({
         currentVote: currentVote,
-        score: currentScore
+        count: currentScore
       })
     }
   }
@@ -183,7 +183,7 @@ export const fetchUserVotesForResources = async (
     Object.entries(data.voteMap).forEach(([resourceId, voteData]: [string, any]) => {
       voteMap.set(resourceId, {
         currentVote: voteData.currentVote,
-        score: voteData.score,
+        count: voteData.count,
         countUp: voteData.countUp,
         countDown: voteData.countDown
       })
