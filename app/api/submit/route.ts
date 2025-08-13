@@ -34,8 +34,6 @@ async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: bool
     // Calculate the timestamp for 16 hours ago
     const sixteenHoursAgo = new Date(Date.now() - (SUBMISSION_WINDOW_HOURS * 60 * 60 * 1000))
     
-    console.log(`Checking submissions for user ${userId} since ${sixteenHoursAgo.toISOString()}`)
-    
     // Query for posts created by this user in the last 16 hours
     const recentPosts = await databases.listDocuments(
       DATABASE_ID,
@@ -48,8 +46,6 @@ async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: bool
     
     const submissionCount = recentPosts.documents.length
     const allowed = submissionCount < MAX_SUBMISSIONS_PER_16_HOURS
-    
-    console.log(`Found ${submissionCount} submissions for user ${userId} in last ${SUBMISSION_WINDOW_HOURS} hours`)
     
     return {
       allowed,
@@ -83,7 +79,6 @@ async function checkDuplicateUrl(url: string): Promise<boolean> {
 async function createDescriptionComment(postId: string, userId: string, userName: string, description: string): Promise<string | null> {
   try {
     if (!description || !description.trim()) {
-      console.log('No description provided, skipping comment creation')
       return null
     }
 
@@ -110,7 +105,6 @@ async function createDescriptionComment(postId: string, userId: string, userName
       }
     )
 
-    console.log('Description comment created successfully:', { commentId: comment.$id, postId })
     return comment.$id
   } catch (error) {
     console.error('Error creating description comment:', error)
@@ -141,7 +135,6 @@ export async function POST(request: NextRequest) {
     const jwtAccount = new Account(jwtClient)
     let user
     try {
-      console.log('Received JWT:', jwt)
       // Set the JWT on the client and get user information
       jwtClient.setJWT(jwt)
       user = await jwtAccount.get()
@@ -191,10 +184,8 @@ export async function POST(request: NextRequest) {
 
     // Step 3: Check user submission limit (abuse protection)
     const submissionLimitCheck = await checkUserSubmissionLimit(user.$id)
-    console.log(`User ${user.$id} submission check: ${submissionLimitCheck.count}/${submissionLimitCheck.limit} in last ${SUBMISSION_WINDOW_HOURS} hours`)
     
     if (!submissionLimitCheck.allowed) {
-      console.log(`User ${user.$id} exceeded submission limit: ${submissionLimitCheck.count}/${submissionLimitCheck.limit}`)
       return NextResponse.json(
         { 
           message: `Submission limit exceeded. You can only submit ${submissionLimitCheck.limit} posts in a ${SUBMISSION_WINDOW_HOURS}-hour period. You have submitted ${submissionLimitCheck.count} posts in the last ${SUBMISSION_WINDOW_HOURS} hours.`,
@@ -258,8 +249,6 @@ export async function POST(request: NextRequest) {
       if (salary) documentData.salary = salary.trim()
     }
 
-    console.log('Creating document:', documentData)
-
     // Create the document in Appwrite using the server-side client
     const createdDocument = await databases.createDocument(
       DATABASE_ID,
@@ -279,8 +268,6 @@ export async function POST(request: NextRequest) {
         )
         
         if (commentId) {
-          console.log('Description comment created, updating post comment count')
-          
           // Update the post with the comment count
           await databases.updateDocument(
             DATABASE_ID,

@@ -18,8 +18,9 @@ export default async function NewPage() {
   // Fetch posts from Appwrite on the server (sorted by creation date)
   const result = await fetchPostsFromAppwriteWithSortAndVotes('new')
   
-  // Add timestamp for debugging
-  console.log(`New page rendered at ${new Date().toISOString()} with ${result.posts.length} posts`)
-  
-  return <ClientPage initialPosts={result.posts} error={result.error} sortType="new" />
+  return (
+    <div className="min-h-screen bg-background">
+      <ClientPage initialPosts={result.posts} error={result.error} sortType="new" />
+    </div>
+  )
 } 

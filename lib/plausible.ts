@@ -225,20 +225,61 @@ export function trackPostClick(postId: string, postTitle: string, isExternal: bo
     }
     
     ;(window as any).plausible(eventName, { props })
-    console.log(`Tracked ${eventName}:`, props)
   }
 }
 
-// Track page views
-export function trackPageView(pageName: string, additionalProps?: Record<string, any>) {
-  if (typeof window !== 'undefined' && (window as any).plausible) {
-    const props = {
-      page_name: pageName,
-      timestamp: new Date().toISOString(),
-      ...additionalProps
-    }
-    
-    ;(window as any).plausible('Page View', { props })
-    console.log('Tracked Page View:', props)
+export function trackEvent(eventName: string, props?: Record<string, any>) {
+  if (typeof window === 'undefined') return
+
+  const url = window.location.href
+  const domain = window.location.hostname
+
+  // Only track on production domain
+  if (domain !== 'refetch.io' && domain !== 'www.refetch.io') return
+
+  const payload = {
+    name: eventName,
+    domain,
+    url,
+    props: props || {}
   }
+
+  // Send to Plausible
+  fetch('https://plausible.io/api/event', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+  }).catch(error => {
+    console.error('Failed to track event:', error)
+  })
+}
+
+export function trackPageView(props?: Record<string, any>) {
+  if (typeof window === 'undefined') return
+
+  const url = window.location.href
+  const domain = window.location.hostname
+
+  // Only track on production domain
+  if (domain !== 'refetch.io' && domain !== 'www.refetch.io') return
+
+  const payload = {
+    name: 'pageview',
+    domain,
+    url,
+    props: props || {}
+  }
+
+  // Send to Plausible
+  fetch('https://plausible.io/api/event', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+  }).catch(error => {
+    console.error('Failed to track page view:', error)
+  })
 }

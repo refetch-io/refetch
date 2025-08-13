@@ -553,7 +553,6 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
   const handleVoteClick = async (itemId: string, direction: "up" | "down") => {
     // Check if user is authenticated
     if (!isAuthenticated) {
-      console.log('User not authenticated, cannot vote')
       return
     }
     

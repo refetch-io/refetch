@@ -33,8 +33,6 @@ async function checkUserCommentLimit(userId: string): Promise<{ allowed: boolean
     // Calculate the timestamp for 1 hour ago
     const oneHourAgo = new Date(Date.now() - (COMMENT_WINDOW_HOURS * 60 * 60 * 1000))
     
-    console.log(`Checking comments for user ${userId} since ${oneHourAgo.toISOString()}`)
-    
     // Query for comments created by this user in the last hour
     const recentComments = await databases.listDocuments(
       DATABASE_ID,
@@ -48,8 +46,6 @@ async function checkUserCommentLimit(userId: string): Promise<{ allowed: boolean
     
     const commentCount = recentComments.documents.length
     const allowed = commentCount < MAX_COMMENTS_PER_HOUR
-    
-    console.log(`Found ${commentCount} comments for user ${userId} in last ${COMMENT_WINDOW_HOURS} hour(s)`)
     
     return {
       allowed,
@@ -92,8 +88,6 @@ export async function GET(request: NextRequest) {
         ])
       ]
     )
-
-    console.log(`Fetched ${comments.documents.length} comments for post ${postId} (max limit: ${MAX_COMMENTS_PER_POST})`)
 
     // Transform the comments to match the Comment interface
     const transformedComments = comments.documents.map(doc => ({
@@ -142,7 +136,6 @@ export async function POST(request: NextRequest) {
     const jwtAccount = new Account(jwtClient)
     let user
     try {
-      console.log('Received JWT:', jwt)
       // Set the JWT on the client and get user information
       jwtClient.setJWT(jwt)
       user = await jwtAccount.get()
@@ -166,10 +159,8 @@ export async function POST(request: NextRequest) {
 
     // Step 3: Check user comment limit (abuse protection)
     const commentLimitCheck = await checkUserCommentLimit(user.$id)
-    console.log(`User ${user.$id} comment check: ${commentLimitCheck.count}/${commentLimitCheck.limit} in last ${COMMENT_WINDOW_HOURS} hour(s)`)
     
     if (!commentLimitCheck.allowed) {
-      console.log(`User ${user.$id} exceeded comment limit: ${commentLimitCheck.count}/${commentLimitCheck.limit}`)
       return NextResponse.json(
         { 
           message: `Comment limit exceeded. You can only post ${commentLimitCheck.limit} comments in a ${COMMENT_WINDOW_HOURS}-hour period. You have posted ${commentLimitCheck.count} comments in the last ${COMMENT_WINDOW_HOURS} hour(s).`,
@@ -180,8 +171,6 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
-
-    console.log('Creating comment for user:', { userId: user.$id, userName: userName || user.name, postId })
 
     // Step 4: Create the comment in the database using the server-side client
     const comment = await databases.createDocument(
@@ -208,14 +197,11 @@ export async function POST(request: NextRequest) {
         1, // increment by 1
         undefined // no maximum limit
       )
-      console.log('Successfully incremented comment count for post:', postId)
     } catch (updateError) {
       console.error('Error updating comment count for post:', postId, updateError)
       // Don't fail the comment creation if the count update fails
       // The comment was created successfully, just the count couldn't be updated
     }
-
-    console.log('Comment created successfully:', { commentId: comment.$id, postId, authorId: user.$id })
 
     return NextResponse.json({ 
       message: 'Comment posted successfully',

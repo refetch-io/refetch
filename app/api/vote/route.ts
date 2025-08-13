@@ -23,78 +23,91 @@ const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
 const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID || ''
 const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID || ''
 
-// Debug logging
-console.log('Vote API Environment Variables:')
-console.log('DATABASE_ID:', DATABASE_ID)
-console.log('POSTS_COLLECTION_ID:', POSTS_COLLECTION_ID)
-console.log('COMMENTS_COLLECTION_ID:', COMMENTS_COLLECTION_ID)
-console.log('VOTES_COLLECTION_ID:', VOTES_COLLECTION_ID)
-console.log('ENDPOINT:', process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-console.log('PROJECT_ID:', process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    // Step 1: Parse the request body
-    const body: VoteRequest = await request.json()
-    const { resourceId, resourceType, voteType } = body
-
-    console.log('Vote request:', { resourceId, resourceType, voteType })
+    const { resourceId, resourceType, voteType } = await request.json()
 
     // Validate required fields
     if (!resourceId || !resourceType || !voteType) {
       return NextResponse.json(
-        { message: 'Resource ID, resource type, and vote type are required' },
+        { error: 'Missing required fields: resourceId, resourceType, voteType' },
         { status: 400 }
       )
     }
 
-    if (resourceType !== 'post' && resourceType !== 'comment') {
+    // Validate vote type
+    if (!['up', 'down'].includes(voteType)) {
       return NextResponse.json(
-        { message: 'Resource type must be either "post" or "comment"' },
+        { error: 'Invalid vote type. Must be "up" or "down"' },
         { status: 400 }
       )
     }
 
-    if (voteType !== 'up' && voteType !== 'down') {
+    // Validate resource type
+    if (!['post', 'comment'].includes(resourceType)) {
       return NextResponse.json(
-        { message: 'Vote type must be either "up" or "down"' },
+        { error: 'Invalid resource type. Must be "post" or "comment"' },
         { status: 400 }
       )
     }
 
-    // Step 2: Get and validate JWT token from Authorization header
+    // Check environment variables
+    const DATABASE_ID = process.env.APPWRITE_DATABASE_ID
+    const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID
+    const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID
+    const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID
+
+    if (!DATABASE_ID || !POSTS_COLLECTION_ID || !COMMENTS_COLLECTION_ID || !VOTES_COLLECTION_ID) {
+      console.error('Missing required environment variables for voting')
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      )
+    }
+
+    // Get user from JWT token
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
-        { message: 'Missing or invalid authorization header' },
+        { error: 'Missing or invalid authorization header' },
         { status: 401 }
       )
     }
 
-    const jwt = authHeader.replace('Bearer ', '')
+    const jwt = authHeader.substring(7)
+    
+    // Initialize Appwrite client
+    const { Client, Databases, Query } = await import('node-appwrite')
+    
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+      .setKey(process.env.APPWRITE_API_KEY!)
 
-    // Use the JWT client to validate the token
+    const databases = new Databases(client)
+
+    // Verify JWT and get user
     let user
     try {
-      jwtClient.setJWT(jwt)
+      const { ID, Account } = await import('node-appwrite')
+      const account = new Account(client)
       user = await account.get()
-      console.log('User authenticated:', user.$id)
     } catch (error) {
-      console.error('JWT validation error:', error)
+      console.error('Error verifying JWT:', error)
       return NextResponse.json(
-        { message: 'Invalid or expired JWT token' },
+        { error: 'Invalid or expired token' },
         { status: 401 }
       )
     }
 
-    // Convert vote type to count value
-    const voteCount = voteType === 'up' ? 1 : -1
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not authenticated' },
+        { status: 401 }
+      )
+    }
 
-    // Determine which collection to use based on resource type
-    const targetCollectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
-
-    // Step 3: Check if user has already voted on this resource
-    console.log('Checking existing vote for user:', user.$id, 'resource:', resourceId, 'type:', resourceType)
+    // Check if user has already voted on this resource
     const existingVote = await databases.listDocuments(
       DATABASE_ID,
       VOTES_COLLECTION_ID,
@@ -105,202 +118,163 @@ export async function POST(request: NextRequest) {
       ]
     )
 
-    console.log('Existing votes found:', existingVote.documents.length)
+    let voteDocument
+    let isNewVote = false
 
     if (existingVote.documents.length > 0) {
-      const previousVote = existingVote.documents[0]
-      console.log('Previous vote:', previousVote)
+      // Update existing vote
+      voteDocument = existingVote.documents[0]
+      const oldVoteType = voteDocument.count === 1 ? 'up' : 'down'
       
-      // If user is voting the same way, remove the vote
-      if (previousVote.count === voteCount) {
-        console.log('Removing vote')
-        // Delete the vote record
+      if (oldVoteType === voteType) {
+        // Remove vote (same vote type clicked again)
         await databases.deleteDocument(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
-          previousVote.$id
+          voteDocument.$id
         )
-
-        // Use atomic operations to update the resource count fields
-        if (voteType === 'up') {
-          // Removing upvote: decrease countUp and count
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countUp',
-            1,
-            0 // min value to prevent negative counts
-          )
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'count',
-            1
-          )
-        } else {
-          // Removing downvote: decrease countDown and increase count
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countDown',
-            1,
-            0 // min value to prevent negative counts
-          )
-          await databases.incrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'count',
-            1
-          )
-        }
-
-        return NextResponse.json({
-          message: 'Vote removed successfully',
-          action: 'removed',
-          voteType: null
-        })
+        voteDocument = null
       } else {
-        console.log('Changing vote from', previousVote.count, 'to', voteCount)
-        // If user is changing their vote, update the vote record
+        // Change vote type
         await databases.updateDocument(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
-          previousVote.$id,
+          voteDocument.$id,
           {
-            count: voteCount
+            count: voteType === 'up' ? 1 : -1
           }
         )
-
-        // Use atomic operations to update the resource count fields
-        if (previousVote.count === 1) {
-          // Previous was upvote, new is downvote
-          // Decrease countUp, increase countDown, decrease count by 2
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countUp',
-            1,
-            0 // min value to prevent negative counts
-          )
-          await databases.incrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countDown',
-            1
-          )
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'count',
-            2
-          )
-        } else {
-          // Previous was downvote, new is upvote
-          // Increase countUp, decrease countDown, increase count by 2
-          await databases.incrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countUp',
-            1
-          )
-          await databases.decrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'countDown',
-            1,
-            0 // min value to prevent negative counts
-          )
-          await databases.incrementDocumentAttribute(
-            DATABASE_ID,
-            targetCollectionId,
-            resourceId,
-            'count',
-            2
-          )
-        }
-
-        return NextResponse.json({
-          message: 'Vote updated successfully',
-          action: 'updated',
-          voteType: voteType
-        })
+        voteDocument.count = voteType === 'up' ? 1 : -1
       }
     } else {
-      console.log('Creating new vote')
-      // Step 4: Create new vote record
-      await databases.createDocument(
+      // Create new vote
+      const { ID } = await import('node-appwrite')
+      voteDocument = await databases.createDocument(
         DATABASE_ID,
         VOTES_COLLECTION_ID,
         ID.unique(),
         {
           userId: user.$id,
-          resourceId: resourceId,
-          resourceType: resourceType,
-          count: voteCount
+          resourceId,
+          resourceType,
+          count: voteType === 'up' ? 1 : -1
         }
       )
+      isNewVote = true
+    }
 
-      // Step 5: Use atomic operations to update the resource count fields
-      if (voteType === 'up') {
-        // New upvote: increase countUp and count
-        await databases.incrementDocumentAttribute(
+    // Update resource score
+    const collectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
+    const resource = await databases.getDocument(DATABASE_ID, collectionId, resourceId)
+    
+    let newScore = resource.count || 0
+    
+    if (voteDocument) {
+      if (isNewVote) {
+        // Add new vote
+        newScore += voteDocument.count
+      } else {
+        // Vote was changed, calculate the difference
+        const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+        if (oldVoteType === 'up' && voteType === 'down') {
+          newScore -= 2 // From +1 to -1 = -2
+        } else if (oldVoteType === 'down' && voteType === 'up') {
+          newScore += 2 // From -1 to +1 = +2
+        }
+      }
+    } else {
+      // Vote was removed
+      const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      newScore -= oldVoteType === 'up' ? 1 : -1
+    }
+
+    // Update the resource with new score
+    await databases.updateDocument(
+      DATABASE_ID,
+      collectionId,
+      resourceId,
+      {
+        count: newScore,
+        countUp: resource.countUp || 0,
+        countDown: resource.countDown || 0
+      }
+    )
+
+    // Update up/down counts
+    if (voteDocument) {
+      if (isNewVote) {
+        // New vote
+        if (voteType === 'up') {
+          await databases.updateDocument(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            { countUp: (resource.countUp || 0) + 1 }
+          )
+        } else {
+          await databases.updateDocument(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            { countDown: (resource.countDown || 0) + 1 }
+          )
+        }
+      } else {
+        // Vote changed
+        const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+        if (oldVoteType === 'up' && voteType === 'down') {
+          await databases.updateDocument(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            { 
+              countUp: (resource.countUp || 0) - 1,
+              countDown: (resource.countDown || 0) + 1
+            }
+          )
+        } else if (oldVoteType === 'down' && voteType === 'up') {
+          await databases.updateDocument(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            { 
+              countUp: (resource.countUp || 0) + 1,
+              countDown: (resource.countDown || 0) - 1
+            }
+          )
+        }
+      }
+    } else {
+      // Vote removed
+      const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      if (oldVoteType === 'up') {
+        await databases.updateDocument(
           DATABASE_ID,
-          targetCollectionId,
+          collectionId,
           resourceId,
-          'countUp',
-          1
-        )
-        await databases.incrementDocumentAttribute(
-          DATABASE_ID,
-          targetCollectionId,
-          resourceId,
-          'count',
-          1
+          { countUp: (resource.countUp || 0) - 1 }
         )
       } else {
-        // New downvote: increase countDown and decrease count
-        await databases.incrementDocumentAttribute(
+        await databases.updateDocument(
           DATABASE_ID,
-          targetCollectionId,
+          collectionId,
           resourceId,
-          'countDown',
-          1
-        )
-        await databases.decrementDocumentAttribute(
-          DATABASE_ID,
-          targetCollectionId,
-          resourceId,
-          'count',
-          1
+          { countDown: (resource.countDown || 0) - 1 }
         )
       }
-
-      return NextResponse.json({
-        message: 'Vote submitted successfully',
-        action: 'added',
-        voteType: voteType
-      })
     }
+
+    return NextResponse.json({
+      success: true,
+      message: voteDocument ? 'Vote recorded successfully' : 'Vote removed successfully',
+      newScore,
+      voteType: voteDocument ? voteType : null
+    })
 
   } catch (error) {
     console.error('Error processing vote:', error)
-    if (error instanceof Error) {
-      console.error('Error details:', {
-        message: error.message,
-        name: error.name
-      })
-    }
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { error: 'Failed to process vote' },
       { status: 500 }
     )
   }

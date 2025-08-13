@@ -1,5 +1,4 @@
 "use client"
-console.log("BackToTopButton component loaded.") // Debugging log
 
 import { useState, useEffect, useCallback } from "react"
 import { ChevronUp } from "lucide-react"

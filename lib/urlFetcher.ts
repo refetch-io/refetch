@@ -147,8 +147,6 @@ export class URLContentFetcher {
       cleanedHtml = cleanedHtml.substring(0, halfSize) + 
                    '\n\n[HTML content truncated due to size limits - preserving beginning and end sections...]\n\n' +
                    cleanedHtml.substring(cleanedHtml.length - halfSize);
-      
-      console.log(`HTML content truncated from ${html.length} to ${cleanedHtml.length} characters for LLM payload`);
     }
 
     return cleanedHtml;

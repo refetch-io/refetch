@@ -344,12 +344,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
   try {
     const { Client, Databases, Query } = await import('node-appwrite')
     
-    // Log environment variables for debugging (remove sensitive data in production)
-    console.log('Appwrite Config:', {
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
-      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
-    })
+    // Environment variables validated
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
@@ -410,8 +405,6 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}`)
-
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
       title: post.title,
@@ -442,14 +435,11 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     })
     
     // Log additional debugging information
-    console.error('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
-      hasApiKey: !!process.env.APPWRITE_API_KEY
-    })
+    if (error instanceof Error && error.message.includes('Appwrite')) {
+      console.error('Appwrite-specific error detected')
+    }
     
-    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+    return { posts: [], error: 'Failed to fetch posts from Appwrite' }
   }
 }
 
@@ -492,8 +482,6 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       ]
     )
 
-    console.log(`Fetched ${comments.documents.length} comments for post ${postId} (max limit: ${MAX_COMMENTS_PER_POST})`)
-
     // Transform the comments to match the Comment interface
     const transformedComments = comments.documents.map(doc => ({
       id: doc.$id,
@@ -534,8 +522,6 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
       id
     )
 
-    console.log(`Successfully fetched post ${id} from Appwrite`)
-
     // Convert the post to NewsItem format
     const newsItem = convertAppwritePostToNewsItem(post as unknown as AppwritePost, 0)
     
@@ -554,12 +540,9 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
     })
     
     // Log additional debugging information
-    console.error('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
-      hasApiKey: !!process.env.APPWRITE_API_KEY
-    })
+    if (error instanceof Error && error.message.includes('Appwrite')) {
+      console.error('Appwrite-specific error detected')
+    }
     
     return null
   }
@@ -608,8 +591,6 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
         ])
       ]
     )
-
-    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}`)
 
     const appwritePosts = posts.documents.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post as AppwritePost, index)
@@ -688,8 +669,6 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
       // Continue with null votes if the query fails
     }
 
-    console.log(`Successfully fetched votes for ${postIds.length} posts for user ${userId}`)
-
     return voteMap
   } catch (error) {
     console.error('Error fetching votes from Appwrite:', error)
@@ -725,12 +704,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
   try {
     const { Client, Databases, Query } = await import('node-appwrite')
     
-    // Log environment variables for debugging (remove sensitive data in production)
-    console.log('Appwrite Config:', {
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
-      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
-    })
+    // Environment variables validated
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
@@ -795,8 +769,6 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}, limit: ${limit}, offset: ${offset}`)
-
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
       title: post.title,
@@ -838,14 +810,11 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
     })
     
     // Log additional debugging information
-    console.error('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
-      hasApiKey: !!process.env.APPWRITE_API_KEY
-    })
+    if (error instanceof Error && error.message.includes('Appwrite')) {
+      console.error('Appwrite-specific error detected')
+    }
     
-    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+    return { posts: [], error: 'Failed to fetch posts from Appwrite' }
   }
 }
 
@@ -898,8 +867,6 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
         ])
       ]
     )
-
-    console.log(`Successfully fetched ${posts.documents.length} user submissions from Appwrite for user ${userId}, limit: ${limit}, offset: ${offset}`)
 
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
@@ -1055,8 +1022,6 @@ export async function fetchCommentsForPostsBatch(postIds: string[]): Promise<Rec
 
 // Fallback function to fetch comments individually if batch fails
 async function fetchCommentsForPostsFallback(postIds: string[]): Promise<Record<string, Comment[]>> {
-  console.log('Falling back to individual comment fetching for', postIds.length, 'posts')
-  
   const commentsByPost: Record<string, Comment[]> = {}
   
   // Initialize empty arrays for all posts
@@ -1137,8 +1102,6 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
       // Continue with null votes if the query fails
     }
 
-    console.log(`Successfully fetched votes for ${postIds.length} posts for user ${userId}`)
-
     return voteMap
   } catch (error) {
     console.error('Error fetching votes from Appwrite:', error)
@@ -1169,12 +1132,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
   try {
     const { Client, Databases, Query } = await import('node-appwrite')
     
-    // Log environment variables for debugging (remove sensitive data in production)
-    console.log('Appwrite Config:', {
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ? 'Set' : 'Missing',
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ? 'Set' : 'Missing',
-      apiKey: process.env.APPWRITE_API_KEY ? 'Set' : 'Missing'
-    })
+    // Environment variables validated
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
@@ -1239,8 +1197,6 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       queries
     )
 
-    console.log(`Successfully fetched ${posts.documents.length} posts from Appwrite with sort type: ${sortType}, limit: ${limit}, offset: ${offset}`)
-
     const appwritePosts = posts.documents.map((post: any) => ({
       $id: post.$id,
       title: post.title,
@@ -1299,13 +1255,10 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
     })
     
     // Log additional debugging information
-    console.error('Environment check:', {
-      NODE_ENV: process.env.NODE_ENV,
-      endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
-      projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
-      hasApiKey: !!process.env.APPWRITE_API_KEY
-    })
+    if (error instanceof Error && error.message.includes('Appwrite')) {
+      console.error('Appwrite-specific error detected')
+    }
     
-    return { posts: [], error: error instanceof Error ? error.message : 'Unknown error occurred' }
+    return { posts: [], error: 'Failed to fetch posts from Appwrite' }
   }
 }
