@@ -27,6 +27,7 @@ ChartJS.register(
 interface ChartData {
   hour?: number
   day?: number
+  month?: string
   visitors: number
 }
 
@@ -45,7 +46,12 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
     )
   }
 
-  const labels = data.map(d => selectedTab === "24h" ? `${d.hour}:00` : `Day ${d.day}`)
+  const labels = data.map(d => {
+    if (selectedTab === "24h") return `${d.hour}:00`
+    if (selectedTab === "30d") return `Day ${d.day}`
+    if (selectedTab === "1y") return d.month
+    return `Day ${d.day}`
+  })
   const values = data.map(d => d.visitors)
 
   const chartData = {

@@ -21,6 +21,7 @@ const TTL_CONFIG = {
   realtime: 30000,      // 30 seconds for real-time data
   '24h': 300000,        // 5 minutes for 24-hour data
   '30d': 1800000,       // 30 minutes for 30-day data
+  '1y': 3600000,        // 1 hour for 1-year data
 } as const
 
 const PLAUSIBLE_API_URL = 'https://plausible.io/api/v2/query'
@@ -135,6 +136,22 @@ function generateMockData(dataType: DataType): any {
         const variation = (day * 11 + 17) % 50
         return {
           day: i + 1,
+          visitors: baseVisitors + variation
+        }
+      })
+    case '1y':
+      return Array.from({ length: 12 }, (_, i) => {
+        const month = i
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        let baseVisitors = 3000
+        if (month >= 0 && month <= 2) baseVisitors = 2500 // Winter months
+        if (month >= 3 && month <= 5) baseVisitors = 2800 // Spring months
+        if (month >= 6 && month <= 8) baseVisitors = 3200 // Summer months
+        if (month >= 9 && month <= 11) baseVisitors = 3500 // Fall months
+        
+        const variation = (month * 13 + 17) % 800
+        return {
+          month: monthNames[month],
           visitors: baseVisitors + variation
         }
       })

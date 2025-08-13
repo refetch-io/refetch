@@ -35,7 +35,7 @@ export interface PlausibleResponse {
   query: PlausibleQuery
 }
 
-export type DataType = 'realtime' | '24h' | '30d'
+export type DataType = 'realtime' | '24h' | '30d' | '1y'
 
 // Helper functions for date manipulation
 function keyHour(d: Date): number {
@@ -150,6 +150,47 @@ export function transformData(result: PlausibleResponse, dataType: DataType): an
     return series.slice(0, 30)
   }
 
+  if (dataType === '1y') {
+    const labels: string[] | undefined = result.meta?.time_labels
+    const rows: any[] = result.results ?? []
+
+    if (labels?.length) {
+      const valByMonth = new Map<number, number>()
+      for (const r of rows) {
+        const d = parseFlexible(r.dimensions?.[0])
+        if (d) {
+          const monthKey = d.getMonth() // 0-11
+          valByMonth.set(monthKey, (valByMonth.get(monthKey) || 0) + (r.metrics?.[0] ?? 0))
+        }
+      }
+      
+      // Create monthly series with month names
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const series = monthNames.map((monthName, monthIndex) => ({
+        month: monthName,
+        visitors: valByMonth.get(monthIndex) ?? 0
+      }))
+      
+      return series
+    }
+
+    // Fallback without labels - group by month
+    const monthMap = new Map<number, number>()
+    for (const r of rows) {
+      const d = parseFlexible(r.dimensions?.[0])
+      if (d) {
+        const monthKey = d.getMonth()
+        monthMap.set(monthKey, (monthMap.get(monthKey) || 0) + (r.metrics?.[0] ?? 0))
+      }
+    }
+    
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return monthNames.map((monthName, monthIndex) => ({
+      month: monthName,
+      visitors: monthMap.get(monthIndex) ?? 0
+    }))
+  }
+
   return result.results ?? []
 }
 
@@ -198,6 +239,19 @@ export function create30dQuery(siteId: string): PlausibleQuery {
   }
 }
 
+export function create1yQuery(siteId: string): PlausibleQuery {
+  return {
+    site_id: siteId,
+    metrics: ["visitors"],
+    date_range: "12mo",
+    dimensions: ["time"],
+    include: {
+      time_labels: true,
+      total_rows: false
+    }
+  }
+}
+
 // Generic query builder
 export function createQuery(siteId: string, dataType: DataType): PlausibleQuery {
   switch (dataType) {
@@ -207,6 +261,8 @@ export function createQuery(siteId: string, dataType: DataType): PlausibleQuery 
       return create24hQuery(siteId)
     case '30d':
       return create30dQuery(siteId)
+    case '1y':
+      return create1yQuery(siteId)
     default:
       throw new Error(`Unknown data type: ${dataType}`)
   }

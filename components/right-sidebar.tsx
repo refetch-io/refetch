@@ -76,6 +76,7 @@ function ChartCard() {
   const [selectedTab, setSelectedTab] = useState("24h")
   const [chartData24h, setChartData24h] = useState<any[]>([])
   const [chartData30d, setChartData30d] = useState<any[]>([])
+  const [chartData1y, setChartData1y] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -100,20 +101,22 @@ function ChartCard() {
     }
   }
 
-  // Fetch both 24h and 30d data
+  // Fetch all chart data
   const fetchAllChartData = async () => {
     try {
       setIsLoading(true)
       setError(null)
       
-      // Fetch both data sets in parallel
-      const [data24h, data30d] = await Promise.all([
+      // Fetch all data sets in parallel
+      const [data24h, data30d, data1y] = await Promise.all([
         fetchChartData("24h"),
-        fetchChartData("30d")
+        fetchChartData("30d"),
+        fetchChartData("1y")
       ])
       
       setChartData24h(data24h)
       setChartData30d(data30d)
+      setChartData1y(data1y)
       setError(null)
     } catch (err) {
       console.error('Failed to fetch chart data:', err)
@@ -130,20 +133,28 @@ function ChartCard() {
 
   // Transform data for chart display based on selected tab
   const transformedChartData = useMemo(() => {
-    const data = selectedTab === "24h" ? chartData24h : chartData30d
-    
+    let data
     if (selectedTab === "24h") {
+      data = chartData24h
       return data.map(d => ({
         hour: d.hour !== undefined ? d.hour : parseInt(d.date?.split(':')[0]) || 0,
         visitors: d.visitors
       }))
-    } else {
+    } else if (selectedTab === "30d") {
+      data = chartData30d
       return data.map(d => ({
         day: d.day !== undefined ? d.day : parseInt(d.date) || 0,
         visitors: d.visitors
       }))
+    } else if (selectedTab === "1y") {
+      data = chartData1y
+      return data.map(d => ({
+        month: d.month,
+        visitors: d.visitors
+      }))
     }
-  }, [selectedTab, chartData24h, chartData30d])
+    return []
+  }, [selectedTab, chartData24h, chartData30d, chartData1y])
 
   // Calculate total visitors for each time period using the actual data
   const totalVisitors24h = useMemo(() => {
@@ -153,6 +164,10 @@ function ChartCard() {
   const totalVisitors30d = useMemo(() => {
     return chartData30d.reduce((sum, d) => sum + d.visitors, 0)
   }, [chartData30d])
+
+  const totalVisitors1y = useMemo(() => {
+    return chartData1y.reduce((sum, d) => sum + d.visitors, 0)
+  }, [chartData1y])
 
   // Format visitor count for display
   const formatVisitorCount = (count: number) => {
@@ -167,7 +182,9 @@ function ChartCard() {
       {/* Chart Card */}
       <div className="bg-white rounded-lg px-4 py-2 min-h-[100px]">
         <div className="text-xs text-gray-500/85 font-medium mb-3">
-          {selectedTab === "24h" ? "Last 24 Hours" : "Last 30 Days"}
+          {selectedTab === "24h" ? "Last 24 Hours" : 
+           selectedTab === "30d" ? "Last 30 Days" : 
+           selectedTab === "1y" ? "Last 12 Months" : "Last 30 Days"}
         </div>
         {isLoading ? (
           <div className="h-16 rounded animate-pulse"></div>
@@ -217,6 +234,23 @@ function ChartCard() {
           </div>
           <span className="text-xs font-semibold">
             {isLoading ? "..." : formatVisitorCount(totalVisitors30d)}
+          </span>
+        </button>
+
+        <button
+          onClick={() => setSelectedTab("1y")}
+          className={`flex-1 flex items-center justify-between p-2 rounded-lg h-8 transition-colors ${
+            selectedTab === "1y" 
+              ? "bg-white text-gray-900" 
+              : "bg-gray-50/50 text-gray-500 hover:bg-gray-100"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <BarChart3 className="w-3 h-3 flex-shrink-0" />
+            <span className="text-xs leading-4">1y</span>
+          </div>
+          <span className="text-xs font-semibold">
+            {isLoading ? "..." : formatVisitorCount(totalVisitors1y)}
           </span>
         </button>
       </div>
