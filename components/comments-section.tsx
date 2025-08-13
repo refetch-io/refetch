@@ -125,12 +125,12 @@ interface CommentsSectionProps {
 type SortType = 'date' | 'votes'
 
 export function CommentsSection({ initialComments, postId, postUserId }: CommentsSectionProps) {
+  const { user } = useAuth()
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newCommentText, setNewCommentText] = useState("")
-  const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
-  const [isVoting, setIsVoting] = useState(false)
   const [sortType, setSortType] = useState<SortType>('date')
-  const { user } = useAuth()
+  const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
+  const [votingComments, setVotingComments] = useState<Set<string>>(new Set()) // Track voting state per comment
 
   // Helper function to check if a comment is from the original poster
   const isOriginalPoster = (commentUserId: string) => {
@@ -229,7 +229,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
       return
     }
 
-    setIsVoting(true)
+    setVotingComments(prev => new Set(prev).add(commentId))
     
     try {
       // Get current vote state
@@ -253,9 +253,13 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
       const currentVoteState = commentVotes.get(commentId) || { currentVote: null, count: 0 }
       setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
     } finally {
-      setIsVoting(false)
+      setVotingComments(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(commentId)
+        return newSet
+      })
     }
-  }, [commentVotes, isVoting, user])
+  }, [commentVotes, user])
 
   const handleSortChange = (newSortType: SortType) => {
     setSortType(newSortType)
@@ -315,7 +319,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
               onAddReply={handleAddReply} 
               onVote={handleCommentVote}
               voteState={commentVotes.get(comment.id) || { currentVote: null, count: comment.count }}
-              isVoting={isVoting}
+              isVoting={votingComments.has(comment.id)}
               isAuthenticated={!!user}
               isOriginalPoster={Boolean(isOriginalPoster(comment.userId || ''))}
             />

@@ -94,95 +94,45 @@ export async function POST(request: Request) {
       ]
     )
 
-    let voteDocument
-    let isNewVote = false
+    console.log(`Vote check for user ${user.$id} on ${resourceType} ${resourceId}:`, {
+      existingVotes: existingVote.documents.length,
+      requestedVoteType: voteType,
+      existingVoteType: existingVote.documents.length > 0 ? (existingVote.documents[0].count === 1 ? 'up' : 'down') : 'none'
+    })
 
-    if (existingVote.documents.length > 0) {
-      // Update existing vote
-      voteDocument = existingVote.documents[0]
-      const oldVoteType = voteDocument.count === 1 ? 'up' : 'down'
-      
-      if (oldVoteType === voteType) {
-        // Remove vote (same vote type clicked again)
-        console.log(`Removing ${oldVoteType} vote for ${resourceType} ${resourceId}`)
-        await databases.deleteDocument(
-          DATABASE_ID,
-          VOTES_COLLECTION_ID,
-          voteDocument.$id
-        )
-        voteDocument = null
-      } else {
-        // Change vote type
-        console.log(`Changing vote from ${oldVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
-        await databases.updateDocument(
-          DATABASE_ID,
-          VOTES_COLLECTION_ID,
-          voteDocument.$id,
-          {
-            count: voteType === 'up' ? 1 : -1
-          }
-        )
-        voteDocument.count = voteType === 'up' ? 1 : -1
-      }
-    } else {
-      // Create new vote
-      const { ID } = await import('node-appwrite')
-      voteDocument = await databases.createDocument(
-        DATABASE_ID,
-        VOTES_COLLECTION_ID,
-        ID.unique(),
-        {
-          userId: user.$id,
-          resourceId,
-          resourceType,
-          count: voteType === 'up' ? 1 : -1
-        }
-      )
-      isNewVote = true
-    }
-
-    // Update resource score
+    // Get the current resource to see existing counts
     const collectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
     const resource = await databases.getDocument(DATABASE_ID, collectionId, resourceId)
     
     let newScore = resource.count || 0
-    
-    if (voteDocument) {
-      if (isNewVote) {
-        // Add new vote
-        newScore += voteDocument.count
-      } else {
-        // Vote was changed, calculate the difference
-        const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
-        if (oldVoteType === 'up' && voteType === 'down') {
-          newScore -= 2 // From +1 to -1 = -2
-        } else if (oldVoteType === 'down' && voteType === 'up') {
-          newScore += 2 // From -1 to +1 = +2
-        }
-      }
-    } else {
-      // Vote was removed
-      const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
-      newScore -= oldVoteType === 'up' ? 1 : -1
-    }
+    let newCountUp = resource.countUp || 0
+    let newCountDown = resource.countDown || 0
 
-    // Update the resource with new score
-    await databases.updateDocument(
-      DATABASE_ID,
-      collectionId,
-      resourceId,
-      {
-        count: newScore
-      }
-    )
-
-    // Update up/down counts using atomic operations to prevent race conditions
-    if (voteDocument) {
-      if (isNewVote) {
-        // New vote - increment the appropriate counter
-        console.log(`New ${voteType} vote for ${resourceType} ${resourceId}`)
-        if (voteType === 'up') {
-          await databases.incrementDocumentAttribute(
+    if (existingVote.documents.length > 0) {
+      // User has an existing vote
+      const existingVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      
+      if (existingVoteType === voteType) {
+        // Same vote type clicked again - REMOVE the vote
+        console.log(`Removing ${existingVoteType} vote for ${resourceType} ${resourceId}`)
+        
+        // Delete the vote document
+        await databases.deleteDocument(
+          DATABASE_ID,
+          VOTES_COLLECTION_ID,
+          existingVote.documents[0].$id
+        )
+        
+        // Update counters using atomic operations
+        if (existingVoteType === 'up') {
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            'count',
+            1
+          )
+          await databases.decrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
@@ -194,22 +144,48 @@ export async function POST(request: Request) {
             DATABASE_ID,
             collectionId,
             resourceId,
+            'count',
+            1
+          )
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
             'countDown',
             1
           )
         }
+        
       } else {
-        // Vote changed - decrement old counter and increment new counter
-        const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
-        console.log(`Vote changed from ${oldVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
-        if (oldVoteType === 'up' && voteType === 'down') {
-          // Changed from up to down
-          await databases.incrementDocumentAttribute(
+        // Different vote type clicked - CHANGE the vote
+        console.log(`Changing vote from ${existingVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
+        
+        // Update the vote document
+        await databases.updateDocument(
+          DATABASE_ID,
+          VOTES_COLLECTION_ID,
+          existingVote.documents[0].$id,
+          {
+            count: voteType === 'up' ? 1 : -1
+          }
+        )
+        
+        // Update counters using atomic operations
+        if (existingVoteType === 'up' && voteType === 'down') {
+          // From up to down: -1 for up, +1 for down, total change = -2
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            'count',
+            2
+          )
+          await databases.decrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
             'countUp',
-            -1
+            1
           )
           await databases.incrementDocumentAttribute(
             DATABASE_ID,
@@ -218,14 +194,21 @@ export async function POST(request: Request) {
             'countDown',
             1
           )
-        } else if (oldVoteType === 'down' && voteType === 'up') {
-          // Changed from down to up
+        } else {
+          // From down to up: +1 for down, +1 for up, total change = +2
           await databases.incrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
+            'count',
+            2
+          )
+          await databases.decrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
             'countDown',
-            -1
+            1
           )
           await databases.incrementDocumentAttribute(
             DATABASE_ID,
@@ -236,37 +219,91 @@ export async function POST(request: Request) {
           )
         }
       }
+      
     } else {
-      // Vote removed - decrement the appropriate counter
-      const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
-      console.log(`Vote removed (was ${oldVoteType}) for ${resourceType} ${resourceId}`)
-      if (oldVoteType === 'up') {
+      // User has no existing vote - CREATE new vote
+      console.log(`Creating new ${voteType} vote for ${resourceType} ${resourceId}`)
+      
+      // Create the vote document
+      const { ID } = await import('node-appwrite')
+      await databases.createDocument(
+        DATABASE_ID,
+        VOTES_COLLECTION_ID,
+        ID.unique(),
+        {
+          userId: user.$id,
+          resourceId,
+          resourceType,
+          count: voteType === 'up' ? 1 : -1
+        }
+      )
+      
+      // Update counters using atomic operations
+      if (voteType === 'up') {
+        await databases.incrementDocumentAttribute(
+          DATABASE_ID,
+          collectionId,
+          resourceId,
+          'count',
+          1
+        )
         await databases.incrementDocumentAttribute(
           DATABASE_ID,
           collectionId,
           resourceId,
           'countUp',
-          -1
+          1
         )
       } else {
+        await databases.decrementDocumentAttribute(
+          DATABASE_ID,
+          collectionId,
+          resourceId,
+          'count',
+          1
+        )
         await databases.incrementDocumentAttribute(
           DATABASE_ID,
           collectionId,
           resourceId,
           'countDown',
-          -1
+          1
         )
       }
     }
 
-    // Log the final state for debugging
-    console.log(`Final state for ${resourceType} ${resourceId}: score=${newScore}, voteType=${voteDocument ? voteType : 'removed'}`)
+    // Get the final resource state to verify counters
+    try {
+      const finalResource = await databases.getDocument(DATABASE_ID, collectionId, resourceId)
+      console.log(`Final state for ${resourceType} ${resourceId}:`, {
+        score: finalResource.count,
+        countUp: finalResource.countUp,
+        countDown: finalResource.countDown
+      })
+    } catch (error) {
+      console.error('Error getting final resource state:', error)
+    }
+
+    // Determine the operation type for the response
+    let operationType = 'created'
+    let finalVoteType = voteType
+    
+    if (existingVote.documents.length > 0) {
+      const existingVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      if (existingVoteType === voteType) {
+        operationType = 'removed'
+        finalVoteType = null
+      } else {
+        operationType = 'changed'
+        finalVoteType = voteType
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      message: voteDocument ? 'Vote recorded successfully' : 'Vote removed successfully',
+      message: `Vote ${operationType} successfully`,
       newScore,
-      voteType: voteDocument ? voteType : null
+      voteType: finalVoteType
     })
 
   } catch (error) {
