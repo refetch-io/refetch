@@ -431,10 +431,22 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
   const [voteStates, setVoteStates] = useState<Record<string, VoteState>>({})
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set())
   const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [scrollPosition, setScrollPosition] = useState(0)
   const { user, isAuthenticated } = useAuth()
 
   const POSTS_PER_PAGE = 25
   const MAX_PAGES = 10
+
+  // Save scroll position before page change
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY)
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Update newsItems when initialPosts changes
   useEffect(() => {
@@ -445,6 +457,8 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
   // Fetch posts for a specific page
   const fetchPostsForPage = async (page: number) => {
     if (page < 1 || page > MAX_PAGES) return
+    
+    setIsLoading(true)
     
     try {
       const offset = (page - 1) * POSTS_PER_PAGE
@@ -471,13 +485,15 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
       }
     } catch (error) {
       console.error('Error fetching posts for page:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  // Handle page change
-  const handlePageChange = (page: number) => {
+  // Handle page change - now returns a Promise
+  const handlePageChange = async (page: number) => {
     if (page < 1 || page > MAX_PAGES) return
-    fetchPostsForPage(page)
+    await fetchPostsForPage(page)
   }
 
   // Calculate pagination state
@@ -575,9 +591,33 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
   }
 
   return (
-    <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0">
+    <div className={`flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 transition-all duration-300 ease-out ${
+      isLoading ? 'opacity-95' : 'opacity-100'
+    }`}>
+      {/* Progress Bar */}
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-0.5 bg-gray-100 z-50">
+          <div className="h-full bg-[#4e1cb3] transition-all duration-300 ease-out" 
+               style={{ width: '100%' }}>
+            <div className="h-full bg-gradient-to-r from-[#4e1cb3] to-[#7c3aed] animate-pulse"></div>
+          </div>
+        </div>
+      )}
+      
       {/* Main Content */}
-      <main className="flex-1 space-y-6 min-w-0">
+      <main className={`flex-1 space-y-6 min-w-0 transition-opacity duration-200 ${
+        isLoading ? 'opacity-90' : 'opacity-100'
+      }`}>
+        {/* Content Loading Indicator */}
+        {isLoading && (
+          <div className="flex items-center justify-center py-6">
+            <div className="flex items-center gap-2 text-gray-400">
+              <div className="w-4 h-4 border-2 border-gray-200 border-t-[#4e1cb3] rounded-full animate-spin"></div>
+              <span className="text-xs font-medium">Updating content...</span>
+            </div>
+          </div>
+        )}
+        
         {/* Error Display */}
         {error && (
           <div className="bg-red-500 rounded-lg p-4 mb-6">
@@ -609,7 +649,10 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
         {/* <SearchAndFilter /> */}
 
         {/* News Items List - All posts rendered at once */}
-        <div className="space-y-4 min-h-screen">
+        <div className={`space-y-4 min-h-screen transition-all duration-300 ease-out ${
+          isLoading ? 'scale-98 opacity-90' : 'scale-100 opacity-100'
+        }`}>
+          {/* Actual Posts */}
           {newsItems.map((item, index) => {
             // Calculate the position in the list
             const position = index + 1
@@ -625,7 +668,13 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
             
             return (
               <div
-                key={item.id}
+                key={`${item.id}-${currentPage}`}
+                className={`transition-all duration-300 ease-out ${
+                  isLoading ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
+                }`}
+                style={{
+                  transitionDelay: `${index * 30}ms`
+                }}
               >
                 <PostCard
                   item={item}
@@ -651,6 +700,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
           hasNextPage={hasNextPage}
           hasPrevPage={hasPrevPage}
           onPageChange={handlePageChange}
+          isLoading={isLoading}
         />
       </main>
 
