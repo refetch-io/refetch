@@ -80,7 +80,16 @@ export async function GET(request: NextRequest) {
       [
         Query.equal('postId', postId),
         Query.orderDesc('$createdAt'),
-        Query.limit(MAX_COMMENTS_PER_POST)
+        Query.limit(MAX_COMMENTS_PER_POST),
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'userName',
+          'content',
+          'userId',
+          'count',
+          '$createdAt'
+        ])
       ]
     )
 
@@ -92,7 +101,7 @@ export async function GET(request: NextRequest) {
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      score: doc.count || 0, // Use the count field if available
+      count: doc.count || 0, // Use the count field if available
       userId: doc.userId || '', // Include userId for original poster detection
       replies: [] // TODO: Implement nested replies using replyId
     }))

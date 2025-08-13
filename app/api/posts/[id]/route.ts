@@ -63,7 +63,18 @@ export async function GET(
         const comments = await databases.listDocuments(
           process.env.APPWRITE_DATABASE_ID,
           process.env.APPWRITE_COMMENTS_COLLECTION_ID,
-          [Query.equal('postId', id)]
+          [
+            Query.equal('postId', id),
+            // Select only the attributes we actually use to improve performance
+            Query.select([
+              '$id',
+              'userName',
+              'userId',
+              'content',
+              'count',
+              '$createdAt'
+            ])
+          ]
         )
 
         // Convert comments to the expected format
@@ -72,7 +83,7 @@ export async function GET(
           author: comment.authorName || 'Anonymous',
           text: comment.text,
           timeAgo: getTimeAgo(comment.createdAt || comment.$createdAt),
-          score: comment.count || 0,
+          count: comment.count || 0,
           replies: [] // For now, no nested replies
         }))
 

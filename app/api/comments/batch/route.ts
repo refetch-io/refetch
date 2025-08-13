@@ -41,7 +41,17 @@ export async function POST(request: NextRequest) {
       [
         Query.equal('postId', postIds), // This will match any of the post IDs
         Query.orderDesc('$createdAt'),
-        Query.limit(1000) // Increase limit to get more comments
+        Query.limit(1000), // Increase limit to get more comments
+        // Select only the attributes we actually use to improve performance
+        Query.select([
+          '$id',
+          'postId',
+          'userName',
+          'content',
+          'userId',
+          'count',
+          '$createdAt'
+        ])
       ]
     )
 
@@ -60,7 +70,7 @@ export async function POST(request: NextRequest) {
           author: doc.userName || 'Anonymous',
           text: doc.content || '',
           timeAgo: getTimeAgo(doc.$createdAt),
-          score: doc.count || 0, // Use the count field if available
+          count: doc.count || 0, // Use the count field if available
           userId: doc.userId || '', // Include userId for original poster detection
           replies: [] // TODO: Implement nested replies using replyId
         }

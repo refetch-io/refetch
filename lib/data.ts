@@ -486,6 +486,7 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
           'userName',
           'content',
           'userId',
+          'count',
           '$createdAt'
         ])
       ]
@@ -499,7 +500,7 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      count: 0, // Default score since it's not stored in the collection
+      count: doc.count || 0, // Use the count field from the collection
       userId: doc.userId || undefined,
       replies: [] // TODO: Implement nested replies using replyId
     }))
