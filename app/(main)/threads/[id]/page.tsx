@@ -62,8 +62,8 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
         images: [
           {
             url: `${baseUrl}/api/og/thread/${article.id}`,
-            width: 2400,
-            height: 1260,
+            width: 1200,
+            height: 630,
             alt: article.title,
             type: 'image/png',
             secureUrl: `${baseUrl}/api/og/thread/${article.id}`,
@@ -83,8 +83,8 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
           {
             url: `${baseUrl}/api/og/thread/${article.id}`,
             alt: article.title,
-            width: 2400,
-            height: 1260,
+            width: 1200,
+            height: 630,
             type: 'image/png',
           }
         ],
@@ -111,12 +111,12 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
         'article:author': article.author,
         'article:section': 'Technology',
         'article:tag': [article.domain, 'tech news', 'discussion'],
-        'og:image:width': '2400',
-        'og:image:height': '1260',
+        'og:image:width': '1200',
+        'og:image:height': '630',
         'og:image:type': 'image/png',
         'og:image:secure_url': `${baseUrl}/api/og/thread/${article.id}`,
-        'twitter:image:width': '2400',
-        'twitter:image:height': '1260',
+        'twitter:image:width': '1200',
+        'twitter:image:height': '630',
         // LinkedIn specific optimizations
         'og:image:alt': article.title,
         'og:image:url': `${baseUrl}/api/og/thread/${article.id}`,

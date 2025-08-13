@@ -22,7 +22,7 @@ export async function GET(
               alignItems: 'center',
               justifyContent: 'center',
               backgroundColor: '#ffffff',
-              fontSize: 60,
+              fontSize: 30,
               fontWeight: 600,
               color: '#6b7280',
             }}
@@ -31,8 +31,8 @@ export async function GET(
           </div>
         ),
         {
-          width: 2400,
-          height: 1260,
+          width: 1200,
+          height: 630,
         }
       )
     }
@@ -83,7 +83,7 @@ export async function GET(
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: '#f3f4f6',
-            padding: '120px',
+            padding: '60px',
             fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             justifyContent: 'center',
             alignItems: 'center',
@@ -94,19 +94,19 @@ export async function GET(
           <div
             style={{
               position: 'absolute',
-              top: '80px', // Reduced from 120px
-              left: '120px',
+              top: '40px',
+              left: '60px',
               display: 'flex',
             }}
           >
             <img
               src={logoBase64}
               alt="Refetch"
-              width="306"
-              height="69"
+              width="153"
+              height="34.5"
               style={{
-                width: '306px',
-                height: '69px',
+                width: '153px',
+                height: '34.5px',
               }}
             />
           </div>
@@ -115,15 +115,15 @@ export async function GET(
           <div
             style={{
               backgroundColor: '#ffffff',
-              padding: '80px',
-              borderRadius: '24px',
+              padding: '40px',
+              borderRadius: '12px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '24px',
+              gap: '12px',
               width: '100%',
-              minHeight: '800px', // Fixed height instead of calc()
-              marginTop: '160px',
-              marginBottom: '160px',
+              minHeight: '400px',
+              marginTop: '80px',
+              marginBottom: '80px',
             }}
           >
             {/* Show RF badge if applicable - positioned above title */}
@@ -132,19 +132,19 @@ export async function GET(
                 style={{
                   display: 'flex',
                   justifyContent: 'flex-start',
-                  marginBottom: '24px',
+                  marginBottom: '12px',
                 }}
               >
                 <span
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    padding: '12px 32px',
-                    fontSize: '36px',
+                    padding: '6px 16px',
+                    fontSize: '18px',
                     fontWeight: '600',
                     backgroundColor: '#faf5ff',
                     color: '#9333ea',
-                    borderRadius: '20px',
+                    borderRadius: '10px',
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -158,21 +158,21 @@ export async function GET(
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '16px',
-                marginBottom: '40px', // Reduced from 160px to eliminate excessive spacing
+                gap: '8px',
+                marginBottom: '20px',
               }}
             >
               {/* Title */}
               <h1
                 style={{
-                  fontSize: '110px', // Reduced from 120px
+                  fontSize: '55px',
                   fontWeight: '900',
                   color: '#111827',
                   lineHeight: '1.3',
                   margin: 0,
                   flex: 1,
                   fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                  height: post.type === "show" ? '320px' : '440px', // Reduced height when tag is present
+                  height: post.type === "show" ? '160px' : '220px',
                   overflow: 'hidden',
                   display: '-webkit-box',
                   WebkitLineClamp: 3,
@@ -190,11 +190,11 @@ export async function GET(
             {post.description && (
               <p
                 style={{
-                  fontSize: '40px',
+                  fontSize: '20px',
                   color: '#374151',
                   lineHeight: '1.4',
-                  margin: '40px 0 0 0',
-                  maxWidth: '1800px',
+                  margin: '20px 0 0 0',
+                  maxWidth: '900px',
                   fontFamily: 'Arial, sans-serif',
                 }}
               >
@@ -211,14 +211,14 @@ export async function GET(
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginTop: '40px', // Reduced from 80px
-                paddingTop: '40px', // Reduced from 80px
-                borderTop: '2px solid #f3f4f6',
-                marginLeft: '-80px',
-                marginRight: '-80px',
-                paddingLeft: '80px',
-                paddingRight: '80px',
-                fontSize: '48px',
+                marginTop: '20px',
+                paddingTop: '20px',
+                borderTop: '1px solid #f3f4f6',
+                marginLeft: '-40px',
+                marginRight: '-40px',
+                paddingLeft: '40px',
+                paddingRight: '40px',
+                fontSize: '24px',
                 color: '#6b7280',
                 fontFamily: 'Arial, sans-serif',
               }}
@@ -228,19 +228,19 @@ export async function GET(
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '40px',
+                  gap: '20px',
                 }}
               >
                 {/* Domain favicon - using base64-encoded inline SVG */}
                 <img
                   src={faviconBase64}
                   alt="Domain favicon"
-                  width="48"
-                  height="48"
+                  width="24"
+                  height="24"
                   style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '12px',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '6px',
                     display: 'block',
                   }}
                 />
@@ -272,26 +272,26 @@ export async function GET(
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '24px',
+                  gap: '12px',
                 }}
               >
                 {/* Upvote icon */}
                 <div
                   style={{
-                    width: '48px',
-                    height: '48px',
-                    backgroundColor: '#dcfce7', // Light green background
-                    borderRadius: '12px', // Rounded corners instead of circular
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#dcfce7',
+                    borderRadius: '6px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
-                    marginTop: '6px', // Tiny margin top
+                    marginTop: '3px',
                   }}
                 >
                   <svg
-                    width="28"
-                    height="28"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -309,13 +309,13 @@ export async function GET(
                 {/* Vote count */}
                 <span
                   style={{
-                    fontSize: '48px',
+                    fontSize: '24px',
                     fontWeight: '700',
                     color: '#111827',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minWidth: '60px',
+                    minWidth: '30px',
                     flexShrink: 0,
                   }}
                 >
@@ -325,20 +325,20 @@ export async function GET(
                 {/* Downvote icon */}
                 <div
                   style={{
-                    width: '48px',
-                    height: '48px',
-                    backgroundColor: '#fef2f2', // Light red background
-                    borderRadius: '12px', // Rounded corners instead of circular
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: '#fef2f2',
+                    borderRadius: '6px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
-                    marginTop: '6px', // Tiny margin top
+                    marginTop: '3px',
                   }}
                 >
                   <svg
-                    width="28"
-                    height="28"
+                    width="14"
+                    height="14"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -360,13 +360,13 @@ export async function GET(
           <div
             style={{
               position: 'absolute',
-              bottom: '80px', // Reduced from 120px
-              left: '120px',
-              right: '120px',
+              bottom: '40px',
+              left: '60px',
+              right: '60px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              fontSize: '32px',
+              fontSize: '16px',
               color: '#9ca3af',
               fontFamily: 'Arial, sans-serif',
             }}
@@ -377,8 +377,8 @@ export async function GET(
         </div>
       ),
       {
-        width: 2400,
-        height: 1260,
+        width: 1200,
+        height: 630,
       }
     )
   } catch (error) {
@@ -394,7 +394,7 @@ export async function GET(
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff',
-            fontSize: 60,
+            fontSize: 30,
             fontWeight: 600,
             color: '#6b7280',
           }}
@@ -403,8 +403,8 @@ export async function GET(
         </div>
       ),
       {
-        width: 2400,
-        height: 1260,
+        width: 1200,
+        height: 630,
       }
     )
   }
