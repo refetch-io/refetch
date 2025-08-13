@@ -69,38 +69,40 @@ First, create a dedicated user account that will be the author of all auto-disco
 2. Add the following variables:
 
 ```bash
-# Appwrite Configuration
-APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-APPWRITE_PROJECT_ID=your_project_id_here
-APPWRITE_API_KEY=your_api_key_here
-APPWRITE_DATABASE_ID=your_database_id_here
-APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id_here
-APPWRITE_COMMENTS_COLLECTION_ID=your_comments_collection_id_here
-
-# OpenAI Configuration
+# OpenAI Configuration (Required)
 OPENAI_API_KEY=your_openai_api_key_here
 
-# Scout Configuration
+# Scout Configuration (Required)
 SCOUT_USER_ID=scout-user
+
+# Optional Configuration
 SCOUT_USER_NAME=Scout
 MAX_ARTICLES_PER_RUN=10
-SCRAPING_DELAY_MS=2000
+SCRAPING_DELAY_MS=3000
 ```
 
 **Important Notes:**
-- Replace all `your_*_here` values with your actual Appwrite configuration
+- **Required**: `OPENAI_API_KEY` and `SCOUT_USER_ID` must be set
+- **Automatic**: Appwrite automatically provides `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT_ID`, `APPWRITE_API_KEY`, `APPWRITE_DATABASE_ID`, `APPWRITE_POSTS_COLLECTION_ID`, and `APPWRITE_COMMENTS_COLLECTION_ID`
 - The `SCOUT_USER_ID` should match the user ID you created in Step 1
-- `SCRAPING_DELAY_MS` controls the delay between requests (2000ms = 2 seconds)
+- `SCRAPING_DELAY_MS` controls the delay between requests (3000ms = 3 seconds recommended)
 - `MAX_ARTICLES_PER_RUN` limits how many articles are added per execution
 
 ### 3.3 Get Your Appwrite Configuration
 
-To find your configuration values:
+**Good news!** Most of the Appwrite configuration is automatically available in Functions:
 
-1. **Project ID**: Go to **Settings** → **General** → Copy the Project ID
-2. **API Key**: Go to **Settings** → **API Keys** → Create a new key with appropriate scopes
-3. **Database ID**: Go to **Databases** → Copy the Database ID
-4. **Collection IDs**: Go to **Databases** → Your Database → Copy the Collection IDs for posts and comments
+✅ **Automatically Available** (no setup needed):
+- `APPWRITE_ENDPOINT` - Your Appwrite instance endpoint
+- `APPWRITE_PROJECT_ID` - Your project ID
+- `APPWRITE_API_KEY` - Function's API key
+- `APPWRITE_DATABASE_ID` - Your database ID
+- `APPWRITE_POSTS_COLLECTION_ID` - Your posts collection ID
+- `APPWRITE_COMMENTS_COLLECTION_ID` - Your comments collection ID
+
+**You only need to set:**
+1. **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. **Scout User ID**: The user ID you created in Step 1
 
 ## Step 4: Test the Function
 

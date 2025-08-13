@@ -44,6 +44,7 @@ let appwriteClient, databases, openai;
 // Helper function to initialize clients
 function initializeClients() {
   if (!appwriteClient) {
+    // In Appwrite Functions, these environment variables are automatically available
     appwriteClient = new Client()
       .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.APPWRITE_PROJECT_ID || '')
@@ -255,12 +256,6 @@ async function scoutArticles() {
     
     // Validate environment variables
     const requiredEnvVars = [
-      'APPWRITE_ENDPOINT',
-      'APPWRITE_PROJECT_ID', 
-      'APPWRITE_API_KEY',
-      'APPWRITE_DATABASE_ID',
-      'APPWRITE_POSTS_COLLECTION_ID',
-      'APPWRITE_COMMENTS_COLLECTION_ID',
       'OPENAI_API_KEY',
       'SCOUT_USER_ID'
     ];
@@ -310,8 +305,8 @@ async function scoutArticles() {
     // Sort by quality score (highest first) and take top articles
     const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '10');
     const sortedArticles = analyzedArticles
-      .filter(article => article.analysis.qualityScore >= 60 && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
-      .sort((a, b) => b.analysis.qualityScore - a.analysis.qualityScore)
+      .filter(article => (article.analysis.qualityScore || 0) >= 60 && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
+      .sort((a, b) => (b.analysis.qualityScore || 0) - (a.analysis.qualityScore || 0))
       .slice(0, maxArticles);
     
     for (const article of sortedArticles) {
