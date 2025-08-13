@@ -1,9 +1,8 @@
 "use client"
-import { ChevronUp, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { Favicon } from "@/components/favicon"
+import { VoteButtons } from "@/components/vote-buttons"
 import { type NewsItem } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { trackPostClick } from "@/lib/plausible"
@@ -46,53 +45,17 @@ export function PostCard({
     <div className={`bg-white px-4 py-2 rounded-lg hover:shadow-sm transition-shadow flex mb-4 relative group ${item.isSponsored ? "bg-neutral-50" : ""} ${className}`}>
       {/* Upvote/Downvote Section */}
       {showVoting && !item.isSponsored && (
-        <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8 self-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`h-4 w-4 ${
-              voteState.currentVote === 'up' 
-                ? 'text-green-600 bg-green-50 hover:bg-green-50' 
-                : 'text-gray-400 hover:bg-green-50 hover:text-green-600'
-            }`}
-            onClick={async (e) => {
-              e.preventDefault()
-              if (!isAuthenticated) {
-                window.location.href = '/login'
-                return
-              }
-              await onVote(item.id, "up")
-            }}
-            disabled={isVoting}
-            aria-label={`Upvote ${item.title}`}
-          >
-            <ChevronUp className="h-3 w-3" />
-          </Button>
-          <span className="text-[0.65rem] text-gray-700 font-medium">
-            {voteState.count}
-          </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`h-4 w-4 ${
-              voteState.currentVote === 'down' 
-                ? 'text-red-600 bg-red-50 hover:bg-red-50 hover:text-red-50' 
-                : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
-            }`}
-            onClick={async (e) => {
-              e.preventDefault()
-              if (!isAuthenticated) {
-                window.location.href = '/login'
-                return
-              }
-              await onVote(item.id, "down")
-            }}
-            disabled={isVoting}
-            aria-label={`Downvote ${item.title}`}
-          >
-            <ChevronDown className="h-3 w-3" />
-          </Button>
-        </div>
+        <VoteButtons
+          resourceId={item.id}
+          resourceType="post"
+          voteState={voteState}
+          isVoting={isVoting}
+          onVote={onVote}
+          isAuthenticated={isAuthenticated}
+          layout="vertical"
+          size="sm"
+          className="mr-4 w-8"
+        />
       )}
       {showVoting && item.isSponsored && (
         <div className="flex flex-col items-center justify-center mr-4 text-gray-500 w-8 self-center">

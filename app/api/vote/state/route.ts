@@ -103,14 +103,14 @@ export async function GET(request: NextRequest) {
       
       return NextResponse.json({
         currentVote,
-        score: resourceScore,
+        count: resourceScore,
         countUp,
         countDown
       })
     } else {
       return NextResponse.json({
         currentVote: null,
-        score: resourceScore,
+        count: resourceScore,
         countUp,
         countDown
       })

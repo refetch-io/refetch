@@ -51,20 +51,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check environment variables
-    const DATABASE_ID = process.env.APPWRITE_DATABASE_ID
-    const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID
-    const COMMENTS_COLLECTION_ID = process.env.APPWRITE_COMMENTS_COLLECTION_ID
-    const VOTES_COLLECTION_ID = process.env.APPWRITE_VOTES_COLLECTION_ID
-
-    if (!DATABASE_ID || !POSTS_COLLECTION_ID || !COMMENTS_COLLECTION_ID || !VOTES_COLLECTION_ID) {
-      console.error('Missing required environment variables for voting')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
-
     // Get user from JWT token
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -76,21 +62,11 @@ export async function POST(request: Request) {
 
     const jwt = authHeader.substring(7)
     
-    // Initialize Appwrite client
-    const { Client, Databases, Query } = await import('node-appwrite')
-    
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-      .setKey(process.env.APPWRITE_API_KEY!)
-
-    const databases = new Databases(client)
-
     // Verify JWT and get user
     let user
     try {
-      const { ID, Account } = await import('node-appwrite')
-      const account = new Account(client)
+      // Use the jwtClient that was already initialized at the top of the file
+      jwtClient.setJWT(jwt)
       user = await account.get()
     } catch (error) {
       console.error('Error verifying JWT:', error)

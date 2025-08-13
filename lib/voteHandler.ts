@@ -1,5 +1,20 @@
 import { getCachedJWT } from './jwtCache'
+import { account } from './appwrite'
 import type { VoteState, VoteRequest } from './types'
+
+// Helper function to handle authentication failure
+const handleAuthenticationFailure = (error: any): void => {
+  console.error('🔐 Authentication completely failed:', error)
+  
+  if (typeof window !== 'undefined') {
+    // Clear any cached JWT
+    localStorage.removeItem('refetch_jwt_cache')
+    
+    // Redirect to login
+    console.log('🔄 Redirecting to login page...')
+    window.location.href = '/login'
+  }
+}
 
 export const fetchUserVote = async (
   resourceId: string, 
@@ -35,11 +50,86 @@ export const fetchUserVote = async (
   }
 }
 
-export function handleVote(
+// Main async function to handle voting - makes the API call
+export const handleVote = async (
+  resourceId: string,
+  resourceType: 'post' | 'comment',
+  direction: 'up' | 'down',
+  currentVote: 'up' | 'down' | null,
+  currentScore: number,
+  onVoteStateChange: (newState: VoteState) => void
+): Promise<void> => {
+  try {
+    console.log('🚀 Starting vote process for:', resourceType, resourceId, direction)
+    
+    // Get JWT token for authentication
+    const jwt = await getCachedJWT()
+
+    if (!jwt) {
+      throw new Error('No JWT token available')
+    }
+
+    console.log('🔑 JWT token obtained, making API call...')
+
+    // Make API call to record the vote
+    const response = await fetch('/api/vote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      },
+      body: JSON.stringify({
+        resourceId,
+        resourceType,
+        voteType: direction
+      })
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      
+      // Handle specific error cases
+      if (response.status === 401) {
+        // Clear the cached JWT and redirect to login
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('refetch_jwt_cache')
+          window.location.href = '/login'
+        }
+        throw new Error('Authentication expired. Please log in again.')
+      }
+      
+      throw new Error(`Vote failed: ${response.status} - ${errorText}`)
+    }
+
+    const responseData = await response.json()
+    console.log('✅ Vote successful:', responseData)
+
+    // Calculate new vote state based on the response
+    const newVoteState = calculateVoteState(currentVote, direction, currentScore)
+    
+    // Call the callback to update the parent component's state
+    onVoteStateChange(newVoteState)
+
+  } catch (error) {
+    console.error('❌ Error handling vote:', error)
+    
+    // If it's an authentication error, handle it gracefully
+    if (error instanceof Error && error.message.includes('not authenticated')) {
+      handleAuthenticationFailure(error)
+      return // Don't throw the error, just redirect
+    }
+    
+    // For other errors, re-throw them
+    throw error
+  }
+}
+
+// Helper function to calculate vote state changes (renamed from handleVote to avoid conflict)
+export function calculateVoteState(
   currentVote: 'up' | 'down' | null,
   newVoteType: 'up' | 'down',
   currentScore: number
-): { newScore: number; newVote: 'up' | 'down' | null } {
+): VoteState {
   let newScore = currentScore
   let newVote: 'up' | 'down' | null = currentVote
 
@@ -61,7 +151,7 @@ export function handleVote(
     }
   }
 
-  return { newScore, newVote }
+  return { count: newScore, currentVote: newVote }
 }
 
 // Helper function to fetch votes for multiple resources

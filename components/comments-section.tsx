@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -10,6 +10,7 @@ import { type Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { useAuth } from "@/hooks/use-auth"
 import { getCachedJWT } from "@/lib/jwtCache"
+import { handleVote } from "@/lib/voteHandler"
 import { ArrowUpDown, Clock, TrendingUp } from "lucide-react"
 
 interface CommentItemProps {
@@ -223,69 +224,38 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     setCommentVotes(prev => new Map(prev).set(newReply.id, { currentVote: null, count: 1 }))
   }
 
-  const handleVote = async (commentId: string, direction: "up" | "down") => {
-    if (!user) return
+  const handleCommentVote = useCallback(async (commentId: string, direction: "up" | "down") => {
+    if (!user) {
+      return
+    }
 
     setIsVoting(true)
+    
     try {
       // Get current vote state
       const currentVoteState = commentVotes.get(commentId) || { currentVote: null, count: 0 }
       
-      // Optimistic update
-      const newVoteState = { ...currentVoteState }
-      if (currentVoteState.currentVote === direction) {
-        // Removing vote
-        newVoteState.currentVote = null
-        newVoteState.count = currentVoteState.count - (direction === "up" ? 1 : -1)
-      } else if (currentVoteState.currentVote === null) {
-        // New vote
-        newVoteState.currentVote = direction
-        newVoteState.count = currentVoteState.count + (direction === "up" ? 1 : -1)
-      } else {
-        // Changing vote
-        const previousVoteValue = currentVoteState.currentVote === 'up' ? 1 : -1
-        const newVoteValue = direction === 'up' ? 1 : -1
-        newVoteState.currentVote = direction
-        newVoteState.count = currentVoteState.count - previousVoteValue + newVoteValue
-      }
-
-      // Update local state immediately
-      setCommentVotes(prev => new Map(prev).set(commentId, newVoteState))
-
-      // Get JWT token
-      const jwt = await getCachedJWT()
-      if (!jwt) {
-        throw new Error('No JWT token available')
-      }
-
-      // Make API call
-      const response = await fetch('/api/vote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`
-        },
-        body: JSON.stringify({
-          resourceId: commentId,
-          resourceType: 'comment',
-          voteType: direction
-        })
-      })
-
-      if (!response.ok) {
-        // Revert on error
-        setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
-        console.error('Vote failed')
-      }
+      // Use the unified handleVote function
+      await handleVote(
+        commentId, 
+        'comment', 
+        direction, 
+        currentVoteState.currentVote, 
+        currentVoteState.count, 
+        (newState: VoteState) => {
+          // Update local state with the new vote state
+          setCommentVotes(prev => new Map(prev).set(commentId, newState))
+        }
+      )
+      
     } catch (error) {
-      console.error('Error voting:', error)
       // Revert on error
       const currentVoteState = commentVotes.get(commentId) || { currentVote: null, count: 0 }
       setCommentVotes(prev => new Map(prev).set(commentId, currentVoteState))
     } finally {
       setIsVoting(false)
     }
-  }
+  }, [commentVotes, isVoting, user])
 
   const handleSortChange = (newSortType: SortType) => {
     setSortType(newSortType)
@@ -343,7 +313,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
               key={comment.id} 
               comment={comment} 
               onAddReply={handleAddReply} 
-              onVote={handleVote}
+              onVote={handleCommentVote}
               voteState={commentVotes.get(comment.id) || { currentVote: null, count: comment.count }}
               isVoting={isVoting}
               isAuthenticated={!!user}

@@ -9,6 +9,18 @@ export const client = new Client()
 export const avatars = new Avatars(client);
 export const account = new Account(client);
 
+// Helper function to ensure the client is properly configured for the current user
+export const ensureAuthenticatedClient = async () => {
+  try {
+    // This will throw an error if the user is not authenticated
+    await account.get()
+    return true
+  } catch (error) {
+    console.error('Client authentication check failed:', error)
+    return false
+  }
+}
+
 // Helper function to get favicon URL for a domain
 export const getFaviconUrl = (domain: string): string => {
   try {
