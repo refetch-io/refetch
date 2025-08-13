@@ -27,6 +27,8 @@ The function is configured to scan these tech news sources:
 
 - **Simple HTML Scraping**: Scrapes full HTML from target websites without complex selectors
 - **AI-Powered Analysis**: Uses GPT-4 to analyze HTML and identify valuable content
+- **Intelligent Batching**: Automatically splits large URL lists into smaller batches to avoid LLM token limits
+- **Retry Logic**: Failed batches are automatically retried with exponential backoff
 - **Refetch-Style Titles**: Generates titles that match the refetch platform style (similar to Hacker News)
 - **Discussion Starters**: Automatically creates engaging first comments to kick off discussions
 - **Content Classification**: Properly categorizes articles as "link" or "show" types
@@ -56,6 +58,12 @@ SCOUT_USER_ID=your_scout_user_id
 SCOUT_USER_NAME=Refetch Scout
 MAX_ARTICLES_PER_RUN=10
 SCRAPING_DELAY_MS=2000
+
+# Batching Configuration (Optional)
+LLM_MAX_TOKENS=6000
+LLM_MAX_BATCH_SIZE=20
+LLM_MIN_BATCH_SIZE=5
+DEBUG_BATCHING=false
 ```
 
 ### Scout User Setup
@@ -64,6 +72,48 @@ Create a dedicated user account for the scout function:
 - Username: "Refetch Scout" (or your preferred name)
 - This user will be the author of all auto-discovered articles
 - Ensure this user has proper permissions
+
+## Batching Configuration
+
+The scout function now uses intelligent batching to avoid exceeding LLM token limits. This is especially important when processing websites with many articles.
+
+### How Batching Works
+
+1. **Token Estimation**: Each URL + label is estimated to use ~75 tokens
+2. **Batch Calculation**: Optimal batch size is calculated based on available tokens
+3. **Processing**: URLs are split into batches and processed sequentially
+4. **Retry Logic**: Failed batches are retried up to 2 times with exponential backoff
+5. **Rate Limiting**: Delays are added between batches to avoid overwhelming the API
+
+### Batching Environment Variables
+
+```bash
+# Maximum tokens per batch (default: 6000)
+LLM_MAX_TOKENS=6000
+
+# Maximum URLs per batch (default: 20)
+LLM_MAX_BATCH_SIZE=20
+
+# Minimum URLs per batch (default: 5)
+LLM_MIN_BATCH_SIZE=5
+
+# Enable debug logging for batch calculations (default: false)
+DEBUG_BATCHING=false
+```
+
+### Example Batching Output
+
+```
+📦 Processing 46 URLs in 4 batches of ~12
+🔄 Processing batch 1/4 (12 URLs, ~1200 tokens)
+✅ Batch 1: 8/10 articles valid
+🔄 Processing batch 2/4 (12 URLs, ~1200 tokens)
+✅ Batch 2: 6/9 articles valid
+...
+📊 Batching Summary: Processed 46 URLs in approximately 4 batches to avoid token limits
+```
+
+For detailed batching configuration options, see [BATCHING_CONFIG.md](./BATCHING_CONFIG.md).
 
 ## Deployment
 
@@ -182,7 +232,11 @@ Modify the AI analysis prompts and scoring thresholds to match your content stan
 3. **AI Analysis Failures**: OpenAI API errors
    - Solution: Check API key validity and rate limits
 
-4. **Database Errors**: Appwrite connection issues
+4. **Token Limit Errors**: LLM requests exceeding token limits
+   - Solution: The function now automatically batches URLs to avoid this issue
+   - If still occurring, reduce `LLM_MAX_TOKENS` or `LLM_MAX_BATCH_SIZE`
+
+5. **Database Errors**: Appwrite connection issues
    - Solution: Verify database IDs and API key permissions
 
 ### Logs

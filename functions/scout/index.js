@@ -422,60 +422,175 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
   }
 }
 
+// Helper function to estimate token count for a batch
+function estimateTokenCount(urlsWithLabels) {
+  // Rough estimation: each URL + label is about 50-100 tokens
+  // System prompt is about 200 tokens
+  // User prompt template is about 100 tokens
+  const baseTokens = 300; // System prompt + user prompt template
+  const perUrlTokens = 75; // Conservative estimate per URL
+  return baseTokens + (urlsWithLabels.length * perUrlTokens);
+}
+
+// Helper function to calculate optimal batch size
+function calculateOptimalBatchSize(urlsWithLabels) {
+  // Allow configuration through environment variables
+  const MAX_TOKENS = parseInt(process.env.LLM_MAX_TOKENS || '6000'); // Conservative limit to stay well under 8192
+  const baseTokens = 300;
+  const perUrlTokens = 75;
+  
+  // Calculate how many URLs we can fit
+  const availableTokens = MAX_TOKENS - baseTokens;
+  const maxUrls = Math.floor(availableTokens / perUrlTokens);
+  
+  // Use a conservative batch size, minimum 5, maximum 20
+  // Allow override through environment variable
+  const maxBatchSize = parseInt(process.env.LLM_MAX_BATCH_SIZE || '20');
+  const minBatchSize = parseInt(process.env.LLM_MIN_BATCH_SIZE || '5');
+  
+  // Ensure we don't exceed the calculated maximum
+  const optimalSize = Math.max(minBatchSize, Math.min(maxUrls, maxBatchSize));
+  
+  // Log the batch size calculation for debugging
+  if (process.env.DEBUG_BATCHING === 'true') {
+    console.log(`  🔧 Batch size calculation: MAX_TOKENS=${MAX_TOKENS}, available=${availableTokens}, maxUrls=${maxUrls}, optimal=${optimalSize}`);
+  }
+  
+  return optimalSize;
+}
+
 // Helper function to analyze URLs with AI in batches
 async function analyzeUrlsWithAI(urlsWithLabels, sourceUrl) {
   try {
-    const urlList = urlsWithLabels.map(item => `${item.label} -> ${item.url}`).join('\n');
+    if (urlsWithLabels.length === 0) {
+      console.log(`  ⚠️ No URLs to analyze for ${sourceUrl}`);
+      return [];
+    }
     
-    const prompt = `Please analyze this list of URLs and their link text labels from a tech website and identify the best articles for a tech news platform called "refetch".
+    // Calculate optimal batch size based on token estimation
+    const batchSize = calculateOptimalBatchSize(urlsWithLabels);
+    const batches = [];
+    
+    // Split URLs into batches
+    for (let i = 0; i < urlsWithLabels.length; i += batchSize) {
+      batches.push(urlsWithLabels.slice(i, i + batchSize));
+    }
+    
+    console.log(`  📦 Processing ${urlsWithLabels.length} URLs in ${batches.length} batches of ~${batchSize}`);
+    
+    const allAnalyzedArticles = [];
+    let successfulBatches = 0;
+    let failedBatches = 0;
+    let retriedBatches = 0;
+    
+    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+      const batch = batches[batchIndex];
+      const estimatedTokens = estimateTokenCount(batch);
+      
+      console.log(`  🔄 Processing batch ${batchIndex + 1}/${batches.length} (${batch.length} URLs, ~${estimatedTokens} tokens)`);
+      
+      const urlList = batch.map(item => `${item.label} -> ${item.url}`).join('\n');
+      
+      const prompt = `Please analyze this batch of URLs and their link text labels from a tech website and identify the best articles for a tech news platform called "refetch".
 
 Source: ${sourceUrl}
+Batch: ${batchIndex + 1}/${batches.length}
 URLs and Labels:
 ${urlList}
 
 Please return a JSON response with the structure specified in the system prompt. Focus on finding high-quality tech content that would be valuable to developers and open source enthusiasts. Only include URLs that are actually articles, not about pages, contact forms, etc.`;
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.3,
-      max_tokens: 8000
-    });
-    
-    const response = completion.choices[0].message.content;
-    
-    try {
-      let jsonResponse = response;
-      if (response.includes('{') && response.includes('}')) {
-        const startIndex = response.indexOf('{');
-        const endIndex = response.lastIndexOf('}') + 1;
-        jsonResponse = response.substring(startIndex, endIndex);
-      }
+      let batchSuccess = false;
+      let retryCount = 0;
+      const maxRetries = 2;
       
-      const analysis = JSON.parse(jsonResponse);
-      
-      if (!analysis.articles || !Array.isArray(analysis.articles)) {
-        console.error(`❌ ${sourceUrl}: Invalid AI response structure`);
-        return [];
-      }
-      
-      const validArticles = analysis.articles.filter(article => {
-        if (!article.url || !article.refetchTitle || !article.discussionStarter) {
-          return false;
+      while (!batchSuccess && retryCount <= maxRetries) {
+        try {
+          if (retryCount > 0) {
+            console.log(`  🔄 Retrying batch ${batchIndex + 1} (attempt ${retryCount + 1}/${maxRetries + 1})`);
+            await delay(2000 * retryCount); // Exponential backoff
+          }
+          
+          const completion = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              { role: "user", content: prompt }
+            ],
+            temperature: 0.3,
+            max_tokens: 4000 // Reduced from 8000 to be more conservative
+          });
+          
+          const response = completion.choices[0].message.content;
+          
+          try {
+            let jsonResponse = response;
+            if (response.includes('{') && response.includes('}')) {
+              const startIndex = response.indexOf('{');
+              const endIndex = response.lastIndexOf('}') + 1;
+              jsonResponse = response.substring(startIndex, endIndex);
+            }
+            
+            const analysis = JSON.parse(jsonResponse);
+            
+            if (!analysis.articles || !Array.isArray(analysis.articles)) {
+              throw new Error('Invalid AI response structure');
+            }
+            
+            const validArticles = analysis.articles.filter(article => {
+              if (!article.url || !article.refetchTitle || !article.discussionStarter) {
+                return false;
+              }
+              return true;
+            });
+            
+            // Add source information to each article
+            validArticles.forEach(article => {
+              article.source = sourceUrl;
+            });
+            
+            allAnalyzedArticles.push(...validArticles);
+            successfulBatches++;
+            batchSuccess = true;
+            
+            if (retryCount > 0) {
+              retriedBatches++;
+              console.log(`  ✅ Batch ${batchIndex + 1}: ${validArticles.length}/${analysis.articles.length} articles valid (recovered after retry)`);
+            } else {
+              console.log(`  ✅ Batch ${batchIndex + 1}: ${validArticles.length}/${analysis.articles.length} articles valid`);
+            }
+            
+          } catch (parseError) {
+            throw new Error(`Parse error: ${parseError.message}`);
+          }
+          
+        } catch (error) {
+          retryCount++;
+          if (retryCount > maxRetries) {
+            console.log(`  ❌ Batch ${batchIndex + 1}: Failed after ${maxRetries + 1} attempts - ${error.message}`);
+            failedBatches++;
+            break;
+          }
         }
-        return true;
-      });
+      }
       
-      console.log(`  ${validArticles.length}/${analysis.articles.length} articles valid`);
-      return validArticles;
-      
-    } catch (parseError) {
-      console.error(`❌ ${sourceUrl}: Parse error - ${parseError.message}`);
-      return [];
+      // Add delay between batches to avoid rate limiting
+      if (batchIndex < batches.length - 1) {
+        await delay(1000);
+      }
     }
+    
+    console.log(`  🎯 Total valid articles from ${sourceUrl}: ${allAnalyzedArticles.length} (${successfulBatches}/${batches.length} batches successful)`);
+    
+    if (failedBatches > 0) {
+      console.log(`  ⚠️ ${failedBatches} batches failed for ${sourceUrl}`);
+    }
+    
+    if (retriedBatches > 0) {
+      console.log(`  🔄 ${retriedBatches} batches were recovered after retries`);
+    }
+    
+    return allAnalyzedArticles;
     
   } catch (error) {
     console.error(`❌ ${sourceUrl}: ${error.message}`);
@@ -659,6 +774,9 @@ async function scoutArticles() {
     // Step 2: Analyze URLs with AI
     console.log('\n🤖 Step 2: AI analysis of URLs...');
     const analyzedArticles = [];
+    let totalBatchesProcessed = 0;
+    let totalBatchesSuccessful = 0;
+    let totalBatchesFailed = 0;
     
     // Process each website's URLs separately for better context
     for (let i = 0; i < TARGET_WEBSITES.length; i++) {
@@ -676,16 +794,41 @@ async function scoutArticles() {
       
       console.log(`  📤 Sending ${sourceArticles.length} URLs to LLM from ${sourceUrl}`);
       
-      const analyzedSourceArticles = await analyzeUrlsWithAI(sourceArticles, sourceUrl);
-      analyzedArticles.push(...analyzedSourceArticles);
-      results.urlBreakdown.urlsAnalyzed += analyzedSourceArticles.length;
+      try {
+        const analyzedSourceArticles = await analyzeUrlsWithAI(sourceArticles, sourceUrl);
+        analyzedArticles.push(...analyzedSourceArticles);
+        results.urlBreakdown.urlsAnalyzed += analyzedSourceArticles.length;
+        
+        // Estimate batch counts for this source
+        const estimatedBatchSize = calculateOptimalBatchSize(sourceArticles);
+        const estimatedBatches = Math.ceil(sourceArticles.length / estimatedBatchSize);
+        totalBatchesProcessed += estimatedBatches;
+        
+        console.log(`  ✅ LLM returned ${analyzedSourceArticles.length} valid articles from ${sourceUrl}`);
+        
+      } catch (error) {
+        console.error(`  ❌ Failed to analyze URLs from ${sourceUrl}: ${error.message}`);
+        results.failedUrls.analysis.push({
+          source: sourceUrl,
+          error: error.message,
+          urlsCount: sourceArticles.length
+        });
+        continue;
+      }
       
-      console.log(`  ✅ LLM returned ${analyzedSourceArticles.length} valid articles from ${sourceUrl}`);
-      
-      await delay(2000);
+      // Add delay between websites to avoid overwhelming the API
+      if (i < TARGET_WEBSITES.length - 1) {
+        console.log(`  ⏳ Waiting 3 seconds before processing next website...`);
+        await delay(3000);
+      }
     }
     
     console.log(`✅ Analyzed ${analyzedArticles.length}/${allArticlesData.length} URLs successfully`);
+    
+    // Show batching summary if we had multiple batches
+    if (totalBatchesProcessed > 1) {
+      console.log(`📊 Batching Summary: Processed ${allArticlesData.length} URLs in approximately ${totalBatchesProcessed} batches to avoid token limits`);
+    }
     
     // Step 3: Add articles to database
     console.log('\n💾 Step 3: Adding articles to database...');
