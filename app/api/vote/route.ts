@@ -104,6 +104,7 @@ export async function POST(request: Request) {
       
       if (oldVoteType === voteType) {
         // Remove vote (same vote type clicked again)
+        console.log(`Removing ${oldVoteType} vote for ${resourceType} ${resourceId}`)
         await databases.deleteDocument(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
@@ -112,6 +113,7 @@ export async function POST(request: Request) {
         voteDocument = null
       } else {
         // Change vote type
+        console.log(`Changing vote from ${oldVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
         await databases.updateDocument(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
@@ -170,75 +172,95 @@ export async function POST(request: Request) {
       collectionId,
       resourceId,
       {
-        count: newScore,
-        countUp: resource.countUp || 0,
-        countDown: resource.countDown || 0
+        count: newScore
       }
     )
 
-    // Update up/down counts
+    // Update up/down counts using atomic operations to prevent race conditions
     if (voteDocument) {
       if (isNewVote) {
-        // New vote
+        // New vote - increment the appropriate counter
+        console.log(`New ${voteType} vote for ${resourceType} ${resourceId}`)
         if (voteType === 'up') {
-          await databases.updateDocument(
+          await databases.incrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
-            { countUp: (resource.countUp || 0) + 1 }
+            'countUp',
+            1
           )
         } else {
-          await databases.updateDocument(
+          await databases.incrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
-            { countDown: (resource.countDown || 0) + 1 }
+            'countDown',
+            1
           )
         }
       } else {
-        // Vote changed
+        // Vote changed - decrement old counter and increment new counter
         const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+        console.log(`Vote changed from ${oldVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
         if (oldVoteType === 'up' && voteType === 'down') {
-          await databases.updateDocument(
+          // Changed from up to down
+          await databases.incrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
-            { 
-              countUp: (resource.countUp || 0) - 1,
-              countDown: (resource.countDown || 0) + 1
-            }
+            'countUp',
+            -1
+          )
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            'countDown',
+            1
           )
         } else if (oldVoteType === 'down' && voteType === 'up') {
-          await databases.updateDocument(
+          // Changed from down to up
+          await databases.incrementDocumentAttribute(
             DATABASE_ID,
             collectionId,
             resourceId,
-            { 
-              countUp: (resource.countUp || 0) + 1,
-              countDown: (resource.countDown || 0) - 1
-            }
+            'countDown',
+            -1
+          )
+          await databases.incrementDocumentAttribute(
+            DATABASE_ID,
+            collectionId,
+            resourceId,
+            'countUp',
+            1
           )
         }
       }
     } else {
-      // Vote removed
+      // Vote removed - decrement the appropriate counter
       const oldVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      console.log(`Vote removed (was ${oldVoteType}) for ${resourceType} ${resourceId}`)
       if (oldVoteType === 'up') {
-        await databases.updateDocument(
+        await databases.incrementDocumentAttribute(
           DATABASE_ID,
           collectionId,
           resourceId,
-          { countUp: (resource.countUp || 0) - 1 }
+          'countUp',
+          -1
         )
       } else {
-        await databases.updateDocument(
+        await databases.incrementDocumentAttribute(
           DATABASE_ID,
           collectionId,
           resourceId,
-          { countDown: (resource.countDown || 0) - 1 }
+          'countDown',
+          -1
         )
       }
     }
+
+    // Log the final state for debugging
+    console.log(`Final state for ${resourceType} ${resourceId}: score=${newScore}, voteType=${voteDocument ? voteType : 'removed'}`)
 
     return NextResponse.json({
       success: true,
