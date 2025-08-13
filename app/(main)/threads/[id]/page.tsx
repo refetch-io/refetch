@@ -17,43 +17,104 @@ export async function generateMetadata({ params }: ThreadPageProps): Promise<Met
     
     if (!article) {
       return {
-        title: 'Thread Not Found',
+        title: 'Thread Not Found | Refetch',
         description: 'The requested thread could not be found.',
+        robots: 'noindex, nofollow',
       }
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://refetch.io'
+    const canonicalUrl = `${baseUrl}/threads/${article.id}`
     
+    // Enhanced metadata for better SEO
     return {
       title: `${article.title} | Refetch`,
-      description: article.description || `Discussion about ${article.title}`,
+      description: article.description || `Discussion about ${article.title}. Join the conversation on Refetch, the open-source alternative to YC-controlled HN.`,
+      keywords: [
+        'tech news',
+        'discussion',
+        'community',
+        'open source',
+        'hacker news alternative',
+        'refetch',
+        article.domain,
+        ...(article.description ? article.description.split(' ').slice(0, 10) : [])
+      ].filter(Boolean),
+      authors: article.author ? [{ name: article.author }] : undefined,
+      creator: 'Refetch',
+      publisher: 'Refetch',
+      formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+      },
+      metadataBase: new URL(baseUrl),
+      alternates: {
+        canonical: canonicalUrl,
+      },
       openGraph: {
         title: article.title,
-        description: article.description || `Discussion about ${article.title}`,
+        description: article.description || `Discussion about ${article.title}. Join the conversation on Refetch.`,
         type: 'article',
-        url: `${baseUrl}/threads/${article.id}`,
+        url: canonicalUrl,
+        siteName: 'Refetch',
+        locale: 'en_US',
         images: [
           {
             url: `${baseUrl}/api/og/thread/${article.id}`,
             width: 2400,
             height: 1260,
             alt: article.title,
+            type: 'image/png',
           },
         ],
-        siteName: 'Refetch',
+        authors: article.author ? [article.author] : undefined,
+        publishedTime: undefined, // NewsItem doesn't have $createdAt
+        modifiedTime: undefined, // NewsItem doesn't have $updatedAt
+        section: 'Technology',
+        tags: [article.domain, 'tech news', 'discussion'],
       },
       twitter: {
         card: 'summary_large_image',
         title: article.title,
-        description: article.description || `Discussion about ${article.title}`,
+        description: article.description || `Discussion about ${article.title}. Join the conversation on Refetch.`,
         images: [`${baseUrl}/api/og/thread/${article.id}`],
+        creator: '@refetch_io',
+        site: '@refetch_io',
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
+      verification: {
+        google: process.env.GOOGLE_SITE_VERIFICATION,
+        yandex: process.env.YANDEX_VERIFICATION,
+        yahoo: process.env.YAHOO_VERIFICATION,
+      },
+      other: {
+        'article:author': article.author,
+        'article:section': 'Technology',
+        'article:tag': [article.domain, 'tech news', 'discussion'],
+        'og:image:width': '2400',
+        'og:image:height': '1260',
+        'og:image:type': 'image/png',
+        'twitter:image:width': '2400',
+        'twitter:image:height': '1260',
       },
     }
   } catch (error) {
     console.error('Error generating metadata:', error)
     return {
       title: 'Thread | Refetch',
-      description: 'Tech news and discussions on Refetch.',
+      description: 'Tech news and discussions on Refetch, the open-source alternative to YC-controlled HN.',
+      robots: 'noindex, nofollow',
     }
   }
 }
