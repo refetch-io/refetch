@@ -17,7 +17,8 @@ const TARGET_WEBSITES = [
   "https://wired.com",
   "https://venturebeat.com",
   "https://infoq.com",
-  "https://theregister.com"
+  "https://theregister.com",
+  "https://news.ycombinator.com"
 ];
 
 // System prompt for AI content analysis
@@ -118,224 +119,71 @@ function extractArticleUrls(html, baseUrl) {
   try {
     const articleUrls = [];
     
-    // Site-specific extraction patterns
-    if (baseUrl.includes('techcrunch.com')) {
-      // TechCrunch specific patterns
-      const techcrunchPatterns = [
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi,
-        /href=["']([^"']*\/tag\/[^"']*)["']/gi,
-        /href=["']([^"']*\/author\/[^"']*)["']/gi
-      ];
+    // Special handling for Hacker News
+    if (baseUrl.includes('news.ycombinator.com')) {
+      console.log(`  - Using Hacker News specific extraction`);
       
-      for (const pattern of techcrunchPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          // Filter out non-article URLs
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('wp-content') &&
-              !articleUrl.includes('wp-includes') &&
-              !articleUrl.includes('_static') &&
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('.gif') &&
-              !articleUrl.includes('.ico') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
+      // HN story links are in <a> tags with class "storylink" or similar
+      const hnStoryPattern = /<a[^>]*href=["']([^"']*)["'][^>]*class=["'][^"']*storylink[^"']*["'][^>]*>/gi;
+      const hnMatches = html.matchAll(hnStoryPattern);
+      
+      for (const match of hnMatches) {
+        let articleUrl = match[1];
+        
+        // Skip empty or invalid URLs
+        if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+          continue;
         }
+        
+        // HN has external links, so we don't restrict to same domain
+        if (articleUrl.startsWith('/')) {
+          articleUrl = new URL(articleUrl, baseUrl).href;
+        } else if (!articleUrl.startsWith('http')) {
+          continue;
+        }
+        
+        // Skip HN internal pages
+        if (articleUrl.includes('news.ycombinator.com') && !articleUrl.includes('item?id=')) {
+          continue;
+        }
+        
+        articleUrls.push(articleUrl);
       }
-    } else if (baseUrl.includes('arstechnica.com')) {
-      // Ars Technica specific patterns
-      const arsPatterns = [
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi,
-        /href=["']([^"']*\/category\/[^"']*)["']/gi,
-        /href=["']([^"']*\/tag\/[^"']*)["']/gi
-      ];
       
-      for (const pattern of arsPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
-      }
-    } else if (baseUrl.includes('wired.com')) {
-      // Wired specific patterns
-      const wiredPatterns = [
-        /href=["']([^"']*\/story\/[^"']*)["']/gi,
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi
-      ];
-      
-      for (const pattern of wiredPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
-      }
-    } else if (baseUrl.includes('venturebeat.com')) {
-      // VentureBeat specific patterns
-      const vbPatterns = [
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi,
-        /href=["']([^"']*\/category\/[^"']*)["']/gi
-      ];
-      
-      for (const pattern of vbPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
-      }
-    } else if (baseUrl.includes('infoq.com')) {
-      // InfoQ specific patterns
-      const infoqPatterns = [
-        /href=["']([^"']*\/news\/[^"']*)["']/gi,
-        /href=["']([^"']*\/presentation\/[^"']*)["']/gi,
-        /href=["']([^"']*\/article\/[^"']*)["']/gi
-      ];
-      
-      for (const pattern of infoqPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
-      }
-    } else if (baseUrl.includes('theregister.com')) {
-      // The Register specific patterns
-      const regPatterns = [
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi,
-        /href=["']([^"']*\/article\/[^"']*)["']/gi
-      ];
-      
-      for (const pattern of regPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
-      }
-    } else {
-      // Generic patterns for other sites
-      const genericPatterns = [
-        /href=["']([^"']*\/\d{4}\/\d{2}\/[^"']*)["']/gi,
-        /href=["']([^"']*\/article\/[^"']*)["']/gi,
-        /href=["']([^"']*\/story\/[^"']*)["']/gi,
-        /href=["']([^"']*\/news\/[^"']*)["']/gi
-      ];
-      
-      for (const pattern of genericPatterns) {
-        const matches = html.matchAll(pattern);
-        for (const match of matches) {
-          let articleUrl = match[1];
-          if (articleUrl.startsWith('/')) {
-            articleUrl = new URL(articleUrl, baseUrl).href;
-          }
-          
-          if (articleUrl.startsWith(baseUrl) && 
-              !articleUrl.includes('.css') &&
-              !articleUrl.includes('.js') &&
-              !articleUrl.includes('.png') &&
-              !articleUrl.includes('.jpg') &&
-              !articleUrl.includes('#') &&
-              !articleUrl.includes('javascript:') &&
-              articleUrl !== baseUrl &&
-              !articleUrl.endsWith('/')) {
-            articleUrls.push(articleUrl);
-          }
-        }
+      // If we didn't find any with the specific pattern, fall back to generic
+      if (articleUrls.length === 0) {
+        console.log(`  - No HN story links found, falling back to generic extraction`);
       }
     }
     
-    // Remove duplicates and limit to reasonable number
-    const uniqueUrls = [...new Set(articleUrls)].slice(0, 20);
+    // Simple, universal approach: extract all <a href> values
+    const hrefPattern = /href=["']([^"']*)["']/gi;
+    const matches = html.matchAll(hrefPattern);
     
-    // Additional filtering to ensure we have good URLs
-    const filteredUrls = uniqueUrls.filter(url => {
-      // Skip URLs that are clearly not articles
+    for (const match of matches) {
+      let articleUrl = match[1];
+      
+      // Skip empty or invalid URLs
+      if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+        continue;
+      }
+      
+      // Convert relative URLs to absolute
+      if (articleUrl.startsWith('/')) {
+        articleUrl = new URL(articleUrl, baseUrl).href;
+      } else if (!articleUrl.startsWith('http')) {
+        // Skip relative URLs that don't start with /
+        continue;
+      }
+      
+      // Only include URLs from the same domain (except for HN)
+      if (!baseUrl.includes('news.ycombinator.com') && !articleUrl.startsWith(baseUrl)) {
+        continue;
+      }
+      
+      // Filter out common non-article URLs
       const skipPatterns = [
-        /\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/i,
+        /\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf|zip|rar)$/i,
         /wp-content\/uploads/i,
         /wp-includes/i,
         /_static/i,
@@ -343,28 +191,48 @@ function extractArticleUrls(html, baseUrl) {
         /rss/i,
         /sitemap/i,
         /robots\.txt/i,
-        /favicon/i
+        /favicon/i,
+        /search/i,
+        /tag\//i,
+        /category\//i,
+        /author\//i,
+        /page\//i,
+        /comment/i,
+        /login/i,
+        /register/i,
+        /admin/i
       ];
       
-      return !skipPatterns.some(pattern => pattern.test(url));
-    });
+      if (skipPatterns.some(pattern => pattern.test(articleUrl))) {
+        continue;
+      }
+      
+      // Skip the homepage itself
+      if (articleUrl === baseUrl || articleUrl === baseUrl + '/') {
+        continue;
+      }
+      
+      articleUrls.push(articleUrl);
+    }
+    
+    // Remove duplicates and limit to reasonable number
+    const uniqueUrls = [...new Set(articleUrls)].slice(0, 30); // Increased from 20 to 30
     
     console.log(`📊 URL Extraction Results for ${baseUrl}:`);
     console.log(`  - Raw URLs found: ${articleUrls.length}`);
     console.log(`  - After deduplication: ${uniqueUrls.length}`);
-    console.log(`  - After filtering: ${filteredUrls.length}`);
     
     // Log a few sample URLs for debugging
-    if (filteredUrls.length > 0) {
-      console.log(`  - Sample URLs: ${filteredUrls.slice(0, 3).join(', ')}`);
+    if (uniqueUrls.length > 0) {
+      console.log(`  - Sample URLs: ${uniqueUrls.slice(0, 5).join(', ')}`);
     } else {
       console.log(`  - ⚠️ No valid article URLs found for ${baseUrl}`);
     }
     
-    return filteredUrls;
+    return uniqueUrls;
     
   } catch (error) {
-    console.error(`Error extracting article URLs from ${baseUrl}:`, error.message);
+    console.error(`❌ Error extracting article URLs from ${baseUrl}:`, error.message);
     return [];
   }
 }
@@ -777,14 +645,13 @@ async function scoutArticles() {
     
     // Sort by quality score (highest first) and take top articles
     const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '10');
-    const qualityThreshold = 60;
     
-    console.log(`  - Quality threshold: ${qualityThreshold}/100`);
     console.log(`  - Max articles per run: ${maxArticles}`);
     
+    // Remove quality threshold - accept all articles that have required fields
     const sortedArticles = analyzedArticles
-      .filter(article => (article.analysis.qualityScore || 0) >= qualityThreshold && article.analysis.refetchTitle && article.analysis.discussionStarter) // Basic quality filter
-      .sort((a, b) => (b.analysis.qualityScore || 0) - (a.analysis.qualityScore || 0))
+      .filter(article => article.analysis.refetchTitle && article.analysis.discussionStarter) // Only check for required fields
+      .sort((a, b) => (b.analysis.qualityScore || 0) - (a.analysis.qualityScore || 0)) // Still sort by quality for better ordering
       .slice(0, maxArticles);
     
     const filteredOutCount = analyzedArticles.length - sortedArticles.length;
@@ -797,9 +664,7 @@ async function scoutArticles() {
     
     filteredOutArticles.forEach(article => {
       let reason = '';
-      if (!article.analysis.qualityScore || article.analysis.qualityScore < qualityThreshold) {
-        reason = `Quality score too low: ${article.analysis.qualityScore || 'undefined'}/${qualityThreshold}`;
-      } else if (!article.analysis.refetchTitle) {
+      if (!article.analysis.refetchTitle) {
         reason = 'Missing title';
       } else if (!article.analysis.discussionStarter) {
         reason = 'Missing discussion starter';
@@ -817,18 +682,18 @@ async function scoutArticles() {
     });
     
     console.log(`\n📊 Quality Filtering Results:`);
-    console.log(`  - Articles meeting quality threshold (>=${qualityThreshold}): ${sortedArticles.length}/${analyzedArticles.length}`);
+    console.log(`  - Articles with required fields: ${sortedArticles.length}/${analyzedArticles.length}`);
     console.log(`  - Articles filtered out: ${filteredOutCount}`);
     
     if (sortedArticles.length > 0) {
       console.log(`  - Articles to process:`);
       sortedArticles.forEach((article, index) => {
-        console.log(`    ${index + 1}. "${article.analysis.refetchTitle}" (Score: ${article.analysis.qualityScore}/100)`);
+        console.log(`    ${index + 1}. "${article.analysis.refetchTitle}" (Score: ${article.analysis.qualityScore || 'N/A'}/100)`);
         console.log(`       URL: ${article.url}`);
         console.log(`       Comment: "${article.analysis.discussionStarter.substring(0, 100)}${article.analysis.discussionStarter.length > 100 ? '...' : ''}"`);
       });
     } else {
-      console.log(`  - ⚠️ No articles met the quality threshold`);
+      console.log(`  - ⚠️ No articles had the required fields (title + discussion starter)`);
     }
     
     for (const article of sortedArticles) {
@@ -870,7 +735,7 @@ async function scoutArticles() {
     console.log(`  - Total URLs found: ${results.urlBreakdown.totalUrlsFound}`);
     console.log(`  - URLs successfully scraped: ${results.urlBreakdown.urlsScraped}`);
     console.log(`  - URLs successfully analyzed: ${results.urlBreakdown.urlsAnalyzed}`);
-    console.log(`  - URLs filtered out (quality): ${results.urlBreakdown.urlsFilteredOut}`);
+    console.log(`  - URLs filtered out (missing fields): ${results.urlBreakdown.urlsFilteredOut}`);
     console.log(`  - URLs failed analysis: ${results.urlBreakdown.urlsFailedAnalysis}`);
     console.log(`  - Articles added to database: ${results.articlesAdded}`);
     console.log(`  - Duplicates skipped: ${results.duplicatesSkipped}`);
@@ -903,7 +768,7 @@ async function scoutArticles() {
       }
       
       if (results.failedUrls.quality.length > 0) {
-        console.log(`  - Quality filter failures (${results.failedUrls.quality.length}):`);
+        console.log(`  - Required fields filter failures (${results.failedUrls.quality.length}):`);
         results.failedUrls.quality.slice(0, 5).forEach(failure => {
           console.log(`    • ${failure.url} - ${failure.reason}`);
         });
