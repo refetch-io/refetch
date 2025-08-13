@@ -29,7 +29,7 @@ const navigationItems: NavigationItem[] = [
     href: "/",
     label: "Top",
     icon: TrendingUp,
-    badge: "+1k",
+    // badge: "+1k", // Counter icon commented out
     isSpecial: true
   },
   {
@@ -143,11 +143,11 @@ export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
                         {item.label}
                       </span>
                     </div>
-                    {item.badge && (
+                    {/* {item.badge && (
                       <Badge variant="secondary" className="bg-[#4e1cb3] text-white text-xs leading-4 flex-shrink-0">
                         {item.badge}
                       </Badge>
-                    )}
+                    )} */}
                   </div>
                 )
               })}
