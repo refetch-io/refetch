@@ -15,13 +15,34 @@ The Scout Function:
 
 The function is configured to scan these tech news sources:
 
+### Tech News & Startups
 - **TechCrunch** — Startups, funding, product launches
 - **The Verge** — Tech, gadgets, culture
 - **Ars Technica** — Deep technical reporting
 - **Wired** — Tech & culture intersections
 - **VentureBeat** — AI, enterprise tech, startups
+- **Engadget** — Consumer electronics and gadgets
+
+### Developer & Technical
 - **InfoQ** — Developer-oriented articles on architecture, devops, and languages
+- **Hacker News** — Community-curated tech news and discussions
+- **Lobste.rs** — Alternative tech community with focus on open source
+- **Reddit r/programming** — Community-curated developer content
+
+### Scientific & Research
+- **Science Daily** — Research and innovation news
+- **Nature Technology** — Scientific tech breakthroughs and research
+
+### Platform-Specific Tech
+- **9to5Mac** — Apple ecosystem news and analysis
+- **9to5Google** — Google and Android ecosystem coverage
+
+### Enterprise & Business Tech
 - **The Register** — Snarky but often well-researched tech industry news
+- **ZDNet** — Enterprise technology and business IT news
+
+### Emerging Tech & Research
+- **MIT Technology Review** — Emerging technologies and their impact
 
 ## Features
 
@@ -29,6 +50,8 @@ The function is configured to scan these tech news sources:
 - **AI-Powered Analysis**: Uses GPT-4 to analyze HTML and identify valuable content
 - **Intelligent Batching**: Automatically splits large URL lists into smaller batches to avoid LLM token limits
 - **Retry Logic**: Failed batches are automatically retried with exponential backoff
+- **Generic URL Extraction**: Single algorithm that automatically adapts to different site structures
+- **Intelligent Pattern Detection**: Adaptive requirements based on URL complexity
 - **Refetch-Style Titles**: Generates titles that match the refetch platform style (similar to Hacker News)
 - **Discussion Starters**: Automatically creates engaging first comments to kick off discussions
 - **Content Classification**: Properly categorizes articles as "link" or "show" types

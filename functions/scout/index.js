@@ -12,14 +12,34 @@ import { JSDOM } from 'jsdom';
 
 // Target websites to scout
 const TARGET_WEBSITES = [
+  // Tech News & Startups
   "https://techcrunch.com",
   "https://theverge.com", 
   "https://arstechnica.com",
   "https://wired.com",
   "https://venturebeat.com",
+  "https://engadget.com",
+  
+  // Developer & Technical
   "https://infoq.com",
+  "https://news.ycombinator.com",
+  "https://lobste.rs",
+  "https://reddit.com/r/programming",
+  
+  // Scientific & Research
+  "https://sciencedaily.com",
+  "https://nature.com/nature/technology",
+  
+  // Platform-Specific Tech
+  "https://9to5mac.com",
+  "https://9to5google.com",
+  
+  // Enterprise & Business Tech
   "https://theregister.com",
-  "https://news.ycombinator.com"
+  "https://zdnet.com",
+  
+  // Emerging Tech & Research
+  "https://www.technologyreview.com/tag/the-algorithm"
 ];
 
 // System prompt for AI content analysis
@@ -331,7 +351,14 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         /archive/i,
         /archives/i,
         /index\.php/i,
-        /default\.asp/i
+        /default\.asp/i,
+        // Additional patterns for new sources
+        /submit/i,
+        /new/i,
+        /top/i,
+        /hot/i,
+        /rising/i,
+        /controversial/i
       ];
       
       if (skipPatterns.some(pattern => pattern.test(articleUrl))) {
@@ -354,26 +381,55 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       
       // Skip URLs with too few slashes (likely not articles)
       const slashCount = (urlPath.match(/\//g) || []).length;
-      if (slashCount < 2) {
+      
+      // Adaptive requirements based on URL structure
+      // Sites with more complex URLs need more structure, simpler sites can have less
+      const minSlashCount = urlPath.length > 50 ? 2 : 1;
+      
+      if (slashCount < minSlashCount) {
         skippedUrls++;
         continue;
       }
       
       // Look for article-like patterns in the URL
       const articlePatterns = [
+        // Date patterns
         /\d{4}\/\d{2}\/\d{2}/i,  // Date patterns (YYYY/MM/DD)
         /\d{4}\/\d{2}/i,          // Date patterns (YYYY/MM)
+        
+        // General article patterns
         /article/i,
         /story/i,
         /news/i,
         /post/i,
         /blog/i,
         /entry/i,
-        /item/i
+        /item/i,
+        
+        // Technology patterns
+        /tech/i,
+        /technology/i,
+        /software/i,
+        /hardware/i,
+        
+        // Community patterns
+        /comments/i,
+        /discussion/i,
+        /thread/i,
+        
+        // Generic content patterns
+        /content/i,
+        /page/i,
+        /view/i,
+        /show/i,
+        /display/i
       ];
       
-      // Only include URLs that match at least one article pattern
-      if (!articlePatterns.some(pattern => pattern.test(articleUrl))) {
+      // More lenient approach: if no specific patterns match, still consider it if the URL is substantial
+      const hasArticlePattern = articlePatterns.some(pattern => pattern.test(articleUrl));
+      const isSubstantialUrl = urlPath.length > 30 && slashCount >= 1;
+      
+      if (!hasArticlePattern && !isSubstantialUrl) {
         skippedUrls++;
         continue;
       }
