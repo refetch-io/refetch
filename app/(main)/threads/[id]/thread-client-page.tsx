@@ -20,6 +20,125 @@ interface ThreadClientPageProps {
 
 type SortType = 'date' | 'votes'
 
+// Move CommentItem outside to prevent recreation on every render
+interface CommentItemProps {
+  comment: Comment
+  depth?: number
+  onVote: (commentId: string, direction: "up" | "down") => void
+  onReply: (comment: { id: string; author: string; text: string; depth?: number }) => void
+  isVoting: boolean
+  isAuthenticated: boolean
+  isOriginalPoster: (commentUserId: string) => boolean
+  getCommentVoteState: (commentId: string) => VoteState
+  getCommentChildren: (commentId: string) => Comment[]
+}
+
+const CommentItem = memo<CommentItemProps>(({ 
+  comment, 
+  depth = 0,
+  onVote,
+  onReply,
+  isVoting,
+  isAuthenticated,
+  isOriginalPoster,
+  getCommentVoteState,
+  getCommentChildren
+}) => {
+  const canReply = depth < 2 // Allow replies up to depth 2 (3 levels total)
+  
+  const handleReplyClick = useCallback(() => {
+    onReply({
+      id: comment.id,
+      author: comment.author,
+      text: comment.text,
+      depth: comment.depth || depth
+    })
+  }, [comment.id, comment.author, comment.text, comment.depth, depth, onReply])
+  
+  const handleCommentVote = useCallback((commentId: string, direction: "up" | "down") => {
+    onVote(commentId, direction)
+  }, [onVote])
+  
+  // Get the current vote state for this specific comment - memoized to prevent re-renders
+  const currentVoteState = useMemo(() => {
+    return getCommentVoteState(comment.id)
+  }, [comment.id, getCommentVoteState])
+  
+  // Get children from the flattened map - memoized to prevent re-renders
+  const children = useMemo(() => {
+    return getCommentChildren(comment.id)
+  }, [comment.id, getCommentChildren])
+  
+  return (
+    <div className="flex items-start gap-3">
+      {/* Avatar on the left */}
+      <Avatar className="w-8 h-8 mt-1">
+        <AvatarImage src={avatars.getInitials(comment.author, 80, 80)} />
+      </Avatar>
+      
+      {/* Comment content */}
+      <div className="flex-1">
+        <div className="flex items-center gap-2 text-xs mb-2">
+          <span className="text-gray-800">{comment.author}</span>
+          {isOriginalPoster(comment.userId || '') && (
+            <>
+              <span className="text-gray-500">•</span>
+              <span className="text-gray-500 text-xs">original poster</span>
+            </>
+          )}
+        </div>
+        <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{comment.text}</div>
+        
+        <div className="flex items-center gap-3">
+          <CommentVote
+            commentId={comment.id}
+            voteState={currentVoteState}
+            isVoting={isVoting}
+            onVote={handleCommentVote}
+            isAuthenticated={isAuthenticated}
+            layout="horizontal"
+            size="sm"
+          />
+          <div className="text-xs text-gray-500">{comment.timeAgo}</div>
+          {canReply && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-auto p-1 text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+              onClick={handleReplyClick}
+            >
+              <Reply className="w-3 h-3" />
+              Reply
+            </Button>
+          )}
+        </div>
+        
+        {/* Recursively render nested replies */}
+        {children.length > 0 && (
+          <div className={`mt-4 space-y-4 border-l pl-4 ${depth === 0 ? 'ml-6' : depth === 1 ? 'ml-4' : 'ml-3'} border-gray-200`}>
+            {children.map((reply: Comment) => (
+              <CommentItem 
+                key={reply.id} 
+                comment={reply} 
+                depth={depth + 1}
+                onVote={onVote}
+                onReply={onReply}
+                isVoting={isVoting}
+                isAuthenticated={isAuthenticated}
+                isOriginalPoster={isOriginalPoster}
+                getCommentVoteState={getCommentVoteState}
+                getCommentChildren={getCommentChildren}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+})
+
+CommentItem.displayName = 'CommentItem'
+
 export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, count: article.count })
   const [isVoting, setIsVoting] = useState(false)
@@ -40,7 +159,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     return map
   })
   
-  // Flattened vote state management
+  // Flattened vote state management - use individual state for each comment to prevent re-renders
   const [commentVoteStates, setCommentVoteStates] = useState<Record<string, VoteState>>(() => {
     const initialVoteStates: Record<string, VoteState> = {}
     const processComment = (comment: Comment) => {
@@ -55,6 +174,28 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     }
     return initialVoteStates
   })
+
+  // Helper function to get the current vote state for a comment (like main page)
+  const getCommentVoteState = useCallback((commentId: string): VoteState => {
+    const comment = commentMap.get(commentId)
+    const voteState = commentVoteStates[commentId]
+    return {
+      currentVote: voteState?.currentVote || null,
+      count: voteState?.count !== undefined ? voteState.count : (comment?.count || 0)
+    }
+  }, [commentMap, commentVoteStates])
+
+  // Helper function to update vote state for a comment - only update the specific comment
+  const updateCommentVoteState = useCallback((commentId: string, newState: VoteState) => {
+    // Only update if the state actually changed to prevent unnecessary re-renders
+    const currentState = commentVoteStates[commentId]
+    if (currentState?.currentVote !== newState.currentVote || currentState?.count !== newState.count) {
+      setCommentVoteStates(prev => ({
+        ...prev,
+        [commentId]: newState
+      }))
+    }
+  }, [commentVoteStates])
   
   const [isCommentVoting, setIsCommentVoting] = useState(false)
   const [isCommentFormMinimized, setIsCommentFormMinimized] = useState(false)
@@ -84,14 +225,14 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     } else if (sortType === 'votes') {
       // Sort by vote count (highest first)
       return sorted.sort((a, b) => {
-        const aScore = commentVoteStates[a.id]?.count ?? a.count
-        const bScore = commentVoteStates[b.id]?.count ?? b.count
+        const aScore = getCommentVoteState(a.id).count
+        const bScore = getCommentVoteState(b.id).count
         return bScore - aScore
       })
     }
     
     return sorted
-  }, [getRootComments, sortType, commentVoteStates])
+  }, [getRootComments, sortType, commentMap, commentVoteStates])
 
   // Helper function to get all comment IDs from any nesting level
   const getAllCommentIds = useCallback(() => {
@@ -223,18 +364,16 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
             })
             
             // Initialize vote states for new comments using functional update
-            setCommentVoteStates(prev => {
-              const newVoteStates = { ...prev }
-              const processComment = (comment: Comment) => {
-                newVoteStates[comment.id] = { currentVote: null, count: comment.count }
-                if (comment.replies && comment.replies.length > 0) {
-                  comment.replies.forEach(processComment)
-                }
+            const newCommentVoteStates: Record<string, VoteState> = {}
+            const processComment = (comment: Comment) => {
+              newCommentVoteStates[comment.id] = { currentVote: null, count: comment.count }
+              if (comment.replies && comment.replies.length > 0) {
+                comment.replies.forEach(processComment)
               }
-              
-              data.comments.forEach(processComment)
-              return newVoteStates
-            })
+            }
+            
+            data.comments.forEach(processComment)
+            setCommentVoteStates(newCommentVoteStates)
           }
         })
         .catch(error => {
@@ -247,7 +386,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     setIsCommentFormMinimized(isMinimized)
   }
 
-  const handleCommentVoteClick = async (commentId: string, direction: "up" | "down") => {
+  const handleCommentVoteClick = useCallback(async (commentId: string, direction: "up" | "down") => {
     if (!isAuthenticated) {
       return
     }
@@ -259,8 +398,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     setIsCommentVoting(true)
     try {
       // Get current vote state for this comment
-      const foundComment = commentMap.get(commentId)
-      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, count: foundComment?.count || 0 }
+      const currentVoteState = getCommentVoteState(commentId)
       
       // Optimistic update - update UI immediately
       const optimisticState = { ...currentVoteState }
@@ -273,163 +411,37 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       }
       
       // Update vote state immediately for better UX
-      setCommentVoteStates(prev => ({
-        ...prev,
-        [commentId]: optimisticState
-      }))
+      updateCommentVoteState(commentId, optimisticState)
       
       await handleVote(commentId, 'comment', direction, currentVoteState.currentVote, currentVoteState.count, (newState) => {
         // Update with actual server response
-        setCommentVoteStates(prev => ({
-          ...prev,
-          [commentId]: newState
-        }))
+        updateCommentVoteState(commentId, newState)
       })
     } catch (error) {
       console.error('Error handling comment vote:', error)
       // Revert optimistic update on error
       const originalComment = commentMap.get(commentId)
-      setCommentVoteStates(prev => ({
-        ...prev,
-        [commentId]: commentVoteStates[commentId] || { currentVote: null, count: originalComment?.count || 0 }
-      }))
+      const originalState = getCommentVoteState(commentId)
+      updateCommentVoteState(commentId, originalState)
     } finally {
       setIsCommentVoting(false)
     }
-  }
+  }, [isAuthenticated, isCommentVoting, getCommentVoteState, updateCommentVoteState])
 
   const handleSortChange = (newSortType: SortType) => {
     setSortType(newSortType)
   }
 
   // Helper function to check if a comment is from the original poster
-  const isOriginalPoster = (commentUserId: string) => {
+  const isOriginalPoster = useCallback((commentUserId: string) => {
     return commentUserId === article.userId
-  }
+  }, [article.userId])
 
-  // Recursive component to render comments with proper nesting
-  const CommentItem = memo(({ comment, depth = 0 }: { comment: Comment; depth?: number }) => {
-    const canReply = depth < 2 // Allow replies up to depth 2 (3 levels total)
-    
-    const handleReplyClick = useCallback(() => {
-      setReplyingTo({
-        id: comment.id,
-        author: comment.author,
-        text: comment.text,
-        depth: comment.depth || depth
-      })
-      setIsCommentFormMinimized(false)
-    }, [comment.id, comment.author, comment.text, comment.depth, depth])
-    
-    const handleCommentVote = useCallback((commentId: string, direction: "up" | "down") => {
-      handleCommentVoteClick(commentId, direction)
-    }, [])
-    
-    // Get the current vote state for this specific comment - memoized to prevent re-renders
-    const currentVoteState = useMemo(() => {
-      return commentVoteStates[comment.id] || { currentVote: null, count: comment.count }
-    }, [commentVoteStates[comment.id], comment.count])
-    
-    // Get children from the flattened map - memoized to prevent re-renders
-    const children = useMemo(() => {
-      return getCommentChildren(comment.id)
-    }, [comment.id, getCommentChildren])
-    
-    return (
-      <div className="flex items-start gap-3">
-        {/* Avatar on the left */}
-        <Avatar className="w-8 h-8 mt-1">
-          <AvatarImage src={avatars.getInitials(comment.author, 80, 80)} />
-        </Avatar>
-        
-        {/* Comment content */}
-        <div className="flex-1">
-          <div className="flex items-center gap-2 text-xs mb-2">
-            <span className="text-gray-800">{comment.author}</span>
-            {isOriginalPoster(comment.userId || '') && (
-              <>
-                <span className="text-gray-500">•</span>
-                <span className="text-gray-500 text-xs">original poster</span>
-              </>
-            )}
-          </div>
-          <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{comment.text}</div>
-          
-          <div className="flex items-center gap-3">
-            <CommentVote
-              commentId={comment.id}
-              voteState={currentVoteState}
-              isVoting={isCommentVoting}
-              onVote={handleCommentVote}
-              isAuthenticated={isAuthenticated}
-              layout="horizontal"
-              size="sm"
-            />
-            <div className="text-xs text-gray-500">{comment.timeAgo}</div>
-            {canReply && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-auto p-1 text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
-                onClick={handleReplyClick}
-              >
-                <Reply className="w-3 h-3" />
-                Reply
-              </Button>
-            )}
-          </div>
-          
-          {/* Recursively render nested replies */}
-          {children.length > 0 && (
-            <div className={`mt-4 space-y-4 border-l pl-4 ${depth === 0 ? 'ml-6' : depth === 1 ? 'ml-4' : 'ml-3'} border-gray-200`}>
-              {children.map((reply: Comment) => (
-                <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }, (prevProps, nextProps) => {
-    // Only re-render if this specific comment's data changed
-    const prevComment = prevProps.comment
-    const nextComment = nextProps.comment
-    const commentId = prevComment.id
-    
-    // Re-render if this comment's vote state changed
-    const prevVoteState = commentVoteStates[commentId]
-    const nextVoteState = commentVoteStates[commentId]
-    if (prevVoteState !== nextVoteState) {
-      return false
-    }
-    
-    // Re-render if this comment's content changed
-    if (prevComment.text !== nextComment.text) {
-      return false
-    }
-    
-    // Re-render if this comment's children count changed (but not their content)
-    const prevChildrenCount = getCommentChildren(commentId).length
-    const nextChildrenCount = getCommentChildren(commentId).length
-    if (prevChildrenCount !== nextChildrenCount) {
-      return false
-    }
-    
-    // Re-render if depth changed
-    if (prevProps.depth !== nextProps.depth) {
-      return false
-    }
-    
-    // Re-render if author or userId changed
-    if (prevComment.author !== nextComment.author || prevComment.userId !== nextComment.userId) {
-      return false
-    }
-    
-    // Don't re-render if only sibling or parent data changed
-    return true
-  })
-  
-  CommentItem.displayName = 'CommentItem'
+  // Callback for replying to a comment
+  const handleReplyToComment = useCallback((comment: { id: string; author: string; text: string; depth?: number }) => {
+    setReplyingTo(comment)
+    setIsCommentFormMinimized(false)
+  }, [])
 
   return (
     <main className="w-full space-y-6 px-4 lg:px-6">
@@ -506,7 +518,17 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         ) : (
           <div className="space-y-6">
             {sortedComments.map((comment: Comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+              <CommentItem 
+                key={comment.id} 
+                comment={comment} 
+                onVote={handleCommentVoteClick}
+                onReply={handleReplyToComment}
+                isVoting={isCommentVoting}
+                isAuthenticated={isAuthenticated}
+                isOriginalPoster={isOriginalPoster}
+                getCommentVoteState={getCommentVoteState}
+                getCommentChildren={getCommentChildren}
+              />
             ))}
           </div>
         )}
