@@ -689,9 +689,13 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
           })}
         </div>
 
-        {/* Gen Z Remark */}
+        {/* End of Content Message */}
         <div className="text-center text-gray-500 text-sm mt-20 mb-10">
-          <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass 🌱, or paginate below 👇</p>
+          {hasNextPage ? (
+            <p className="leading-10">You've scrolled to the end. That's cap. Go touch grass 🌱, or paginate below 👇</p>
+          ) : (
+            <p className="leading-10">No more items to show. That's all we've got! 🎯</p>
+          )}
         </div>
 
         {/* Pagination */}
