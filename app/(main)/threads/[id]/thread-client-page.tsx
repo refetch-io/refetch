@@ -12,7 +12,7 @@ import { PostCard } from "@/components/post-card"
 import { avatars } from "@/lib/appwrite"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Clock, TrendingUp, Reply } from "lucide-react"
+import { Clock, TrendingUp, Reply, ChevronDown, ChevronUp } from "lucide-react"
 
 interface ThreadClientPageProps {
   article: NewsItem
@@ -200,6 +200,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [isCommentVoting, setIsCommentVoting] = useState(false)
   const [isCommentFormMinimized, setIsCommentFormMinimized] = useState(false)
   const [sortType, setSortType] = useState<SortType>('date')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [replyingTo, setReplyingTo] = useState<{ id: string; author: string; text: string; depth?: number } | null>(null)
   
   const { isAuthenticated, user } = useAuth()
@@ -220,19 +221,20 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     const sorted = [...getRootComments]
     
     if (sortType === 'date') {
-      // Sort by date (newest first) - keep original order for now
-      return sorted
+      // Sort by date - use direction to determine order
+      return sortDirection === 'desc' ? sorted : sorted.reverse()
     } else if (sortType === 'votes') {
-      // Sort by vote count (highest first)
-      return sorted.sort((a, b) => {
+      // Sort by vote count - use direction to determine order
+      const voteSorted = sorted.sort((a, b) => {
         const aScore = getCommentVoteState(a.id).count
         const bScore = getCommentVoteState(b.id).count
         return bScore - aScore
       })
+      return sortDirection === 'desc' ? voteSorted : voteSorted.reverse()
     }
     
     return sorted
-  }, [getRootComments, sortType, commentMap, commentVoteStates])
+  }, [getRootComments, sortType, sortDirection, commentMap, commentVoteStates])
 
   // Helper function to get all comment IDs from any nesting level
   const getAllCommentIds = useCallback(() => {
@@ -429,7 +431,14 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   }, [isAuthenticated, isCommentVoting, getCommentVoteState, updateCommentVoteState])
 
   const handleSortChange = (newSortType: SortType) => {
-    setSortType(newSortType)
+    if (sortType === newSortType) {
+      // Toggle direction if clicking the same sort type
+      setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc')
+    } else {
+      // Set new sort type with default direction
+      setSortType(newSortType)
+      setSortDirection('desc')
+    }
   }
 
   // Helper function to check if a comment is from the original poster
@@ -490,7 +499,12 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
               }`}
             >
               <Clock className="h-2.5 w-2.5" />
-              Newest
+              Time
+              {sortType === 'date' && (
+                <span className={sortType === 'date' ? 'text-black' : 'text-gray-400'}>
+                  {sortDirection === 'desc' ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                </span>
+              )}
             </button>
             <button
               onClick={() => handleSortChange('votes')}
@@ -502,6 +516,11 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
             >
               <TrendingUp className="h-2.5 w-2.5" />
               Popular
+              {sortType === 'votes' && (
+                <span className={sortType === 'votes' ? 'text-black' : 'text-gray-400'}>
+                  {sortDirection === 'desc' ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+                </span>
+              )}
             </button>
           </div>
         </div>
