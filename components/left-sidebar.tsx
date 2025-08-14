@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp, Clock, BarChart3, Heart, Monitor, Briefcase, User } from "lucide-react"
+import { TrendingUp, Clock, BarChart3, Heart, Monitor, Briefcase, User, ArrowLeft } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -106,6 +106,18 @@ function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: bo
   )
 }
 
+// Back link component for threads pages
+function BackLink() {
+  return (
+    <Link href="/" passHref>
+      <div className="flex items-center gap-3 p-2 rounded-lg h-10 hover:bg-gray-50">
+        <ArrowLeft className="w-4 h-4 text-gray-400" />
+        <span className="text-sm text-gray-600">Back to home</span>
+      </div>
+    </Link>
+  )
+}
+
 interface LeftSidebarProps {
   isThreadsPage?: boolean
 }
@@ -113,40 +125,35 @@ interface LeftSidebarProps {
 export function LeftSidebar({ isThreadsPage = false }: LeftSidebarProps) {
   const pathname = usePathname()
   
-  if (isThreadsPage) {
-    // On threads pages: only show footer at bottom
-    return (
-      <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20" style={{ height: 'calc(100vh - 5rem)' }}>
-        <div className="h-full flex flex-col">
-          {/* Spacer to push footer to bottom */}
-          <div className="flex-1"></div>
-          
-          {/* Footer positioned at the bottom */}
-          <div className="pb-4">
-            <Footer variant="sidebar" />
-          </div>
-        </div>
-      </aside>
-    )
-  }
-  
-  // On main pages: show navigation with footer below
+  // On all pages: show navigation with footer at bottom
   return (
-    <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20 h-fit">
-      <div className="pr-4 pb-4">
-        <div className="space-y-1">
-          {navigationItems.map((item) => (
-            <NavigationLink
-              key={item.href}
-              item={item}
-              isActive={pathname === item.href}
-            />
-          ))}
+    <aside className="hidden lg:block w-full sm:w-56 lg:w-56 sticky top-20" style={{ height: 'calc(100vh - 5rem)' }}>
+      <div className="h-full flex flex-col">
+        {/* Navigation items or back link */}
+        <div className="pr-4 pb-4">
+          {isThreadsPage ? (
+            <BackLink />
+          ) : (
+            <div className="space-y-1">
+              {navigationItems.map((item) => (
+                <NavigationLink
+                  key={item.href}
+                  item={item}
+                  isActive={pathname === item.href}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {/* Spacer to push footer to bottom */}
+        <div className="flex-1"></div>
+        
+        {/* Footer positioned at the bottom */}
+        <div className="pb-4">
+          <Footer variant="sidebar" />
         </div>
       </div>
-      
-      {/* Footer positioned below navigation */}
-      <Footer variant="sidebar" />
     </aside>
   )
 }

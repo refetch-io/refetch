@@ -89,7 +89,7 @@ export default function SignUpPage() {
   return (
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
       {/* Main Content */}
-      <main className="flex-1 space-y-6 min-w-0">
+      <main className="flex-1 space-y-6 min-w-0 pb-[50px]">
         <div className="bg-white px-4 py-4 rounded-lg flex mb-4 relative group">
           <div className="flex-1 flex flex-col justify-center min-w-0">
             <div className="flex items-center gap-2 mb-3">

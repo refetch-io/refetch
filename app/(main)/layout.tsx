@@ -4,11 +4,11 @@ import { BackToTopButton } from "@/components/back-to-top-button"
 import { MobileNavigation } from "@/components/mobile-navigation"
 import { BrowserExtensionCTA } from "@/components/browser-extension-cta"
 import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Copy, Flag, Check } from "lucide-react"
 import { ThreadActions } from "@/components/thread-actions"
+import { Footer } from "@/components/footer"
 
 export default function MainLayout({
   children,
@@ -38,7 +38,7 @@ export default function MainLayout({
       </div>
 
       {/* Main content wrapper with padding to account for fixed header */}
-      <div className={`max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 ${isFullWidth || isThreadsPage ? 'pb-0' : 'pb-[50px]'} ${isFullWidth ? '' : 'flex flex-wrap gap-4 lg:gap-6'}`}>
+      <div className={`max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 ${isFullWidth ? '' : 'flex flex-wrap gap-4 lg:gap-6'}`}>
         {/* Left Sidebar - Show on all pages except full-width pages */}
         {!isFullWidth && <LeftSidebar isThreadsPage={isThreadsPage} />}
 
@@ -55,9 +55,9 @@ export default function MainLayout({
         )}
       </div>
       
-      {/* Footer - Only show on submit page, not on threads pages */}
+      {/* Footer for full-width pages only */}
       {isFullWidth && (
-        <div className="max-w-2xl mx-auto pr-4 pl-4 sm:pr-6">
+        <div className="max-w-2xl mx-auto pr-4 pl-4 sm:pr-6 mt-20">
           <Footer variant="bottom" />
         </div>
       )}

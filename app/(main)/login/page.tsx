@@ -110,7 +110,7 @@ export default function LoginPage() {
   return (
     <div className="flex-1 flex flex-col sm:flex-row gap-4 lg:gap-6 min-w-0 pt-4 lg:pt-4 mt-1">
       {/* Main Content */}
-      <main className="flex-1 space-y-6 min-w-0">
+      <main className="flex-1 space-y-6 min-w-0 pb-[50px]">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-4">
           <TabsList className="grid w-full grid-cols-2 shadow-none p-0 gap-2">

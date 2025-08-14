@@ -605,7 +605,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
       )}
       
       {/* Main Content */}
-      <main className={`flex-1 space-y-6 min-w-0 transition-opacity duration-200 ${
+      <main className={`flex-1 space-y-6 min-w-0 transition-opacity duration-200 pb-[50px] ${
         isLoading ? 'opacity-90' : 'opacity-100'
       }`}>
         {/* Content Loading Indicator */}
@@ -649,7 +649,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
         {/* <SearchAndFilter /> */}
 
         {/* News Items List - All posts rendered at once */}
-        <div className={`space-y-4 min-h-screen transition-all duration-300 ease-out ${
+        <div className={`space-y-4 flex-1 transition-all duration-300 ease-out ${
           isLoading ? 'scale-98 opacity-90' : 'scale-100 opacity-100'
         }`}>
           {/* Actual Posts */}
