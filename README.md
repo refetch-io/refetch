@@ -3,10 +3,10 @@
   <img src="public/logo-purple.png" width="200" style="max-width: 200px;">
   <br />
   <br />
-  **An open-source alternative to YC-controller HN, featuring curated tech news, discussions, and community-driven content.**
+  **Open-source alternative to YC-controller HN, featuring curated tech news, discussions, and community-driven content.**
   <br />
   <br />
-  
+
   [![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![Appwrite](https://img.shields.io/badge/Appwrite-18.2.0-FF6B6B?style=for-the-badge&logo=appwrite)](https://appwrite.io/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
