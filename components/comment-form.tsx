@@ -60,9 +60,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
 
   // Override minimized state when forceOpen prop is provided
   useEffect(() => {
-    console.log('forceOpen effect triggered:', forceOpen)
     if (forceOpen) {
-      console.log('Setting form to open')
       setIsMinimized(false)
       setWasMinimized(true)
     }
@@ -103,7 +101,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
     }
 
     // Check if we're trying to reply to a comment at maximum nesting level
-    if (replyId && replyToComment && replyToComment.depth === 2) {
+    if (replyId && replyToComment && (replyToComment.depth || 0) >= 2) {
       setError('Cannot reply to this comment - maximum nesting level reached.')
       return
     }

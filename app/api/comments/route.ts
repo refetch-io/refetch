@@ -131,23 +131,14 @@ function buildNestedComments(flatComments: any[]): any[] {
     commentMap.set(comment.id, { ...comment, replies: [] })
   })
 
-  // Second pass: build the tree structure with max 3 levels
+  // Second pass: build the tree structure naturally
   flatComments.forEach(comment => {
     if (comment.parentId && commentMap.has(comment.parentId)) {
       // This is a reply, add it to its parent
       const parent = commentMap.get(comment.parentId)
-      const parentDepth = parent.depth || 0
-      
-      // Only allow nesting up to 3 levels (0 = root, 1 = reply, 2 = reply to reply)
-      if (parentDepth < 2) {
-        parent.replies.push(commentMap.get(comment.id))
-        // Set depth for visual nesting
-        commentMap.get(comment.id).depth = parentDepth + 1
-      } else {
-        // If we're at max depth, add as a root comment instead
-        rootComments.push(commentMap.get(comment.id))
-        commentMap.get(comment.id).depth = 0
-      }
+      parent.replies.push(commentMap.get(comment.id))
+      // Set depth for visual nesting
+      commentMap.get(comment.id).depth = (parent.depth || 0) + 1
     } else {
       // This is a root comment
       rootComments.push(commentMap.get(comment.id))

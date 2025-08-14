@@ -2,7 +2,7 @@
 
 import { CommentForm } from "@/components/comment-form"
 import { CommentVote } from "@/components/comment-vote"
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useCallback, memo } from "react"
 import type { NewsItem, Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { handleVote, fetchUserVotesForResources } from "@/lib/voteHandler"
@@ -23,10 +23,26 @@ type SortType = 'date' | 'votes'
 export function ThreadClientPage({ article }: ThreadClientPageProps) {
   const [voteState, setVoteState] = useState<VoteState>({ currentVote: null, count: article.count })
   const [isVoting, setIsVoting] = useState(false)
-  const [commentVoteStates, setCommentVoteStates] = useState<Record<string, VoteState>>(() => {
-    // Initialize with comment counts from SSR data to avoid showing 0 briefly
-    const initialVoteStates: Record<string, VoteState> = {}
+  
+  // Flattened comment state management for better performance
+  const [commentMap, setCommentMap] = useState<Map<string, Comment>>(() => {
+    const map = new Map()
+    const addCommentToMap = (comment: Comment) => {
+      map.set(comment.id, comment)
+      if (comment.replies) {
+        comment.replies.forEach(addCommentToMap)
+      }
+    }
     
+    if (article.comments) {
+      article.comments.forEach(addCommentToMap)
+    }
+    return map
+  })
+  
+  // Flattened vote state management
+  const [commentVoteStates, setCommentVoteStates] = useState<Record<string, VoteState>>(() => {
+    const initialVoteStates: Record<string, VoteState> = {}
     const processComment = (comment: Comment) => {
       initialVoteStates[comment.id] = { currentVote: null, count: comment.count }
       if (comment.replies && comment.replies.length > 0) {
@@ -37,47 +53,33 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     if (article.comments && article.comments.length > 0) {
       article.comments.forEach(processComment)
     }
-    
     return initialVoteStates
   })
+  
   const [isCommentVoting, setIsCommentVoting] = useState(false)
-  const [comments, setComments] = useState<Comment[]>(article.comments || [])
-  
-  // Debug logging for initial comments
-  useEffect(() => {
-    console.log('Initial comments from SSR:', article.comments)
-    console.log('Current comments state:', comments)
-  }, [])
-  
-  // Debug logging for comment changes
-  useEffect(() => {
-    console.log('Comments state updated:', comments)
-    console.log('Comments with replies:', comments.filter(c => c.replies && c.replies.length > 0))
-    
-    // Log detailed nesting structure
-    const logCommentStructure = (comment: Comment, level = 0) => {
-      const indent = '  '.repeat(level)
-      console.log(`${indent}Comment ${comment.id}: depth=${comment.depth}, replies=${comment.replies?.length || 0}`)
-      if (comment.replies) {
-        comment.replies.forEach(reply => logCommentStructure(reply, level + 1))
-      }
-    }
-    
-    comments.forEach(comment => logCommentStructure(comment))
-  }, [comments])
   const [isCommentFormMinimized, setIsCommentFormMinimized] = useState(false)
   const [sortType, setSortType] = useState<SortType>('date')
   const [replyingTo, setReplyingTo] = useState<{ id: string; author: string; text: string; depth?: number } | null>(null)
   
   const { isAuthenticated, user } = useAuth()
 
+  // Helper function to get root comments from the flattened map
+  const getRootComments = useMemo(() => {
+    const rootComments: Comment[] = []
+    commentMap.forEach(comment => {
+      if (!comment.parentId) {
+        rootComments.push(comment)
+      }
+    })
+    return rootComments
+  }, [commentMap])
+
   // Sort comments based on current sort type
   const sortedComments = useMemo(() => {
-    const sorted = [...comments]
+    const sorted = [...getRootComments]
     
     if (sortType === 'date') {
       // Sort by date (newest first) - keep original order for now
-      // In a real implementation, you'd want to store actual timestamps
       return sorted
     } else if (sortType === 'votes') {
       // Sort by vote count (highest first)
@@ -89,8 +91,36 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     }
     
     return sorted
-  }, [comments, sortType, commentVoteStates])
+  }, [getRootComments, sortType, commentVoteStates])
 
+  // Helper function to get all comment IDs from any nesting level
+  const getAllCommentIds = useCallback(() => {
+    const ids: string[] = []
+    commentMap.forEach(comment => ids.push(comment.id))
+    return ids
+  }, [commentMap])
+
+  // Helper function to get children of a comment
+  const getCommentChildren = useCallback((commentId: string): Comment[] => {
+    const children: Comment[] = []
+    commentMap.forEach(comment => {
+      if (comment.parentId === commentId) {
+        children.push(comment)
+      }
+    })
+    return children
+  }, [commentMap])
+
+  // Debug logging for initial comments
+  useEffect(() => {
+    // Removed console.log statements
+  }, [])
+  
+  // Debug logging for comment changes
+  useEffect(() => {
+    // Removed console.log statements
+  }, [getRootComments])
+  
   // Fetch votes for the current user when component mounts
   useEffect(() => {
     const fetchVotes = async () => {
@@ -102,9 +132,9 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         // Get all resource IDs from the page (post + comments)
         const resources = [
           { id: article.id, type: 'post' as const },
-          ...comments.map(comment => ({ id: comment.id, type: 'comment' as const })),
-          ...comments.flatMap(comment => 
-            comment.replies ? comment.replies.map(reply => ({ id: reply.id, type: 'comment' as const })) : []
+          ...getAllCommentIds().map(id => ({ id, type: 'comment' as const })),
+          ...getAllCommentIds().flatMap(id => 
+            getCommentChildren(id).map(reply => ({ id: reply.id, type: 'comment' as const }))
           )
         ]
 
@@ -119,37 +149,35 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
 
         // Set comment vote states
         const newCommentVoteStates: Record<string, VoteState> = {}
-        comments.forEach(comment => {
-          const commentVoteState = voteMap.get(comment.id)
-          newCommentVoteStates[comment.id] = commentVoteState || { currentVote: null, count: comment.count }
-          
-          if (comment.replies) {
-            comment.replies.forEach(reply => {
-              const replyVoteState = voteMap.get(reply.id)
-              newCommentVoteStates[reply.id] = replyVoteState || { currentVote: null, count: reply.count }
-            })
+        const processCommentForVotes = (commentId: string) => {
+          const comment = commentMap.get(commentId)
+          if (comment) {
+            const commentVoteState = voteMap.get(commentId)
+            newCommentVoteStates[commentId] = commentVoteState || { currentVote: null, count: comment.count }
           }
-        })
+        }
+        
+        getAllCommentIds().forEach(processCommentForVotes)
         setCommentVoteStates(newCommentVoteStates)
       } catch (error) {
         console.error('Error fetching votes:', error)
         // Fallback to default states
         setVoteState({ currentVote: null, count: article.count || 0 })
         const defaultCommentVoteStates: Record<string, VoteState> = {}
-        comments.forEach(comment => {
-          defaultCommentVoteStates[comment.id] = { currentVote: null, count: comment.count }
-          if (comment.replies) {
-            comment.replies.forEach(reply => {
-              defaultCommentVoteStates[reply.id] = { currentVote: null, count: reply.count }
-            })
+        const processCommentForDefaults = (commentId: string) => {
+          const comment = commentMap.get(commentId)
+          if (comment) {
+            defaultCommentVoteStates[commentId] = { currentVote: null, count: comment.count }
           }
-        })
+        }
+        
+        getAllCommentIds().forEach(processCommentForDefaults)
         setCommentVoteStates(defaultCommentVoteStates)
       }
     }
 
     fetchVotes()
-  }, [isAuthenticated, user?.$id, article.id, article.count, comments])
+  }, [isAuthenticated, user?.$id, article.id, article.count, getAllCommentIds, getRootComments, commentMap])
 
 
 
@@ -174,7 +202,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     }
   }
 
-  const handleCommentAdded = () => {
+  const handleCommentAdded = useCallback(() => {
     // Add a small delay to ensure the database has time to update
     setTimeout(() => {
       // Refresh comments from the API to get the latest comment
@@ -182,33 +210,44 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         .then(response => response.json())
         .then(data => {
           if (data.comments) {
-            console.log('Refreshed comments:', data.comments)
-            setComments(data.comments)
-            
-            // Initialize vote states for new comments
-            const newVoteStates: Record<string, VoteState> = {}
-            const processComment = (comment: Comment) => {
-              newVoteStates[comment.id] = { currentVote: null, count: comment.count }
-              if (comment.replies && comment.replies.length > 0) {
-                comment.replies.forEach(processComment)
+            setCommentMap(prev => {
+              const newMap = new Map(prev)
+              const addCommentToMap = (comment: Comment) => {
+                newMap.set(comment.id, comment)
+                if (comment.replies) {
+                  comment.replies.forEach(addCommentToMap)
+                }
               }
-            }
+              data.comments.forEach(addCommentToMap)
+              return newMap
+            })
             
-            data.comments.forEach(processComment)
-            setCommentVoteStates(newVoteStates)
+            // Initialize vote states for new comments using functional update
+            setCommentVoteStates(prev => {
+              const newVoteStates = { ...prev }
+              const processComment = (comment: Comment) => {
+                newVoteStates[comment.id] = { currentVote: null, count: comment.count }
+                if (comment.replies && comment.replies.length > 0) {
+                  comment.replies.forEach(processComment)
+                }
+              }
+              
+              data.comments.forEach(processComment)
+              return newVoteStates
+            })
           }
         })
         .catch(error => {
           console.error('Error refreshing comments:', error)
         })
     }, 500) // 500ms delay
-  }
+  }, [article.id, getAllCommentIds])
 
   const handleCommentFormMinimizedChange = (isMinimized: boolean) => {
     setIsCommentFormMinimized(isMinimized)
   }
 
-  const handleCommentVote = async (commentId: string, direction: "up" | "down") => {
+  const handleCommentVoteClick = async (commentId: string, direction: "up" | "down") => {
     if (!isAuthenticated) {
       return
     }
@@ -220,9 +259,27 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     setIsCommentVoting(true)
     try {
       // Get current vote state for this comment
-      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, count: comments.find(c => c.id === commentId)?.count || 0 }
+      const foundComment = commentMap.get(commentId)
+      const currentVoteState = commentVoteStates[commentId] || { currentVote: null, count: foundComment?.count || 0 }
+      
+      // Optimistic update - update UI immediately
+      const optimisticState = { ...currentVoteState }
+      if (direction === 'up') {
+        optimisticState.currentVote = optimisticState.currentVote === 'up' ? null : 'up'
+        optimisticState.count = optimisticState.currentVote === 'up' ? optimisticState.count + 1 : optimisticState.count - 1
+      } else {
+        optimisticState.currentVote = optimisticState.currentVote === 'down' ? null : 'down'
+        optimisticState.count = optimisticState.currentVote === 'down' ? optimisticState.count - 1 : optimisticState.count + 1
+      }
+      
+      // Update vote state immediately for better UX
+      setCommentVoteStates(prev => ({
+        ...prev,
+        [commentId]: optimisticState
+      }))
       
       await handleVote(commentId, 'comment', direction, currentVoteState.currentVote, currentVoteState.count, (newState) => {
+        // Update with actual server response
         setCommentVoteStates(prev => ({
           ...prev,
           [commentId]: newState
@@ -230,6 +287,12 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
       })
     } catch (error) {
       console.error('Error handling comment vote:', error)
+      // Revert optimistic update on error
+      const originalComment = commentMap.get(commentId)
+      setCommentVoteStates(prev => ({
+        ...prev,
+        [commentId]: commentVoteStates[commentId] || { currentVote: null, count: originalComment?.count || 0 }
+      }))
     } finally {
       setIsCommentVoting(false)
     }
@@ -245,8 +308,32 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
   }
 
   // Recursive component to render comments with proper nesting
-  const CommentItem = ({ comment, depth = 0 }: { comment: Comment; depth?: number }) => {
+  const CommentItem = memo(({ comment, depth = 0 }: { comment: Comment; depth?: number }) => {
     const canReply = depth < 2 // Allow replies up to depth 2 (3 levels total)
+    
+    const handleReplyClick = useCallback(() => {
+      setReplyingTo({
+        id: comment.id,
+        author: comment.author,
+        text: comment.text,
+        depth: comment.depth || depth
+      })
+      setIsCommentFormMinimized(false)
+    }, [comment.id, comment.author, comment.text, comment.depth, depth])
+    
+    const handleCommentVote = useCallback((commentId: string, direction: "up" | "down") => {
+      handleCommentVoteClick(commentId, direction)
+    }, [])
+    
+    // Get the current vote state for this specific comment - memoized to prevent re-renders
+    const currentVoteState = useMemo(() => {
+      return commentVoteStates[comment.id] || { currentVote: null, count: comment.count }
+    }, [commentVoteStates[comment.id], comment.count])
+    
+    // Get children from the flattened map - memoized to prevent re-renders
+    const children = useMemo(() => {
+      return getCommentChildren(comment.id)
+    }, [comment.id, getCommentChildren])
     
     return (
       <div className="flex items-start gap-3">
@@ -271,7 +358,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           <div className="flex items-center gap-3">
             <CommentVote
               commentId={comment.id}
-              voteState={commentVoteStates[comment.id] || { currentVote: null, count: comment.count }}
+              voteState={currentVoteState}
               isVoting={isCommentVoting}
               onVote={handleCommentVote}
               isAuthenticated={isAuthenticated}
@@ -284,16 +371,7 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                 variant="ghost"
                 size="sm"
                 className="h-auto p-1 text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
-                onClick={() => {
-                  console.log('Reply clicked for comment:', comment.id)
-                  setReplyingTo({
-                    id: comment.id,
-                    author: comment.author,
-                    text: comment.text,
-                    depth: comment.depth || depth
-                  })
-                  setIsCommentFormMinimized(false)
-                }}
+                onClick={handleReplyClick}
               >
                 <Reply className="w-3 h-3" />
                 Reply
@@ -302,9 +380,9 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
           </div>
           
           {/* Recursively render nested replies */}
-          {comment.replies && comment.replies.length > 0 && (
+          {children.length > 0 && (
             <div className={`mt-4 space-y-4 border-l pl-4 ${depth === 0 ? 'ml-6' : depth === 1 ? 'ml-4' : 'ml-3'} border-gray-200`}>
-              {comment.replies.map((reply: Comment) => (
+              {children.map((reply: Comment) => (
                 <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
               ))}
             </div>
@@ -312,7 +390,46 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
         </div>
       </div>
     )
-  }
+  }, (prevProps, nextProps) => {
+    // Only re-render if this specific comment's data changed
+    const prevComment = prevProps.comment
+    const nextComment = nextProps.comment
+    const commentId = prevComment.id
+    
+    // Re-render if this comment's vote state changed
+    const prevVoteState = commentVoteStates[commentId]
+    const nextVoteState = commentVoteStates[commentId]
+    if (prevVoteState !== nextVoteState) {
+      return false
+    }
+    
+    // Re-render if this comment's content changed
+    if (prevComment.text !== nextComment.text) {
+      return false
+    }
+    
+    // Re-render if this comment's children count changed (but not their content)
+    const prevChildrenCount = getCommentChildren(commentId).length
+    const nextChildrenCount = getCommentChildren(commentId).length
+    if (prevChildrenCount !== nextChildrenCount) {
+      return false
+    }
+    
+    // Re-render if depth changed
+    if (prevProps.depth !== nextProps.depth) {
+      return false
+    }
+    
+    // Re-render if author or userId changed
+    if (prevComment.author !== nextComment.author || prevComment.userId !== nextComment.userId) {
+      return false
+    }
+    
+    // Don't re-render if only sibling or parent data changed
+    return true
+  })
+  
+  CommentItem.displayName = 'CommentItem'
 
   return (
     <main className="w-full space-y-6 px-4 lg:px-6">
@@ -344,13 +461,8 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
             Comments
             <span className="ml-2 text-gray-700">
               ({(() => {
-                const total = comments.reduce((total, comment) => total + 1 + (comment.replies?.length || 0), 0)
-                console.log('Comment count calculation:', { 
-                  rootComments: comments.length, 
-                  totalReplies: comments.reduce((sum, c) => sum + (c.replies?.length || 0), 0),
-                  total
-                })
-                return total
+                // Count all comments in the flattened map
+                return commentMap.size
               })()})
             </span>
           </h3>
