@@ -24,8 +24,12 @@ export function Footer({ variant = 'sidebar', bottomPadding }: FooterProps) {
       <div className="h-px bg-gray-200 mb-4 mt-4 opacity-50"></div>
 
       <div className={`flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-4 leading-4 ${isBottom ? 'justify-center' : ''}`}>
-        <a href="#" className="hover:text-gray-700">
+        <a href="https://github.com/refetch-io/refetch" target="_blank" rel="noopener noreferrer" className="hover:text-gray-700">
           About
+        </a>
+        <span>•</span>
+        <a href="https://github.com/refetch-io/refetch/tree/main/functions/algorithm" target="_blank" rel="noopener noreferrer" className="hover:text-gray-700">
+          Algorithm
         </a>
         <span>•</span>
         <a href="https://appwrite.io/terms" target="_blank" rel="noopener noreferrer" className="hover:text-gray-700">
