@@ -132,7 +132,7 @@ export default async function ({ req, res, log, error }) {
             COLLECTION_ID,
             [
                 Query.notEqual('enhanced', true),
-                Query.limit(5) // Process up to 100 posts at a time
+                Query.limit(50) // Process up to 100 posts at a time
             ]
         );
         
