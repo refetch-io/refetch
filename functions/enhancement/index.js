@@ -7,7 +7,6 @@
 
 import { Client, Databases, Query } from 'node-appwrite';
 import OpenAI from 'openai';
-import { JSDOM } from 'jsdom';
 
 // System prompt for AI content analysis
 const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platform. Analyze the provided post content and return a JSON response with the following structure:
@@ -319,50 +318,90 @@ async function fetchURLContent(url) {
 
         const html = await response.text();
         
-        // Parse HTML content for metadata extraction
-        const dom = new JSDOM(html);
-        const document = dom.window.document;
-
-        // Extract title
-        const title = document.querySelector('title')?.textContent?.trim() || '';
+        // Simple text extraction without complex HTML parsing
+        let cleanText = extractCleanText(html);
         
-        // Extract meta description
-        const metaDescription = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-        
-        // Extract main content
-        let content = '';
-        const article = document.querySelector('article') || document.querySelector('[role="main"]') || document.querySelector('main');
-        if (article) {
-            content = article.textContent || '';
-        } else {
-            const body = document.querySelector('body');
-            if (body) {
-                const scripts = body.querySelectorAll('script, style, nav, header, footer, aside');
-                scripts.forEach(el => el.remove());
-                content = body.textContent || '';
-            }
-        }
-
-        // Clean content
-        content = content
-            .replace(/\s+/g, ' ')
-            .trim()
-            .substring(0, 5000); // Limit to first 5000 characters
-
         // Calculate reading time (average reading speed: 225 words per minute)
-        const wordCount = content.split(/\s+/).length;
+        const wordCount = cleanText.split(/\s+/).length;
         const readingTime = Math.ceil(wordCount / 225);
 
         return {
-            title,
-            description: metaDescription,
-            content,
+            title: extractSimpleTitle(html),
+            description: extractSimpleDescription(html),
+            content: cleanText,
             wordCount,
             readingTime,
             rawHtml: html
         };
     } catch (error) {
         throw new Error(`Failed to fetch URL content: ${error.message}`);
+    }
+}
+
+/**
+ * Extract clean text content from HTML without complex parsing
+ */
+function extractCleanText(html) {
+    try {
+        // Remove script and style tags completely
+        let text = html
+            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<noscript[^>]*>[\s\S]*?<\/noscript>/gi, ' ')
+            .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, ' ')
+            .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, ' ')
+            .replace(/<embed[^>]*>/gi, ' ')
+            .replace(/<applet[^>]*>[\s\S]*?<\/applet>/gi, ' ');
+        
+        // Remove HTML tags but preserve line breaks
+        text = text
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/p>/gi, '\n')
+            .replace(/<\/div>/gi, '\n')
+            .replace(/<\/h[1-6]>/gi, '\n')
+            .replace(/<\/li>/gi, '\n')
+            .replace(/<\/td>/gi, ' ')
+            .replace(/<\/th>/gi, ' ');
+        
+        // Remove remaining HTML tags
+        text = text.replace(/<[^>]*>/g, ' ');
+        
+        // Clean up whitespace and normalize
+        text = text
+            .replace(/\s+/g, ' ')
+            .replace(/\n\s*\n/g, '\n')
+            .trim()
+            .substring(0, 5000); // Limit to first 5000 characters
+        
+        return text;
+    } catch (error) {
+        // If text extraction fails, return a simple fallback
+        console.warn('Text extraction failed, using fallback:', error.message);
+        return html.substring(0, 5000).replace(/<[^>]*>/g, ' ').trim();
+    }
+}
+
+/**
+ * Extract title from HTML using simple regex
+ */
+function extractSimpleTitle(html) {
+    try {
+        const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+        return titleMatch ? titleMatch[1].trim() : '';
+    } catch (error) {
+        return '';
+    }
+}
+
+/**
+ * Extract meta description from HTML using simple regex
+ */
+function extractSimpleDescription(html) {
+    try {
+        const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i);
+        return descMatch ? descMatch[1].trim() : '';
+    } catch (error) {
+        return '';
     }
 }
 
