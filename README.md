@@ -3,7 +3,9 @@
   <img src="public/logo-purple.png" width="200" style="max-width: 200px;">
   <br />
   <br />
+  
   **Open-source alternative to YC-controller HN, featuring curated tech news, discussions, and community-driven content.**
+  
   <br />
   <br />
 
