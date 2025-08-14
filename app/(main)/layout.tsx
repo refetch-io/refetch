@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Copy, Flag, Check } from "lucide-react"
+import { ThreadActions } from "@/components/thread-actions"
 
 export default function MainLayout({
   children,
@@ -49,39 +50,7 @@ export default function MainLayout({
         {/* Right Sidebar - Only show on threads pages */}
         {isThreadsPage && (
           <aside className="hidden lg:block w-56 sticky top-20 h-fit pl-6">
-            <div className="bg-white rounded-lg">
-              <h3 className="font-normal text-gray-900 mb-2 px-4 pt-2 font-heading text-sm">Actions</h3>
-              {/* Separator between title and first item */}
-              <div className="h-px bg-gray-100" />
-              <div className="space-y-0">
-                <div>
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href)
-                      const button = event?.target as HTMLButtonElement
-                      if (button) {
-                        const originalText = button.innerHTML
-                        button.innerHTML = '<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!'
-                        setTimeout(() => {
-                          button.innerHTML = originalText
-                        }, 2000)
-                      }
-                    }}
-                    className="w-full text-left text-xs text-gray-700 hover:text-blue-600 hover:bg-gray-50 py-2 px-4 transition-colors flex items-center gap-2 cursor-pointer"
-                  >
-                    <Copy className="h-4 w-4" />
-                    Copy Link
-                  </button>
-                </div>
-                <div className="h-px bg-gray-100" />
-                <div>
-                  <button className="w-full text-left text-xs text-gray-700 hover:text-red-600 hover:bg-gray-50 py-2 px-4 transition-colors flex items-center gap-2 cursor-pointer">
-                    <Flag className="h-4 w-4" />
-                    Report
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ThreadActions postId={pathname.split('/')[2]} />
           </aside>
         )}
       </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Query } from 'node-appwrite'
+import { Client, Databases, Query, Account } from 'node-appwrite'
 import { convertAppwritePostToNewsItem, Comment as AppComment } from '@/lib/data'
 
 export async function GET(
@@ -88,6 +88,104 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching post:', error)
     return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 })
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id
+  
+  try {
+    // Validate environment variables
+    const envCheck = {
+      databaseId: !!process.env.APPWRITE_DATABASE_ID,
+      postsCollectionId: !!process.env.APPWRITE_POSTS_COLLECTION_ID,
+      endpoint: !!process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT,
+      projectId: !!process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+      apiKey: !!process.env.APPWRITE_API_KEY
+    }
+
+    if (!envCheck.databaseId || !envCheck.postsCollectionId || !envCheck.endpoint || !envCheck.projectId || !envCheck.apiKey) {
+      console.error('Missing required environment variables:', envCheck)
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+    }
+
+    // Initialize Appwrite clients
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+      .setKey(process.env.APPWRITE_API_KEY!)
+
+    const jwtClient = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+
+    const databases = new Databases(client)
+    const account = new Account(jwtClient)
+
+    // Get user from JWT token
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Missing or invalid authorization header' },
+        { status: 401 }
+      )
+    }
+
+    const jwt = authHeader.substring(7)
+    
+    // Verify JWT and get user
+    let user
+    try {
+      jwtClient.setJWT(jwt)
+      user = await account.get()
+    } catch (error) {
+      console.error('Error verifying JWT:', error)
+      return NextResponse.json(
+        { error: 'Invalid or expired token' },
+        { status: 401 }
+      )
+    }
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    // Get the post to check ownership
+    const post = await databases.getDocument(
+      process.env.APPWRITE_DATABASE_ID!,
+      process.env.APPWRITE_POSTS_COLLECTION_ID!,
+      id
+    )
+
+    // Check if the user owns this post
+    if (post.userId !== user.$id) {
+      return NextResponse.json(
+        { error: 'You can only delete your own posts' },
+        { status: 403 }
+      )
+    }
+
+    // Delete the post
+    await databases.deleteDocument(
+      process.env.APPWRITE_DATABASE_ID!,
+      process.env.APPWRITE_POSTS_COLLECTION_ID!,
+      id
+    )
+
+    return NextResponse.json({
+      success: true,
+      message: 'Post deleted successfully'
+    })
+
+  } catch (error) {
+    console.error('Error deleting post:', error)
+    return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 })
   }
 }
 
