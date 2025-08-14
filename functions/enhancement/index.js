@@ -172,6 +172,10 @@ export default async function ({ req, res, log, error }) {
                     } catch (fetchError) {
                         urlError = fetchError;
                         log(`⚠️  Failed to fetch URL content for ${post.$id}: ${fetchError.message}`);
+                        log(`   📍 Post Title: "${post.title}"`);
+                        log(`   🔗 URL: ${postData.url}`);
+                        log(`   ❌ Error Type: ${fetchError.name || 'Unknown'}`);
+                        log(`   📝 Error Details: ${fetchError.message}`);
                         // Continue without URL content, but we'll use the error info for spam detection
                     }
                 }
@@ -334,7 +338,35 @@ async function fetchURLContent(url) {
             rawHtml: html
         };
     } catch (error) {
-        throw new Error(`Failed to fetch URL content: ${error.message}`);
+        // Provide detailed error information
+        let errorDetails = `Failed to fetch URL content: ${error.message}`;
+        
+        // Add specific error context based on error type
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            errorDetails += ` | Network Error: Unable to connect to the URL`;
+        } else if (error.name === 'AbortError') {
+            errorDetails += ` | Timeout Error: Request took longer than 10 seconds`;
+        } else if (error.message.includes('HTTP')) {
+            // HTTP status errors are already detailed
+            errorDetails = error.message;
+        } else if (error.message.includes('ENOTFOUND')) {
+            errorDetails += ` | DNS Error: Domain name could not be resolved`;
+        } else if (error.message.includes('ECONNREFUSED')) {
+            errorDetails += ` | Connection Error: Server refused the connection`;
+        } else if (error.message.includes('ECONNRESET')) {
+            errorDetails += ` | Connection Error: Connection was reset by the server`;
+        } else if (error.message.includes('ETIMEDOUT')) {
+            errorDetails += ` | Timeout Error: Connection timed out`;
+        } else if (error.message.includes('ENOENT')) {
+            errorDetails += ` | File Error: Resource not found`;
+        } else if (error.message.includes('EACCES')) {
+            errorDetails += ` | Permission Error: Access denied`;
+        }
+        
+        // Add URL context for debugging
+        errorDetails += ` | URL: ${url}`;
+        
+        throw new Error(errorDetails);
     }
 }
 
