@@ -5,7 +5,9 @@ export interface Comment {
   timeAgo: string
   count: number
   userId?: string
+  parentId?: string // Add parentId to support nested comments
   replies?: Comment[]
+  depth?: number // Add depth for visual nesting
 }
 
 export interface NewsItem {
@@ -477,27 +479,84 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
           'content',
           'userId',
           'count',
+          'replyId', // Include replyId for nested comments
           '$createdAt'
         ])
       ]
     )
 
     // Transform the comments to match the Comment interface
-    const transformedComments = comments.documents.map(doc => ({
+    const flatComments = comments.documents.map(doc => ({
       id: doc.$id,
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      count: doc.count || 0, // Use the count field from the collection
-      userId: doc.userId || undefined,
-      replies: [] // TODO: Implement nested replies using replyId
+      count: doc.count || 0,
+      userId: doc.userId || '',
+      parentId: doc.replyId || undefined, // Use replyId as parentId
+      replies: [],
+      depth: 0
     }))
 
-    return transformedComments
+    // Build nested comment structure
+    const nestedComments = buildNestedComments(flatComments)
+
+    return nestedComments
   } catch (error) {
     console.error(`Error fetching comments for post ${postId}:`, error)
     return []
   }
+}
+
+// Helper function to build nested comment structure (same as API endpoint)
+function buildNestedComments(flatComments: any[]): any[] {
+  const commentMap = new Map()
+  const rootComments: any[] = []
+
+  // First pass: create a map of all comments
+  flatComments.forEach(comment => {
+    commentMap.set(comment.id, { ...comment, replies: [] })
+  })
+
+  // Second pass: build the tree structure with max 3 levels
+  flatComments.forEach(comment => {
+    if (comment.parentId && commentMap.has(comment.parentId)) {
+      // This is a reply, add it to its parent
+      const parent = commentMap.get(comment.parentId)
+      const parentDepth = parent.depth || 0
+      
+      // Only allow nesting up to 3 levels (0 = root, 1 = reply, 2 = reply to reply)
+      if (parentDepth < 2) {
+        parent.replies.push(commentMap.get(comment.id))
+        // Set depth for visual nesting
+        commentMap.get(comment.id).depth = parentDepth + 1
+      } else {
+        // If we're at max depth, add as a root comment instead
+        rootComments.push(commentMap.get(comment.id))
+        commentMap.get(comment.id).depth = 0
+      }
+    } else {
+      // This is a root comment
+      rootComments.push(commentMap.get(comment.id))
+    }
+  })
+
+  // Sort replies by creation time (newest first)
+  const sortReplies = (comments: any[]) => {
+    comments.forEach(comment => {
+      if (comment.replies && comment.replies.length > 0) {
+        comment.replies.sort((a: any, b: any) => {
+          // Sort by timeAgo (assuming newer comments come first in the original array)
+          return flatComments.findIndex(c => c.id === a.id) - 
+                 flatComments.findIndex(c => c.id === b.id)
+        })
+        sortReplies(comment.replies)
+      }
+    })
+  }
+
+  sortReplies(rootComments)
+  return rootComments
 }
 
 export async function fetchPostById(id: string): Promise<NewsItem | null> {

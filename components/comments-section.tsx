@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CommentVote } from "@/components/comment-vote"
+import { CommentForm } from "@/components/comment-form"
 import { type Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { useAuth } from "@/hooks/use-auth"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { handleVote } from "@/lib/voteHandler"
-import { ArrowUpDown, Clock, TrendingUp } from "lucide-react"
+import { ArrowUpDown, Clock, TrendingUp, Reply, X } from "lucide-react"
 
 interface CommentItemProps {
   comment: Comment
@@ -21,6 +22,8 @@ interface CommentItemProps {
   isVoting: boolean
   isAuthenticated: boolean
   isOriginalPoster: boolean
+  depth?: number
+  onReplyToComment?: (commentId: string) => void // Add callback for replying to comment
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ 
@@ -30,7 +33,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
   voteState, 
   isVoting, 
   isAuthenticated,
-  isOriginalPoster
+  isOriginalPoster,
+  depth = 0,
+  onReplyToComment
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
@@ -43,6 +48,15 @@ const CommentItem: React.FC<CommentItemProps> = ({
       setShowReplyForm(false)
     }
   }
+
+  const handleReplyToComment = () => {
+    if (onReplyToComment) {
+      onReplyToComment(comment.id)
+    }
+  }
+
+  const maxDepth = 5 // Maximum nesting depth to prevent excessive indentation
+  const currentDepth = Math.min(depth, maxDepth)
 
   return (
     <div className="flex items-start gap-3">
@@ -73,30 +87,67 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <span className="text-gray-500">• {comment.timeAgo}</span>
         </div>
         <p className="text-gray-700 mt-1 text-sm">{comment.text}</p>
-        <Button
-          variant="link"
-          className="p-0 h-auto text-xs text-gray-500 hover:text-gray-700"
-          onClick={() => setShowReplyForm(!showReplyForm)}
-        >
-          {showReplyForm ? "Cancel" : "Reply"}
-        </Button>
+        
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3 mt-2">
+          {/* Reply Button */}
+          <Button
+            variant="link"
+            className="p-0 h-auto text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+            onClick={() => setShowReplyForm(!showReplyForm)}
+          >
+            <Reply className="w-3 h-3" />
+            {showReplyForm ? "Cancel" : "Reply"}
+          </Button>
 
+          {/* Reply to this comment from main form */}
+          {onReplyToComment && (
+            <Button
+              variant="link"
+              className="p-0 h-auto text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
+              onClick={handleReplyToComment}
+            >
+              Reply to this comment
+            </Button>
+          )}
+        </div>
+
+        {/* Reply Form */}
         {showReplyForm && (
           <form onSubmit={handleReplySubmit} className="mt-3 mb-4">
-            <Textarea
-              placeholder="Write a reply..."
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              className="mb-2 min-h-[60px] text-sm"
-            />
-            <Button type="submit" size="sm" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
-              Post Reply
-            </Button>
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
+              <div className="flex items-center gap-2 text-xs text-blue-700 mb-2">
+                <Reply className="w-3 h-3" />
+                Replying to {comment.author}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto p-0 text-blue-600 hover:text-blue-800 ml-auto"
+                  onClick={() => setShowReplyForm(false)}
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+              <Textarea
+                placeholder="Write a reply..."
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                className="mb-2 min-h-[60px] text-sm border-blue-200 focus:border-blue-400"
+              />
+              <Button type="submit" size="sm" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
+                Post Reply
+              </Button>
+            </div>
           </form>
         )}
 
+        {/* Nested Replies */}
         {comment.replies && comment.replies.length > 0 && (
-          <div className="ml-6 mt-4 space-y-5 border-l pl-4 border-gray-200">
+          <div 
+            className="mt-4 space-y-4 border-l pl-4 border-gray-200"
+            style={{ marginLeft: `${currentDepth * 16}px` }}
+          >
             {comment.replies.map((reply) => (
               <CommentItem 
                 key={reply.id} 
@@ -106,7 +157,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 voteState={{ currentVote: null, count: reply.count }}
                 isVoting={false}
                 isAuthenticated={isAuthenticated}
-                isOriginalPoster={false} // Replies don't have original poster status
+                isOriginalPoster={false}
+                depth={currentDepth + 1}
+                onReplyToComment={onReplyToComment}
               />
             ))}
           </div>
@@ -119,7 +172,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 interface CommentsSectionProps {
   initialComments: Comment[]
   postId: string
-  postUserId?: string // Add postUserId to identify original poster
+  postUserId?: string
 }
 
 type SortType = 'date' | 'votes'
@@ -130,7 +183,8 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
   const [newCommentText, setNewCommentText] = useState("")
   const [sortType, setSortType] = useState<SortType>('date')
   const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
-  const [votingComments, setVotingComments] = useState<Set<string>>(new Set()) // Track voting state per comment
+  const [votingComments, setVotingComments] = useState<Set<string>>(new Set())
+  const [replyingTo, setReplyingTo] = useState<string | null>(null) // Track which comment we're replying to
 
   // Helper function to check if a comment is from the original poster
   const isOriginalPoster = (commentUserId: string) => {
@@ -173,55 +227,82 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     setCommentVotes(initialVotes)
   }, [initialComments])
 
-  const handleAddComment = (e: React.FormEvent) => {
+  const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault()
     if (newCommentText.trim()) {
-      const newComment: Comment = {
-        id: `c${Date.now()}`,
-        author: "You", // Assuming the current user is "You"
-        text: newCommentText.trim(),
-        timeAgo: "just now",
-        count: 1, // Default score for new comments
-        replies: [],
-        userId: user?.$id || '', // Include userId for original poster detection
+      try {
+        // Get JWT token for authentication
+        const { getCachedJWT } = await import('@/lib/jwtCache')
+        const jwt = await getCachedJWT()
+
+        if (!jwt) {
+          console.error('Authentication token not found')
+          return
+        }
+
+        const response = await fetch('/api/comments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+          },
+          body: JSON.stringify({
+            postId,
+            text: newCommentText.trim(),
+            userName: user?.name || 'Anonymous',
+            replyId: replyingTo || undefined
+          })
+        })
+
+        if (response.ok) {
+          // Clear form and reset reply state
+          setNewCommentText("")
+          setReplyingTo(null)
+          // Refresh the page to show the new comment
+          window.location.reload()
+        } else {
+          console.error('Error posting comment:', response.statusText)
+        }
+      } catch (error) {
+        console.error('Error posting comment:', error)
       }
-      setComments((prev) => [newComment, ...prev])
-      // Add default vote state for new comment
-      setCommentVotes(prev => new Map(prev).set(newComment.id, { currentVote: null, count: 1 }))
-      setNewCommentText("")
     }
   }
 
-  const handleAddReply = (parentId: string, text: string) => {
-    const newReply: Comment = {
-      id: `c${Date.now()}-${Math.random()}`,
-      author: "You",
-      text: text,
-      timeAgo: "just now",
-      count: 1,
-      replies: [],
-      userId: user?.$id || '', // Include userId for original poster detection
-    }
+  const handleAddReply = async (parentId: string, text: string) => {
+    try {
+      // Get JWT token for authentication
+      const { getCachedJWT } = await import('@/lib/jwtCache')
+      const jwt = await getCachedJWT()
 
-    const addReplyRecursive = (currentComments: Comment[]): Comment[] => {
-      return currentComments.map((comment) => {
-        if (comment.id === parentId) {
-          return {
-            ...comment,
-            replies: comment.replies ? [newReply, ...comment.replies] : [newReply],
-          }
-        } else if (comment.replies && comment.replies.length > 0) {
-          return {
-            ...comment,
-            replies: addReplyRecursive(comment.replies),
-          }
-        }
-        return comment
+      if (!jwt) {
+        console.error('Authentication token not found')
+        return
+      }
+
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        },
+        body: JSON.stringify({
+          postId,
+          text: text,
+          userName: user?.name || 'Anonymous',
+          replyId: parentId
+        })
       })
+
+      if (response.ok) {
+        // Refresh the page to show the new reply
+        window.location.reload()
+      } else {
+        console.error('Error posting reply:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error posting reply:', error)
     }
-    setComments((prev) => addReplyRecursive(prev))
-    // Add default vote state for new reply
-    setCommentVotes(prev => new Map(prev).set(newReply.id, { currentVote: null, count: 1 }))
   }
 
   const handleCommentVote = useCallback(async (commentId: string, direction: "up" | "down") => {
@@ -265,6 +346,24 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     setSortType(newSortType)
   }
 
+  const cancelReply = () => {
+    setReplyingTo(null)
+  }
+
+  // Helper function to find a comment by ID in the nested structure
+  const findCommentById = (commentId: string, commentList: Comment[]): Comment | null => {
+    for (const comment of commentList) {
+      if (comment.id === commentId) {
+        return comment
+      }
+      if (comment.replies && comment.replies.length > 0) {
+        const found = findCommentById(commentId, comment.replies)
+        if (found) return found
+      }
+    }
+    return null
+  }
+
   return (
     <div className="bg-white p-6 rounded-lg border-none shadow-none">
       <div className="flex items-center justify-between mb-4">
@@ -296,15 +395,42 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
 
       {/* Comment Input */}
       <form onSubmit={handleAddComment} className="mb-6">
+        {replyingTo && (
+          <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
+            <div className="flex items-center gap-2 text-xs text-blue-700 mb-2">
+              <Reply className="w-3 h-3" />
+              Replying to {findCommentById(replyingTo, comments)?.author || 'a comment'}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-auto p-0 text-blue-600 hover:text-blue-800 ml-auto"
+                onClick={cancelReply}
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            </div>
+            <div className="text-xs text-blue-600 bg-blue-100 p-2 rounded border-l-2 border-blue-300">
+              "{findCommentById(replyingTo, comments)?.text || ''}"
+            </div>
+          </div>
+        )}
         <Textarea
-          placeholder="Write a comment..."
+          placeholder={replyingTo ? "Write a reply..." : "Write a comment..."}
           value={newCommentText}
           onChange={(e) => setNewCommentText(e.target.value)}
           className="mb-3 min-h-[80px]"
         />
-        <Button type="submit" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
-          Post Comment
-        </Button>
+        <div className="flex gap-2">
+          <Button type="submit" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
+            {replyingTo ? "Post Reply" : "Post Comment"}
+          </Button>
+          {replyingTo && (
+            <Button type="button" variant="outline" onClick={cancelReply}>
+              Cancel Reply
+            </Button>
+          )}
+        </div>
       </form>
 
       {/* Comments List */}
@@ -322,9 +448,22 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
               isVoting={votingComments.has(comment.id)}
               isAuthenticated={!!user}
               isOriginalPoster={Boolean(isOriginalPoster(comment.userId || ''))}
+              depth={comment.depth || 0}
+              onReplyToComment={(commentId) => setReplyingTo(commentId)}
             />
           ))
         )}
+      </div>
+
+      {/* Main Comment Form */}
+      <div className="mt-8">
+        <CommentForm 
+          postId={postId}
+          onCommentAdded={() => {
+            // Refresh comments or handle comment added
+            window.location.reload() // Simple refresh for now
+          }}
+        />
       </div>
     </div>
   )

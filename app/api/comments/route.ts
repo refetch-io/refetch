@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Post ID is required' }, { status: 400 })
     }
 
-    // Fetch comments for the specific post (up to 500 comments)
+    // Fetch all comments for the specific post (up to 500 comments)
     const comments = await databases.listDocuments(
       DATABASE_ID,
       COMMENTS_COLLECTION_ID,
@@ -84,26 +84,32 @@ export async function GET(request: NextRequest) {
           'content',
           'userId',
           'count',
+          'replyId', // Include replyId for nested comments
           '$createdAt'
         ])
       ]
     )
 
     // Transform the comments to match the Comment interface
-    const transformedComments = comments.documents.map(doc => ({
+    const flatComments = comments.documents.map(doc => ({
       id: doc.$id,
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
       timeAgo: getTimeAgo(doc.$createdAt),
-      count: doc.count || 0, // Use the count field if available
-      userId: doc.userId || '', // Include userId for original poster detection
-      replies: [] // TODO: Implement nested replies using replyId
+      count: doc.count || 0,
+      userId: doc.userId || '',
+      parentId: doc.replyId || undefined, // Use replyId as parentId
+      replies: [],
+      depth: 0
     }))
 
+    // Build nested comment structure
+    const nestedComments = buildNestedComments(flatComments)
+
     return NextResponse.json({ 
-      comments: transformedComments,
+      comments: nestedComments,
       metadata: {
-        totalComments: transformedComments.length,
+        totalComments: flatComments.length,
         maxCommentsPerRequest: MAX_COMMENTS_PER_POST,
         postId: postId
       }
@@ -115,11 +121,62 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Helper function to build nested comment structure
+function buildNestedComments(flatComments: any[]): any[] {
+  const commentMap = new Map()
+  const rootComments: any[] = []
+
+  // First pass: create a map of all comments
+  flatComments.forEach(comment => {
+    commentMap.set(comment.id, { ...comment, replies: [] })
+  })
+
+  // Second pass: build the tree structure with max 3 levels
+  flatComments.forEach(comment => {
+    if (comment.parentId && commentMap.has(comment.parentId)) {
+      // This is a reply, add it to its parent
+      const parent = commentMap.get(comment.parentId)
+      const parentDepth = parent.depth || 0
+      
+      // Only allow nesting up to 3 levels (0 = root, 1 = reply, 2 = reply to reply)
+      if (parentDepth < 2) {
+        parent.replies.push(commentMap.get(comment.id))
+        // Set depth for visual nesting
+        commentMap.get(comment.id).depth = parentDepth + 1
+      } else {
+        // If we're at max depth, add as a root comment instead
+        rootComments.push(commentMap.get(comment.id))
+        commentMap.get(comment.id).depth = 0
+      }
+    } else {
+      // This is a root comment
+      rootComments.push(commentMap.get(comment.id))
+    }
+  })
+
+  // Sort replies by creation time (newest first)
+  const sortReplies = (comments: any[]) => {
+    comments.forEach(comment => {
+      if (comment.replies && comment.replies.length > 0) {
+        comment.replies.sort((a: any, b: any) => {
+          // Sort by timeAgo (assuming newer comments come first in the original array)
+          return flatComments.findIndex(c => c.id === a.id) - 
+                 flatComments.findIndex(c => c.id === b.id)
+        })
+        sortReplies(comment.replies)
+      }
+    })
+  }
+
+  sortReplies(rootComments)
+  return rootComments
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse the request body first (can only be done once)
     const body = await request.json()
-    const { postId, text, userName } = body
+    const { postId, text, userName, replyId } = body // Add replyId for nested comments
 
     // Step 2: Get and validate JWT token from Authorization header
     const authHeader = request.headers.get('authorization')
@@ -182,7 +239,7 @@ export async function POST(request: NextRequest) {
         userId: user.$id,
         userName: userName || user.name || 'Anonymous',
         content: text.trim(),
-        replyId: '', // Optional field for future nested replies
+        replyId: replyId || '', // Use replyId for nested comments
         countReports: 0 // Optional field with default value
       }
     )
