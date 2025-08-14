@@ -81,6 +81,7 @@ SCOUT_USER_ID=your_scout_user_id
 SCOUT_USER_NAME=Refetch Scout
 MAX_ARTICLES_PER_RUN=10
 SCRAPING_DELAY_MS=2000
+MAX_URLS_PER_SOURCE=25
 
 # Batching Configuration (Optional)
 LLM_MAX_TOKENS=6000
@@ -102,15 +103,19 @@ The scout function now uses intelligent batching to avoid exceeding LLM token li
 
 ### How Batching Works
 
-1. **Token Estimation**: Each URL + label is estimated to use ~75 tokens
-2. **Batch Calculation**: Optimal batch size is calculated based on available tokens
-3. **Processing**: URLs are split into batches and processed sequentially
-4. **Retry Logic**: Failed batches are retried up to 2 times with exponential backoff
-5. **Rate Limiting**: Delays are added between batches to avoid overwhelming the API
+1. **Per-Source Limiting**: Each source is limited to 25 URLs maximum for balanced coverage
+2. **Token Estimation**: Each URL + label is estimated to use ~75 tokens
+3. **Batch Calculation**: Optimal batch size is calculated based on available tokens
+4. **Processing**: URLs are split into batches and processed sequentially
+5. **Retry Logic**: Failed batches are retried up to 2 times with exponential backoff
+6. **Rate Limiting**: Delays are added between batches to avoid overwhelming the API
 
 ### Batching Environment Variables
 
 ```bash
+# Maximum URLs per source (default: 25)
+MAX_URLS_PER_SOURCE=25
+
 # Maximum tokens per batch (default: 6000)
 LLM_MAX_TOKENS=6000
 

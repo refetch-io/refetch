@@ -848,16 +848,24 @@ async function scoutArticles() {
         continue;
       }
       
-      console.log(`  📤 Sending ${sourceArticles.length} URLs to LLM from ${sourceUrl}`);
+      // Limit URLs per source to ensure balanced coverage
+      const MAX_URLS_PER_SOURCE = parseInt(process.env.MAX_URLS_PER_SOURCE || '25');
+      const limitedSourceArticles = sourceArticles.slice(0, MAX_URLS_PER_SOURCE);
+      
+      if (sourceArticles.length > MAX_URLS_PER_SOURCE) {
+        console.log(`  📊 Limiting ${sourceArticles.length} URLs to ${MAX_URLS_PER_SOURCE} for balanced coverage`);
+      }
+      
+      console.log(`  📤 Sending ${limitedSourceArticles.length} URLs to LLM from ${sourceUrl}`);
       
       try {
-        const analyzedSourceArticles = await analyzeUrlsWithAI(sourceArticles, sourceUrl);
+        const analyzedSourceArticles = await analyzeUrlsWithAI(limitedSourceArticles, sourceUrl);
         analyzedArticles.push(...analyzedSourceArticles);
         results.urlBreakdown.urlsAnalyzed += analyzedSourceArticles.length;
         
         // Estimate batch counts for this source
-        const estimatedBatchSize = calculateOptimalBatchSize(sourceArticles);
-        const estimatedBatches = Math.ceil(sourceArticles.length / estimatedBatchSize);
+        const estimatedBatchSize = calculateOptimalBatchSize(limitedSourceArticles);
+        const estimatedBatches = Math.ceil(limitedSourceArticles.length / estimatedBatchSize);
         totalBatchesProcessed += estimatedBatches;
         
         console.log(`  ✅ LLM returned ${analyzedSourceArticles.length} valid articles from ${sourceUrl}`);
@@ -867,7 +875,7 @@ async function scoutArticles() {
         results.failedUrls.analysis.push({
           source: sourceUrl,
           error: error.message,
-          urlsCount: sourceArticles.length
+          urlsCount: limitedSourceArticles.length
         });
         continue;
       }
