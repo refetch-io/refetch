@@ -4,7 +4,7 @@ import { TrendingUp, Clock, Monitor, X, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { Footer } from "@/components/footer"
 
@@ -52,13 +52,18 @@ const navigationItems: NavigationItem[] = [
 
 export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const { isAuthenticated, user } = useAuth()
 
   const handleNavigationClick = (item: NavigationItem) => {
     if (item.requiresAuth && !isAuthenticated) {
-      window.location.href = '/login'
+      router.push('/login')
+      onClose()
       return
     }
+    
+    // Navigate to the link and close the menu
+    router.push(item.href)
     onClose()
   }
 
@@ -89,7 +94,7 @@ export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
         {/* Header with close button - aligned with main header height */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 h-[52px]">
           <Image 
-            src="/logo.png" 
+            src="/logo-purple.png" 
             alt="Refetch Logo" 
             width={102} 
             height={23} 
