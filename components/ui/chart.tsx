@@ -46,13 +46,46 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
     )
   }
 
-  const labels = data.map(d => {
-    if (selectedTab === "24h") return `${d.hour}:00`
-    if (selectedTab === "30d") return `Day ${d.day}`
-    if (selectedTab === "1y") return d.month
-    return `Day ${d.day}`
-  })
+  // For 24h data, create rolling time labels based on current time
+  const getTimeLabels = () => {
+    if (selectedTab === "24h" && data.length > 0) {
+      const now = new Date()
+      const currentHour = now.getHours()
+      
+      // Create labels for the last 24 hours ending at current time
+      // Position 0 should be 24 hours ago, position 23 should be current hour
+      const labels = data.map((_, i) => {
+        const hour = (currentHour - (23 - i) + 24) % 24
+        return `${hour.toString().padStart(2, '0')}:00`
+      })
+      
+      return labels
+    }
+    
+    // For other tabs, use the original logic
+    return data.map(d => {
+      if (selectedTab === "30d") return `Day ${d.day}`
+      if (selectedTab === "1y") return d.month
+      return `Day ${d.day}`
+    })
+  }
+
+  const labels = getTimeLabels()
   const values = data.map(d => d.visitors)
+
+  // Get current time for 24h chart context
+  const getCurrentTimeRange = () => {
+    if (selectedTab === "24h" && data.length > 0) {
+      const now = new Date()
+      const currentHour = now.getHours()
+      const currentMinute = now.getMinutes()
+      const startHour = (currentHour - 23 + 24) % 24
+      return `${startHour.toString().padStart(2, '0')}:00 - ${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`
+    }
+    return null
+  }
+
+  const currentTimeRange = getCurrentTimeRange()
 
   const chartData = {
     labels,
@@ -125,6 +158,11 @@ export function StatsChart({ data, selectedTab }: StatsChartProps) {
   return (
     <div className="h-16 overflow-hidden -mx-2 rounded-lg">
       <Line data={chartData} options={options} />
+      {currentTimeRange && (
+        <div className="text-xs text-gray-400 text-center mt-1">
+          {currentTimeRange}
+        </div>
+      )}
     </div>
   )
 }

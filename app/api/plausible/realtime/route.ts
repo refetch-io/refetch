@@ -30,9 +30,9 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
   const apiKey = process.env.PLAUSIBLE_API_KEY
   const siteId = process.env.PLAUSIBLE_SITE_ID
 
-  // If no API key or site ID, return mock data for development
+  // If no API key or site ID, return error
   if (!apiKey || !siteId) {
-    return generateMockData(dataType)
+    throw new Error('Plausible configuration missing. Please configure PLAUSIBLE_API_KEY and PLAUSIBLE_SITE_ID environment variables.')
   }
 
   try {
@@ -94,8 +94,6 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
     // Transform the data using the new implementation
     const transformedData = transformData(plausibleResult, dataType)
     
-
-    
     return transformedData
   } catch (error) {
     console.error(`=== PLAUSIBLE API ERROR SUMMARY ===`)
@@ -104,57 +102,6 @@ async function fetchAnalyticsData(dataType: DataType): Promise<any> {
     console.error(`Error message:`, error instanceof Error ? error.message : 'Unknown error')
     console.error(`Error stack:`, error instanceof Error ? error.stack : 'No stack trace')
     throw error
-  }
-}
-
-function generateMockData(dataType: DataType): any {
-  switch (dataType) {
-    case 'realtime':
-      return Math.floor(Math.random() * 20) + 15 // 15-35 visitors
-    case '24h':
-      return Array.from({ length: 24 }, (_, i) => {
-        const hour = i
-        let baseVisitors = 30
-        if (hour >= 9 && hour <= 17) baseVisitors = 60 // Work hours
-        if (hour >= 19 && hour <= 22) baseVisitors = 45 // Evening
-        if (hour >= 0 && hour <= 6) baseVisitors = 15 // Night
-        
-        const variation = (hour * 7 + 13) % 20
-        return {
-          hour: i,
-          visitors: baseVisitors + variation
-        }
-      })
-    case '30d':
-      return Array.from({ length: 30 }, (_, i) => {
-        const day = i + 1
-        const dayOfWeek = day % 7
-        let baseVisitors = 120
-        if (dayOfWeek === 0 || dayOfWeek === 6) baseVisitors = 80 // Weekend
-        if (dayOfWeek >= 1 && dayOfWeek <= 5) baseVisitors = 150 // Weekday
-        
-        const variation = (day * 11 + 17) % 50
-        return {
-          day: i + 1,
-          visitors: baseVisitors + variation
-        }
-      })
-    case '1y':
-      return Array.from({ length: 12 }, (_, i) => {
-        const month = i
-        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        let baseVisitors = 3000
-        if (month >= 0 && month <= 2) baseVisitors = 2500 // Winter months
-        if (month >= 3 && month <= 5) baseVisitors = 2800 // Spring months
-        if (month >= 6 && month <= 8) baseVisitors = 3200 // Summer months
-        if (month >= 9 && month <= 11) baseVisitors = 3500 // Fall months
-        
-        const variation = (month * 13 + 17) % 800
-        return {
-          month: monthNames[month],
-          visitors: baseVisitors + variation
-        }
-      })
   }
 }
 
@@ -191,15 +138,14 @@ export async function GET(request: NextRequest) {
     
     if (!apiKey || !siteId) {
       console.warn(`Plausible configuration missing: API_KEY=${!!apiKey}, SITE_ID=${!!siteId}`)
-      // Return mock data for development
-      const mockData = generateMockData(dataType)
-      return NextResponse.json({
-        data: mockData,
-        type: dataType,
-        cached: false,
-        timestamp: Date.now(),
-        warning: 'Using mock data - Plausible configuration missing'
-      })
+      return NextResponse.json(
+        { 
+          error: 'Plausible configuration missing. Please configure PLAUSIBLE_API_KEY and PLAUSIBLE_SITE_ID environment variables.',
+          type: dataType,
+          timestamp: Date.now()
+        },
+        { status: 500 }
+      )
     }
 
     const now = Date.now()

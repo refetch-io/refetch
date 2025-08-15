@@ -79,19 +79,24 @@ export function transformData(result: PlausibleResponse, dataType: DataType): an
     const rows: any[] = result.results ?? []
 
     if (labels?.length) {
-      // Build value map from rows by HOUR key
+      // Build value map from rows by HOUR key using local time
       const valByHour = new Map<number, number>()
       for (const r of rows) {
         const dv = r.dimensions?.[0]
         const d = parseFlexible(dv)
-        if (d) valByHour.set(keyHour(d), r.metrics?.[0] ?? 0)
+        if (d) {
+          // Use local hour to show time relative to user's timezone
+          const localHour = d.getHours()
+          valByHour.set(localHour, r.metrics?.[0] ?? 0)
+        }
       }
       
-      // Produce series in label order, then fill 0..23
+      // Produce series in label order, then fill 0..23 using local hours
       const labeled = labels.map((iso) => {
         const d = parseFlexible(iso)
         if (!d) return { hour: 0, visitors: 0 }
-        return { hour: d.getHours(), visitors: valByHour.get(keyHour(d)) ?? 0 }
+        // Use local hour to maintain user's timezone perspective
+        return { hour: d.getHours(), visitors: valByHour.get(d.getHours()) ?? 0 }
       })
       
       // Ensure 0..23 present and ordered
@@ -102,16 +107,23 @@ export function transformData(result: PlausibleResponse, dataType: DataType): an
       return filled
     }
 
-    // Fallback without labels
+    // Fallback without labels - use local hours
     const hourMap = new Map<number, number>()
     for (const r of rows) {
       const d = parseFlexible(r.dimensions?.[0])
-      if (d) hourMap.set(d.getHours(), r.metrics?.[0] ?? 0)
+      if (d) {
+        // Use local hour to show time relative to user's timezone
+        const localHour = d.getHours()
+        hourMap.set(localHour, r.metrics?.[0] ?? 0)
+      }
     }
-    return Array.from({ length: 24 }, (_, h) => ({ 
+    
+    const fallbackResult = Array.from({ length: 24 }, (_, h) => ({ 
       hour: h, 
       visitors: hourMap.get(h) ?? 0 
     }))
+    
+    return fallbackResult
   }
 
   if (dataType === '30d') {
@@ -211,6 +223,7 @@ export function createRealtimeQuery(siteId: string): PlausibleQuery {
 }
 
 export function create24hQuery(siteId: string): PlausibleQuery {
+  // Use local timezone to show last 24 hours relative to user's current time
   const now = new Date()
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
   

@@ -133,22 +133,23 @@ function ChartCard() {
 
   // Transform data for chart display based on selected tab
   const transformedChartData = useMemo(() => {
-    let data
     if (selectedTab === "24h") {
-      data = chartData24h
-      return data.map(d => ({
+      const data = chartData24h
+      
+      // Just return the data as-is, let the chart handle the labels
+      return data.map((d: any) => ({
         hour: d.hour !== undefined ? d.hour : parseInt(d.date?.split(':')[0]) || 0,
         visitors: d.visitors
       }))
     } else if (selectedTab === "30d") {
-      data = chartData30d
-      return data.map(d => ({
+      const data = chartData30d
+      return data.map((d: any) => ({
         day: d.day !== undefined ? d.day : parseInt(d.date) || 0,
         visitors: d.visitors
       }))
     } else if (selectedTab === "1y") {
-      data = chartData1y
-      return data.map(d => ({
+      const data = chartData1y
+      return data.map((d: any) => ({
         month: d.month,
         visitors: d.visitors
       }))
@@ -182,7 +183,7 @@ function ChartCard() {
       {/* Chart Card */}
       <div className="bg-white rounded-lg px-4 py-2 min-h-[100px]">
         <div className="text-xs text-gray-500/85 font-medium mb-3">
-          {selectedTab === "24h" ? "Last 24 Hours" : 
+          {selectedTab === "24h" ? "Last 24 Hours (Local Time)" : 
            selectedTab === "30d" ? "Last 30 Days" : 
            selectedTab === "1y" ? "Last 12 Months" : "Last 30 Days"}
         </div>
