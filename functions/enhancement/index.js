@@ -22,6 +22,7 @@ const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platfor
   "safetyIssues": ["array of safety concerns, or empty if none found"],
   "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
   "qualityIssues": ["array explaining the quality score and any issues found"],
+  "sensationScore": number 0-100 (0 = routine tech news, 100 = extremely dramatic/impactful tech news)",
   "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
   "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
   "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
@@ -78,6 +79,11 @@ CRITICAL GUIDELINES:
   * Posts with no substantial content, just test messages, or placeholder text should get qualityScore 0-20
   * Posts that don't provide any tech news, analysis, or meaningful information should get qualityScore 0-30
   * Consider the platform's purpose: sharing valuable tech content, not testing or placeholder posts
+- SENSATION SCORING: Evaluate how dramatic or impactful the tech news is (0-100 scale):
+  * **High Sensation (80-100)**: Industry-shifting announcements, major product failures/shutdowns, mass layoffs/leadership shakeups, security breaches/data leaks, major regulatory/legal battles, unexpected partnerships/acquisitions, technological breakthroughs/failures, major scandals/ethical controversies
+  * **Medium Sensation (40-79)**: Leadership changes, product updates, partnerships, regulatory developments, moderate controversies, company restructuring, funding rounds, moderate acquisitions
+  * **Low Sensation (0-39)**: Routine updates, minor releases, incremental improvements, standard industry news, regular product updates, minor feature announcements
+  * **Sensation Reasoning**: Provide detailed explanation of why this score was assigned, considering factors like surprise factor, industry impact, public reaction, and long-term significance
 - Be strict but fair with scoring
 - Identify clickbait, misleading content, and inappropriate material
 - Consider the context of tech news and community guidelines
@@ -145,6 +151,7 @@ export default async function ({ req, res, log, error }) {
         let flaggedCount = 0;
         let highSpamCount = 0;
         let lowQualityCount = 0;
+        let highSensationCount = 0;
         
                 // Process each post
         for (let i = 0; i < posts.length; i++) {
@@ -200,6 +207,7 @@ export default async function ({ req, res, log, error }) {
                     safetyIssues: metadata.safetyIssues,
                     qualityScore: metadata.qualityScore,
                     qualityIssues: metadata.qualityIssues,
+                    sensationScore: metadata.sensationScore,
                     optimizedTitle: metadata.optimizedTitle,
                     optimizedDescription: metadata.optimizedDescription,
                     readingLevel: metadata.readingLevel,
@@ -221,6 +229,14 @@ export default async function ({ req, res, log, error }) {
                     log(`⚠️  LOW QUALITY DETECTED - Post ID: ${post.$id}, Title: "${post.title}", Quality Score: ${metadata.qualityScore}, Issues: ${metadata.qualityIssues.join(', ')}`);
                     lowQualityCount++;
                     if (!isHighSpam) flaggedCount++; // Don't double count
+                }
+                
+                // Log high sensation scores for dramatic tech news
+                if (metadata.sensationScore >= 80) {
+                    log(`🔥 HIGH SENSATION DETECTED - Post ID: ${post.$id}, Title: "${post.title}", Sensation Score: ${metadata.sensationScore}`);
+                    highSensationCount++;
+                } else if (metadata.sensationScore >= 60) {
+                    log(`⚡ MEDIUM SENSATION - Post ID: ${post.$id}, Title: "${post.title}", Sensation Score: ${metadata.sensationScore}`);
                 }
                 
                 await databases.updateDocument(
@@ -261,6 +277,7 @@ export default async function ({ req, res, log, error }) {
                 flagged: flaggedCount,
                 highSpam: highSpamCount,
                 lowQuality: lowQualityCount,
+                highSensation: highSensationCount,
                 successRate: posts.length > 0 ? Math.round((updatedCount / posts.length) * 100) : 0
             }
         };
@@ -274,6 +291,7 @@ export default async function ({ req, res, log, error }) {
         log(`📈 Success rate: ${result.summary.successRate}%`);
         log(`📝 TL;DR summaries generated: ${posts.filter(p => p.tldr).length}/${posts.length}`);
         log(`🚨 Posts flagged for review: ${flaggedCount} (${highSpamCount} high spam, ${lowQualityCount} low quality)`);
+        log(`🔥 High sensation posts detected: ${highSensationCount} (dramatic tech news)`);
         log(`⏱️  Processing time: ${new Date().toISOString()}`);
         log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
@@ -289,6 +307,11 @@ export default async function ({ req, res, log, error }) {
             log(`🚨 ATTENTION: ${flaggedCount} posts were flagged for review due to high spam scores or low quality content.`);
             log(`   High spam posts: ${highSpamCount} - These should be reviewed and potentially removed.`);
             log(`   Low quality posts: ${lowQualityCount} - These may need improvement or removal.`);
+        }
+        
+        if (highSensationCount > 0) {
+            log(`🔥 DRAMATIC TECH NEWS: ${highSensationCount} posts were identified as high-sensation content.`);
+            log(`   These posts will receive significant ranking boosts in the algorithm due to their dramatic impact.`);
         }
         
         return res.json(result);
@@ -594,6 +617,7 @@ function validateAndSanitizeMetadata(metadata, postData) {
         safetyIssues: Array.isArray(metadata.safetyIssues) ? metadata.safetyIssues.slice(0, 50) : [],
         qualityScore: Math.max(0, Math.min(100, Number(metadata.qualityScore) || 50)),
         qualityIssues: Array.isArray(metadata.qualityIssues) ? metadata.qualityIssues.slice(0, 50) : [],
+        sensationScore: Math.max(0, Math.min(100, Number(metadata.sensationScore) || 0)),
         optimizedTitle: typeof metadata.optimizedTitle === 'string' ? metadata.optimizedTitle.substring(0, 500) : postData.title.substring(0, 500),
         optimizedDescription: typeof metadata.optimizedDescription === 'string' ? metadata.optimizedDescription.substring(0, 2000) : (postData.description || '').substring(0, 2000),
         readingLevel: validateReadingLevel(metadata.readingLevel),

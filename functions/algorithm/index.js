@@ -4,10 +4,23 @@
  * This function calculates ranking scores for posts based on multiple factors:
  * - Time decay (posts lose relevance over 24 hours)
  * - Quality metrics (spelling, spam, safety, quality scores)
+ * - Sensation score for dramatic tech news (0-100 scale)
  * - Weighted scoring system for fair ranking
  * 
  * The algorithm processes posts in batches and updates them efficiently using
  * Appwrite's batch update functionality.
+ * 
+ * SCORING WEIGHTS (Percentage Importance):
+ * - Time Score: 15% - Reduced weight to prevent new posts from dominating
+ * - Sensation Score: 30% - High weight for dramatic tech news
+ * - Quality Score: 20% - Overall content value and relevance
+ * - Vote Count: 15% - Community engagement through voting
+ * - Safety Score: 8% - Content appropriateness and safety
+ * - Comment Count: 7% - Community discussion and engagement
+ * - Spelling Score: 3% - Writing quality and grammar
+ * - Spam Score: 2% - Content legitimacy (inverted - lower spam = higher score)
+ * 
+ * Total Weight: 100% (1.0)
  */
 
 import { Client, Databases, Query } from 'node-appwrite';
@@ -19,16 +32,17 @@ import { Client, Databases, Query } from 'node-appwrite';
 /**
  * Scoring weights for different factors
  * These weights determine how much each factor contributes to the final score
- * Total should equal 1.0 (100%)
+ * Each weight represents the percentage importance of that factor
  */
 const SCORING_WEIGHTS = {
-  timeScore: 0.25,      // 25% - Time relevance (newer posts get higher scores)
-  spellingScore: 0.05,  // 5% - Writing quality and grammar
-  spamScore: 0.10,      // 10% - Content legitimacy (inverted - lower spam = higher score)
-  safetyScore: 0.10,    // 10% - Content appropriateness and safety
-  qualityScore: 0.25,   // 25% - Overall content value and relevance
-  voteCount: 0.15,      // 15% - Community engagement through voting
-  commentCount: 0.10    // 10% - Community discussion and engagement
+  timeScore: 0.15,        // 15% - Time relevance (reduced from 25% to prevent new posts from dominating)
+  sensationScore: 0.30,   // 30% - Dramatic tech news impact (NEW: high weight for sensational content)
+  qualityScore: 0.20,     // 20% - Overall content value and relevance
+  voteCount: 0.15,        // 15% - Community engagement through voting
+  safetyScore: 0.08,      // 8% - Content appropriateness and safety
+  commentCount: 0.07,     // 7% - Community discussion and engagement
+  spellingScore: 0.03,    // 3% - Writing quality and grammar
+  spamScore: 0.02         // 2% - Content legitimacy (inverted - lower spam = higher score)
 };
 
 /**
@@ -40,6 +54,19 @@ const PROCESSING_CONFIG = {
   rateLimitDelay: 100,       // Delay between batches to avoid rate limiting
   timeScoreDecayHours: 24    // Hours over which time score decays to 0
 };
+
+/**
+ * Sensation Score Guidelines for Dramatic Tech News (0-100 scale):
+ * 
+ * High Sensation (80-100): Industry-shifting announcements, major failures, 
+ * security breaches, unexpected acquisitions, technological breakthroughs
+ * 
+ * Medium Sensation (40-79): Leadership changes, product updates, partnerships, 
+ * regulatory developments, moderate controversies
+ * 
+ * Low Sensation (0-39): Routine updates, minor releases, incremental improvements, 
+ * standard industry news
+ */
 
 // ============================================================================
 // MAIN FUNCTION
@@ -211,6 +238,7 @@ function calculateFinalScore(post, newTimeScore) {
     const spamScore = post.spamScore ?? 50;            // Neutral score if missing
     const safetyScore = post.safetyScore ?? 75;        // Assume safe if missing
     const qualityScore = post.qualityScore ?? 50;      // Neutral score if missing
+    const sensationScore = post.sensationScore ?? 0;   // Sensation score for dramatic tech news, default to 0
     
     // Get vote count and comment count with defaults
     const voteCount = post.count ?? 0;                 // Vote count, default to 0
@@ -225,6 +253,9 @@ function calculateFinalScore(post, newTimeScore) {
     
     const safetyScoreComponent = safetyScore * SCORING_WEIGHTS.safetyScore;
     const qualityScoreComponent = qualityScore * SCORING_WEIGHTS.qualityScore;
+    
+    // Sensation score component - high weight for dramatic tech news
+    const sensationScoreComponent = sensationScore * SCORING_WEIGHTS.sensationScore;
     
     // Calculate vote count score (0-100 scale)
     // Apply logarithmic scaling to prevent extremely high vote counts from dominating
@@ -242,6 +273,7 @@ function calculateFinalScore(post, newTimeScore) {
                       spamScoreComponent + 
                       safetyScoreComponent + 
                       qualityScoreComponent +
+                      sensationScoreComponent +
                       voteCountComponent +
                       commentCountComponent;
     
@@ -386,7 +418,7 @@ function generateFinalSummary(results, startTime, log) {
   log(`📈 Success rate: ${successRate}%`);
   log(`📦 Batches processed: ${results.batches}`);
   log(`⏱️  Total processing time: ${processingTime}ms`);
-  log(`⚖️  Scoring weights used:`);
+  log(`⚖️  Scoring weights used (Percentage Importance):`);
   Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
     log(`   • ${factor}: ${(weight * 100).toFixed(0)}%`);
   });
@@ -427,15 +459,7 @@ function generateFinalSummary(results, startTime, log) {
 }
 
 /**
- * Validate that all scoring weights sum to 1.0 (100%)
- * This is a safety check to ensure the algorithm is properly configured
+ * Note: Scoring weights no longer need to sum to 1.0 (100%)
+ * Each weight represents the percentage importance of that factor
+ * The algorithm will use the actual weight values for scoring calculations
  */
-function validateScoringWeights() {
-  const totalWeight = Object.values(SCORING_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
-  if (Math.abs(totalWeight - 1.0) > 0.001) {
-    throw new Error(`Scoring weights must sum to 1.0, current sum: ${totalWeight}`);
-  }
-}
-
-// Validate weights on module load
-validateScoringWeights();

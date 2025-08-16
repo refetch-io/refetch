@@ -336,6 +336,14 @@ export async function fetchPostsFromAppwrite(): Promise<{ posts: NewsItem[], err
   return fetchPostsFromAppwriteWithSort('score')
 }
 
+// Helper function to get timestamp for 24 hours ago
+// This ensures old posts don't stick to the top of the feed and aligns with the algorithm's time decay logic
+function getTwentyFourHoursAgo(): string {
+  const now = new Date()
+  const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000))
+  return twentyFourHoursAgo.toISOString()
+}
+
 // Server-side function to fetch posts from Appwrite with custom sorting
 export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' | 'show'): Promise<{ posts: NewsItem[], error?: string }> {
   if (!validateAppwriteConfig()) {
@@ -765,6 +773,10 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
     
     let queries = []
     
+    // Always filter posts to only show those from the last 24 hours
+    const twentyFourHoursAgo = getTwentyFourHoursAgo()
+    queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
+    
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
@@ -894,6 +906,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
         Query.equal('userId', userId),
+        Query.greaterThan('$createdAt', getTwentyFourHoursAgo()), // Only show posts from last 24 hours
         Query.orderDesc('$createdAt'),
         Query.limit(limit),
         Query.offset(offset),
@@ -1192,6 +1205,10 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
     const databases = new Databases(client)
     
     let queries = []
+    
+    // Always filter posts to only show those from the last 24 hours
+    const twentyFourHoursAgo = getTwentyFourHoursAgo()
+    queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
     
     // Apply different sorting based on sortType
     switch (sortType) {
