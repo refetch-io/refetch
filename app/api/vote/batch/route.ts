@@ -77,29 +77,62 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Fetch all votes for the user in a single call
+    // Fetch votes for the specific resources requested
     try {
-      const votes = await databases.listDocuments(
-        DATABASE_ID,
-        VOTES_COLLECTION_ID,
-        [
-          Query.equal('userId', user.$id),
-          Query.limit(100) // Limit to prevent too many results
-        ]
-      )
-
-      // Filter votes by the requested resources and set the vote types
-      votes.documents.forEach((vote: any) => {
-        const resourceId = vote.resourceId
-        const resourceType = vote.resourceType
+      // Separate posts and comments to fetch votes efficiently
+      const postIds = resources.filter(r => r.type === 'post').map(r => r.id)
+      const commentIds = resources.filter(r => r.type === 'comment').map(r => r.id)
+      
+      // Fetch all votes for posts and comments in parallel
+      const [postVotesResult, commentVotesResult] = await Promise.all([
+        // Fetch post votes
+        postIds.length > 0 ? databases.listDocuments(
+          DATABASE_ID,
+          VOTES_COLLECTION_ID,
+          [
+            Query.equal('userId', user.$id),
+            Query.equal('resourceType', 'post'),
+            Query.equal('resourceId', postIds)
+          ]
+        ).catch(error => {
+          console.error('Error fetching post votes:', error)
+          return { documents: [] }
+        }) : Promise.resolve({ documents: [] }),
         
-        // Check if this vote matches any of the requested resources
-        const matchingResource = resources.find(r => r.id === resourceId && r.type === resourceType)
-        if (matchingResource) {
+        // Fetch comment votes
+        commentIds.length > 0 ? databases.listDocuments(
+          DATABASE_ID,
+          VOTES_COLLECTION_ID,
+          [
+            Query.equal('userId', user.$id),
+            Query.equal('resourceType', 'comment'),
+            Query.equal('resourceId', commentIds)
+          ]
+        ).catch(error => {
+          console.error('Error fetching comment votes:', error)
+          return { documents: [] }
+        }) : Promise.resolve({ documents: [] })
+      ])
+      
+      // Update vote map with post votes
+      if (postVotesResult.documents.length > 0) {
+        console.log(`🔍 Found ${postVotesResult.documents.length} post votes`)
+        postVotesResult.documents.forEach((vote: any) => {
           const voteType = vote.count === 1 ? 'up' : 'down'
-          voteMap[resourceId].currentVote = voteType
-        }
-      })
+          voteMap[vote.resourceId].currentVote = voteType
+          console.log(`✅ Set post vote for ${vote.resourceId}: ${voteType}`)
+        })
+      }
+      
+      // Update vote map with comment votes
+      if (commentVotesResult.documents.length > 0) {
+        console.log(`🔍 Found ${commentVotesResult.documents.length} comment votes`)
+        commentVotesResult.documents.forEach((vote: any) => {
+          const voteType = vote.count === 1 ? 'up' : 'down'
+          voteMap[vote.resourceId].currentVote = voteType
+          console.log(`✅ Set comment vote for ${vote.resourceId}: ${voteType}`)
+        })
+      }
     } catch (error) {
       console.error('Error fetching votes:', error)
       // Return empty vote map on error
@@ -119,6 +152,8 @@ export async function POST(request: NextRequest) {
             POSTS_COLLECTION_ID,
             [Query.equal('$id', postIds)]
           )
+          
+          console.log('📊 Fetched posts:', posts.documents.length)
           
           // Update vote map with post data
           posts.documents.forEach((post: any) => {
@@ -140,6 +175,8 @@ export async function POST(request: NextRequest) {
             [Query.equal('$id', commentIds)]
           )
           
+          console.log('📊 Fetched comments:', comments.documents.length)
+          
           // Update vote map with comment data
           comments.documents.forEach((comment: any) => {
             voteMap[comment.$id].countUp = comment.countUp || 0
@@ -155,6 +192,19 @@ export async function POST(request: NextRequest) {
       // Continue with default values if the query fails
     }
 
+    console.log('📊 Final vote map being returned:', voteMap)
+    
+    // Log each resource's final state for debugging
+    resources.forEach(resource => {
+      const state = voteMap[resource.id]
+      console.log(`📋 Final state for ${resource.id} (${resource.type}):`, {
+        currentVote: state.currentVote,
+        count: state.count,
+        countUp: state.countUp,
+        countDown: state.countDown
+      })
+    })
+    
     return NextResponse.json({ voteMap })
 
   } catch (error) {
