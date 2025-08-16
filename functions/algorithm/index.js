@@ -525,12 +525,12 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       
       // Log score distribution for this batch
       const scores = batchUpdates.map(update => update.score);
-      const diversityScores = batchUpdates.map(update => update.diversityScore);
+      const batchDiversityScores = batchUpdates.map(update => update.diversityScore);
       const avgScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
       const minScore = Math.min(...scores);
       const maxScore = Math.max(...scores);
-      const avgDiversity = Math.round(diversityScores.reduce((sum, score) => sum + score, 0) / diversityScores.length);
-      const diversity100Count = diversityScores.filter(score => score === 100).length;
+      const avgDiversity = Math.round(batchDiversityScores.reduce((sum, score) => sum + score, 0) / batchDiversityScores.length);
+      const diversity100Count = batchDiversityScores.filter(score => score === 100).length;
       log(`✅ Batch ${results.batches} completed: ${successfulUpdates}/${batch.length} posts updated successfully`);
       log(`📊 Score distribution - Avg: ${avgScore}, Min: ${minScore}, Max: ${maxScore}`);
       log(`🌐 Diversity distribution - Avg: ${avgDiversity}, Posts with 100: ${diversity100Count}/${batch.length}`);
