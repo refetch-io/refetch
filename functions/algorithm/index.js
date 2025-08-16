@@ -112,7 +112,35 @@ export default async function ({ req, res, log, error }) {
     log(`📊 Found ${posts.length} posts to process`);
     
     // Calculate diversity scores for top 100 articles first
-    const diversityScores = await calculateDiversityScores(databases, DATABASE_ID, COLLECTION_ID, log);
+    let diversityScores;
+    try {
+      log('🌐 Starting diversity score calculation...');
+      diversityScores = await calculateDiversityScores(databases, DATABASE_ID, COLLECTION_ID, log);
+      log(`✅ Diversity scores calculated successfully for ${diversityScores.size} articles`);
+      
+      // Log some sample diversity scores for debugging
+      let sampleCount = 0;
+      for (const [postId, score] of diversityScores) {
+        if (sampleCount < 5) {
+          log(`   Sample: Post ${postId} → Diversity Score: ${score}`);
+          sampleCount++;
+        }
+      }
+      
+    } catch (diversityError) {
+      log(`⚠️ Warning: Failed to calculate diversity scores: ${diversityError.message}`);
+      log(`   Error stack: ${diversityError.stack}`);
+      log(`   Continuing with default diversity scores (all posts get 0)`);
+      diversityScores = new Map(); // Empty map means all posts get 0 diversity score
+    }
+    
+    // Ensure diversityScores is properly initialized
+    if (!diversityScores || !(diversityScores instanceof Map)) {
+      log(`⚠️ Warning: diversityScores is not a valid Map, creating empty Map`);
+      diversityScores = new Map();
+    }
+    
+    log(`🔍 Final diversityScores size: ${diversityScores.size}, type: ${typeof diversityScores}`);
     
     // Process posts and calculate scores with diversity scores
     const processingResults = await processPostsInBatches(
@@ -413,6 +441,14 @@ function applyScoringAlgorithm(post, diversityScore = 0) {
  * Uses Appwrite's batch update with 1000 posts per batch
  */
 async function processPostsInBatches(posts, databases, databaseId, collectionId, log, error, diversityScores) {
+  // Ensure diversityScores is properly initialized
+  if (!diversityScores || !(diversityScores instanceof Map)) {
+    log(`⚠️ Warning: diversityScores is not a valid Map in processPostsInBatches, creating empty Map`);
+    diversityScores = new Map();
+  }
+  
+  log(`🔍 Processing posts with diversityScores size: ${diversityScores.size}`);
+  
   const results = {
     totalPosts: posts.length,
     processed: 0,
@@ -436,6 +472,12 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       const batchUpdates = batch.map(post => {
         const diversityScore = diversityScores.get(post.$id) || 0;
         const updatedData = applyScoringAlgorithm(post, diversityScore);
+        
+        // Log diversity score assignment for first few posts
+        if (results.batches === 1 && batch.indexOf(post) < 3) {
+          log(`🔍 Post ${post.$id}: diversityScore = ${diversityScore} (from map: ${diversityScores.has(post.$id)})`);
+        }
+        
         return {
           $id: post.$id,
           timeScore: updatedData.timeScore,
