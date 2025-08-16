@@ -297,6 +297,13 @@ function applyScoringAlgorithm(post) {
   // Calculate final ranking score
   const finalScore = calculateFinalScore(post, newTimeScore);
   
+  // Log scoring details for debugging (only for first few posts to avoid spam)
+  if (Math.random() < 0.1) { // Log ~10% of posts for debugging
+    console.log(`🔍 Post scoring debug - ID: ${post.$id}, Title: "${post.title?.substring(0, 50)}..."`);
+    console.log(`   Time Score: ${post.timeScore || 100} → ${newTimeScore}`);
+    console.log(`   Final Score: ${finalScore}`);
+  }
+  
   // Return updated data for batch update
   return {
     timeScore: newTimeScore,
@@ -338,7 +345,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
         return {
           $id: post.$id,
           timeScore: updatedData.timeScore,
-          count: updatedData.count
+          score: updatedData.score
         };
       });
       
@@ -350,7 +357,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
         const firstPost = batch[0];
         const voteCount = firstPost.count ?? 0;
         const commentCount = firstPost.countComments ?? 0;
-        log(`📊 Sample post scoring - Votes: ${voteCount}, Comments: ${commentCount}, Final Count: ${batchUpdates[0].count}`);
+        log(`📊 Sample post scoring - Votes: ${voteCount}, Comments: ${commentCount}, Final Score: ${batchUpdates[0].score}`);
       }
       
       // Update batch using Appwrite's bulk operations
@@ -365,7 +372,7 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
             update.$id,
             {
               timeScore: update.timeScore,
-              score: update.count
+              score: update.score
             }
           );
           successfulUpdates++;
@@ -378,7 +385,13 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       results.updated += successfulUpdates;
       results.processed += batch.length;
       
+      // Log score distribution for this batch
+      const scores = batchUpdates.map(update => update.score);
+      const avgScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+      const minScore = Math.min(...scores);
+      const maxScore = Math.max(...scores);
       log(`✅ Batch ${results.batches} completed: ${successfulUpdates}/${batch.length} posts updated successfully`);
+      log(`📊 Score distribution - Avg: ${avgScore}, Min: ${minScore}, Max: ${maxScore}`);
       
       // Add delay between batches to avoid rate limiting
       if (batchEnd < posts.length) {
