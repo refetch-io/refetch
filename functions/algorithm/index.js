@@ -11,14 +11,15 @@
  * Appwrite's batch update functionality.
  * 
  * SCORING WEIGHTS (Percentage Importance):
- * - Time Score: 15% - Reduced weight to prevent new posts from dominating
- * - Sensation Score: 30% - High weight for dramatic tech news
- * - Quality Score: 20% - Overall content value and relevance
- * - Vote Count: 15% - Community engagement through voting
- * - Safety Score: 8% - Content appropriateness and safety
- * - Comment Count: 7% - Community discussion and engagement
- * - Spelling Score: 3% - Writing quality and grammar
- * - Spam Score: 2% - Content legitimacy (inverted - lower spam = higher score)
+ * - Diversity Score: 20% - Domain diversity (prevents single domain domination)
+ * - Sensation Score: 20% - Dramatic tech news impact
+ * - Quality Score: 15% - Overall content value and relevance
+ * - Time Score: 12% - Time relevance (medium weight)
+ * - Vote Count: 8% - Community engagement through voting
+ * - Safety Score: 8% - Content appropriateness and safety (medium weight)
+ * - Comment Count: 8% - Community discussion and engagement (high weight)
+ * - Spelling Score: 5% - Writing quality and grammar (medium weight)
+ * - Spam Score: 4% - Content legitimacy (inverted - lower spam = higher score) (high weight)
  * 
  * Total Weight: 100% (1.0)
  */
@@ -35,14 +36,15 @@ import { Client, Databases, Query } from 'node-appwrite';
  * Each weight represents the percentage importance of that factor
  */
 const SCORING_WEIGHTS = {
-  timeScore: 0.15,        // 15% - Time relevance (reduced from 25% to prevent new posts from dominating)
-  sensationScore: 0.30,   // 30% - Dramatic tech news impact (NEW: high weight for sensational content)
-  qualityScore: 0.20,     // 20% - Overall content value and relevance
-  voteCount: 0.15,        // 15% - Community engagement through voting
-  safetyScore: 0.08,      // 8% - Content appropriateness and safety
-  commentCount: 0.07,     // 7% - Community discussion and engagement
-  spellingScore: 0.03,    // 3% - Writing quality and grammar
-  spamScore: 0.02         // 2% - Content legitimacy (inverted - lower spam = higher score)
+  diversityScore: 0.20,   // 20% - Domain diversity (reduced to make room for other factors)
+  sensationScore: 0.20,   // 20% - Dramatic tech news impact (reduced)
+  qualityScore: 0.15,     // 15% - Overall content value and relevance (reduced)
+  timeScore: 0.12,        // 12% - Time relevance (increased to medium)
+  voteCount: 0.08,        // 8% - Community engagement through voting (reduced)
+  safetyScore: 0.08,      // 8% - Content appropriateness and safety (increased to medium)
+  commentCount: 0.08,     // 8% - Community discussion and engagement (increased a lot)
+  spellingScore: 0.05,    // 5% - Writing quality and grammar (increased to medium)
+  spamScore: 0.04         // 4% - Content legitimacy (inverted - lower spam = higher score) (increased a lot)
 };
 
 /**
@@ -109,14 +111,18 @@ export default async function ({ req, res, log, error }) {
     
     log(`📊 Found ${posts.length} posts to process`);
     
-    // Process posts and calculate scores
+    // Calculate diversity scores for top 100 articles first
+    const diversityScores = await calculateDiversityScores(databases, DATABASE_ID, COLLECTION_ID, log);
+    
+    // Process posts and calculate scores with diversity scores
     const processingResults = await processPostsInBatches(
       posts, 
       databases, 
       DATABASE_ID, 
       COLLECTION_ID, 
       log,
-      error
+      error,
+      diversityScores
     );
     
     // Generate final summary
@@ -231,7 +237,7 @@ function calculateTimeDecayScore(createdAt, currentTimeScore) {
 /**
  * Calculate the final ranking score based on all factors
  */
-function calculateFinalScore(post, newTimeScore) {
+function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
   try {
     // Use default scores for missing metrics
     const spellingScore = post.spellingScore ?? 50;    // Neutral score if missing
@@ -257,6 +263,9 @@ function calculateFinalScore(post, newTimeScore) {
     // Sensation score component - high weight for dramatic tech news
     const sensationScoreComponent = sensationScore * SCORING_WEIGHTS.sensationScore;
     
+    // Diversity score component - high weight to prevent domain domination
+    const diversityScoreComponent = diversityScore * SCORING_WEIGHTS.diversityScore;
+    
     // Calculate vote count score (0-100 scale)
     // Apply logarithmic scaling to prevent extremely high vote counts from dominating
     const voteCountScore = Math.min(100, Math.round(Math.log10(Math.max(1, voteCount + 1)) * 20));
@@ -274,6 +283,7 @@ function calculateFinalScore(post, newTimeScore) {
                       safetyScoreComponent + 
                       qualityScoreComponent +
                       sensationScoreComponent +
+                      diversityScoreComponent +
                       voteCountComponent +
                       commentCountComponent;
     
@@ -288,26 +298,109 @@ function calculateFinalScore(post, newTimeScore) {
 }
 
 /**
+ * Calculate diversity score based on domain uniqueness
+ * This function analyzes the top 100 articles and assigns diversity scores
+ */
+async function calculateDiversityScores(databases, databaseId, collectionId, log) {
+  try {
+    log('🌐 Calculating diversity scores for top 100 articles...');
+    
+    // Fetch top 100 articles by current score
+    const topPosts = await databases.listDocuments(
+      databaseId,
+      collectionId,
+      [
+        Query.orderDesc('score'),
+        Query.limit(100),
+        Query.select(['$id', 'link', 'score'])
+      ]
+    );
+    
+    const domainMap = new Map(); // domain -> array of post IDs
+    const diversityScores = new Map(); // post ID -> diversity score
+    
+    // Group posts by domain
+    topPosts.documents.forEach(post => {
+      if (post.link) {
+        try {
+          const domain = new URL(post.link).hostname;
+          if (!domainMap.has(domain)) {
+            domainMap.set(domain, []);
+          }
+          domainMap.get(domain).push({
+            id: post.$id,
+            score: post.score || 0
+          });
+        } catch (error) {
+          // If URL parsing fails, treat as unique domain
+          const uniqueDomain = `unknown-${post.$id}`;
+          domainMap.set(uniqueDomain, [{
+            id: post.$id,
+            score: post.score || 0
+          }]);
+        }
+      } else {
+        // Posts without links get unique domain treatment
+        const uniqueDomain = `no-link-${post.$id}`;
+        domainMap.set(uniqueDomain, [{
+          id: post.$id,
+          score: post.score || 0
+        }]);
+      }
+    });
+    
+    // Calculate diversity scores
+    domainMap.forEach((posts, domain) => {
+      if (posts.length === 1) {
+        // Only article from this domain - give 100 diversity score
+        diversityScores.set(posts[0].id, 100);
+        log(`🌐 Domain ${domain}: Single article - Diversity Score: 100`);
+      } else {
+        // Multiple articles from same domain - sort by score and assign scores
+        posts.sort((a, b) => b.score - a.score); // Highest score first
+        
+        // Give 100 to the highest scoring article, 0 to others
+        diversityScores.set(posts[0].id, 100);
+        for (let i = 1; i < posts.length; i++) {
+          diversityScores.set(posts[i].id, 0);
+        }
+        
+        log(`🌐 Domain ${domain}: ${posts.length} articles - Top article gets 100, others get 0`);
+      }
+    });
+    
+    log(`✅ Diversity scores calculated for ${diversityScores.size} articles`);
+    return diversityScores;
+    
+  } catch (error) {
+    log(`❌ Error calculating diversity scores: ${error.message}`);
+    return new Map(); // Return empty map on error
+  }
+}
+
+/**
  * Apply scoring algorithm to a single post
  */
-function applyScoringAlgorithm(post) {
+function applyScoringAlgorithm(post, diversityScore = 0) {
   // Calculate new time score based on decay
   const newTimeScore = calculateTimeDecayScore(post.$createdAt, post.timeScore || 100);
   
   // Calculate final ranking score
-  const finalScore = calculateFinalScore(post, newTimeScore);
+  const finalScore = calculateFinalScore(post, newTimeScore, diversityScore);
   
   // Log scoring details for debugging (only for first few posts to avoid spam)
   if (Math.random() < 0.1) { // Log ~10% of posts for debugging
     console.log(`🔍 Post scoring debug - ID: ${post.$id}, Title: "${post.title?.substring(0, 50)}..."`);
     console.log(`   Time Score: ${post.timeScore || 100} → ${newTimeScore}`);
+    console.log(`   Diversity Score: ${diversityScore}`);
     console.log(`   Final Score: ${finalScore}`);
   }
   
   // Return updated data for batch update
   return {
     timeScore: newTimeScore,
-    score: finalScore
+    score: finalScore,
+    diversityScore: diversityScore
   };
 }
 
@@ -319,7 +412,7 @@ function applyScoringAlgorithm(post) {
  * Process posts in batches for efficient database updates
  * Uses Appwrite's batch update with 1000 posts per batch
  */
-async function processPostsInBatches(posts, databases, databaseId, collectionId, log, error) {
+async function processPostsInBatches(posts, databases, databaseId, collectionId, log, error, diversityScores) {
   const results = {
     totalPosts: posts.length,
     processed: 0,
@@ -341,11 +434,13 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       // Apply scoring algorithm to all posts in the batch
       // Create batch updates with only the fields we want to update
       const batchUpdates = batch.map(post => {
-        const updatedData = applyScoringAlgorithm(post);
+        const diversityScore = diversityScores.get(post.$id) || 0;
+        const updatedData = applyScoringAlgorithm(post, diversityScore);
         return {
           $id: post.$id,
           timeScore: updatedData.timeScore,
-          score: updatedData.score
+          score: updatedData.score,
+          diversityScore: updatedData.diversityScore
         };
       });
       
@@ -372,7 +467,8 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
             update.$id,
             {
               timeScore: update.timeScore,
-              score: update.score
+              score: update.score,
+              diversityScore: update.diversityScore
             }
           );
           successfulUpdates++;
@@ -387,11 +483,15 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       
       // Log score distribution for this batch
       const scores = batchUpdates.map(update => update.score);
+      const diversityScores = batchUpdates.map(update => update.diversityScore);
       const avgScore = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
       const minScore = Math.min(...scores);
       const maxScore = Math.max(...scores);
+      const avgDiversity = Math.round(diversityScores.reduce((sum, score) => sum + score, 0) / diversityScores.length);
+      const diversity100Count = diversityScores.filter(score => score === 100).length;
       log(`✅ Batch ${results.batches} completed: ${successfulUpdates}/${batch.length} posts updated successfully`);
       log(`📊 Score distribution - Avg: ${avgScore}, Min: ${minScore}, Max: ${maxScore}`);
+      log(`🌐 Diversity distribution - Avg: ${avgDiversity}, Posts with 100: ${diversity100Count}/${batch.length}`);
       
       // Add delay between batches to avoid rate limiting
       if (batchEnd < posts.length) {
@@ -425,17 +525,18 @@ function generateFinalSummary(results, startTime, log) {
   // Log comprehensive summary
   log('🎯 ALGORITHM FUNCTION COMPLETED');
   log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  log(`📊 Total posts found: ${results.totalPosts}`);
-  log(`✅ Successfully processed: ${results.updated}`);
-  log(`❌ Errors encountered: ${results.errors}`);
-  log(`📈 Success rate: ${successRate}%`);
-  log(`📦 Batches processed: ${results.batches}`);
-  log(`⏱️  Total processing time: ${processingTime}ms`);
-  log(`⚖️  Scoring weights used (Percentage Importance):`);
-  Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
-    log(`   • ${factor}: ${(weight * 100).toFixed(0)}%`);
-  });
-  log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        log(`📊 Total posts found: ${results.totalPosts}`);
+        log(`✅ Successfully processed: ${results.updated}`);
+        log(`❌ Errors encountered: ${results.errors}`);
+        log(`📈 Success rate: ${successRate}%`);
+        log(`📦 Batches processed: ${results.batches}`);
+        log(`⏱️  Total processing time: ${processingTime}ms`);
+        log(`🌐 Diversity scores calculated for top 100 articles`);
+        log(`⚖️  Scoring weights used (Percentage Importance):`);
+        Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
+          log(`   • ${factor}: ${(weight * 100).toFixed(0)}%`);
+        });
+        log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // Performance warnings
   if (processingTime > PROCESSING_CONFIG.maxProcessingTime) {
