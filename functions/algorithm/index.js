@@ -11,11 +11,11 @@
  * Appwrite's batch update functionality.
  * 
  * SCORING WEIGHTS (Percentage Importance):
- * - Diversity Score: 20% - Domain diversity (prevents single domain domination)
- * - Sensation Score: 20% - Dramatic tech news impact
- * - Quality Score: 15% - Overall content value and relevance
- * - Time Score: 12% - Time relevance (medium weight)
- * - Vote Count: 8% - Community engagement through voting
+ * - Diversity Score: 18% - Domain diversity (prevents single domain domination)
+ * - Sensation Score: 18% - Dramatic tech news impact
+ * - Quality Score: 12% - Overall content value and relevance
+ * - Time Score: 10% - Time relevance (medium weight)
+ * - Vote Count: 15% - Community engagement through voting (high weight)
  * - Safety Score: 8% - Content appropriateness and safety (medium weight)
  * - Comment Count: 8% - Community discussion and engagement (high weight)
  * - Spelling Score: 5% - Writing quality and grammar (medium weight)
@@ -36,15 +36,15 @@ import { Client, Databases, Query } from 'node-appwrite';
  * Each weight represents the percentage importance of that factor
  */
 const SCORING_WEIGHTS = {
-  diversityScore: 0.20,   // 20% - Domain diversity (reduced to make room for other factors)
-  sensationScore: 0.20,   // 20% - Dramatic tech news impact (reduced)
-  qualityScore: 0.15,     // 15% - Overall content value and relevance (reduced)
-  timeScore: 0.12,        // 12% - Time relevance (increased to medium)
-  voteCount: 0.08,        // 8% - Community engagement through voting (reduced)
-  safetyScore: 0.08,      // 8% - Content appropriateness and safety (increased to medium)
-  commentCount: 0.08,     // 8% - Community discussion and engagement (increased a lot)
-  spellingScore: 0.05,    // 5% - Writing quality and grammar (increased to medium)
-  spamScore: 0.04         // 4% - Content legitimacy (inverted - lower spam = higher score) (increased a lot)
+  diversityScore: 0.18,   // 18% - Domain diversity (reduced to make room for vote count)
+  sensationScore: 0.18,   // 18% - Dramatic tech news impact (reduced)
+  qualityScore: 0.12,     // 12% - Overall content value and relevance (reduced)
+  timeScore: 0.10,        // 10% - Time relevance (reduced to make room)
+  voteCount: 0.15,        // 15% - Community engagement through voting (increased a lot)
+  safetyScore: 0.08,      // 8% - Content appropriateness and safety (medium weight)
+  commentCount: 0.08,     // 8% - Community discussion and engagement (high weight)
+  spellingScore: 0.05,    // 5% - Writing quality and grammar (medium weight)
+  spamScore: 0.04         // 4% - Content legitimacy (inverted - lower spam = higher score) (high weight)
 };
 
 /**
