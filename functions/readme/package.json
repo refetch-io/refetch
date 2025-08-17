@@ -14,7 +14,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "node-appwrite": "^13.0.1",
+    "node-appwrite": "^17.2.0",
     "octokit": "^3.1.2"
   }
 }
