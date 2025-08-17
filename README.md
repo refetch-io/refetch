@@ -19,6 +19,64 @@
 
 **Refetch** was born from a simple yet powerful idea: create a modern, open-source alternative to Hacker News that combines the best of community-driven curation with intelligent AI-powered content discovery. Free from YC-control, open and transparent, doesn't favor anyone.
 
+<div align="center">
+
+## 🔥 Top Posts Today (Sunday, August 17, 2025)
+
+*Auto-updated with the highest-scoring community content*
+
+</div>
+
+**🥇 [Building a Sync-Engine and Reactivity System with SQLite: Lessons Learned](https://www.finkelstein.fr/sqlite-sync-engine-with-reactivity)**
+📊 Score: **66** | ⏰ 6 minutes ago | 👤 Scout
+
+**🥈 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)**
+📊 Score: **61** | ⏰ 11 hours ago | 👤 Scout
+
+**🥉 [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)**
+📊 Score: **61** | ⏰ 11 hours ago | 👤 Scout
+
+**⭐ [Node.js Now Supports Execution of TypeScript Files](https://nodejs.org/en/blog/release/v22.18.0)**
+📊 Score: **61** | ⏰ 1 hour ago | 👤 Scout
+
+**⭐ [Revolutionizing Battery Recycling: Princeton NuEnergy's Tech Recovers 97% of Lithium-ion Material](https://www.energy-reporters.com/environment/97-battery-recycling-breakthrough-princeton-nuenergy-opens-first-u-s-commercial-facility-cutting-costs-38-and-slashing-environmental-impact/)**
+📊 Score: **59** | ⏰ 13 hours ago | 👤 Scout
+
+---
+
+*Last updated: 2025-08-17T08:30:47.855Z*
+
+
+
+<div align="center">
+
+## 🔥 Top Posts Today (Sunday, August 17, 2025)
+
+*Auto-updated with the highest-scoring community content*
+
+</div>
+
+**🥇 [Building a Sync-Engine and Reactivity System with SQLite: Lessons Learned](https://www.finkelstein.fr/sqlite-sync-engine-with-reactivity)**
+📊 Score: **65** | ⏰ 10 minutes ago | 👤 Scout
+
+**🥈 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)**
+📊 Score: **61** | ⏰ 11 hours ago | 👤 Scout
+
+**🥉 [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)**
+📊 Score: **61** | ⏰ 11 hours ago | 👤 Scout
+
+**⭐ [Node.js Now Supports Execution of TypeScript Files](https://nodejs.org/en/blog/release/v22.18.0)**
+📊 Score: **61** | ⏰ 1 hour ago | 👤 Scout
+
+**⭐ [Revolutionizing Battery Recycling: Princeton NuEnergy's Tech Recovers 97% of Lithium-ion Material](https://www.energy-reporters.com/environment/97-battery-recycling-breakthrough-princeton-nuenergy-opens-first-u-s-commercial-facility-cutting-costs-38-and-slashing-environmental-impact/)**
+📊 Score: **59** | ⏰ 13 hours ago | 👤 Scout
+
+---
+
+*Last updated: 2025-08-17T08:34:10.665Z*
+
+
+
 ### What We're Building
 
 - **🤖 AI-Powered Discovery**: Our intelligent scout functions automatically discover high-quality tech content from leading sources so you can be lazy and enjoy
