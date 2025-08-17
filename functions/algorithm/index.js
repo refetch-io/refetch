@@ -2,6 +2,7 @@
  * Algorithm Appwrite Function
  * 
  * This function calculates ranking scores for posts based on multiple factors:
+ * - Tech relevancy (highest priority - ensures content is relevant for tech audience)
  * - Time decay (posts lose relevance over 24 hours)
  * - Quality metrics (spelling, spam, safety, quality scores)
  * - Sensation score for dramatic tech news (0-100 scale)
@@ -11,15 +12,16 @@
  * Appwrite's batch update functionality.
  * 
  * SCORING WEIGHTS (Percentage Importance):
- * - Diversity Score: 18% - Domain diversity (prevents single domain domination)
- * - Sensation Score: 18% - Dramatic tech news impact
- * - Quality Score: 12% - Overall content value and relevance
- * - Time Score: 10% - Time relevance (medium weight)
- * - Vote Count: 15% - Community engagement through voting (high weight)
- * - Safety Score: 8% - Content appropriateness and safety (medium weight)
- * - Comment Count: 8% - Community discussion and engagement (high weight)
- * - Spelling Score: 5% - Writing quality and grammar (medium weight)
- * - Spam Score: 4% - Content legitimacy (inverted - lower spam = higher score) (high weight)
+ * - Relevancy Score: 25% - Tech audience relevance (HIGHEST PRIORITY)
+ * - Diversity Score: 15% - Domain diversity (prevents single domain domination)
+ * - Sensation Score: 15% - Dramatic tech news impact
+ * - Quality Score: 10% - Overall content value and relevance
+ * - Time Score: 8% - Time relevance (medium weight)
+ * - Vote Count: 12% - Community engagement through voting (high weight)
+ * - Safety Score: 6% - Content appropriateness and safety (medium weight)
+ * - Comment Count: 6% - Community discussion and engagement (high weight)
+ * - Spelling Score: 2% - Writing quality and grammar (low weight)
+ * - Spam Score: 1% - Content legitimacy (inverted - lower spam = higher score) (low weight)
  * 
  * Total Weight: 100% (1.0)
  */
@@ -36,15 +38,16 @@ import { Client, Databases, Query } from 'node-appwrite';
  * Each weight represents the percentage importance of that factor
  */
 const SCORING_WEIGHTS = {
-  diversityScore: 0.18,   // 18% - Domain diversity (reduced to make room for vote count)
-  sensationScore: 0.18,   // 18% - Dramatic tech news impact (reduced)
-  qualityScore: 0.12,     // 12% - Overall content value and relevance (reduced)
-  timeScore: 0.10,        // 10% - Time relevance (reduced to make room)
-  voteCount: 0.15,        // 15% - Community engagement through voting (increased a lot)
-  safetyScore: 0.08,      // 8% - Content appropriateness and safety (medium weight)
-  commentCount: 0.08,     // 8% - Community discussion and engagement (high weight)
-  spellingScore: 0.05,    // 5% - Writing quality and grammar (medium weight)
-  spamScore: 0.04         // 4% - Content legitimacy (inverted - lower spam = higher score) (high weight)
+  relevancyScore: 0.25,   // 25% - Tech relevance (highest weight - most important factor)
+  diversityScore: 0.15,   // 15% - Domain diversity (reduced to make room for relevancy)
+  sensationScore: 0.15,   // 15% - Dramatic tech news impact (reduced)
+  qualityScore: 0.10,     // 10% - Overall content value and relevance (reduced)
+  timeScore: 0.08,        // 8% - Time relevance (reduced)
+  voteCount: 0.12,        // 12% - Community engagement through voting (reduced)
+  safetyScore: 0.06,      // 6% - Content appropriateness and safety (reduced)
+  commentCount: 0.06,     // 6% - Community discussion and engagement (reduced)
+  spellingScore: 0.02,    // 2% - Writing quality and grammar (reduced)
+  spamScore: 0.01         // 1% - Content legitimacy (inverted - lower spam = higher score) (reduced)
 };
 
 /**
@@ -268,6 +271,7 @@ function calculateTimeDecayScore(createdAt, currentTimeScore) {
 function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
   try {
     // Use default scores for missing metrics
+    const relevancyScore = post.relevancyScore ?? 50;   // Neutral score if missing
     const spellingScore = post.spellingScore ?? 50;    // Neutral score if missing
     const spamScore = post.spamScore ?? 50;            // Neutral score if missing
     const safetyScore = post.safetyScore ?? 75;        // Assume safe if missing
@@ -279,6 +283,7 @@ function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
     const commentCount = post.countComments ?? 0;      // Comment count, default to 0
     
     // Calculate weighted components
+    const relevancyScoreComponent = relevancyScore * SCORING_WEIGHTS.relevancyScore;
     const timeScoreComponent = newTimeScore * SCORING_WEIGHTS.timeScore;
     const spellingScoreComponent = spellingScore * SCORING_WEIGHTS.spellingScore;
     
@@ -305,7 +310,8 @@ function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
     const commentCountComponent = commentCountScore * SCORING_WEIGHTS.commentCount;
     
     // Calculate weighted sum
-    const finalScore = timeScoreComponent + 
+    const finalScore = relevancyScoreComponent +
+                      timeScoreComponent + 
                       spellingScoreComponent + 
                       spamScoreComponent + 
                       safetyScoreComponent + 
@@ -419,6 +425,7 @@ function applyScoringAlgorithm(post, diversityScore = 0) {
   // Log scoring details for debugging (only for first few posts to avoid spam)
   if (Math.random() < 0.1) { // Log ~10% of posts for debugging
     console.log(`🔍 Post scoring debug - ID: ${post.$id}, Title: "${post.title?.substring(0, 50)}..."`);
+    console.log(`   Relevancy Score: ${post.relevancyScore || 50} (Weight: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}%)`);
     console.log(`   Time Score: ${post.timeScore || 100} → ${newTimeScore}`);
     console.log(`   Diversity Score: ${diversityScore}`);
     console.log(`   Final Score: ${finalScore}`);
@@ -575,8 +582,11 @@ function generateFinalSummary(results, startTime, log) {
         log(`⏱️  Total processing time: ${processingTime}ms`);
         log(`🌐 Diversity scores calculated for top 100 articles`);
         log(`⚖️  Scoring weights used (Percentage Importance):`);
+        log(`   🎯 Relevancy Score: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}% (Tech audience relevance - HIGHEST PRIORITY)`);
         Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
-          log(`   • ${factor}: ${(weight * 100).toFixed(0)}%`);
+          if (factor !== 'relevancyScore') { // Skip relevancy as it's already logged above
+            log(`   • ${factor}: ${(weight * 100).toFixed(0)}%`);
+          }
         });
         log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   

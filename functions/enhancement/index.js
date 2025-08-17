@@ -14,6 +14,7 @@ const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platfor
 {
   "language": "detected language (e.g., 'English', 'Spanish')",
   "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
+  "relevancyScore": number 0-100 (0 = not relevant for tech audience, 100 = highly relevant for tech audience. Tech topics: software, hardware, AI, startups, tech companies, programming, cybersecurity, etc. Non-tech: sports, entertainment, etc.)",
   "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
   "spellingIssues": ["array of specific spelling/grammar issues found"],
   "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
@@ -79,6 +80,17 @@ CRITICAL GUIDELINES:
   * Posts with no substantial content, just test messages, or placeholder text should get qualityScore 0-20
   * Posts that don't provide any tech news, analysis, or meaningful information should get qualityScore 0-30
   * Consider the platform's purpose: sharing valuable tech content, not testing or placeholder posts
+- RELEVANCY SCORING: Evaluate how relevant the content is for a tech audience (0-100 scale):
+  * **High Relevancy (80-100)**: Software development, programming languages, AI/ML, cybersecurity, hardware, startups, tech companies, cloud computing, data science, blockchain, mobile development, web development, DevOps, open source, tech industry news, product launches, tech acquisitions, funding rounds
+  * **Medium Relevancy (40-79)**: Business news related to tech companies, general technology trends, digital transformation, tech education, tech careers, moderate tech controversies
+  * **Low Relevancy (0-39)**: Sports, politics, entertainment, fashion, food, travel, non-tech business, general news with no tech angle
+  * **Relevancy Examples**: 
+    - "New AI model released" → 95-100 (highly relevant)
+    - "Tech company acquires startup" → 85-95 (highly relevant)
+    - "Software bug found in popular app" → 80-90 (highly relevant)
+    - "Sports team wins championship" → 0-10 (not relevant)
+    - "New restaurant opens downtown" → 0-10 (not relevant)
+    - "Political election results" → 0-20 (not relevant unless tech policy related)
 - SENSATION SCORING: Evaluate how dramatic or impactful the tech news is (0-100 scale):
   * **High Sensation (80-100)**: Industry-shifting announcements, major product failures/shutdowns, mass layoffs/leadership shakeups, security breaches/data leaks, major regulatory/legal battles, unexpected partnerships/acquisitions, technological breakthroughs/failures, major scandals/ethical controversies
   * **Medium Sensation (40-79)**: Leadership changes, product updates, partnerships, regulatory developments, moderate controversies, company restructuring, funding rounds, moderate acquisitions
@@ -103,6 +115,11 @@ CRITICAL GUIDELINES:
     - For technical announcements, product launches, innovations → Use playful and engaging language
     - For general tech news and updates → Use balanced, informative yet entertaining language
     - Always prioritize respect and sensitivity over entertainment when the content demands it
+- RELEVANCY GUIDELINES: When scoring relevancy, consider:
+  * Tech topics that get high scores (80-100): Programming, software development, AI/ML, cybersecurity, hardware, cloud computing, data science, blockchain, mobile/web development, DevOps, open source, tech startups, tech company news, product launches, tech acquisitions, funding rounds, tech industry trends
+  * Mixed topics that get medium scores (40-79): Business news about tech companies, digital transformation, tech education, tech careers, general technology trends, moderate tech controversies
+  * Non-tech topics that get low scores (0-39): Sports, politics, entertainment, fashion, food, travel, general business with no tech angle, personal life updates, non-tech hobbies
+  * Always prioritize tech relevance - this is the most important factor for ranking
 - Return only valid JSON, no additional text`;
 
 export default async function ({ req, res, log, error }) {
@@ -199,6 +216,7 @@ export default async function ({ req, res, log, error }) {
                     enhanced: true,
                     type: metadata.type, // Store the AI-recommended type
                     language: metadata.language,
+                    relevancyScore: metadata.relevancyScore,
                     spellingScore: metadata.spellingScore,
                     spellingIssues: metadata.spellingIssues,
                     spamScore: metadata.spamScore,
@@ -237,6 +255,13 @@ export default async function ({ req, res, log, error }) {
                     highSensationCount++;
                 } else if (metadata.sensationScore >= 60) {
                     log(`⚡ MEDIUM SENSATION - Post ID: ${post.$id}, Title: "${post.title}", Sensation Score: ${metadata.sensationScore}`);
+                }
+                
+                // Log relevancy scores for tech audience relevance
+                if (metadata.relevancyScore >= 80) {
+                    log(`🎯 HIGH TECH RELEVANCY - Post ID: ${post.$id}, Title: "${post.title}", Relevancy Score: ${metadata.relevancyScore}`);
+                } else if (metadata.relevancyScore <= 30) {
+                    log(`⚠️  LOW TECH RELEVANCY - Post ID: ${post.$id}, Title: "${post.title}", Relevancy Score: ${metadata.relevancyScore}`);
                 }
                 
                 await databases.updateDocument(
@@ -608,7 +633,7 @@ function validateAndSanitizeMetadata(metadata, postData) {
     return {
         language: typeof metadata.language === 'string' ? metadata.language.substring(0, 10) : 'English',
         type: validatedType,
-        type: validatedType, // Also return type for database update
+        relevancyScore: Math.max(0, Math.min(100, Number(metadata.relevancyScore) || 0)),
         spellingScore: Math.max(0, Math.min(100, Number(metadata.spellingScore) || 0)),
         spellingIssues: Array.isArray(metadata.spellingIssues) ? metadata.spellingIssues.slice(0, 50) : [],
         spamScore: Math.max(0, Math.min(100, Number(metadata.spamScore) || 0)),
