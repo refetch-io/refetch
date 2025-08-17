@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+**🥇 [Automating Database Upgrades with PG Auto Upgrade Docker Container](https://refetch.io/threads/68a24bdb00342cea23a9)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://github.com/pgautoupgrade/docker-pgautoupgrade)
 
-**🥈 [Google's Material 3 Expressive Redesign: What's New](https://refetch.io/threads/68a22c8c0037f7f4b9c4)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/17/google-material-3-expressive-redesign/)
+**🥈 [Anticipating Meta's Smart Glasses: A Look Ahead to 2025](https://refetch.io/threads/68a24bb800329a8e2ea0)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/2025/1/3/24333045/command-line-reader-mailbag-issue-2025)
 
-**🥉 [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
+**⭐ [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
-**⭐ [AI and the Value of Mastery: A Thought-Provoking Perspective](https://refetch.io/threads/68a22548003cb9f107a8)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://playtechnique.io/blog/ai-doesnt-lighten-the-burden-of-mastery.html)
+**⭐ [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
 
 ---
 
-*Last updated: 2025-08-17T20:01:35.130Z*
+*Last updated: 2025-08-17T22:01:35.327Z*
 
 
 
