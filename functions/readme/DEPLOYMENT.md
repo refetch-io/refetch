@@ -51,7 +51,32 @@ appwrite functions createVariable \
    - The token needs `repo` scope to read and write repository content
    - Test with: `curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/user`
 
-### Step 2: Appwrite API Key Setup
+### Step 2: README Template Setup
+
+1. **Create README.template.md**
+   - This file should contain your base README content
+   - Include the `{{news}}` placeholder where you want the top posts to appear
+   - The function will use this template every time to prevent news accumulation
+
+2. **Example Template Structure**
+   ```markdown
+   # Your Project Title
+   
+   Your project description...
+   
+   {{news}}
+   
+   ## Features
+   - Feature 1
+   - Feature 2
+   ```
+
+3. **Important Notes**
+   - The function reads from `README.template.md` and updates `README.md`
+   - This prevents news sections from building up over time
+   - Always keep your template file updated with any changes you want to preserve
+
+### Step 3: Appwrite API Key Setup
 
 1. **Create API Key**
    - Go to your Appwrite Console → API Keys
@@ -73,7 +98,7 @@ appwrite functions createVariable \
      - `createdAt` (datetime)
      - `author` (string, optional)
 
-### Step 3: Function Deployment
+### Step 4: Function Deployment
 
 1. **Create Function in Appwrite**
    - Go to Appwrite Console → Functions
@@ -119,7 +144,7 @@ appwrite functions createVariable \
      - `collections.read`
      - `documents.read`
 
-### Step 4: Configure Triggers
+### Step 5: Configure Triggers
 
 1. **Scheduled Execution (Recommended)**
    - Go to Settings → Triggers
@@ -137,7 +162,7 @@ appwrite functions createVariable \
    - Events: Database document updates
    - This runs the function whenever posts are updated
 
-### Step 5: Deploy and Test
+### Step 6: Deploy and Test
 
 1. **Deploy Function**
    - Click "Deploy" button

@@ -112,7 +112,7 @@ Configure how the function is invoked:
 
 ## 🎯 README Template
 
-Your README.md should include the `{{news}}` placeholder where you want the top posts to appear:
+Your `README.template.md` file should include the `{{news}}` placeholder where you want the top posts to appear:
 
 ```markdown
 **Refetch** was born from a simple yet powerful idea...
@@ -122,7 +122,7 @@ Your README.md should include the `{{news}}` placeholder where you want the top 
 ### What We're Building
 ```
 
-If no placeholder is found, the function will add the news section after the description.
+**Important**: The function always uses `README.template.md` as the baseline and updates `README.md`. This prevents news sections from accumulating and ensures a clean, consistent format every time.
 
 ## 📝 Output Format
 
@@ -134,24 +134,26 @@ The function generates content like this:
 *Auto-updated with the highest-scoring community content*
 
 **🥇 [Amazing Tech Article](https://example.com/article)**
-📊 Score: **42** | ⏰ 2 hours ago | 👤 John Doe
+📊 Votes: **42** | ⏰ 2 hours ago
 
 **🥈 [Another Great Post](https://example.com/post)**
-📊 Score: **38** | ⏰ 5 hours ago | 👤 Jane Smith
+📊 Votes: **38** | ⏰ 5 hours ago
 
 **🥉 [Interesting Content](https://example.com/content)**
-📊 Score: **35** | ⏰ 1 day ago | 👤 Anonymous
+📊 Votes: **35** | ⏰ 1 day ago
 
 **⭐ [Fourth Post](https://example.com/fourth)**
-📊 Score: **28** | ⏰ 2 days ago | 👤 Bob Wilson
+📊 Votes: **28** | ⏰ 2 days ago
 
 **⭐ [Fifth Post](https://example.com/fifth)**
-📊 Score: **25** | ⏰ 3 days ago | 👤 Alice Brown
+📊 Votes: **25** | ⏰ 3 days ago
 
 ---
 
 *Last updated: 2024-01-15T09:00:00.000Z*
 ```
+
+**Note**: Titles are automatically trimmed to ~80 characters to prevent line breaks and maintain clean formatting.
 
 ## 🧪 Testing
 

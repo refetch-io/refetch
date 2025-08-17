@@ -54,7 +54,7 @@ export default async function ({ req, res, log, error }) {
             [
                 Query.orderDesc('score'),
                 Query.limit(5),
-                Query.select(['title', 'link', 'score', 'count', 'countUp', 'countDown', '$createdAt', 'userName'])
+                Query.select(['title', 'link', 'count', '$createdAt'])
             ]
         );
         
@@ -74,12 +74,8 @@ export default async function ({ req, res, log, error }) {
             log(`Sample post structure: ${JSON.stringify({
                 title: firstPost.title,
                 link: firstPost.link,
-                score: firstPost.score,
                 count: firstPost.count,
-                countUp: firstPost.countUp,
-                countDown: firstPost.countDown,
-                createdAt: firstPost.$createdAt,
-                userName: firstPost.userName
+                createdAt: firstPost.$createdAt
             })}`);
         }
         
@@ -130,46 +126,48 @@ export default async function ({ req, res, log, error }) {
             throw new Error(`GitHub repository access error: ${repoError.message}`);
         }
         
-        // Get current README content
-        log('Fetching current README content from GitHub...');
+        // Get README template content
+        log('Fetching README template from GitHub...');
         log(`GitHub Owner: ${githubOwner}`);
         log(`GitHub Repo: ${githubRepo}`);
         log(`GitHub Branch: ${githubBranch}`);
         
-        let readmeResponse;
+        let templateResponse;
         try {
-            readmeResponse = await octokit.rest.repos.getContent({
+            templateResponse = await octokit.rest.repos.getContent({
                 owner: githubOwner,
                 repo: githubRepo,
-                path: 'README.md',
+                path: 'README.template.md',
                 ref: githubBranch
             });
             
-            if (readmeResponse.status !== 200) {
-                throw new Error(`Failed to fetch README: ${readmeResponse.status}`);
+            if (templateResponse.status !== 200) {
+                throw new Error(`Failed to fetch README template: ${templateResponse.status}`);
             }
-        } catch (githubError) {
-            log(`GitHub API Error: ${githubError.message}`);
-            log(`GitHub Error Status: ${githubError.status}`);
-            log(`GitHub Error Response: ${JSON.stringify(githubError.response?.data || {})}`);
+        } catch (templateError) {
+            log(`GitHub API Error for template: ${templateError.message}`);
+            log(`GitHub Error Status: ${templateError.status}`);
+            log(`GitHub Error Response: ${JSON.stringify(templateError.response?.data || {})}`);
             
             // Check if it's a 404 (file not found) or other error
-            if (githubError.status === 404) {
-                throw new Error(`README.md not found in repository. Please check:
+            if (templateError.status === 404) {
+                throw new Error(`README.template.md not found in repository. Please check:
                 1. Repository exists: ${githubOwner}/${githubRepo}
                 2. Branch exists: ${githubBranch}
-                3. README.md file exists in the root directory
-                4. GitHub token has access to this repository`);
+                3. README.template.md file exists in the root directory (this is required!)
+                4. GitHub token has access to this repository
+                
+                Note: The function requires README.template.md to prevent news accumulation.`);
             }
             
-            throw new Error(`GitHub API error: ${githubError.message}`);
+            throw new Error(`GitHub template API error: ${templateError.message}`);
         }
         
-        const currentContent = Buffer.from(readmeResponse.data.content, 'base64').toString('utf-8');
-        log('Current README content fetched successfully');
+        const templateContent = Buffer.from(templateResponse.data.content, 'base64').toString('utf-8');
+        log('README template content fetched successfully');
         
-        // Update README content
-        const updatedContent = updateReadmeContent(currentContent, formattedPosts);
+        // Update template content with news
+        const updatedContent = updateReadmeContent(templateContent, formattedPosts);
         
         // Commit updated README to GitHub
         log('Committing updated README to GitHub...');
@@ -179,7 +177,7 @@ export default async function ({ req, res, log, error }) {
             path: 'README.md',
             message: `🤖 Auto-update README with top posts - ${new Date().toISOString().split('T')[0]}`,
             content: Buffer.from(updatedContent).toString('base64'),
-            sha: readmeResponse.data.sha,
+            sha: templateResponse.data.sha,
             branch: githubBranch,
             committer: {
                 name: 'Refetch Bot',
@@ -225,9 +223,8 @@ function formatPostsForReadme(posts) {
         return {
             title: post.title,
             url: post.link,
-            score: post.score,
-            timeAgo: timeAgo,
-            author: post.userName || 'Anonymous'
+            count: post.count,
+            timeAgo: timeAgo
         };
     });
 }
@@ -235,23 +232,19 @@ function formatPostsForReadme(posts) {
 /**
  * Update README content with new posts
  */
-function updateReadmeContent(currentContent, posts) {
+function updateReadmeContent(templateContent, posts) {
     // Create the news section content
     const newsSection = createNewsSection(posts);
     
     // Replace the {{news}} placeholder with actual content
-    if (currentContent.includes('{{news}}')) {
-        return currentContent.replace('{{news}}', newsSection);
+    if (templateContent.includes('{{news}}')) {
+        return templateContent.replace('{{news}}', newsSection);
     }
     
-    // If no placeholder found, add the news section after the description
-    const descriptionEnd = currentContent.indexOf('### What We\'re Building');
-    if (descriptionEnd !== -1) {
-        return currentContent.slice(0, descriptionEnd) + newsSection + '\n\n' + currentContent.slice(descriptionEnd);
-    }
-    
-    // Fallback: add at the end
-    return currentContent + '\n\n' + newsSection;
+    // If no placeholder found, log warning and return template as-is
+    log('Warning: {{news}} placeholder not found in README.template.md');
+    log('Please ensure your template contains the {{news}} placeholder');
+    return templateContent;
 }
 
 /**
@@ -272,8 +265,12 @@ function createNewsSection(posts) {
     
     posts.forEach((post, index) => {
         const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐';
-        html += `**${medal} [${post.title}](${post.url})**\n`;
-        html += `📊 Score: **${post.score}** | ⏰ ${post.timeAgo} | 👤 ${post.author}\n\n`;
+        
+        // Limit title length to prevent line breaks (max ~80 characters)
+        const trimmedTitle = post.title.length > 80 ? post.title.substring(0, 77) + '...' : post.title;
+        
+        html += `**${medal} [${trimmedTitle}](${post.url})**\n`;
+        html += `📊 Votes: **${post.count}** | ⏰ ${post.timeAgo}\n\n`;
     });
     
     html += `---\n\n`;
