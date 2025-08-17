@@ -169,24 +169,92 @@ export default async function ({ req, res, log, error }) {
         // Update template content with news
         const updatedContent = updateReadmeContent(templateContent, formattedPosts);
         
-        // Commit updated README to GitHub
-        log('Committing updated README to GitHub...');
-        const commitResponse = await octokit.rest.repos.createOrUpdateFileContents({
-            owner: githubOwner,
-            repo: githubRepo,
-            path: 'README.md',
-            message: `🤖 Auto-update README with top posts - ${new Date().toISOString().split('T')[0]}`,
-            content: Buffer.from(updatedContent).toString('base64'),
-            sha: templateResponse.data.sha,
-            branch: githubBranch,
-            committer: {
-                name: 'Refetch Bot',
-                email: 'bot@refetch.io'
+        // Get the current README.md file to get its latest SHA before updating
+        log('Fetching current README.md to get latest SHA...');
+        let currentReadmeSha = null;
+        try {
+            const currentReadmeResponse = await octokit.rest.repos.getContent({
+                owner: githubOwner,
+                repo: githubRepo,
+                path: 'README.md',
+                ref: githubBranch
+            });
+            currentReadmeSha = currentReadmeResponse.data.sha;
+            log(`Current README.md SHA: ${currentReadmeSha}`);
+        } catch (readmeError) {
+            if (readmeError.status === 404) {
+                log('README.md not found, will create new file');
+                currentReadmeSha = null;
+            } else {
+                throw new Error(`Failed to fetch current README.md: ${readmeError.message}`);
             }
-        });
+        }
         
-        if (commitResponse.status !== 200 && commitResponse.status !== 201) {
-            throw new Error(`Failed to commit README: ${commitResponse.status}`);
+        // Commit updated README to GitHub with retry logic
+        log('Committing updated README to GitHub...');
+        let commitResponse;
+        let retryCount = 0;
+        const maxRetries = 3;
+        
+        while (retryCount < maxRetries) {
+            try {
+                commitResponse = await octokit.rest.repos.createOrUpdateFileContents({
+                    owner: githubOwner,
+                    repo: githubRepo,
+                    path: 'README.md',
+                    message: `🤖 Auto-update README with top posts - ${new Date().toISOString().split('T')[0]}`,
+                    content: Buffer.from(updatedContent).toString('base64'),
+                    sha: currentReadmeSha, // Use the current README.md SHA, not the template SHA
+                    branch: githubBranch,
+                    committer: {
+                        name: 'Refetch Bot',
+                        email: 'bot@refetch.io'
+                    }
+                });
+                
+                if (commitResponse.status === 200 || commitResponse.status === 201) {
+                    break; // Success, exit retry loop
+                }
+                
+                throw new Error(`Failed to commit README: ${commitResponse.status}`);
+                
+            } catch (commitError) {
+                retryCount++;
+                
+                // If it's a 409 conflict (SHA mismatch), refresh the SHA and retry
+                if (commitError.status === 409 && retryCount < maxRetries) {
+                    log(`SHA mismatch detected (attempt ${retryCount}/${maxRetries}), refreshing README SHA...`);
+                    
+                    try {
+                        const refreshResponse = await octokit.rest.repos.getContent({
+                            owner: githubOwner,
+                            repo: githubRepo,
+                            path: 'README.md',
+                            ref: githubBranch
+                        });
+                        currentReadmeSha = refreshResponse.data.sha;
+                        log(`Refreshed README.md SHA: ${currentReadmeSha}`);
+                        
+                        // Wait a bit before retrying
+                        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+                        continue;
+                    } catch (refreshError) {
+                        log(`Failed to refresh README SHA: ${refreshError.message}`);
+                        throw new Error(`Failed to refresh README SHA after conflict: ${refreshError.message}`);
+                    }
+                }
+                
+                // If it's not a conflict or we've exhausted retries, throw the error
+                if (retryCount >= maxRetries) {
+                    throw new Error(`Failed to commit README after ${maxRetries} attempts: ${commitError.message}`);
+                }
+                
+                throw commitError;
+            }
+        }
+        
+        if (!commitResponse || (commitResponse.status !== 200 && commitResponse.status !== 201)) {
+            throw new Error(`Failed to commit README after all retry attempts`);
         }
         
         log('README updated successfully on GitHub');
