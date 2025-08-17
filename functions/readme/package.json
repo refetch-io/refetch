@@ -1,0 +1,20 @@
+{
+  "name": "readme-updater",
+  "version": "1.0.0",
+  "description": "Automatically updates README.md with top 5 highest-scoring posts",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "github", "readme", "automation"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.1",
+    "octokit": "^3.1.2"
+  }
+}
