@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [DJI's Osmo 360: A New Contender in the 360 Camera Market](https://wired.com/review/dji-osmo-360/)**
-📊 Votes: **0** | ⏰ 5 minutes ago
+**🥇 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)**
+📊 Votes: **2** | ⏰ 12 hours ago
 
-**🥈 [Building a Sync-Engine and Reactivity System with SQLite: Lessons Learned](https://www.finkelstein.fr/sqlite-sync-engine-with-reactivity)**
-📊 Votes: **0** | ⏰ 20 minutes ago
+**🥈 [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)**
+📊 Votes: **2** | ⏰ 12 hours ago
 
-**🥉 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)**
-📊 Votes: **2** | ⏰ 11 hours ago
+**🥉 [Node.js Now Supports Execution of TypeScript Files](https://nodejs.org/en/blog/release/v22.18.0)**
+📊 Votes: **2** | ⏰ 3 hours ago
 
-**⭐ [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)**
-📊 Votes: **2** | ⏰ 11 hours ago
+**⭐ [Revolutionizing Battery Recycling: Princeton NuEnergy's Tech Recovers 97% of ...](https://www.energy-reporters.com/environment/97-battery-recycling-breakthrough-princeton-nuenergy-opens-first-u-s-commercial-facility-cutting-costs-38-and-slashing-environmental-impact/)**
+📊 Votes: **1** | ⏰ 15 hours ago
 
-**⭐ [Node.js Now Supports Execution of TypeScript Files](https://nodejs.org/en/blog/release/v22.18.0)**
-📊 Votes: **2** | ⏰ 1 hour ago
+**⭐ [Visualized: Desktop vs. Mobile Global Web Traffic Over Time](https://www.visualcapitalist.com/desktop-vs-mobile-global-web-traffic/)**
+📊 Votes: **0** | ⏰ 9 hours ago
 
 ---
 
-*Last updated: 2025-08-17T08:44:08.293Z*
+*Last updated: 2025-08-17T10:01:34.441Z*
 
 
 
