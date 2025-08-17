@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://refetch.io/threads/68a0f6a700316434fcbe)**
-📊 Votes: **2** | ⏰ 20 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)
+**🥇 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**🥈 [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://refetch.io/threads/68a0f6d400092e2c8a52)**
-📊 Votes: **2** | ⏰ 20 hours ago | 🔗 [Original](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)
+**🥈 [Google's Material 3 Expressive Redesign: What's New](https://refetch.io/threads/68a22c8c0037f7f4b9c4)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/17/google-material-3-expressive-redesign/)
 
-**🥉 [Node.js Now Supports Execution of TypeScript Files](https://refetch.io/threads/68a17c58001cef640303)**
-📊 Votes: **2** | ⏰ 11 hours ago | 🔗 [Original](https://nodejs.org/en/blog/release/v22.18.0)
+**🥉 [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
 
-**⭐ [Revolutionizing Battery Recycling: Princeton NuEnergy's Tech Recovers 97% of ...](https://refetch.io/threads/68a0d3b7000c30717253)**
-📊 Votes: **1** | ⏰ 23 hours ago | 🔗 [Original](https://www.energy-reporters.com/environment/97-battery-recycling-breakthrough-princeton-nuenergy-opens-first-u-s-commercial-facility-cutting-costs-38-and-slashing-environmental-impact/)
+**⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
 
-**⭐ [Visualized: Desktop vs. Mobile Global Web Traffic Over Time](https://refetch.io/threads/68a11c24003847fcee48)**
-📊 Votes: **0** | ⏰ 17 hours ago | 🔗 [Original](https://www.visualcapitalist.com/desktop-vs-mobile-global-web-traffic/)
+**⭐ [AI and the Value of Mastery: A Thought-Provoking Perspective](https://refetch.io/threads/68a22548003cb9f107a8)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://playtechnique.io/blog/ai-doesnt-lighten-the-burden-of-mastery.html)
 
 ---
 
-*Last updated: 2025-08-17T18:01:41.291Z*
+*Last updated: 2025-08-17T20:01:35.130Z*
 
 
 
