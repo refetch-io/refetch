@@ -91,17 +91,78 @@ export default async function ({ req, res, log, error }) {
             auth: githubToken
         });
         
+        // Test GitHub repository access first
+        log('Testing GitHub repository access...');
+        try {
+            const repoResponse = await octokit.rest.repos.get({
+                owner: githubOwner,
+                repo: githubRepo
+            });
+            log(`Repository found: ${repoResponse.data.full_name}`);
+            log(`Default branch: ${repoResponse.data.default_branch}`);
+            
+            // Check if the specified branch exists
+            try {
+                const branchResponse = await octokit.rest.repos.getBranch({
+                    owner: githubOwner,
+                    repo: githubRepo,
+                    branch: githubBranch
+                });
+                log(`Branch found: ${branchResponse.data.name}`);
+            } catch (branchError) {
+                log(`Branch access error: ${branchError.message}`);
+                if (branchError.status === 404) {
+                    throw new Error(`Branch '${githubBranch}' not found in repository. Available branches might be: ${repoResponse.data.default_branch}. Please check:
+                    1. Branch name is correct
+                    2. Branch exists in the repository
+                    3. Try using the default branch: ${repoResponse.data.default_branch}`);
+                }
+                throw new Error(`GitHub branch access error: ${branchError.message}`);
+            }
+        } catch (repoError) {
+            log(`Repository access error: ${repoError.message}`);
+            if (repoError.status === 404) {
+                throw new Error(`Repository not found: ${githubOwner}/${githubRepo}. Please check:
+                1. Repository name is correct
+                2. Repository is not private (or token has access)
+                3. GitHub token has correct permissions`);
+            }
+            throw new Error(`GitHub repository access error: ${repoError.message}`);
+        }
+        
         // Get current README content
         log('Fetching current README content from GitHub...');
-        const readmeResponse = await octokit.rest.repos.getContent({
-            owner: githubOwner,
-            repo: githubRepo,
-            path: 'README.md',
-            ref: githubBranch
-        });
+        log(`GitHub Owner: ${githubOwner}`);
+        log(`GitHub Repo: ${githubRepo}`);
+        log(`GitHub Branch: ${githubBranch}`);
         
-        if (readmeResponse.status !== 200) {
-            throw new Error(`Failed to fetch README: ${readmeResponse.status}`);
+        let readmeResponse;
+        try {
+            readmeResponse = await octokit.rest.repos.getContent({
+                owner: githubOwner,
+                repo: githubRepo,
+                path: 'README.md',
+                ref: githubBranch
+            });
+            
+            if (readmeResponse.status !== 200) {
+                throw new Error(`Failed to fetch README: ${readmeResponse.status}`);
+            }
+        } catch (githubError) {
+            log(`GitHub API Error: ${githubError.message}`);
+            log(`GitHub Error Status: ${githubError.status}`);
+            log(`GitHub Error Response: ${JSON.stringify(githubError.response?.data || {})}`);
+            
+            // Check if it's a 404 (file not found) or other error
+            if (githubError.status === 404) {
+                throw new Error(`README.md not found in repository. Please check:
+                1. Repository exists: ${githubOwner}/${githubRepo}
+                2. Branch exists: ${githubBranch}
+                3. README.md file exists in the root directory
+                4. GitHub token has access to this repository`);
+            }
+            
+            throw new Error(`GitHub API error: ${githubError.message}`);
         }
         
         const currentContent = Buffer.from(readmeResponse.data.content, 'base64').toString('utf-8');
@@ -158,7 +219,7 @@ function formatPostsForReadme(posts) {
     const now = new Date();
     
     return posts.map((post, index) => {
-        const postDate = new Date(post.createdAt);
+        const postDate = new Date(post.$createdAt);
         const timeAgo = getTimeAgo(now - postDate);
         
         return {
