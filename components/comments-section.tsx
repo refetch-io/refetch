@@ -10,6 +10,7 @@ import { CommentForm } from "@/components/comment-form"
 import { type Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { useAuth } from "@/hooks/use-auth"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { handleVote } from "@/lib/voteHandler"
 import { ArrowUpDown, Clock, TrendingUp, Reply, X } from "lucide-react"
@@ -39,6 +40,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
+  const isMobile = useIsMobile()
 
   const handleReplySubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,7 +61,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const currentDepth = Math.min(depth, maxDepth)
 
   return (
-    <div className="flex items-start gap-3">
+    <div className={`flex items-start gap-3 ${isMobile ? 'gap-1.5' : 'gap-3'}`}>
       {/* Vote Section for Comment */}
       <CommentVote
         commentId={comment.id}
@@ -72,8 +74,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
       />
 
       <div className="flex-1">
-        <div className="flex items-center gap-2 text-sm">
-          <Avatar className="w-6 h-6">
+        <div className={`flex items-center gap-2 text-sm ${isMobile ? 'gap-1 text-xs' : 'gap-2'}`}>
+          <Avatar className={`${isMobile ? 'w-5 h-5' : 'w-6 h-6'}`}>
             <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${comment.author}`} />
             <AvatarFallback>{comment.author.charAt(0)}</AvatarFallback>
           </Avatar>
@@ -86,10 +88,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
           )}
           <span className="text-gray-500">• {comment.timeAgo}</span>
         </div>
-        <p className="text-gray-700 mt-1 text-sm">{comment.text}</p>
+        <p className={`text-gray-700 mt-1 text-sm ${isMobile ? 'mt-0.5 text-xs' : 'mt-1'}`}>{comment.text}</p>
         
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 mt-2">
+        <div className={`flex items-center gap-3 mt-2 ${isMobile ? 'gap-1.5 mt-1' : 'gap-3 mt-2'}`}>
           {/* Reply Button */}
           <Button
             variant="link"
@@ -114,9 +116,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
         {/* Reply Form */}
         {showReplyForm && (
-          <form onSubmit={handleReplySubmit} className="mt-3 mb-4">
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
-              <div className="flex items-center gap-2 text-xs text-blue-700 mb-2">
+          <form onSubmit={handleReplySubmit} className={`mt-3 mb-4 ${isMobile ? 'mt-1.5 mb-2' : 'mt-3 mb-4'}`}>
+            <div className={`bg-blue-50 border border-blue-200 rounded-md p-3 mb-3 ${isMobile ? 'p-1.5 mb-1.5' : 'p-3 mb-3'}`}>
+              <div className={`flex items-center gap-2 text-xs text-blue-700 mb-2 ${isMobile ? 'gap-1 mb-1' : 'gap-2 mb-2'}`}>
                 <Reply className="w-3 h-3" />
                 Replying to {comment.author}
                 <Button
@@ -133,7 +135,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 placeholder="Write a reply..."
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                className="mb-2 min-h-[60px] text-sm border-blue-200 focus:border-blue-400"
+                className={`mb-2 min-h-[60px] text-sm border-blue-200 focus:border-blue-400 ${isMobile ? 'mb-1 min-h-[40px] text-xs' : 'mb-2 min-h-[60px]'}`}
               />
               <Button type="submit" size="sm" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
                 Post Reply
@@ -145,8 +147,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
         {/* Nested Replies */}
         {comment.replies && comment.replies.length > 0 && (
           <div 
-            className="mt-4 space-y-4 border-l pl-4 border-gray-200"
-            style={{ marginLeft: `${currentDepth * 16}px` }}
+            className={`mt-4 space-y-4 border-l border-gray-200 ${
+              isMobile ? 'pl-1.5 mt-2 space-y-2' : 'pl-4'
+            }`}
+            style={{ 
+              marginLeft: isMobile 
+                ? `${Math.min(currentDepth * 6, 24)}px` 
+                : `${currentDepth * 16}px` 
+            }}
           >
             {comment.replies.map((reply) => (
               <CommentItem 
@@ -179,6 +187,7 @@ type SortType = 'date' | 'votes'
 
 export function CommentsSection({ initialComments, postId, postUserId }: CommentsSectionProps) {
   const { user } = useAuth()
+  const isMobile = useIsMobile()
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newCommentText, setNewCommentText] = useState("")
   const [sortType, setSortType] = useState<SortType>('date')
@@ -365,39 +374,41 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg border-none shadow-none">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold font-heading">Comments ({comments.length})</h2>
+    <div className={`bg-white rounded-lg border-none shadow-none ${isMobile ? 'p-2' : 'p-6'}`}>
+      <div className={`flex items-center justify-between mb-4 ${isMobile ? 'flex-col items-start gap-1 mb-2' : 'mb-4'}`}>
+        <h2 className={`text-lg font-semibold font-heading ${isMobile ? 'text-base' : 'text-lg'}`}>Comments ({comments.length})</h2>
         
         {/* Sort Buttons */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500 mr-2">Sort by:</span>
-          <Button
-            variant={sortType === 'date' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleSortChange('date')}
-            className="flex items-center gap-2"
-          >
-            <Clock className="h-4 w-4" />
-            Date
-          </Button>
-          <Button
-            variant={sortType === 'votes' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleSortChange('votes')}
-            className="flex items-center gap-2"
-          >
-            <TrendingUp className="h-4 w-4" />
-            Votes
-          </Button>
+        <div className={`flex items-center gap-2 ${isMobile ? 'flex-col items-start gap-1' : ''}`}>
+          <span className={`text-xs text-gray-500 mr-2 ${isMobile ? 'mr-0 mb-1 text-[10px]' : 'mr-2'}`}>Sort by:</span>
+          <div className={`flex items-center gap-2 ${isMobile ? 'flex-col gap-1' : ''}`}>
+            <Button
+              variant={sortType === 'date' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleSortChange('date')}
+              className={`flex items-center gap-2 ${isMobile ? 'text-xs px-1.5 py-0.5 h-6' : ''}`}
+            >
+              <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+              Date
+            </Button>
+            <Button
+              variant={sortType === 'votes' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => handleSortChange('votes')}
+              className={`flex items-center gap-2 ${isMobile ? 'text-xs px-1.5 py-0.5 h-6' : ''}`}
+            >
+              <TrendingUp className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+              Votes
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Comment Input */}
-      <form onSubmit={handleAddComment} className="mb-6">
+      <form onSubmit={handleAddComment} className={`mb-6 ${isMobile ? 'mb-3' : 'mb-6'}`}>
         {replyingTo && (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
-            <div className="flex items-center gap-2 text-xs text-blue-700 mb-2">
+          <div className={`bg-blue-50 border border-blue-200 rounded-md p-3 mb-3 ${isMobile ? 'p-1.5 mb-1.5' : 'p-3 mb-3'}`}>
+            <div className={`flex items-center gap-2 text-xs text-blue-700 mb-2 ${isMobile ? 'gap-1 mb-1' : 'gap-2 mb-2'}`}>
               <Reply className="w-3 h-3" />
               Replying to {findCommentById(replyingTo, comments)?.author || 'a comment'}
               <Button
@@ -410,7 +421,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
                 <X className="w-3 h-3" />
               </Button>
             </div>
-            <div className="text-xs text-blue-600 bg-blue-100 p-2 rounded border-l-2 border-blue-300">
+            <div className={`text-xs text-blue-600 bg-blue-100 p-2 rounded border-l-2 border-blue-300 ${isMobile ? 'p-1 text-[10px]' : 'p-2'}`}>
               "{findCommentById(replyingTo, comments)?.text || ''}"
             </div>
           </div>
@@ -419,9 +430,9 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
           placeholder={replyingTo ? "Write a reply..." : "Write a comment..."}
           value={newCommentText}
           onChange={(e) => setNewCommentText(e.target.value)}
-          className="mb-3 min-h-[80px]"
+          className={`mb-3 min-h-[80px] ${isMobile ? 'mb-1.5 min-h-[60px] text-sm' : 'mb-3 min-h-[80px]'}`}
         />
-        <div className="flex gap-2">
+        <div className={`flex gap-2 ${isMobile ? 'flex-col gap-1.5' : ''}`}>
           <Button type="submit" className="bg-[#4e1cb3] hover:bg-[#5d2bc4]">
             {replyingTo ? "Post Reply" : "Post Comment"}
           </Button>
@@ -434,7 +445,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
       </form>
 
       {/* Comments List */}
-      <div className="space-y-5">
+      <div className={`space-y-5 ${isMobile ? 'space-y-2' : 'space-y-5'}`}>
         {sortedComments.length === 0 ? (
           <p className="text-gray-500 text-sm">No comments yet. Be the first to share your thoughts!</p>
         ) : (
@@ -456,7 +467,7 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
       </div>
 
       {/* Main Comment Form */}
-      <div className="mt-8">
+      <div className={`mt-8 ${isMobile ? 'mt-4' : 'mt-8'}`}>
         <CommentForm 
           postId={postId}
           onCommentAdded={() => {

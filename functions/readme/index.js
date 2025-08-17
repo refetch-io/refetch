@@ -23,6 +23,7 @@ export default async function ({ req, res, log, error }) {
         const githubOwner = process.env.GITHUB_OWNER;
         const githubRepo = process.env.GITHUB_REPO;
         const githubBranch = process.env.GITHUB_BRANCH || 'main';
+        const appBaseUrl = process.env.APP_BASE_URL || 'https://refetch.io';
         
         // Validate required environment variables
         if (!appwriteEndpoint || !appwriteProjectId || !appwriteApiKey || !appwriteDatabaseId || !appwritePostsCollectionId) {
@@ -32,6 +33,8 @@ export default async function ({ req, res, log, error }) {
         if (!githubToken || !githubOwner || !githubRepo) {
             throw new Error('Missing required GitHub environment variables');
         }
+        
+        log(`App base URL: ${appBaseUrl}`);
         
         log('Environment variables validated successfully');
         
@@ -54,7 +57,7 @@ export default async function ({ req, res, log, error }) {
             [
                 Query.orderDesc('score'),
                 Query.limit(5),
-                Query.select(['title', 'link', 'count', '$createdAt'])
+                Query.select(['title', 'link', 'count', '$createdAt', '$id'])
             ]
         );
         
@@ -75,12 +78,13 @@ export default async function ({ req, res, log, error }) {
                 title: firstPost.title,
                 link: firstPost.link,
                 count: firstPost.count,
-                createdAt: firstPost.$createdAt
+                createdAt: firstPost.$createdAt,
+                id: firstPost.$id
             })}`);
         }
         
         // Format posts for README
-        const formattedPosts = formatPostsForReadme(postsResponse.documents);
+        const formattedPosts = formatPostsForReadme(postsResponse.documents, appBaseUrl);
         
         // Initialize GitHub client
         const octokit = new Octokit({
@@ -281,18 +285,23 @@ export default async function ({ req, res, log, error }) {
 /**
  * Format posts for README display
  */
-function formatPostsForReadme(posts) {
+function formatPostsForReadme(posts, appBaseUrl) {
     const now = new Date();
     
     return posts.map((post, index) => {
         const postDate = new Date(post.$createdAt);
         const timeAgo = getTimeAgo(now - postDate);
         
+        // Create discussion URL using the post ID
+        const discussionUrl = `${appBaseUrl}/threads/${post.$id}`;
+        
         return {
             title: post.title,
-            url: post.link,
+            url: discussionUrl, // Use discussion URL instead of external link
+            externalUrl: post.link, // Keep external link for reference
             count: post.count,
-            timeAgo: timeAgo
+            timeAgo: timeAgo,
+            id: post.$id
         };
     });
 }
@@ -338,7 +347,7 @@ function createNewsSection(posts) {
         const trimmedTitle = post.title.length > 80 ? post.title.substring(0, 77) + '...' : post.title;
         
         html += `**${medal} [${trimmedTitle}](${post.url})**\n`;
-        html += `📊 Votes: **${post.count}** | ⏰ ${post.timeAgo}\n\n`;
+        html += `📊 Votes: **${post.count}** | ⏰ ${post.timeAgo} | 🔗 [Original](${post.externalUrl})\n\n`;
     });
     
     html += `---\n\n`;

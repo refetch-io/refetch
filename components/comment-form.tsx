@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { ChevronUp, ChevronDown, Reply } from "lucide-react"
 
 interface CommentFormProps {
@@ -31,6 +32,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
   const router = useRouter()
   const formRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const isMobile = useIsMobile()
 
   // Load minimized state from localStorage after hydration (only if not forcing open)
   useEffect(() => {
@@ -168,11 +170,11 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
   }
 
   return (
-    <div ref={formRef} className={`bg-white px-4 ${isFixed ? 'py-3' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-[738px] mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
+    <div ref={formRef} className={`bg-white ${isMobile ? 'px-2' : 'px-4'} ${isFixed ? 'py-3' : isMobile ? 'py-2' : 'py-4'} ${isFixed ? 'fixed bottom-0 z-50 rounded-t-lg shadow-lg' : 'rounded-lg shadow-md'} flex ${isFixed ? '' : 'mb-4'} ${isFixed ? '' : 'relative'} group ${isFixed ? 'max-w-[738px] mx-auto left-0 right-0' : ''} transform transition-transform duration-500 ease-out ${!hasAnimated && isHydrated ? 'translate-y-0' : hasAnimated ? '' : 'translate-y-full'}`}>
       {/* Reply Context Tab - Floating above the entire card */}
       {replyId && replyToComment && (
-        <div className="absolute left-6 right-6 top-0 bg-primary/90 text-primary-foreground px-2 py-2 my-4 rounded-t-md -mt-9 animate-in slide-in-from-bottom-2 duration-300 delay-150">
-          <div className="flex items-center justify-between text-xs">
+        <div className={`absolute left-6 right-6 top-0 bg-primary/90 text-primary-foreground px-2 py-2 my-4 rounded-t-md -mt-9 animate-in slide-in-from-bottom-2 duration-300 delay-150 ${isMobile ? 'left-2 right-2 px-1.5 py-1.5 my-2 -mt-7' : ''}`}>
+          <div className={`flex items-center justify-between text-xs ${isMobile ? 'text-[10px]' : ''}`}>
             <div className="flex items-center gap-2">
               <Reply className="w-3 h-3" />
               Replying to {replyToComment.author}
@@ -193,7 +195,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
       
       <div className="flex-1 flex flex-col justify-center min-w-0 relative">
         <div 
-          className={`flex items-center justify-between ${isMinimized ? 'mb-0' : 'mb-3'} ${isHydrated ? 'cursor-pointer' : ''}`}
+          className={`flex items-center justify-between ${isMinimized ? 'mb-0' : isMobile ? 'mb-2' : 'mb-3'} ${isHydrated ? 'cursor-pointer' : ''}`}
           onClick={isHydrated ? toggleMinimized : undefined}
           role={isHydrated ? "button" : undefined}
           tabIndex={isHydrated ? 0 : undefined}
@@ -205,7 +207,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
           } : undefined}
           aria-label={isHydrated ? (isMinimized ? "Expand comment form" : "Minimize comment form") : undefined}
         >
-          <h3 className="font-normal text-gray-900 font-heading text-sm">
+          <h3 className={`font-normal text-gray-900 font-heading text-sm ${isMobile ? 'text-xs' : ''}`}>
             Comment
           </h3>
           {isHydrated && (
@@ -221,10 +223,10 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
         
         {isHydrated && !isMinimized && (
           <>
-            <div className="h-px bg-gray-100 mb-4 -mx-4" />
+            <div className={`h-px bg-gray-100 mb-4 -mx-4 ${isMobile ? 'mb-2 -mx-2' : ''}`} />
           
             {error && (
-              <div className="mb-4 bg-red-500 rounded-lg p-4">
+              <div className={`mb-4 bg-red-500 rounded-lg p-4 ${isMobile ? 'mb-2 p-2' : ''}`}>
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-0.5">
                     <svg className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -232,10 +234,10 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-sm font-bold text-white">
+                    <h3 className={`text-sm font-bold text-white ${isMobile ? 'text-xs' : ''}`}>
                       Error posting comment
                     </h3>
-                    <div className="mt-2 text-sm text-white">
+                    <div className={`mt-2 text-sm text-white ${isMobile ? 'mt-1 text-xs' : ''}`}>
                       <p>{error}</p>
                     </div>
                   </div>
@@ -243,7 +245,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
               </div>
             )}
             
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className={`space-y-3 ${isMobile ? 'space-y-2' : ''}`}>
               <div>
                 {/* Hidden input for replyId */}
                 {replyId && <input type="hidden" name="replyId" value={replyId} />}
@@ -263,7 +265,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
                   placeholder={replyId ? `Reply to ${replyToComment?.author || 'this comment'}...` : "Share your thoughts on this post..."}
                   rows={1}
                   required
-                  className="text-lg h-12 resize-none"
+                  className={`text-lg h-12 resize-none ${isMobile ? 'text-sm h-10' : ''}`}
                   ref={textareaRef}
                 />
               </div>
@@ -273,8 +275,8 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
             </form>
             
             {!isAuthenticated && (
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
+              <div className={`mt-6 text-center ${isMobile ? 'mt-4' : ''}`}>
+                <p className={`text-sm text-gray-600 ${isMobile ? 'text-xs' : ''}`}>
                   You need to be signed in to comment.{" "}
                   <button
                     type="button"
