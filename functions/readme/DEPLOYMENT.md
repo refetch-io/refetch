@@ -103,6 +103,7 @@ appwrite functions createVariable \
    APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id
    ```
 
+
    **GitHub Configuration:**
    ```
    GITHUB_TOKEN=your_github_personal_access_token
