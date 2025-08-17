@@ -4,7 +4,7 @@ This Appwrite Function automatically updates the README.md file in your GitHub r
 
 ## 🚀 Features
 
-- **Automatic Updates**: Fetches top 5 posts by score from Appwrite
+- **Automatic Updates**: Fetches top 5 posts by ranking score from Appwrite
 - **GitHub Integration**: Uses GitHub API to update README without git operations
 - **Smart Formatting**: Creates beautiful, formatted content with medals and metadata
 - **Placeholder Replacement**: Automatically replaces `{{news}}` placeholder in README
@@ -26,8 +26,8 @@ Configure these environment variables in your Appwrite Function:
 
 #### Appwrite Configuration
 ```env
-APPWRITE_ENDPOINT=https://your-appwrite-endpoint.com
-APPWRITE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://your-appwrite-endpoint.com
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
 APPWRITE_API_KEY=your_api_key
 APPWRITE_DATABASE_ID=your_database_id
 APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id
@@ -60,7 +60,7 @@ GITHUB_BRANCH=main  # Optional, defaults to 'main'
 
 The function uses these npm packages:
 
-- `node-appwrite`: Appwrite SDK for Node.js
+- `node-appwrite`: Appwrite SDK for Node.js (v17.2.0)
 - `octokit`: GitHub REST API client
 
 ## 🚀 Deployment
@@ -104,7 +104,7 @@ Configure how the function is invoked:
 
 ## 📊 How It Works
 
-1. **Fetch Posts**: Retrieves top 5 posts by score from Appwrite
+1. **Fetch Posts**: Retrieves top 5 posts by ranking score from Appwrite
 2. **Format Content**: Creates formatted HTML content with medals and metadata
 3. **Get Current README**: Fetches existing README content from GitHub
 4. **Update Content**: Replaces `{{news}}` placeholder or adds new section

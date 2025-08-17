@@ -94,14 +94,14 @@ appwrite functions createVariable \
    - Go to Settings → Environment Variables
    - Add each variable:
 
-   **Appwrite Configuration:**
-   ```
-   APPWRITE_ENDPOINT=https://your-appwrite-endpoint.com
-   APPWRITE_PROJECT_ID=your_project_id
-   APPWRITE_API_KEY=your_api_key
-   APPWRITE_DATABASE_ID=your_database_id
-   APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id
-   ```
+       **Appwrite Configuration:**
+    ```
+    NEXT_PUBLIC_APPWRITE_ENDPOINT=https://your-appwrite-endpoint.com
+    NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
+    APPWRITE_API_KEY=your_api_key
+    APPWRITE_DATABASE_ID=your_database_id
+    APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id
+    ```
 
 
    **GitHub Configuration:**

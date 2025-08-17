@@ -13,8 +13,8 @@ export default async function ({ req, res, log, error }) {
         log('Starting README update process...');
         
         // Get environment variables
-        const appwriteEndpoint = process.env.APPWRITE_ENDPOINT;
-        const appwriteProjectId = process.env.APPWRITE_PROJECT_ID;
+        const appwriteEndpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
+        const appwriteProjectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
         const appwriteApiKey = process.env.APPWRITE_API_KEY;
         const appwriteDatabaseId = process.env.APPWRITE_DATABASE_ID;
         const appwritePostsCollectionId = process.env.APPWRITE_POSTS_COLLECTION_ID;
@@ -43,15 +43,18 @@ export default async function ({ req, res, log, error }) {
         
         const databases = new Databases(client);
         
-        // Fetch top 5 posts by score
+        // Fetch top 5 posts by score field (or count if score doesn't exist)
         log('Fetching top 5 posts from Appwrite...');
+        log(`Database ID: ${appwriteDatabaseId}`);
+        log(`Collection ID: ${appwritePostsCollectionId}`);
+        
         const postsResponse = await databases.listDocuments(
             appwriteDatabaseId,
             appwritePostsCollectionId,
             [
                 Query.orderDesc('score'),
                 Query.limit(5),
-                Query.select(['title', 'url', 'score', 'createdAt', 'author'])
+                Query.select(['title', 'link', 'score', 'count', 'countUp', 'countDown', '$createdAt', 'userName'])
             ]
         );
         
@@ -64,6 +67,21 @@ export default async function ({ req, res, log, error }) {
         }
         
         log(`Found ${postsResponse.documents.length} posts`);
+        
+        // Log first post structure for debugging
+        if (postsResponse.documents.length > 0) {
+            const firstPost = postsResponse.documents[0];
+            log(`Sample post structure: ${JSON.stringify({
+                title: firstPost.title,
+                link: firstPost.link,
+                score: firstPost.score,
+                count: firstPost.count,
+                countUp: firstPost.countUp,
+                countDown: firstPost.countDown,
+                createdAt: firstPost.$createdAt,
+                userName: firstPost.userName
+            })}`);
+        }
         
         // Format posts for README
         const formattedPosts = formatPostsForReadme(postsResponse.documents);
@@ -145,10 +163,10 @@ function formatPostsForReadme(posts) {
         
         return {
             title: post.title,
-            url: post.url,
+            url: post.link,
             score: post.score,
             timeAgo: timeAgo,
-            author: post.author || 'Anonymous'
+            author: post.userName || 'Anonymous'
         };
     });
 }
