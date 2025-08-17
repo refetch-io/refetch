@@ -13,8 +13,8 @@ export default async function ({ req, res, log, error }) {
         log('Starting README update process...');
         
         // Get environment variables
-        const appwriteEndpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
-        const appwriteProjectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
+        const appwriteEndpoint = process.env.APPWRITE_ENDPOINT;
+        const appwriteProjectId = process.env.APPWRITE_PROJECT_ID;
         const appwriteApiKey = process.env.APPWRITE_API_KEY;
         const appwriteDatabaseId = process.env.APPWRITE_DATABASE_ID;
         const appwritePostsCollectionId = process.env.APPWRITE_POSTS_COLLECTION_ID;
