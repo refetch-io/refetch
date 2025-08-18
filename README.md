@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **-1** | ⏰ 15 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+**🥈 [Ars Technica's Guide to PC Building: From Budget to High-End Builds](https://refetch.io/threads/68a30d5e001f0a78e90b)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/08/ars-technica-system-guide-back-to-pc-building-for-back-to-school/)
 
-**🥉 [Exploring the Fun Side of Finite State Transducers](https://refetch.io/threads/68a2a3f6001d957cef26)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://blog.yossarian.net/2025/08/14/Fun-with-finite-state-transducers)
+**🥉 [Exploring MCP Tools and Dependent Types](https://refetch.io/threads/68a311180006f03ceb47)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vlaaad.github.io/mcp-tools-with-dependent-types)
 
-**⭐ [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **-1** | ⏰ 17 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
+**⭐ [Achieving Zero-Downtime: Upgrading Critical Cloud Infrastructure at Scale](https://refetch.io/threads/68a30a480035b4e4fa76)**
+📊 Votes: **0** | ⏰ 50 minutes ago | 🔗 [Original](https://infoq.com/articles/zero-downtime-cloud-upgrades/)
 
 ---
 
-*Last updated: 2025-08-18T10:01:33.776Z*
+*Last updated: 2025-08-18T12:01:29.592Z*
 
 
 
