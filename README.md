@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **-1** | ⏰ 11 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+📊 Votes: **-1** | ⏰ 13 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 **🥈 [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 **🥉 [Exploring the Fun Side of Finite State Transducers](https://refetch.io/threads/68a2a3f6001d957cef26)**
-📊 Votes: **1** | ⏰ 2 hours ago | 🔗 [Original](https://blog.yossarian.net/2025/08/14/Fun-with-finite-state-transducers)
+📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://blog.yossarian.net/2025/08/14/Fun-with-finite-state-transducers)
 
 **⭐ [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
 
 **⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
 
 ---
 
-*Last updated: 2025-08-18T06:01:22.127Z*
+*Last updated: 2025-08-18T08:01:38.534Z*
 
 
 
