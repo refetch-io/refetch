@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Apple Card's Limited-Time Promo: 5% Cashback on Gas and EV Charging Stations](https://refetch.io/threads/68a2842e002d7a4d163d)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/16/apple-card-summer-road-trips-gas-ev-charging-special-promo/)
+**🥇 [Exploring the Fun Side of Finite State Transducers](https://refetch.io/threads/68a2a3f6001d957cef26)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://blog.yossarian.net/2025/08/14/Fun-with-finite-state-transducers)
 
 **🥈 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 **🥉 [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 **⭐ [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
 
 **⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
 
 ---
 
-*Last updated: 2025-08-18T02:01:31.594Z*
+*Last updated: 2025-08-18T04:01:53.620Z*
 
 
 
