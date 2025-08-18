@@ -390,6 +390,12 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
         break
     }
     
+    // Add quality filters to ensure only high-quality, tech-relevant content appears
+    // Filter out low-quality posts and non-tech content
+    queries.push(Query.lessThan('spamScore', QUALITY_THRESHOLDS.MAX_SPAM_SCORE))
+    queries.push(Query.greaterThan('relevancyScore', QUALITY_THRESHOLDS.MIN_RELEVANCY_SCORE))
+    queries.push(Query.equal('enhanced', QUALITY_THRESHOLDS.REQUIRE_ENHANCED))
+    
     // Select only the attributes we actually use to improve performance
     queries.push(Query.select([
       '$id',
@@ -429,6 +435,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       type: post.type,
       readingTime: post.readingTime,
       spamScore: post.spamScore,
+      relevancyScore: post.relevancyScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -451,6 +458,13 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     
     return { posts: [], error: 'Failed to fetch posts from Appwrite' }
   }
+}
+
+// Quality filtering constants for post queries
+const QUALITY_THRESHOLDS = {
+  MAX_SPAM_SCORE: 70,        // Maximum allowed spam score (lower is better)
+  MIN_RELEVANCY_SCORE: 30,   // Minimum required relevancy score for tech audience
+  REQUIRE_ENHANCED: true     // Only show posts that have been processed by AI
 }
 
 // Comment fetching constants
@@ -777,6 +791,12 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
     const twentyFourHoursAgo = getTwentyFourHoursAgo()
     queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
     
+    // Add quality filters to ensure only high-quality, tech-relevant content appears
+    // Filter out low-quality posts and non-tech content
+    queries.push(Query.lessThan('spamScore', 70))        // Spam score must be less than 70 (lower is better)
+    queries.push(Query.greaterThan('relevancyScore', 30)) // Must be at least somewhat relevant to tech audience
+    queries.push(Query.equal('enhanced', true))           // Only show enhanced posts (processed by AI)
+    
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
@@ -845,6 +865,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       type: post.type,
       readingTime: post.readingTime,
       spamScore: post.spamScore,
+      relevancyScore: post.relevancyScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -945,6 +966,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
       type: post.type,
       readingTime: post.readingTime,
       spamScore: post.spamScore,
+      relevancyScore: post.relevancyScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
@@ -1210,6 +1232,12 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
     const twentyFourHoursAgo = getTwentyFourHoursAgo()
     queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
     
+    // Add quality filters to ensure only high-quality, tech-relevant content appears
+    // Filter out low-quality posts and non-tech content
+    queries.push(Query.lessThan('spamScore', 70))        // Spam score must be less than 70 (lower is better)
+    queries.push(Query.greaterThan('relevancyScore', 30)) // Must be at least somewhat relevant to tech audience
+    queries.push(Query.equal('enhanced', true))           // Only show enhanced posts (processed by AI)
+    
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
@@ -1278,6 +1306,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       type: post.type,
       readingTime: post.readingTime,
       spamScore: post.spamScore,
+      relevancyScore: post.relevancyScore,
       $createdAt: post.$createdAt,
       $updatedAt: post.$updatedAt,
       currentVote: null as any
