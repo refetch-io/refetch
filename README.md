@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **-1** | ⏰ 23 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 **⭐ [Apple, Amazon, and the AI Revolution: A Perspective](https://refetch.io/threads/68a334ab0017b4789899)**
-📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://gmays.com/the-biggest-bet-in-tech/)
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://gmays.com/the-biggest-bet-in-tech/)
 
-**⭐ [Transforming an iPad Pro into a Classic Macintosh: A Tech Adventure](https://refetch.io/threads/68a361e9001b3907b915)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://blog.gingerbeardman.com/2021/04/17/turning-an-ipad-pro-into-the-ultimate-classic-macintosh/)
+**⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
+📊 Votes: **1** | ⏰ 1 hour ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
 
 ---
 
-*Last updated: 2025-08-18T18:01:29.513Z*
+*Last updated: 2025-08-18T20:01:20.706Z*
 
 
 
