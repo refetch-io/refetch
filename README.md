@@ -21,30 +21,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Sunday, August 17, 2025)
+## 🔥 Top Posts Today (Monday, August 18, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Automating Database Upgrades with PG Auto Upgrade Docker Container](https://refetch.io/threads/68a24bdb00342cea23a9)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://github.com/pgautoupgrade/docker-pgautoupgrade)
+**🥇 [The Dwindling High-Tech Manufacturing in the United States](https://refetch.io/threads/68a26803001681672e80)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://blog.waldrn.com/p/the-decline-of-high-tech-manufacturing)
 
-**🥈 [Anticipating Meta's Smart Glasses: A Look Ahead to 2025](https://refetch.io/threads/68a24bb800329a8e2ea0)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/2025/1/3/24333045/command-line-reader-mailbag-issue-2025)
+**🥈 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
-
-**⭐ [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+**🥉 [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 **⭐ [Secure Boot, TPM and Anti-Cheat Engines: A Deep Dive](https://refetch.io/threads/68a21b13002ffe7a6ec3)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://andrewmoore.ca/blog/post/anticheat-secure-boot-tpm/)
+
+**⭐ [NASA’s SWOT Satellite: A Detailed Capture of Kamchatka Megaquake Tsunami](https://refetch.io/threads/68a21e55001b6ec0e589)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250815034719.htm)
 
 ---
 
-*Last updated: 2025-08-17T22:01:35.327Z*
+*Last updated: 2025-08-18T00:00:27.213Z*
 
 
 
