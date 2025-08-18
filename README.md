@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [Ars Technica's Guide to PC Building: From Budget to High-End Builds](https://refetch.io/threads/68a30d5e001f0a78e90b)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/08/ars-technica-system-guide-back-to-pc-building-for-back-to-school/)
+**🥈 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **-1** | ⏰ 21 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**🥉 [Exploring MCP Tools and Dependent Types](https://refetch.io/threads/68a311180006f03ceb47)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vlaaad.github.io/mcp-tools-with-dependent-types)
+**🥉 [Apple, Amazon, and the AI Revolution: A Perspective](https://refetch.io/threads/68a334ab0017b4789899)**
+📊 Votes: **1** | ⏰ 1 hour ago | 🔗 [Original](https://gmays.com/the-biggest-bet-in-tech/)
 
-**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **-1** | ⏰ 17 hours ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
+**⭐ [The Struggle with AI Pilots: An MIT Report Analysis](https://refetch.io/threads/68a34263002b71ea021b)**
+📊 Votes: **1** | ⏰ 50 minutes ago | 🔗 [Original](https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/)
 
-**⭐ [Achieving Zero-Downtime: Upgrading Critical Cloud Infrastructure at Scale](https://refetch.io/threads/68a30a480035b4e4fa76)**
-📊 Votes: **0** | ⏰ 50 minutes ago | 🔗 [Original](https://infoq.com/articles/zero-downtime-cloud-upgrades/)
+**⭐ [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
+📊 Votes: **1** | ⏰ 20 hours ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 ---
 
-*Last updated: 2025-08-18T12:01:29.592Z*
+*Last updated: 2025-08-18T16:00:49.170Z*
 
 
 
