@@ -21,30 +21,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Sunday, August 17, 2025)
+## 🔥 Top Posts Today (Monday, August 18, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Anthropic's Claude Models: A Step Towards Safer Conversations](https://techcrunch.com/2025/08/16/anthropic-says-some-claude-models-can-now-end-harmful-or-abusive-conversations/)**
-📊 Votes: **2** | ⏰ 18 hours ago
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [The 16 Billion Password Story: A Deep Dive into Data Trolling](https://www.troyhunt.com/that-16-billion-password-story-aka-data-troll/)**
-📊 Votes: **2** | ⏰ 18 hours ago
+**🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
-**🥉 [Node.js Now Supports Execution of TypeScript Files](https://nodejs.org/en/blog/release/v22.18.0)**
-📊 Votes: **2** | ⏰ 9 hours ago
+**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**⭐ [Revolutionizing Battery Recycling: Princeton NuEnergy's Tech Recovers 97% of ...](https://www.energy-reporters.com/environment/97-battery-recycling-breakthrough-princeton-nuenergy-opens-first-u-s-commercial-facility-cutting-costs-38-and-slashing-environmental-impact/)**
-📊 Votes: **1** | ⏰ 21 hours ago
+**⭐ [Apple, Amazon, and the AI Revolution: A Perspective](https://refetch.io/threads/68a334ab0017b4789899)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://gmays.com/the-biggest-bet-in-tech/)
 
-**⭐ [Visualized: Desktop vs. Mobile Global Web Traffic Over Time](https://www.visualcapitalist.com/desktop-vs-mobile-global-web-traffic/)**
-📊 Votes: **0** | ⏰ 15 hours ago
+**⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
+📊 Votes: **1** | ⏰ 1 hour ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
 
 ---
 
-*Last updated: 2025-08-17T16:01:31.719Z*
+*Last updated: 2025-08-18T20:01:20.706Z*
 
 
 
