@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+**🥇 [Debunking Myths: The Reality of Mindless Machines](https://refetch.io/threads/68a3a12d00172551270a)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://lareviewofbooks.org/article/mindless-machines-mindless-myths/)
 
-**🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+**🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+
+**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
 📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
-**⭐ [Apple, Amazon, and the AI Revolution: A Perspective](https://refetch.io/threads/68a334ab0017b4789899)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://gmays.com/the-biggest-bet-in-tech/)
-
 **⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
-📊 Votes: **1** | ⏰ 1 hour ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
+📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
 
 ---
 
-*Last updated: 2025-08-18T20:01:20.706Z*
+*Last updated: 2025-08-18T22:02:00.703Z*
 
 
 
