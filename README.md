@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **0** | ⏰ 18 minutes ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
-
-**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **2** | ⏰ 1 day ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
+**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+
 **🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **1** | ⏰ 22 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
 
 **⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
 📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 ---
 
-*Last updated: 2025-08-19T14:01:20.380Z*
+*Last updated: 2025-08-19T16:02:00.330Z*
 
 
 
