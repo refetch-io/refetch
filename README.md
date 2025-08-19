@@ -21,30 +21,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, August 18, 2025)
+## 🔥 Top Posts Today (Tuesday, August 19, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Debunking Myths: The Reality of Mindless Machines](https://refetch.io/threads/68a3a12d00172551270a)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://lareviewofbooks.org/article/mindless-machines-mindless-myths/)
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+**🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
-**🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
-
-**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
 📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 **⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
-📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
+
+**⭐ [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
+📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 ---
 
-*Last updated: 2025-08-18T22:02:00.703Z*
+*Last updated: 2025-08-19T00:03:38.236Z*
 
 
 
