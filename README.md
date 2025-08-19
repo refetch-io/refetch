@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+📊 Votes: **2** | ⏰ 14 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
-**🥉 [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+**🥉 [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+
+**⭐ [Beyond React: Understanding Image Formats](https://refetch.io/threads/68a3d253002dfb3f9bcd)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://idiallo.com/blog/react-and-image-format)
+
+**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
 📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
-
-**⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
-
-**⭐ [A Visual Journey into Gaussian Processes](https://refetch.io/threads/68a23398001f96c207f3)**
-📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://distill.pub/2019/visual-exploration-gaussian-processes/)
 
 ---
 
-*Last updated: 2025-08-19T00:03:38.236Z*
+*Last updated: 2025-08-19T02:01:50.411Z*
 
 
 
