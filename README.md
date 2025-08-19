@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Meta Launches AI-Powered Translations for Creators Worldwide](https://refetch.io/threads/68a4b6c9002b65c51a3e)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/19/meta-rolls-out-ai-powered-translations-to-creators-globally-starting-with-english-and-spanish/)
-
-**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **2** | ⏰ 1 day ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥉 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+
+**🥉 [Benchmarking Tigris Against AWS S3 and Cloudflare R2 for Small Objects](https://refetch.io/threads/68a4cfb7001671e8ee77)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://www.tigrisdata.com/blog/benchmark-small-objects/)
 
 **⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 17 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+📊 Votes: **0** | ⏰ 19 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
 
 ---
 
-*Last updated: 2025-08-19T18:01:27.779Z*
+*Last updated: 2025-08-19T20:01:22.034Z*
 
 
 
