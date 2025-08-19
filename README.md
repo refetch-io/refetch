@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **2** | ⏰ 18 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+📊 Votes: **2** | ⏰ 20 hours ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **1** | ⏰ 16 hours ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **🥉 [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
 
 **⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
 📊 Votes: **-1** | ⏰ 1 day ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 **⭐ [AI Speed: A Crisis in the Making?](https://refetch.io/threads/68a3770800196b1b165a)**
-📊 Votes: **2** | ⏰ 11 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
+📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://venturebeat.com/ai/the-looming-crisis-of-ai-speed-without-guardrails/)
 
 ---
 
-*Last updated: 2025-08-19T06:01:06.495Z*
+*Last updated: 2025-08-19T08:02:00.828Z*
 
 
 
