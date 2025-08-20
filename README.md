@@ -21,7 +21,7 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Tuesday, August 19, 2025)
+## 🔥 Top Posts Today (Wednesday, August 20, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
@@ -31,20 +31,20 @@
 📊 Votes: **2** | ⏰ 1 day ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
-**🥉 [Exploring Recursion, Immutable Data, and Pure Functions Through JavaScript Mazes](https://refetch.io/threads/68a4eb9a002c0fd676ca)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://jrsinclair.com/articles/2025/joy-of-immutable-data-recursion-pure-functions-javascript-mazes/)
-
-**⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+**🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 21 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+📊 Votes: **0** | ⏰ 23 hours ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
+
+**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
+📊 Votes: **-1** | ⏰ 2 days ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 ---
 
-*Last updated: 2025-08-19T22:01:19.398Z*
+*Last updated: 2025-08-20T00:02:54.375Z*
 
 
 
