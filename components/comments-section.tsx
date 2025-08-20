@@ -15,6 +15,7 @@ import { getCachedJWT } from "@/lib/jwtCache"
 import { handleVote } from "@/lib/voteHandler"
 import { deleteComment } from "@/lib/commentHandler"
 import { ArrowUpDown, Clock, TrendingUp, Reply, X, Trash2 } from "lucide-react"
+import { BotLabel } from "@/components/bot-label"
 
 interface CommentItemProps {
   comment: Comment
@@ -93,13 +94,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <AvatarFallback>{comment.author.charAt(0)}</AvatarFallback>
           </Avatar>
           <span className="font-semibold text-gray-800">{comment.author}</span>
+          {/* Bot detection logic - show for falsy values (0, empty string, undefined) */}
+          {!comment.userId && (
+            <BotLabel />
+          )}
           {isOriginalPoster && (
             <>
               <span className="text-gray-500">•</span>
               <span className="text-gray-500 text-xs">original poster</span>
             </>
           )}
-          <span className="text-gray-500">• {comment.timeAgo}</span>
+          <span className="text-gray-500">•</span>
+          <span className="text-gray-500 text-xs">{comment.timeAgo}</span>
           {/* Delete button - only show for comment owners */}
           {onDeleteComment && comment.userId && currentUserId && comment.userId === currentUserId && (
             <>
