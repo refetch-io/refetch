@@ -403,7 +403,7 @@ function RotatingAdCopy() {
 
   useEffect(() => {
     setIsClient(true)
-    setCurrentIndex(Math.floor(Math.random() * 2))
+    setCurrentIndex(Math.floor(Math.random() * adCopies.length))
   }, [])
 
   const currentAd = adCopies[currentIndex]
