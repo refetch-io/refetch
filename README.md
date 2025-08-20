@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+**🥇 [Exploring the Best Options for Integrating AI in Chip Design](https://refetch.io/threads/68a608d2001faae85541)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://semiengineering.com/best-options-for-using-ai-in-chip-design/)
+
+**🥈 [Optimizing Ordered Insertion in OrioleDB](https://refetch.io/threads/68a608d3002c5b22bd41)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://www.orioledb.com/blog/batch-inserts)
+
+**🥉 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+**⭐ [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
 📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
-**🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+**⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **1** | ⏰ 2 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
-
-**⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
-
-**⭐ [Introducing Tidewave Web: An In-Browser Coding Agent for Rails and Phoenix](https://refetch.io/threads/68a5a9a4000c74ac9346)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://tidewave.ai/blog/tidewave-web-phoenix-rails)
 
 ---
 
-*Last updated: 2025-08-20T16:01:18.610Z*
+*Last updated: 2025-08-20T18:01:26.268Z*
 
 
 
