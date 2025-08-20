@@ -2,7 +2,7 @@
 import { LeftSidebar } from "@/components/left-sidebar"
 import { BackToTopButton } from "@/components/back-to-top-button"
 import { MobileNavigation } from "@/components/mobile-navigation"
-import { BrowserExtensionCTA } from "@/components/browser-extension-cta"
+// import { BrowserExtensionCTA } from "@/components/browser-extension-cta"
 import { Header } from "@/components/header"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
@@ -34,7 +34,7 @@ export default function MainLayout({
 
       {/* Browser Extension CTA - Above all sections */}
       <div className="max-w-7xl mx-auto pr-4 pl-4 sm:pr-6 pt-[80px]">
-        <BrowserExtensionCTA />
+        {/* <BrowserExtensionCTA /> */}
       </div>
 
       {/* Main content wrapper with padding to account for fixed header */}
