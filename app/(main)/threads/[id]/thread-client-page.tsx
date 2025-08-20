@@ -6,13 +6,14 @@ import { useEffect, useState, useMemo, useCallback, memo } from "react"
 import type { NewsItem, Comment } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
 import { handleVote, fetchUserVotesForResources } from "@/lib/voteHandler"
+import { deleteComment } from "@/lib/commentHandler"
 import { useAuth } from "@/contexts/auth-context"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { PostCard } from "@/components/post-card"
 import { avatars } from "@/lib/appwrite"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Clock, TrendingUp, Reply, ChevronDown, ChevronUp } from "lucide-react"
+import { Clock, TrendingUp, Reply, ChevronDown, ChevronUp, Trash2 } from "lucide-react"
 
 interface ThreadClientPageProps {
   article: NewsItem
@@ -31,6 +32,8 @@ interface CommentItemProps {
   isOriginalPoster: (commentUserId: string) => boolean
   getCommentVoteState: (commentId: string) => VoteState
   getCommentChildren: (commentId: string) => Comment[]
+  onDeleteComment?: (commentId: string) => void // Add callback for deleting comment
+  currentUserId?: string // Add current user ID for ownership check
 }
 
 const CommentItem = memo<CommentItemProps>(({ 
@@ -42,7 +45,9 @@ const CommentItem = memo<CommentItemProps>(({
   isAuthenticated,
   isOriginalPoster,
   getCommentVoteState,
-  getCommentChildren
+  getCommentChildren,
+  onDeleteComment,
+  currentUserId
 }) => {
   const canReply = depth < 2 // Allow replies up to depth 2 (3 levels total)
   
@@ -86,6 +91,7 @@ const CommentItem = memo<CommentItemProps>(({
               <span className="text-gray-500 text-xs">original poster</span>
             </>
           )}
+          <span className="text-gray-500">• {comment.timeAgo}</span>
         </div>
         <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{comment.text}</div>
         
@@ -100,6 +106,18 @@ const CommentItem = memo<CommentItemProps>(({
             size="sm"
           />
           <div className="text-xs text-gray-500">{comment.timeAgo}</div>
+          {/* Delete button - only show for comment owners, positioned before reply */}
+          {onDeleteComment && comment.userId && currentUserId && comment.userId === currentUserId && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-auto p-1 text-xs text-gray-500 hover:text-red-600 flex items-center gap-1"
+              onClick={() => onDeleteComment(comment.id)}
+            >
+              <Trash2 className="w-3 h-3" />
+              Delete
+            </Button>
+          )}
           {canReply && (
             <Button
               variant="ghost"
@@ -128,6 +146,8 @@ const CommentItem = memo<CommentItemProps>(({
                 isOriginalPoster={isOriginalPoster}
                 getCommentVoteState={getCommentVoteState}
                 getCommentChildren={getCommentChildren}
+                onDeleteComment={onDeleteComment}
+                currentUserId={currentUserId}
               />
             ))}
           </div>
@@ -430,6 +450,55 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
     }
   }, [isAuthenticated, isCommentVoting, getCommentVoteState, updateCommentVoteState])
 
+  const handleDeleteComment = useCallback(async (commentId: string) => {
+    if (!isAuthenticated || !user) {
+      return
+    }
+
+    if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+      try {
+        const result = await deleteComment(commentId)
+        if (result.success) {
+          // Remove the comment from the comment map
+          setCommentMap(prev => {
+            const newMap = new Map(prev)
+            newMap.delete(commentId)
+            return newMap
+          })
+          
+          // Also remove any replies to this comment
+          setCommentMap(prev => {
+            const newMap = new Map(prev)
+            const commentsToRemove: string[] = []
+            
+            // Find all replies to this comment
+            newMap.forEach((comment, id) => {
+              if (comment.parentId === commentId) {
+                commentsToRemove.push(id)
+              }
+            })
+            
+            // Remove all replies
+            commentsToRemove.forEach(id => newMap.delete(id))
+            return newMap
+          })
+          
+          // Remove vote states for deleted comments
+          setCommentVoteStates(prev => {
+            const newStates = { ...prev }
+            delete newStates[commentId]
+            return newStates
+          })
+        } else {
+          alert(`Failed to delete comment: ${result.error}`)
+        }
+      } catch (error) {
+        console.error('Error deleting comment:', error)
+        alert('Failed to delete comment')
+      }
+    }
+  }, [isAuthenticated, user])
+
   const handleSortChange = (newSortType: SortType) => {
     if (sortType === newSortType) {
       // Toggle direction if clicking the same sort type
@@ -547,6 +616,8 @@ export function ThreadClientPage({ article }: ThreadClientPageProps) {
                 isOriginalPoster={isOriginalPoster}
                 getCommentVoteState={getCommentVoteState}
                 getCommentChildren={getCommentChildren}
+                onDeleteComment={handleDeleteComment}
+                currentUserId={user?.$id}
               />
             ))}
           </div>

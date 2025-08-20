@@ -13,7 +13,8 @@ import { useAuth } from "@/hooks/use-auth"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { getCachedJWT } from "@/lib/jwtCache"
 import { handleVote } from "@/lib/voteHandler"
-import { ArrowUpDown, Clock, TrendingUp, Reply, X } from "lucide-react"
+import { deleteComment } from "@/lib/commentHandler"
+import { ArrowUpDown, Clock, TrendingUp, Reply, X, Trash2 } from "lucide-react"
 
 interface CommentItemProps {
   comment: Comment
@@ -25,6 +26,8 @@ interface CommentItemProps {
   isOriginalPoster: boolean
   depth?: number
   onReplyToComment?: (commentId: string) => void // Add callback for replying to comment
+  onDeleteComment?: (commentId: string) => void // Add callback for deleting comment
+  currentUserId?: string // Add current user ID for ownership check
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ 
@@ -36,7 +39,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
   isAuthenticated,
   isOriginalPoster,
   depth = 0,
-  onReplyToComment
+  onReplyToComment,
+  onDeleteComment,
+  currentUserId
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
@@ -54,6 +59,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const handleReplyToComment = () => {
     if (onReplyToComment) {
       onReplyToComment(comment.id)
+    }
+  }
+
+  const handleDeleteComment = async () => {
+    if (!onDeleteComment) return
+    
+    if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+      onDeleteComment(comment.id)
     }
   }
 
@@ -87,6 +100,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
             </>
           )}
           <span className="text-gray-500">• {comment.timeAgo}</span>
+          {/* Delete button - only show for comment owners */}
+          {onDeleteComment && comment.userId && currentUserId && comment.userId === currentUserId && (
+            <>
+              <span className="text-gray-500">•</span>
+              <button
+                onClick={handleDeleteComment}
+                className="text-xs text-red-600 hover:text-red-800 hover:underline cursor-pointer flex items-center gap-1"
+              >
+                <Trash2 className="w-3 h-3" />
+                delete
+              </button>
+            </>
+          )}
+
         </div>
         <p className={`text-gray-700 mt-1 text-sm ${isMobile ? 'mt-0.5 text-xs' : 'mt-1'}`}>{comment.text}</p>
         
@@ -168,6 +195,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 isOriginalPoster={false}
                 depth={currentDepth + 1}
                 onReplyToComment={onReplyToComment}
+                onDeleteComment={onDeleteComment}
+                currentUserId={currentUserId}
               />
             ))}
           </div>
@@ -194,6 +223,8 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
   const [commentVotes, setCommentVotes] = useState<Map<string, VoteState>>(new Map())
   const [votingComments, setVotingComments] = useState<Set<string>>(new Set())
   const [replyingTo, setReplyingTo] = useState<string | null>(null) // Track which comment we're replying to
+
+
 
   // Helper function to check if a comment is from the original poster
   const isOriginalPoster = (commentUserId: string) => {
@@ -351,6 +382,37 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
     }
   }, [commentVotes, user])
 
+  const handleDeleteComment = useCallback(async (commentId: string) => {
+    if (!user) {
+      return
+    }
+
+    try {
+      const result = await deleteComment(commentId)
+      if (result.success) {
+        // Remove the comment from local state
+        const removeComment = (comments: Comment[], targetId: string): Comment[] => {
+          return comments.filter(comment => {
+            if (comment.id === targetId) {
+              return false
+            }
+            if (comment.replies && comment.replies.length > 0) {
+              comment.replies = removeComment(comment.replies, targetId)
+            }
+            return true
+          })
+        }
+        
+        setComments(prev => removeComment(prev, commentId))
+      } else {
+        alert(`Failed to delete comment: ${result.error}`)
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error)
+      alert('Failed to delete comment')
+    }
+  }, [user])
+
   const handleSortChange = (newSortType: SortType) => {
     setSortType(newSortType)
   }
@@ -461,6 +523,8 @@ export function CommentsSection({ initialComments, postId, postUserId }: Comment
               isOriginalPoster={Boolean(isOriginalPoster(comment.userId || ''))}
               depth={comment.depth || 0}
               onReplyToComment={(commentId) => setReplyingTo(commentId)}
+              onDeleteComment={handleDeleteComment}
+              currentUserId={user?.$id}
             />
           ))
         )}

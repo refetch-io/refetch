@@ -392,13 +392,13 @@ function RotatingAdCopy() {
       description: "Build faster with our fully managed backend platform.",
       linkUrl: "https://appwrite.io"
     },
-    {
-      logoUrl: "https://imagine.dev/favicon.png",
-      logoAlt: "Imagine Logo", 
-      title: "Imagine",
-      description: "Build faster with our fullstack vibe coding platform.",
-      linkUrl: "https://imagine.dev"
-    }
+    // {
+    //   logoUrl: "https://imagine.dev/favicon.png",
+    //   logoAlt: "Imagine Logo", 
+    //   title: "Imagine",
+    //   description: "Build faster with the fullstack vibe coding platform.",
+    //   linkUrl: "https://imagine.dev"
+    // }
   ]
 
   useEffect(() => {
