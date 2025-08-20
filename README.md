@@ -31,7 +31,7 @@
 📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **0** | ⏰ 22 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
 **🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
@@ -40,11 +40,11 @@
 📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
 
 **⭐ [Introducing Tidewave Web: An In-Browser Coding Agent for Rails and Phoenix](https://refetch.io/threads/68a5a9a4000c74ac9346)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://tidewave.ai/blog/tidewave-web-phoenix-rails)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://tidewave.ai/blog/tidewave-web-phoenix-rails)
 
 ---
 
-*Last updated: 2025-08-20T12:00:17.282Z*
+*Last updated: 2025-08-20T14:00:38.775Z*
 
 
 
