@@ -34,17 +34,17 @@
 📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
 **🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **1** | ⏰ 2 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 **⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
 📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
 
 **⭐ [Introducing Tidewave Web: An In-Browser Coding Agent for Rails and Phoenix](https://refetch.io/threads/68a5a9a4000c74ac9346)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://tidewave.ai/blog/tidewave-web-phoenix-rails)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://tidewave.ai/blog/tidewave-web-phoenix-rails)
 
 ---
 
-*Last updated: 2025-08-20T14:00:38.775Z*
+*Last updated: 2025-08-20T16:01:18.610Z*
 
 
 
