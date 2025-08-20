@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+**🥇 [China's Unprecedented Blocking of All HTTPS Connections Abroad](https://refetch.io/threads/68a56329003e20be89f2)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://gfw.report/blog/gfw_unconditional_rst_20250820/en/)
+
+**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **2** | ⏰ 1 day ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+**🥉 [Optimizing Ruby: Making it Faster Than Ever](https://refetch.io/threads/68a55c110032271390ac)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://noteflakes.com/articles/2025-08-18-how-to-make-ruby-faster)
 
-**🥉 [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+**⭐ [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+📊 Votes: **0** | ⏰ 16 hours ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+
+**⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
-
-**⭐ [Persistent Risk: XZ Utils Backdoor in Docker Images](https://refetch.io/threads/68a3c7da001d8865de43)**
-📊 Votes: **0** | ⏰ 1 day ago | 🔗 [Original](https://www.binarly.io/blog/persistent-risk-xz-utils-backdoor-still-lurking-in-docker-images)
-
-**⭐ [Comparing Update Performance: ClickHouse vs PostgreSQL](https://refetch.io/threads/68a21e4b001f5170c779)**
-📊 Votes: **-1** | ⏰ 2 days ago | 🔗 [Original](https://clickhouse.com/blog/update-performance-clickhouse-vs-postgresql)
 
 ---
 
-*Last updated: 2025-08-20T04:01:42.724Z*
+*Last updated: 2025-08-20T06:01:30.333Z*
 
 
 
