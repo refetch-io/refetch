@@ -44,7 +44,7 @@ export function Footer({ variant = 'sidebar', bottomPadding }: FooterProps) {
           Security
         </a>
         <span>•</span>
-        <a href="#" className="hover:text-gray-700 bg-gray-200/60 px-2 py-1 rounded-md hover:bg-gray-200/80 transition-colors">
+        <a href="https://github.com/sponsors/refetch-io" target="_blank" className="hover:text-gray-700 bg-gray-200/60 px-2 py-1 rounded-md hover:bg-gray-200/80 transition-colors">
           Donate
         </a>
         <span>•</span>
