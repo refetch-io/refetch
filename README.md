@@ -30,21 +30,21 @@
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **4** | ⏰ 3 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [The Risks of Image Scaling in AI Systems](https://refetch.io/threads/68a71b15002549628211)**
-📊 Votes: **0** | ⏰ 49 minutes ago | 🔗 [Original](https://blog.trailofbits.com/2025/08/21/weaponizing-image-scaling-against-production-ai-systems/)
-
-**🥉 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
 📊 Votes: **1** | ⏰ 2 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
-**⭐ [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
-📊 Votes: **1** | ⏰ 21 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
+**🥉 [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
+📊 Votes: **1** | ⏰ 23 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
 
 **⭐ [Comprehensive Overview of Made by Google 2025 Announcements](https://refetch.io/threads/68a61df400251355b852)**
-📊 Votes: **2** | ⏰ 18 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **2** | ⏰ 20 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+
+**⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
+📊 Votes: **2** | ⏰ 3 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 ---
 
-*Last updated: 2025-08-21T14:01:17.691Z*
+*Last updated: 2025-08-21T16:01:21.543Z*
 
 
 
