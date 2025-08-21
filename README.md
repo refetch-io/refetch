@@ -30,21 +30,21 @@
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **4** | ⏰ 2 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
-**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
+**🥈 [The Illumos Cafe: A New Space for OS Diversity](https://refetch.io/threads/68a6cd790036d0b770cf)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://it-notes.dragas.net/2025/08/18/introducing-the-illumos-cafe/)
+
+**🥉 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
-**🥉 [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
+**⭐ [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
 
 **⭐ [Comprehensive Overview of Made by Google 2025 Announcements](https://refetch.io/threads/68a61df400251355b852)**
-📊 Votes: **2** | ⏰ 10 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
-
-**⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **2** | ⏰ 12 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 ---
 
-*Last updated: 2025-08-21T06:01:36.241Z*
+*Last updated: 2025-08-21T08:00:23.710Z*
 
 
 
