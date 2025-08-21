@@ -365,28 +365,26 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
     
     let queries = []
     
+    // Always filter posts to only show those from the last 24 hours
+    const twentyFourHoursAgo = getTwentyFourHoursAgo()
+    queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
+    
     // Apply different sorting based on sortType
     switch (sortType) {
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
-        queries = [
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'new':
         // Sort by creation date - newest first
-        queries = [
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'show':
         // Filter by type=show, sort by count first, then by creation date
-        queries = [
-          Query.equal('type', 'show'),
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.equal('type', 'show'))
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
     }
     
@@ -801,24 +799,18 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
     switch (sortType) {
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
-        queries = [
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'new':
         // Sort by creation date - newest first
-        queries = [
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'show':
         // Filter by type=show, sort by score first, then by creation date
-        queries = [
-          Query.equal('type', 'show'),
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.equal('type', 'show'))
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
     }
     
@@ -1242,24 +1234,18 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
     switch (sortType) {
       case 'score':
         // Sort by count (total score) - highest first, then by creation date
-        queries = [
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'new':
         // Sort by creation date - newest first
-        queries = [
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.orderDesc('$createdAt'))
         break
       case 'show':
         // Filter by type=show, sort by score first, then by creation date
-        queries = [
-          Query.equal('type', 'show'),
-          Query.orderDesc('score'),
-          Query.orderDesc('$createdAt')
-        ]
+        queries.push(Query.equal('type', 'show'))
+        queries.push(Query.orderDesc('score'))
+        queries.push(Query.orderDesc('$createdAt'))
         break
     }
     

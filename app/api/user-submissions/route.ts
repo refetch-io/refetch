@@ -45,12 +45,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch posts by the current user with pagination
+    // Fetch posts by the current user with pagination (only from last 24 hours)
     const posts = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [
         Query.equal('userId', user.$id),
+        Query.greaterThan('$createdAt', new Date(Date.now() - (24 * 60 * 60 * 1000)).toISOString()), // Only show posts from last 24 hours
         Query.orderDesc('$createdAt'),
         Query.limit(limit),
         Query.offset(offset),
