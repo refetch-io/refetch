@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: "https://refetch.io",
     images: [
       {
-        url: "https://refetch.io/api/og/default",
+        url: "https://refetch.io/og.png",
         width: 1200,
         height: 630,
         alt: "Refetch - Tech news and discussions",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Refetch - Open Source Hacker News Alternative",
     description: "Discover curated tech news, discussions, and community-driven content on Refetch, the open-source alternative to Hacker News.",
-    images: ["https://refetch.io/api/og/default"],
+    images: ["https://refetch.io/og.png"],
   },
 }
 

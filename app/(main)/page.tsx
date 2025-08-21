@@ -11,6 +11,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Refetch - Latest Tech News & Discussions",
     description: "Discover the latest technology news, startup updates, and programming discussions on Refetch. An open-source community-driven platform for tech enthusiasts.",
+    type: "website",
+    url: "https://refetch.io",
+    images: [
+      {
+        url: "https://refetch.io/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Refetch - Tech news and discussions",
+      },
+    ],
+    siteName: "Refetch",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Refetch - Latest Tech News & Discussions",
+    description: "Discover the latest technology news, startup updates, and programming discussions on Refetch. An open-source community-driven platform for tech enthusiasts.",
+    images: ["https://refetch.io/og.png"],
   },
 }
 

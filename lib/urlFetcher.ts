@@ -18,7 +18,6 @@ export class URLContentFetcher {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; RefetchBot/1.0; +https://refetch.com)',
         },
-        timeout: 10000, // 10 second timeout
       });
 
       if (!response.ok) {
