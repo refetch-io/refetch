@@ -34,17 +34,17 @@
 📊 Votes: **1** | ⏰ 1 day ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
 **🥉 [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
-📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
+📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
 
 **⭐ [Comprehensive Overview of Made by Google 2025 Announcements](https://refetch.io/threads/68a61df400251355b852)**
-📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 **⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
 📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 ---
 
-*Last updated: 2025-08-21T00:02:52.647Z*
+*Last updated: 2025-08-21T02:01:20.278Z*
 
 
 
