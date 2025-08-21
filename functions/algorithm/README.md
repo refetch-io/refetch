@@ -74,7 +74,7 @@ The scoring weights can be easily modified in the `SCORING_WEIGHTS` constant to 
 ### 2. Calculate Time Decay
 - Determines hours since post creation
 - Applies exponential decay formula for smooth score reduction
-- Ensures scores reach 0 at exactly 24 hours
+- Ensures scores reach 0 at exactly 16 hours
 
 ### 3. Apply Scoring Rules
 - Each quality metric is normalized to 0-100 scale

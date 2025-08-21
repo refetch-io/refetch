@@ -3,7 +3,7 @@
  * 
  * This function calculates ranking scores for posts based on multiple factors:
  * - Tech relevancy (highest priority - ensures content is relevant for tech audience)
- * - Time decay (posts lose relevance over 24 hours)
+ * - Time decay (posts lose relevance over 16 hours)
  * - Quality metrics (spelling, spam, safety, quality scores)
  * - Sensation score for dramatic tech news (0-100 scale)
  * - Weighted scoring system for fair ranking
@@ -57,7 +57,7 @@ const PROCESSING_CONFIG = {
   batchSize: 1000,          // Number of posts to process in each batch (read and write)
   maxProcessingTime: 900000, // Maximum processing time in milliseconds (15 minutes)
   rateLimitDelay: 100,       // Delay between batches to avoid rate limiting
-  timeScoreDecayHours: 24    // Hours over which time score decays to 0
+  timeScoreDecayHours: 16    // Hours over which time score decays to 0
 };
 
 /**
@@ -103,7 +103,7 @@ export default async function ({ req, res, log, error }) {
     const posts = await fetchPostsToProcess(databases, DATABASE_ID, COLLECTION_ID, log);
     
     if (posts.length === 0) {
-      log('ℹ️ No posts found to process. All posts may already be processed or outside the 24-hour window.');
+      log('ℹ️ No posts found to process. All posts may already be processed or outside the 16-hour window.');
       return res.json({
         message: 'No posts to process',
         status: 'success',
@@ -184,8 +184,8 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
   try {
     log('🔍 Fetching posts for algorithm processing using cursor pagination...');
     
-    // Calculate the timestamp for 24 hours ago
-    const twentyFourHoursAgo = new Date(Date.now() - (24 * 60 * 60 * 1000));
+    // Calculate the timestamp for 16 hours ago
+    const sixteenHoursAgo = new Date(Date.now() - (16 * 60 * 60 * 1000));
     
     const allPosts = [];
     let cursor = null;
@@ -198,7 +198,7 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
       const queries = [
         Query.equal('enhanced', true),
         Query.greaterThan('timeScore', 0),
-        Query.greaterThan('$createdAt', twentyFourHoursAgo.toISOString()),
+        Query.greaterThan('$createdAt', sixteenHoursAgo.toISOString()),
         Query.orderDesc('$createdAt'), // Process newest posts first
         Query.limit(PROCESSING_CONFIG.batchSize) // Fetch 1000 posts per batch
       ];
@@ -244,14 +244,14 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
 
 /**
  * Calculate the time decay score for a post
- * New posts start with 100, old posts (23-24 hours) get 0
+ * New posts start with 100, old posts (15-16 hours) get 0
  */
 function calculateTimeDecayScore(createdAt, currentTimeScore) {
   const now = new Date();
   const created = new Date(createdAt);
   const hoursSinceCreation = (now - created) / (1000 * 60 * 60);
   
-  // If post is older than 24 hours, time score should be 0
+  // If post is older than 16 hours, time score should be 0
   if (hoursSinceCreation >= PROCESSING_CONFIG.timeScoreDecayHours) {
     return 0;
   }
