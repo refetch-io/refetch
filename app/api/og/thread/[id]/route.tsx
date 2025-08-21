@@ -291,7 +291,7 @@ export async function GET(
                 {/* Comments */}
                 {post.countComments !== undefined && (
                   <span style={{ color: '#4e1cb3' }}>
-                    {post.countComments} comments
+                    {post.countComments} {post.countComments === 1 ? 'comment' : 'comments'}
                   </span>
                 )}
               </div>
