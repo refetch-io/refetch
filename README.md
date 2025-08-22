@@ -40,11 +40,11 @@
 📊 Votes: **2** | ⏰ 1 day ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 **⭐ [Mastering Data Ingestion: How to Handle 1B Rows/s in ClickHouse](https://refetch.io/threads/68a34cff003b5bd6f07f)**
-📊 Votes: **2** | ⏰ 3 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
+📊 Votes: **2** | ⏰ 4 days ago | 🔗 [Original](https://www.tinybird.co/blog-posts/1b-rows-per-second-clickhouse)
 
 ---
 
-*Last updated: 2025-08-22T14:01:18.696Z*
+*Last updated: 2025-08-22T16:01:04.549Z*
 
 
 
