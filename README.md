@@ -27,11 +27,11 @@
 
 </div>
 
-**🥇 [AI in Coding: A Future Where AI Fixes Code Before Humans](https://refetch.io/threads/68a7e9c8000ae2153260)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://every.to/source-code/my-ai-had-already-fixed-the-code-before-i-saw-it)
-
-**🥈 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
+**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
 📊 Votes: **4** | ⏰ 3 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+
+**🥈 [Exploring io_uring, kTLS and Rust for Zero Syscall HTTPS Server](https://refetch.io/threads/68a7ff0f001ec4ba66b2)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://blog.habets.se/2025/04/io-uring-ktls-and-rust-for-zero-syscall-https-server.html)
 
 **🥉 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
 📊 Votes: **1** | ⏰ 2 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
@@ -44,7 +44,7 @@
 
 ---
 
-*Last updated: 2025-08-22T04:01:53.500Z*
+*Last updated: 2025-08-22T06:01:48.689Z*
 
 
 
