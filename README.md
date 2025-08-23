@@ -40,11 +40,11 @@
 📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 **⭐ [Cloudflare: The Pioneer of QUIC CDN](https://refetch.io/threads/68a8c445003e3058cc02)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://moq.dev/blog/first-cdn/)
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://moq.dev/blog/first-cdn/)
 
 ---
 
-*Last updated: 2025-08-23T10:25:15.369Z*
+*Last updated: 2025-08-23T10:30:13.910Z*
 
 
 
