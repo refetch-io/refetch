@@ -37,14 +37,14 @@
 📊 Votes: **1** | ⏰ 3 days ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
 
 **⭐ [Comprehensive Overview of Made by Google 2025 Announcements](https://refetch.io/threads/68a61df400251355b852)**
-📊 Votes: **2** | ⏰ 2 days ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **2** | ⏰ 3 days ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 **⭐ [Cloudflare: The Pioneer of QUIC CDN](https://refetch.io/threads/68a8c445003e3058cc02)**
 📊 Votes: **1** | ⏰ 23 hours ago | 🔗 [Original](https://moq.dev/blog/first-cdn/)
 
 ---
 
-*Last updated: 2025-08-23T19:10:11.861Z*
+*Last updated: 2025-08-23T19:15:13.415Z*
 
 
 
