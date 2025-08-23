@@ -1,6 +1,7 @@
 
 <div align="center">
   <img src="public/logo-purple.png" width="200" style="max-width: 200px;">
+  
   <br />
   <br />
   
