@@ -44,7 +44,7 @@
 
 ---
 
-*Last updated: 2025-08-23T20:25:15.266Z*
+*Last updated: 2025-08-23T22:00:35.264Z*
 
 
 
@@ -99,22 +99,23 @@ Refetch is built with a modern, scalable architecture that prioritizes performan
 
 ```
 refetch/
-├── app/                   # Next.js App Router pages
+├── app/                    # Next.js App Router pages
 │   ├── (main)/            # Main application routes
 │   ├── api/               # API endpoints
+│   ├── auth/              # Authentication flows
 │   └── globals.css        # Global styles
-├── components/            # Reusable React components
+├── components/             # Reusable React components
 │   ├── ui/                # Base UI components (Radix + Tailwind)
 │   └── [feature]/         # Feature-specific components
-├── contexts/              # React contexts (auth, theme)
-├── functions/             # Appwrite serverless functions
+├── contexts/               # React contexts (auth, theme)
+├── functions/              # Appwrite serverless functions
 │   ├── scout/             # Content discovery automation
 │   ├── enhancement/       # AI content analysis
 │   └── algorithm/         # Ranking algorithm
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility libraries and configurations
-├── extensions/            # Browser extensions
-└── styles/                # Additional styling
+├── hooks/                  # Custom React hooks
+├── lib/                    # Utility libraries and configurations
+├── extensions/             # Browser extensions
+└── styles/                 # Additional styling
 ```
 
 ### Key Directories Explained
