@@ -115,8 +115,8 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
     }
     
     if (!isAuthenticated || !user?.$id) {
-      // Redirect to login if not authenticated
-      router.push("/login")
+      // Redirect to signin if not authenticated
+      router.push("/signin")
       return
     }
 
@@ -130,7 +130,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
 
       if (!jwt) {
         setError('Authentication token not found. Please sign in again.')
-        router.push("/login")
+        router.push("/signin")
         return
       }
 
@@ -156,7 +156,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
         // Handle authentication errors
         const errorData = await response.json()
         setError('Authentication failed. Please sign in again.')
-        router.push("/login")
+        router.push("/signin")
       } else {
         const errorData = await response.json()
         setError(errorData.message || 'Error posting comment. Please try again.')
@@ -280,7 +280,7 @@ export function CommentForm({ postId, onCommentAdded, isFixed = false, onMinimiz
                   You need to be signed in to comment.{" "}
                   <button
                     type="button"
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push("/signin")}
                     className="text-blue-600 hover:text-blue-800 underline"
                   >
                     Sign in here

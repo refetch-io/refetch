@@ -16,7 +16,7 @@ export function MinesClientWrapper() {
   useEffect(() => {
     // Check authentication when component mounts
     if (!authLoading && !isAuthenticated) {
-      router.push("/login")
+              router.push("/signin")
       return
     }
 

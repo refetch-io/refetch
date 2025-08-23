@@ -8,7 +8,7 @@ export async function deletePost(postId: string): Promise<{ success: boolean; me
     if (!jwt) {
       console.log('🔑 No JWT token found, redirecting to login...')
       // Redirect to login page
-      window.location.href = '/login'
+              window.location.href = '/signin'
       return { success: false, error: 'No authentication token' }
     }
 

@@ -12,7 +12,7 @@ const handleAuthenticationFailure = (error: any): void => {
     
     // Redirect to login
     console.log('🔄 Redirecting to login page...')
-    window.location.href = '/login'
+            window.location.href = '/signin'
   }
 }
 
@@ -93,7 +93,7 @@ export const handleVote = async (
         // Clear the cached JWT and redirect to login
         if (typeof window !== 'undefined') {
           localStorage.removeItem('refetch_jwt_cache')
-          window.location.href = '/login'
+          window.location.href = '/signin'
         }
         throw new Error('Authentication expired. Please log in again.')
       }

@@ -68,7 +68,7 @@ function NavigationLink({ item, isActive }: { item: NavigationItem; isActive: bo
   const handleClick = (e: React.MouseEvent) => {
     if (item.requiresAuth && !isAuthenticated) {
       e.preventDefault()
-      window.location.href = '/login'
+              window.location.href = '/signin'
       return
     }
   }

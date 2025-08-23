@@ -34,7 +34,7 @@ export function VoteButtons({
 
   const handleVote = async (direction: "up" | "down") => {
     if (!isAuthenticated) {
-      window.location.href = '/login'
+              window.location.href = '/signin'
       return
     }
     

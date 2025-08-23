@@ -98,14 +98,14 @@ export function Header({ onMobileMenuClick, showMobileMenuButton = false }: Head
                 className="text-white hover:bg-white/10 hover:text-white h-8 px-3 text-sm"
                 asChild
               >
-                <Link href="/login">
+                <Link href="/signin">
                   Sign In
                 </Link>
               </Button>
             ))}
           </div>
           <Button className="bg-white text-[#4e1cb3] hover:bg-gray-100 h-8 px-4 text-sm font-medium" asChild>
-            <Link href={!loading && isAuthenticated ? "/submit" : "/login"} prefetch>
+            <Link href={!loading && isAuthenticated ? "/submit" : "/signin"} prefetch>
               Submit
             </Link>
           </Button>

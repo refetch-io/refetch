@@ -57,7 +57,7 @@ export function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
 
   const handleNavigationClick = (item: NavigationItem) => {
     if (item.requiresAuth && !isAuthenticated) {
-      router.push('/login')
+              router.push('/signin')
       onClose()
       return
     }

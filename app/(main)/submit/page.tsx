@@ -45,7 +45,7 @@ export default function SubmitPage() {
     
     if (!isAuthenticated || !user?.$id) {
       // Redirect to login if not authenticated
-      router.push("/login")
+              router.push("/signin")
       return
     }
 
