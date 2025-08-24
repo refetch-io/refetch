@@ -467,7 +467,7 @@ export function ClientPage({ initialPosts, error, sortType = 'score', userId }: 
       if (userId) {
         // For user submissions (mines page)
         const jwt = await getCachedJWT()
-        response = await fetch(`/api/user-submissions?limit=${POSTS_PER_PAGE}&offset=${offset}`, {
+        response = await fetch(`/api/mines?limit=${POSTS_PER_PAGE}&offset=${offset}`, {
           headers: {
             'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json',

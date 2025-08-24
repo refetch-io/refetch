@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ posts: appwritePosts })
   } catch (error) {
-    console.error('Error in user-submissions API:', error)
+    console.error('Error in mines API:', error)
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

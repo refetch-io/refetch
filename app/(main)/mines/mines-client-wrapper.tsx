@@ -32,7 +32,7 @@ export function MinesClientWrapper() {
       // Get JWT token using the cached JWT function
       const jwt = await getCachedJWT()
 
-      const response = await fetch(`/api/user-submissions?limit=${limit}&offset=${offset}`, {
+      const response = await fetch(`/api/mines?limit=${limit}&offset=${offset}`, {
         headers: {
           'Authorization': `Bearer ${jwt}`,
           'Content-Type': 'application/json',
