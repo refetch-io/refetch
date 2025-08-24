@@ -28,7 +28,7 @@
 </div>
 
 **🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **4** | ⏰ 5 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+📊 Votes: **4** | ⏰ 6 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
 📊 Votes: **1** | ⏰ 4 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
@@ -44,7 +44,7 @@
 
 ---
 
-*Last updated: 2025-08-24T10:01:20.686Z*
+*Last updated: 2025-08-24T12:01:16.138Z*
 
 
 
