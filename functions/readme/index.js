@@ -46,15 +46,20 @@ export default async function ({ req, res, log, error }) {
         
         const databases = new Databases(client);
         
-        // Fetch top 5 posts by score field (or count if score doesn't exist)
-        log('Fetching top 5 posts from Appwrite...');
+        // Fetch top 5 posts from the last 16 hours by score field
+        log('Fetching top 5 posts from the last 16 hours from Appwrite...');
         log(`Database ID: ${appwriteDatabaseId}`);
         log(`Collection ID: ${appwritePostsCollectionId}`);
+        
+        // Calculate timestamp for 16 hours ago
+        const sixteenHoursAgo = new Date(Date.now() - (16 * 60 * 60 * 1000));
+        log(`Filtering posts created after: ${sixteenHoursAgo.toISOString()}`);
         
         const postsResponse = await databases.listDocuments(
             appwriteDatabaseId,
             appwritePostsCollectionId,
             [
+                Query.greaterThan('$createdAt', sixteenHoursAgo.toISOString()),
                 Query.orderDesc('score'),
                 Query.limit(5),
                 Query.select(['title', 'link', 'count', '$createdAt', '$id'])
@@ -69,7 +74,7 @@ export default async function ({ req, res, log, error }) {
             });
         }
         
-        log(`Found ${postsResponse.documents.length} posts`);
+        log(`Found ${postsResponse.documents.length} posts from the last 16 hours`);
         
         // Log first post structure for debugging
         if (postsResponse.documents.length > 0) {
