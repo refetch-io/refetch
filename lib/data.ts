@@ -893,7 +893,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
   }
 }
 
-// Updated function to fetch user submissions with vote information
+// Updated function to fetch user submissions with vote information (no time limit)
 export async function fetchUserSubmissionsFromAppwriteWithVotes(
   userId: string,
   limit: number = 25,
@@ -919,7 +919,6 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
         Query.equal('userId', userId),
-        Query.greaterThan('$createdAt', getTwentyFourHoursAgo()), // Only show posts from last 24 hours
         Query.orderDesc('$createdAt'),
         Query.limit(limit),
         Query.offset(offset),
