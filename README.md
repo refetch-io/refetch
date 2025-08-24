@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="public/logo-purple.png" width="200" style="max-width: 200px;">
+  <img width="1500" height="500" alt="image" src="https://github.com/user-attachments/assets/c4209db8-52d0-4ffa-bc6c-b92044418ad8" />
   <br />
   <br />
   
