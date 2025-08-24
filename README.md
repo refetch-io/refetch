@@ -31,7 +31,7 @@
 📊 Votes: **4** | ⏰ 6 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
 
 **🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **1** | ⏰ 4 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+📊 Votes: **1** | ⏰ 5 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
 
 **🥉 [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
 📊 Votes: **1** | ⏰ 3 days ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
@@ -44,7 +44,7 @@
 
 ---
 
-*Last updated: 2025-08-24T12:01:16.138Z*
+*Last updated: 2025-08-24T14:00:26.488Z*
 
 
 
