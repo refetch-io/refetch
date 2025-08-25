@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
 
-**🥈 [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
+**🥈 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
 
-**🥉 [From Hackathon to Y Combinator: A Start-Up Journey](https://refetch.io/threads/68abde3e00237833de94)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.producthunt.com/p/april-yc-s25/from-hackathon-to-yc)
+**🥉 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
 
-**⭐ [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
+**⭐ [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
 
-**⭐ [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
+**⭐ [Revolutionizing Electronics: Scientists Discover Flaws That Enhance Performance](https://refetch.io/threads/68abe1ec0031e2622702)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031544.htm)
 
 ---
 
-*Last updated: 2025-08-25T04:00:23.650Z*
+*Last updated: 2025-08-25T06:00:53.722Z*
 
 
 
