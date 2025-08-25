@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
 
-**🥈 [Elon Musk's Legal Battle Against Apple and OpenAI Over Exclusive ChatGPT Inte...](https://refetch.io/threads/68acbc1f0008feeef540)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/08/elon-musk-sues-apple-openai-to-block-exclusive-iphone-chatgpt-integration/)
+**🥈 [Google's Unusual Pixel 10 Event](https://refetch.io/threads/68acd8720015063501b7)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/the-sideload-001-googles-very-strange-pixel-10-event/)
 
 **🥉 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
-**⭐ [Elon Musk's Legal Battle with OpenAI and Sam Altman over Nonprofit AI Mission](https://refetch.io/threads/68acb87a000f0ae4b35d)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2024/03/01/elon-musk-openai-sam-altman-court/)
+**⭐ [Repurposing Tech: Turning an Old iPhone into a UniFi Protect Camera](https://refetch.io/threads/68acd8560039a26f07a8)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://www.caseyliss.com/2025/8/15/a-rube-goldberg-camera)
 
-**⭐ [Pixel Studio 2.0: A New Image Editor with Advanced AI Tools](https://refetch.io/threads/68acb8ce0000d714aa10)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/pixel-studio-2-0-editor/)
+**⭐ [AI Chatbots: Big Tech's Rapid Advancements and Unforeseen Consequences](https://refetch.io/threads/68ac4818001a959fa4b0)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/with-ai-chatbots-big-tech-is-moving-fast-and-breaking-people/)
 
 ---
 
-*Last updated: 2025-08-25T20:01:22.967Z*
+*Last updated: 2025-08-25T22:00:43.212Z*
 
 
 
