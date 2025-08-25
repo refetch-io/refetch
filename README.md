@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
 
-**🥈 [Achieving Zero-Downtime for Critical Cloud Infrastructure Upgrades](https://refetch.io/threads/68ac2bf80018351fbc85)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://infoq.com/articles/zero-downtime-cloud-upgrades)
+**🥈 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
 
-**🥉 [IBM and NASA's Digital Twin of the Sun: Predicting Solar Storms](https://refetch.io/threads/68ac2be6003213e95346)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://wired.com/story/ibm-and-nasa-develop-a-digital-twin-of-the-sun-to-predict-future-solar-storms/)
+**🥉 [AI Chatbots: Big Tech's Rapid Advancements and Unforeseen Consequences](https://refetch.io/threads/68ac4818001a959fa4b0)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/with-ai-chatbots-big-tech-is-moving-fast-and-breaking-people/)
 
-**⭐ [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
+**⭐ [Ransomware-Resilient Storage: A New Defense in Cybersecurity](https://refetch.io/threads/68ac4831001da496e7dc)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://infoq.com/articles/ransomware-resilient-storage-cyber-defense/)
 
-**⭐ [Revolutionizing Electronics: Scientists Discover Flaws That Enhance Performance](https://refetch.io/threads/68abe1ec0031e2622702)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031544.htm)
+**⭐ [Has Meta Already Secured Victory in the Smart Glasses Race?](https://refetch.io/threads/68ac48200000a4219cae)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://wired.com/story/meta-has-already-won-the-smart-glasses-race/)
 
 ---
 
-*Last updated: 2025-08-25T10:01:12.975Z*
+*Last updated: 2025-08-25T12:01:32.197Z*
 
 
 
