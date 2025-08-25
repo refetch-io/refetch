@@ -28,23 +28,23 @@
 </div>
 
 **🥇 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
 
-**🥈 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
+**🥈 [YouTube's AI Edits Videos Without User Consent](https://refetch.io/threads/68ac0fb000206d1baa99)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://www.bbc.com/future/article/20250822-youtube-is-using-ai-to-edit-videos-without-permission)
 
-**🥉 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
-
-**⭐ [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
+**🥉 [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
 
 **⭐ [Revolutionizing Electronics: Scientists Discover Flaws That Enhance Performance](https://refetch.io/threads/68abe1ec0031e2622702)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031544.htm)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031544.htm)
+
+**⭐ [Google Messages Beta Introduces QR Code Key Verification](https://refetch.io/threads/68ac0fcd0033df77008d)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/google-messages-qr-code-key/)
 
 ---
 
-*Last updated: 2025-08-25T06:00:53.722Z*
+*Last updated: 2025-08-25T08:00:17.144Z*
 
 
 
