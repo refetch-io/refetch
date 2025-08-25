@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
+**🥇 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
 
-**🥈 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
+**🥈 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
 
-**🥉 [EcoFlow's Rapid Power Bank: The Fastest Yet?](https://refetch.io/threads/68ac644b00079b62c1d2)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://theverge.com/reviews/764829/fastest-power-bank-review-ecoflow-rapid)
+**🥉 [New Insights from the Large Hadron Collider: The Higgs Boson's Secret](https://refetch.io/threads/68ac8441001aa88206c0)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015657.htm)
 
-**⭐ [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
+**⭐ [The Impact of Rust on Low-latency Systems and Developer Satisfaction](https://refetch.io/threads/68ac842e003abaf0253d)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://infoq.com/podcasts/low-latency-systems-happy-developers)
 
-**⭐ [Revolutionizing Electronics: Scientists Discover Flaws That Enhance Performance](https://refetch.io/threads/68abe1ec0031e2622702)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031544.htm)
+**⭐ [Elon Musk's xAI Sues Apple and OpenAI: A New Twist in the AI Race](https://refetch.io/threads/68ac844b0029eab836d0)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/25/elon-musks-xai-sues-apple-and-openai-over-siri-partnership-app-store-charts/)
 
 ---
 
-*Last updated: 2025-08-25T14:00:40.031Z*
+*Last updated: 2025-08-25T16:01:08.070Z*
 
 
 
