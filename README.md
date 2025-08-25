@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
+**🥇 [Ensuring Secure Booting in Apple Silicon Mac](https://refetch.io/threads/68abbe83003c15bf289a)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://eclecticlight.co/2025/08/21/how-to-check-if-your-apple-silicon-mac-is-booting-securely/)
 
-**🥈 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
-📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
+**🥈 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
 
-**🥉 [Marshal Madness: Unpacking Ruby Deserialization Exploits](https://refetch.io/threads/68aac8990028db6afa54)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://blog.trailofbits.com/2025/08/20/marshal-madness-a-brief-history-of-ruby-deserialization-exploits/)
+**🥉 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
+
+**⭐ [Y Combinator Backs Epic Games: A Stand Against Store Fees](https://refetch.io/threads/68abbb260027ecac6127)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://www.macrumors.com/2025/08/21/y-combinator-epic-games-amicus-brief/)
 
 **⭐ [Dynamic Python Function Patching at Runtime: A Deep Dive](https://refetch.io/threads/68ab0eb500043ab54667)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://ericmjl.github.io/blog/2025/8/23/wicked-python-trickery-dynamically-patch-a-python-functions-source-code-at-runtime/)
-
-**⭐ [Iterative DFS: A Stack-Based Approach to Graph Traversal](https://refetch.io/threads/68ab8d980037cb179650)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://dwf.dev/blog/2024/09/23/2024/dfs-iterative-stack-based)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://ericmjl.github.io/blog/2025/8/23/wicked-python-trickery-dynamically-patch-a-python-functions-source-code-at-runtime/)
 
 ---
 
-*Last updated: 2025-08-25T00:01:19.863Z*
+*Last updated: 2025-08-25T02:01:19.485Z*
 
 
 
