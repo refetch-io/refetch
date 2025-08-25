@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img width="1500" height="500" alt="image" src="https://github.com/user-attachments/assets/c4209db8-52d0-4ffa-bc6c-b92044418ad8" />
+  <img src="public/logo-purple.png" width="200" style="max-width: 200px;">
   <br />
   <br />
   
@@ -21,30 +21,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Sunday, August 24, 2025)
+## 🔥 Top Posts Today (Monday, August 25, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [LLMs and Coding Agents: A Security Nightmare](https://refetch.io/threads/68a3111b000ed5519a67)**
-📊 Votes: **4** | ⏰ 6 days ago | 🔗 [Original](https://garymarcus.substack.com/p/llms-coding-agents-security-nightmare)
+**🥇 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
 
-**🥈 [Exploring the Critical Cache Poisoning Vulnerability in Dnsmasq](https://refetch.io/threads/68a47f56000e0f5b3a9c)**
-📊 Votes: **1** | ⏰ 5 days ago | 🔗 [Original](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q3/018288.html)
+**🥈 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
+📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
 
-**🥉 [Google's Pixel 10 Series: Doubling Down on AI Phones](https://refetch.io/threads/68a5f388001ba7b9bbb3)**
-📊 Votes: **1** | ⏰ 4 days ago | 🔗 [Original](https://techcrunch.com/2025/08/20/google-doubles-down-on-ai-phones-with-its-pixel-10-series/)
+**🥉 [Marshal Madness: Unpacking Ruby Deserialization Exploits](https://refetch.io/threads/68aac8990028db6afa54)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://blog.trailofbits.com/2025/08/20/marshal-madness-a-brief-history-of-ruby-deserialization-exploits/)
 
-**⭐ [Comprehensive Overview of Made by Google 2025 Announcements](https://refetch.io/threads/68a61df400251355b852)**
-📊 Votes: **2** | ⏰ 4 days ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+**⭐ [Dynamic Python Function Patching at Runtime: A Deep Dive](https://refetch.io/threads/68ab0eb500043ab54667)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://ericmjl.github.io/blog/2025/8/23/wicked-python-trickery-dynamically-patch-a-python-functions-source-code-at-runtime/)
 
-**⭐ [Cloudflare: The Pioneer of QUIC CDN](https://refetch.io/threads/68a8c445003e3058cc02)**
-📊 Votes: **1** | ⏰ 2 days ago | 🔗 [Original](https://moq.dev/blog/first-cdn/)
+**⭐ [Iterative DFS: A Stack-Based Approach to Graph Traversal](https://refetch.io/threads/68ab8d980037cb179650)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://dwf.dev/blog/2024/09/23/2024/dfs-iterative-stack-based)
 
 ---
 
-*Last updated: 2025-08-24T22:01:12.251Z*
+*Last updated: 2025-08-25T00:01:19.863Z*
 
 
 
