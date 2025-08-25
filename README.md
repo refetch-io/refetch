@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
-📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
+📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
 
-**🥈 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
+**🥈 [Elon Musk's Legal Battle Against Apple and OpenAI Over Exclusive ChatGPT Inte...](https://refetch.io/threads/68acbc1f0008feeef540)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/08/elon-musk-sues-apple-openai-to-block-exclusive-iphone-chatgpt-integration/)
 
-**🥉 [Elon Musk's xAI Alleges Anticompetitive Collusion Against Apple and OpenAI](https://refetch.io/threads/68aca346003134545e94)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/25/elon-musks-xai-sues-apple-and-openai-alleging-anticompetitive-collusion/)
+**🥉 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
-**⭐ [Chatbot Design Choices and Their Role in AI Delusions](https://refetch.io/threads/68ac9c7a0023b50127e6)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/25/how-chatbot-design-choices-are-fueling-ai-delusions-meta-chatbot-rogue/)
+**⭐ [Elon Musk's Legal Battle with OpenAI and Sam Altman over Nonprofit AI Mission](https://refetch.io/threads/68acb87a000f0ae4b35d)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2024/03/01/elon-musk-openai-sam-altman-court/)
 
-**⭐ [Google's New Developer Verification Requirement for Android Apps](https://refetch.io/threads/68ac9cc40001b9ffe5fb)**
-📊 Votes: **0** | ⏰ 34 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/android-apps-developer-verification/)
+**⭐ [Pixel Studio 2.0: A New Image Editor with Advanced AI Tools](https://refetch.io/threads/68acb8ce0000d714aa10)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/pixel-studio-2-0-editor/)
 
 ---
 
-*Last updated: 2025-08-25T18:01:19.192Z*
+*Last updated: 2025-08-25T20:01:22.967Z*
 
 
 
