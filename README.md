@@ -27,24 +27,24 @@
 
 </div>
 
-**🥇 [Ensuring Secure Booting in Apple Silicon Mac](https://refetch.io/threads/68abbe83003c15bf289a)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://eclecticlight.co/2025/08/21/how-to-check-if-your-apple-silicon-mac-is-booting-securely/)
+**🥇 [The Quest of Busy Beaver Hunters: Numbers Beyond Ordinary Math](https://refetch.io/threads/68abc5ea00354ceaa7d0)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.quantamagazine.org/busy-beaver-hunters-reach-numbers-that-overwhelm-ordinary-math-20250822/)
 
-**🥈 [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
+**🥈 [Solar Power Supercharged 15x with Black Metal Tech](https://refetch.io/threads/68abde4b001464b6a8c6)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250824031542.htm)
 
-**🥉 [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
+**🥉 [From Hackathon to Y Combinator: A Start-Up Journey](https://refetch.io/threads/68abde3e00237833de94)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.producthunt.com/p/april-yc-s25/from-hackathon-to-yc)
 
-**⭐ [Y Combinator Backs Epic Games: A Stand Against Store Fees](https://refetch.io/threads/68abbb260027ecac6127)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://www.macrumors.com/2025/08/21/y-combinator-epic-games-amicus-brief/)
+**⭐ [Anticipating the Launch of iPhone 17: The Thinnest iPhone Ever](https://refetch.io/threads/68ab2718001e465d1b3c)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/24/iphone-17-the-thinnest-iphone-ever-and-everything-else-were-expecting-out-of-apples-hardware-event/)
 
-**⭐ [Dynamic Python Function Patching at Runtime: A Deep Dive](https://refetch.io/threads/68ab0eb500043ab54667)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://ericmjl.github.io/blog/2025/8/23/wicked-python-trickery-dynamically-patch-a-python-functions-source-code-at-runtime/)
+**⭐ [Exploiting Semantic Gaps Between Parsers: A Security Perspective](https://refetch.io/threads/68ab9b560025c661d70f)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.usenix.org/conference/usenixsecurity25/presentation/you)
 
 ---
 
-*Last updated: 2025-08-25T02:01:19.485Z*
+*Last updated: 2025-08-25T04:00:23.650Z*
 
 
 
