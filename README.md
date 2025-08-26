@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
 **🥈 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
 
-**🥉 [macOS Tahoe 26 Beta 8 Now Available](https://refetch.io/threads/68aca38b0000876612e5)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/macos-tahoe-26-beta-8-now-available/)
-
-**⭐ [Transforming Spin Loss Into Energy: The Key to Ultra-low-power AI Chips](https://refetch.io/threads/68acab02002e9a6b2db6)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015633.htm)
+**🥉 [Transforming Spin Loss Into Energy: The Key to Ultra-low-power AI Chips](https://refetch.io/threads/68acab02002e9a6b2db6)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015633.htm)
 
 **⭐ [iOS 26 Beta 8 Released for iPhone](https://refetch.io/threads/68acab0d000c9d93ae98)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/ios-26-beta-8/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/ios-26-beta-8/)
+
+**⭐ [Understanding Event-Driven Architecture in Multicloud Environments](https://refetch.io/threads/68acb1ca000812b8ef78)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://infoq.com/podcasts/event-driven-architecture-multicloud-environment)
 
 ---
 
-*Last updated: 2025-08-26T08:01:31.268Z*
+*Last updated: 2025-08-26T10:00:16.972Z*
 
 
 
