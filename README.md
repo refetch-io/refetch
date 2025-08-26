@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Gemini 2.5 Flash Image: Google's New Image Model](https://refetch.io/threads/68adc74e001c2e149b9b)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
 
-**🥈 [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
-📊 Votes: **0** | ⏰ 48 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
+**🥈 [Libby's Library App and its New AI Discovery Feature: A Mixed Reception](https://refetch.io/threads/68ae11060014097531a4)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/26/libbys-library-app-adds-an-ai-discovery-feature-and-not-everyone-is-thrilled/)
 
-**🥉 [Amazon's Entry-Level Kindle Colorsoft: A Discounted Deal](https://refetch.io/threads/68adf19d001c4f53b01a)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://theverge.com/tech/765254/amazon-kindle-colorsoft-16gb-e-reader-deal-sale)
+**🥉 [Apple's iPhone 17 Launch Event: What to Expect](https://refetch.io/threads/68addf9400057f5f44d2)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://theverge.com/apple/766062/apple-iphone-17-launch-event-awe-dropping)
 
-**⭐ [Harnessing AI Agents for Development: A New Approach](https://refetch.io/threads/68ada09d00188aac6300)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://infoq.com/presentations/ai-agents-development/)
+**⭐ [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
 
-**⭐ [World's Largest Neutrino Detector Activated Deep Underground](https://refetch.io/threads/68ada81f0003da363dba)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250826005213.htm)
+**⭐ [Anthropic Settles AI Book-Training Lawsuit: A Legal Precedent for AI?](https://refetch.io/threads/68ae09d400365677992c)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-settles-ai-book-training-lawsuit-with-authors/)
 
 ---
 
-*Last updated: 2025-08-26T18:00:23.597Z*
+*Last updated: 2025-08-26T20:01:21.869Z*
 
 
 
