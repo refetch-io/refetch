@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, August 25, 2025)
+## 🔥 Top Posts Today (Tuesday, August 26, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
 **🥇 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
 
-**🥈 [Google's Unusual Pixel 10 Event](https://refetch.io/threads/68acd8720015063501b7)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/the-sideload-001-googles-very-strange-pixel-10-event/)
+**🥈 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
 
-**🥉 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+**🥉 [SpaceX's Dragon Mission: A New Era of Space Exploration](https://refetch.io/threads/68acf7a8002e92dd0875)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/space/2025/08/spacexs-latest-dragon-mission-will-breathe-more-fire-at-the-space-station/)
 
-**⭐ [Repurposing Tech: Turning an Old iPhone into a UniFi Protect Camera](https://refetch.io/threads/68acd8560039a26f07a8)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://www.caseyliss.com/2025/8/15/a-rube-goldberg-camera)
+**⭐ [a16z Invests $1.49M in Washington Lobbying, Outpacing Rivals](https://refetch.io/threads/68acf41c001bb93ad341)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/25/a16z-spends-1-49m-in-washington-lobbying-while-rivals-mostly-sit-out/)
 
-**⭐ [AI Chatbots: Big Tech's Rapid Advancements and Unforeseen Consequences](https://refetch.io/threads/68ac4818001a959fa4b0)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/with-ai-chatbots-big-tech-is-moving-fast-and-breaking-people/)
+**⭐ [The Downfall of the Counter-Strike 2 Server Browser: A Deep Dive](https://refetch.io/threads/68acf4460032f94ccc5f)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://bphilip.uk/blog/2025-08-25-the-cs2-server-browser-where-community-goes-to-die/)
 
 ---
 
-*Last updated: 2025-08-25T22:00:43.212Z*
+*Last updated: 2025-08-26T00:02:48.821Z*
 
 
 
