@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+**🥇 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
 
-**🥈 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
+**🥈 [Matter's Promise of a Unified Smart Home](https://refetch.io/threads/68ad99c30000ff12dc89)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://wired.com/story/matter-is-finally-on-track-to-deliver-the-smart-home-it-promised/)
 
-**🥉 [Transforming Spin Loss Into Energy: The Key to Ultra-low-power AI Chips](https://refetch.io/threads/68acab02002e9a6b2db6)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015633.htm)
+**🥉 [The Importance of Feature Distribution Alignment](https://refetch.io/threads/68ad99de002c0ceee015)**
+📊 Votes: **0** | ⏰ 34 minutes ago | 🔗 [Original](https://alexshtf.github.io/2025/08/19/Orthogonality.html)
 
-**⭐ [iOS 26 Beta 8 Released for iPhone](https://refetch.io/threads/68acab0d000c9d93ae98)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/ios-26-beta-8/)
+**⭐ [Understanding Timeouts, Retries and Idempotency In Distributed Systems](https://refetch.io/threads/68ad3dc70010da5b2fc3)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://infoq.com/presentations/distributed-systems-resiliency/)
 
-**⭐ [Understanding Event-Driven Architecture in Multicloud Environments](https://refetch.io/threads/68acb1ca000812b8ef78)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://infoq.com/podcasts/event-driven-architecture-multicloud-environment)
+**⭐ [Alexis Ohanian Discusses His Next Social Platform](https://refetch.io/threads/68ad99c200091adf0bfa)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://wired.com/story/uncanny-valley-podcast-big-interview-alexis-ohanian/)
 
 ---
 
-*Last updated: 2025-08-26T10:00:16.972Z*
+*Last updated: 2025-08-26T12:01:18.622Z*
 
 
 
