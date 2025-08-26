@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
 
-**🥈 [Google's Quantum Computing Simulates Universe's Hidden Strings](https://refetch.io/threads/68ac762100194fd986f4)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015645.htm)
+**🥈 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
 
-**🥉 [Google's AI Energy Efficiency Leap: A 33x Improvement in a Year](https://refetch.io/threads/68acf7af0004a6c1c80c)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/google-says-it-dropped-the-energy-cost-of-ai-queries-by-33x-in-one-year/)
+**🥉 [macOS Tahoe 26 Beta 8 Now Available](https://refetch.io/threads/68aca38b0000876612e5)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/macos-tahoe-26-beta-8-now-available/)
 
-**⭐ [SpaceX's Dragon Mission: A New Chapter in Space Exploration](https://refetch.io/threads/68ac75f80004277a9999)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/space/2025/08/spacexs-latest-dragon-mission-will-breathe-more-fire-at-the-space-station/)
+**⭐ [Transforming Spin Loss Into Energy: The Key to Ultra-low-power AI Chips](https://refetch.io/threads/68acab02002e9a6b2db6)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250825015633.htm)
 
-**⭐ [The Impact of Rust on Low-latency Systems and Developer Satisfaction](https://refetch.io/threads/68ac842e003abaf0253d)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/podcasts/low-latency-systems-happy-developers)
+**⭐ [iOS 26 Beta 8 Released for iPhone](https://refetch.io/threads/68acab0d000c9d93ae98)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/25/ios-26-beta-8/)
 
 ---
 
-*Last updated: 2025-08-26T06:01:29.119Z*
+*Last updated: 2025-08-26T08:01:31.268Z*
 
 
 
