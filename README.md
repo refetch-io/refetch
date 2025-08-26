@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Gemini 2.5 Flash Image: Google's New Image Model](https://refetch.io/threads/68adc74e001c2e149b9b)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
 
-**🥈 [Dyson’s 360 Vis Nav: A Review of the Robot Vacuum for Carpets](https://refetch.io/threads/68add556001e06486c67)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://theverge.com/tech/765920/dyson-360-vis-nav-google-tv-streamer-4k-deal-sale)
+**🥈 [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
+📊 Votes: **0** | ⏰ 48 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
 
-**🥉 [Imminent Release of Philips Hue Bridge Pro](https://refetch.io/threads/68add598000bc7c06a2c)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/26/philips-hue-bridge-pro-may-cost-around-100-as-leak-reveals-imminent-release/)
+**🥉 [Amazon's Entry-Level Kindle Colorsoft: A Discounted Deal](https://refetch.io/threads/68adf19d001c4f53b01a)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://theverge.com/tech/765254/amazon-kindle-colorsoft-16gb-e-reader-deal-sale)
 
-**⭐ [Spotify Reintroduces Direct Messages Amid Global Price Hikes](https://refetch.io/threads/68add5990004e6566cf7)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/26/spotify-brings-back-dms/)
+**⭐ [Harnessing AI Agents for Development: A New Approach](https://refetch.io/threads/68ada09d00188aac6300)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://infoq.com/presentations/ai-agents-development/)
 
-**⭐ [Meta's $10B Investment in Rural Louisiana for AI Development](https://refetch.io/threads/68add22000110d016ab2)**
-📊 Votes: **0** | ⏰ 34 minutes ago | 🔗 [Original](https://fortune.com/2025/08/24/meta-data-center-rural-louisiana-framework-ai-power-boom/)
+**⭐ [World's Largest Neutrino Detector Activated Deep Underground](https://refetch.io/threads/68ada81f0003da363dba)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250826005213.htm)
 
 ---
 
-*Last updated: 2025-08-26T16:00:59.196Z*
+*Last updated: 2025-08-26T18:00:23.597Z*
 
 
 
