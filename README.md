@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Gemini 2.5 Flash Image: Google's New Image Model](https://refetch.io/threads/68adc74e001c2e149b9b)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
 
-**🥈 [Analyst Warns of 'Tempered' iPhone 17 Air Response](https://refetch.io/threads/68ae6573003a2e8bb2bf)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/analyst-warns-of-tempered-iphone-17-air-response-but-maintains-apples-stock-rating/)
+**🥈 [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
 
-**🥉 [Security Concerns: Viral TikToks Promote 'Undetectable' GPS Trackers](https://refetch.io/threads/68ae61e300311af85a7c)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/security-bite-viral-tiktoks-promote-undetectable-find-my-enabled-gps-trackers-for-stalking/)
+**🥉 [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
 
-**⭐ [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
+**⭐ [Helm.ai and Honda Motor Co. Collaborate for ADAS Development in Consumer Vehi...](https://refetch.io/threads/68ae2d17001f899cf54d)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/business/helm-ai-and-honda-motor-co-agree-to-multi-year-adas-joint-development-for-mass-production-consumer-vehicles/)
 
-**⭐ [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
+**⭐ [Reducing AI Complexity and Cost with Procedural Memory](https://refetch.io/threads/68ae492c002736b2881c)**
+📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://venturebeat.com/ai/how-procedural-memory-can-cut-the-cost-and-complexity-of-ai-agents/)
 
 ---
 
-*Last updated: 2025-08-27T02:00:53.251Z*
+*Last updated: 2025-08-27T04:01:43.237Z*
 
 
 
