@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Introducing Gemini 2.5 Flash Image: Google's New Image Model](https://refetch.io/threads/68adc74e001c2e149b9b)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
+**🥇 [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
 
-**🥈 [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
+**🥈 [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
 
-**🥉 [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
+**🥉 [Reducing AI Complexity and Cost with Procedural Memory](https://refetch.io/threads/68ae492c002736b2881c)**
+📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/how-procedural-memory-can-cut-the-cost-and-complexity-of-ai-agents/)
 
-**⭐ [Reducing AI Complexity and Cost with Procedural Memory](https://refetch.io/threads/68ae492c002736b2881c)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/ai/how-procedural-memory-can-cut-the-cost-and-complexity-of-ai-agents/)
+**⭐ [The Retry Loop: A Deep Dive](https://refetch.io/threads/68aeb9b3003bb4e05fa8)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://matklad.github.io/2025/08/23/retry-loop-retry.html)
 
-**⭐ [Dissecting the Apple M1 GPU: A Comprehensive Analysis](https://refetch.io/threads/68ae9da70027fdeab4bf)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://lobste.rs/s/31d67l/dissectingthe_apple_m1_gpu_end)
+**⭐ [Apple's iPhone 17 Launch Event: What to Expect](https://refetch.io/threads/68addf9400057f5f44d2)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/apple/766062/apple-iphone-17-launch-event-awe-dropping)
 
 ---
 
-*Last updated: 2025-08-27T06:00:13.585Z*
+*Last updated: 2025-08-27T08:01:32.113Z*
 
 
 
