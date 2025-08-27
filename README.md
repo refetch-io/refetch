@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Gemini 2.5 Flash Image: Google's New Image Model](https://refetch.io/threads/68adc74e001c2e149b9b)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/)
 
-**🥈 [Reducing AI Complexity and Cost with Procedural Memory](https://refetch.io/threads/68ae492c002736b2881c)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://venturebeat.com/ai/how-procedural-memory-can-cut-the-cost-and-complexity-of-ai-agents/)
+**🥈 [Analyst Warns of 'Tempered' iPhone 17 Air Response](https://refetch.io/threads/68ae6573003a2e8bb2bf)**
+📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/analyst-warns-of-tempered-iphone-17-air-response-but-maintains-apples-stock-rating/)
 
-**🥉 [Activists Lockdown Microsoft Headquarters: A New Era of Tech Protests?](https://refetch.io/threads/68ae491300003756aaa8)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/26/microsoft-headquarters-go-into-lockdown-after-activists-take-over-brad-smiths-office/)
-
-**⭐ [Tech Giants Unite for Linux Foundation DocumentDB: A Move Towards Vendor Freedom](https://refetch.io/threads/68ae492d001a02ac86e3)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://venturebeat.com/data-infrastructure/aws-microsoft-and-google-unite-behind-linux-foundation-documentdb-database-to-cut-enterprise-costs-and-limit-vendor-lock-in/)
+**🥉 [Security Concerns: Viral TikToks Promote 'Undetectable' GPS Trackers](https://refetch.io/threads/68ae61e300311af85a7c)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/26/security-bite-viral-tiktoks-promote-undetectable-find-my-enabled-gps-trackers-for-stalking/)
 
 **⭐ [Apple Officially Announces iPhone 17 Event: 'Awe Dropping'](https://refetch.io/threads/68adeacd00068c12f9a6)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://9to5mac.com/2025/08/26/iphone-17-event-announcement-2/)
+
+**⭐ [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
 
 ---
 
-*Last updated: 2025-08-27T00:02:52.382Z*
+*Last updated: 2025-08-27T02:00:53.251Z*
 
 
 
