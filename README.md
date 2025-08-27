@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
 **🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
-**🥉 [AI in Food Industry: Image Generation and Its Practical Applications](https://refetch.io/threads/68af0ae200092a75d05d)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://infoq.com/presentations/ai-food-image-generation)
+**🥉 [The Unintended Consequences: Common Painkillers Boost Antibiotic Resistance](https://refetch.io/threads/68af2778000154e00b9f)**
+📊 Votes: **0** | ⏰ 18 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250826005209.htm)
 
-**⭐ [Plaud's New Note Pro: A New Era for AI Note Taking](https://refetch.io/threads/68af0b0800220a2bc842)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/plaud-launches-note-pro/)
+**⭐ ['Vibe-Hacking': A New AI Threat on the Horizon](https://refetch.io/threads/68aedcf3003816af09e0)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking)
 
-**⭐ [Huawei Mate XT: A Review of the Trifold Phone](https://refetch.io/threads/68af0ac60032fbe61c4f)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://theverge.com/huawei/667574/huawei-mate-xt-review-trifold-phone)
+**⭐ [First Glimpse of a Planet in the Making: A Cosmic Revelation](https://refetch.io/threads/68af1c7e00108375bff4)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010732.htm)
 
 ---
 
-*Last updated: 2025-08-27T14:00:59.049Z*
+*Last updated: 2025-08-27T16:01:01.929Z*
 
 
 
