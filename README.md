@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+**🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
-**🥈 [NASA Unfurls Its Largest Satellite Antenna Ever: A Leap in Space Tech](https://refetch.io/threads/68aef1f3002661e96853)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://wired.com/story/the-largest-satellite-antenna-ever-has-just-unfurled-in-space/)
+**🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
-**🥉 ['Vibe-Hacking': A New AI Threat on the Horizon](https://refetch.io/threads/68aedcf3003816af09e0)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking)
+**🥉 [AI in Food Industry: Image Generation and Its Practical Applications](https://refetch.io/threads/68af0ae200092a75d05d)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://infoq.com/presentations/ai-food-image-generation)
 
-**⭐ [Exploring Spacetime Crystals Made of Knotted Light](https://refetch.io/threads/68aee42f000f61cdd1c1)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010722.htm)
+**⭐ [Plaud's New Note Pro: A New Era for AI Note Taking](https://refetch.io/threads/68af0b0800220a2bc842)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/plaud-launches-note-pro/)
 
-**⭐ [Anthropic's New AI Agent Claude: A Resident of Chrome](https://refetch.io/threads/68ae17ff0012da37853d)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/26/anthropic-launches-a-claude-ai-agent-that-lives-in-chrome/)
+**⭐ [Huawei Mate XT: A Review of the Trifold Phone](https://refetch.io/threads/68af0ac60032fbe61c4f)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://theverge.com/huawei/667574/huawei-mate-xt-review-trifold-phone)
 
 ---
 
-*Last updated: 2025-08-27T12:00:14.438Z*
+*Last updated: 2025-08-27T14:00:59.049Z*
 
 
 
