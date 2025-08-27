@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+**🥇 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+**🥈 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
-**🥉 [The Unintended Consequences: Common Painkillers Boost Antibiotic Resistance](https://refetch.io/threads/68af2778000154e00b9f)**
-📊 Votes: **0** | ⏰ 18 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250826005209.htm)
+**🥉 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
-**⭐ ['Vibe-Hacking': A New AI Threat on the Horizon](https://refetch.io/threads/68aedcf3003816af09e0)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking)
+**⭐ [Security Alert: Malicious Versions of Nx and Supporting Plugins Published](https://refetch.io/threads/68af46670018e8abade7)**
+📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://github.com/nrwl/nx/security/advisories/GHSA-cxm3-wv7p-598c)
 
-**⭐ [First Glimpse of a Planet in the Making: A Cosmic Revelation](https://refetch.io/threads/68af1c7e00108375bff4)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010732.htm)
+**⭐ [Top Funded US AI Startups of 2025: A Comprehensive List](https://refetch.io/threads/68af42da0026223b3467)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/here-are-the-33-us-ai-startups-that-have-raised-100m-or-more-in-2025/)
 
 ---
 
-*Last updated: 2025-08-27T16:01:01.929Z*
+*Last updated: 2025-08-27T18:00:44.048Z*
 
 
 
