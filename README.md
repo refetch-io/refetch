@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
 **🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
 **🥉 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**⭐ [Chipolo Debuts Rechargeable Trackers: A Potential AirTag Rival](https://refetch.io/threads/68af623b000470a66dd6)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/chipolo-an-airtag-rival-debuts-rechargeable-trackers-with-a-six-month-battery-life/)
+**⭐ [Nvidia's Record Sales Amidst AI Boom: A Closer Look](https://refetch.io/threads/68af7e61000c99889381)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/nvidia-reports-record-sales-as-the-ai-boom-continues/)
 
-**⭐ [Pixel 10's 'Head Start' Tool: Making the Switch from iPhone Easier](https://refetch.io/threads/68af6280003a0941f65a)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/google-pixel-10-head-start-switch-tool/)
+**⭐ [FCC's Response to DOGE Lawsuit Leaves Judge Unimpressed](https://refetch.io/threads/68af7e6b00039b90620d)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/08/judge-unhappy-with-fccs-vague-and-uninformative-response-to-doge-lawsuit/)
 
 ---
 
-*Last updated: 2025-08-27T20:00:10.393Z*
+*Last updated: 2025-08-27T22:01:19.609Z*
 
 
 
