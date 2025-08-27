@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
+**🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
-**🥈 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+**🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
-**🥉 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+**🥉 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**⭐ [Security Alert: Malicious Versions of Nx and Supporting Plugins Published](https://refetch.io/threads/68af46670018e8abade7)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://github.com/nrwl/nx/security/advisories/GHSA-cxm3-wv7p-598c)
+**⭐ [Chipolo Debuts Rechargeable Trackers: A Potential AirTag Rival](https://refetch.io/threads/68af623b000470a66dd6)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/chipolo-an-airtag-rival-debuts-rechargeable-trackers-with-a-six-month-battery-life/)
 
-**⭐ [Top Funded US AI Startups of 2025: A Comprehensive List](https://refetch.io/threads/68af42da0026223b3467)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/here-are-the-33-us-ai-startups-that-have-raised-100m-or-more-in-2025/)
+**⭐ [Pixel 10's 'Head Start' Tool: Making the Switch from iPhone Easier](https://refetch.io/threads/68af6280003a0941f65a)**
+📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/google-pixel-10-head-start-switch-tool/)
 
 ---
 
-*Last updated: 2025-08-27T18:00:44.048Z*
+*Last updated: 2025-08-27T20:00:10.393Z*
 
 
 
