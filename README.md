@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
-**🥈 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
+**🥈 [Introducing Nvidia DGX Spark: A New Era of Workstations](https://refetch.io/threads/68afc4b9003665502ff7)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
 
-**🥉 [Google Phone App Introduces Custom ‘Calling Cards’](https://refetch.io/threads/68afb6d5002832956e00)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/google-phone-calling-card-wide/)
+**🥉 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**⭐ ['Vibe-Hacking': A New AI Threat on the Horizon](https://refetch.io/threads/68aedcf3003816af09e0)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking)
+**⭐ [Plastivore Caterpillars: A Potential Solution to Plastic Pollution](https://refetch.io/threads/68afd2f100398a545d88)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010736.htm)
 
-**⭐ [Exploring Spacetime Crystals Made of Knotted Light](https://refetch.io/threads/68aee42f000f61cdd1c1)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010722.htm)
+**⭐ [Deciphering Jupiter’s Birth Through Molten Rock Raindrops](https://refetch.io/threads/68afd2f5000af1993636)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250826005233.htm)
 
 ---
 
-*Last updated: 2025-08-28T02:01:01.351Z*
+*Last updated: 2025-08-28T04:01:58.301Z*
 
 
 
