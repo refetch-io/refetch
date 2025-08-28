@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Introducing Nvidia DGX Spark: A New Era of Workstations](https://refetch.io/threads/68afc4b9003665502ff7)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
+**🥇 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
 **🥈 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
-📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
 
-**🥉 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
+**🥉 [DIY Coding Agent with Pydantic-AI: A Comprehensive Guide](https://refetch.io/threads/68b0ad21003b20df62ae)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://martinfowler.com/articles/build-own-coding-agent.html)
 
-**⭐ [Unlocking Hidden Reasoning Abilities in Small Language Models](https://refetch.io/threads/68b02793000bc55a61e3)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/how-test-time-scaling-unlocks-hidden-reasoning-abilities-in-small-language-models-and-allows-them-to-outperform-llms/)
+**⭐ [Samsung's S95F TV: A Matte Screen for Every Room](https://refetch.io/threads/68b0b045002d8849b8df)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://wired.com/review/samsung-s95f/)
 
-**⭐ [Tiny Chip Revolutionizes Clean Energy: A Breakthrough Solution](https://refetch.io/threads/68b06102002d6b464eeb)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250828060040.htm)
+**⭐ [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
 ---
 
-*Last updated: 2025-08-28T18:00:31.339Z*
+*Last updated: 2025-08-28T20:01:03.977Z*
 
 
 
