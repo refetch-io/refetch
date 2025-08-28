@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
-**🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+**🥈 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**🥉 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
+**🥉 [Google Phone App Introduces Custom ‘Calling Cards’](https://refetch.io/threads/68afb6d5002832956e00)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/27/google-phone-calling-card-wide/)
 
-**⭐ [Reverse-Engineering the Globus INK: A Look at Soviet Spaceflight Navigation](https://refetch.io/threads/68af9acd00057103b470)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.righto.com/2023/03/reverse-engineering-globus-ink-soviet.html)
+**⭐ ['Vibe-Hacking': A New AI Threat on the Horizon](https://refetch.io/threads/68aedcf3003816af09e0)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking)
 
-**⭐ [Nvidia's Sales Jump 56%: A Closer Look](https://refetch.io/threads/68af9acd003b7588ae77)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.nytimes.com/2025/08/27/technology/nvidia-earnings-ai-chips.html)
+**⭐ [Exploring Spacetime Crystals Made of Knotted Light](https://refetch.io/threads/68aee42f000f61cdd1c1)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827010722.htm)
 
 ---
 
-*Last updated: 2025-08-28T00:02:55.522Z*
+*Last updated: 2025-08-28T02:01:01.351Z*
 
 
 
