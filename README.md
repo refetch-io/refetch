@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Nvidia DGX Spark: A New Era of Workstations](https://refetch.io/threads/68afc4b9003665502ff7)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
 
-**🥈 [Mark Cuban's Disruption of the $5 Trillion Healthcare Industry](https://refetch.io/threads/68b07bc0000dc679e98a)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/28/mark-cubans-war-on-americas-5-trillion-healthcare-machine-they-cant-react-as-quickly/)
+**🥈 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
+📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
 
-**🥉 [Framer, the No-Code Website Builder, Hits $2B Valuation](https://refetch.io/threads/68b07bc10004e5dd808d)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/28/no-code-website-builder-framer-reaches-2b-valuation/)
+**🥉 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
-**⭐ [iOS Elegantbouncer: Catching Threats Without Samples](https://refetch.io/threads/68b0754e00103a6f5577)**
-📊 Votes: **0** | ⏰ 33 minutes ago | 🔗 [Original](https://www.msuiche.com/posts/elegantbouncer-when-you-cant-get-the-samples-but-still-need-to-catch-the-threat/)
+**⭐ [Unlocking Hidden Reasoning Abilities in Small Language Models](https://refetch.io/threads/68b02793000bc55a61e3)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/how-test-time-scaling-unlocks-hidden-reasoning-abilities-in-small-language-models-and-allows-them-to-outperform-llms/)
 
-**⭐ [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
+**⭐ [Tiny Chip Revolutionizes Clean Energy: A Breakthrough Solution](https://refetch.io/threads/68b06102002d6b464eeb)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250828060040.htm)
 
 ---
 
-*Last updated: 2025-08-28T16:00:14.602Z*
+*Last updated: 2025-08-28T18:00:31.339Z*
 
 
 
