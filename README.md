@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Nvidia DGX Spark: A New Era of Workstations](https://refetch.io/threads/68afc4b9003665502ff7)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
 
-**🥈 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
+**🥈 [Group Borrowing: A New Approach to Memory Safety](https://refetch.io/threads/68b058eb0007b76fd3ca)**
+📊 Votes: **0** | ⏰ 34 minutes ago | 🔗 [Original](https://verdagon.dev/blog/group-borrowing)
 
-**🥉 [Next-Gen iPhones Poised for Major Upgrades with A20 Chip: Rumor Analysis](https://refetch.io/threads/68b0402b0037f699937a)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/12/next-years-iphones-could-get-bigger-than-usual-upgrades-with-a20-chip/)
+**🥉 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
 
-**⭐ [The AI Personhood Trap: A Deep Dive into Artificial Intelligence Mimicking Hu...](https://refetch.io/threads/68b03c9500264e809154)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/the-personhood-trap-how-ai-fakes-human-personality/)
+**⭐ [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
-**⭐ [The Wisdom Behind Apple's Slow Rollout of AI Agent Capabilities](https://refetch.io/threads/68b04028002a761c6550)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/28/stats-suggest-apples-slow-rollout-of-ai-agent-capabilities-may-be-wise/)
+**⭐ [Rethinking Booleans: When a Boolean Should Be Something Else](https://refetch.io/threads/68b05c58000ca0e7d6ef)**
+📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://ntietz.com/blog/that-boolean-should-probably-be-something-else/)
 
 ---
 
-*Last updated: 2025-08-28T12:01:19.208Z*
+*Last updated: 2025-08-28T14:00:05.895Z*
 
 
 
