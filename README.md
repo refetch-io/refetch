@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+**🥇 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**🥈 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
-📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
+**🥈 [Understanding Performance Speed Limits in Computing](https://refetch.io/threads/68b0ccae002df506fc2d)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://travisdowns.github.io/blog/2019/06/11/speed-limits.html)
 
-**🥉 [DIY Coding Agent with Pydantic-AI: A Comprehensive Guide](https://refetch.io/threads/68b0ad21003b20df62ae)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://martinfowler.com/articles/build-own-coding-agent.html)
+**🥉 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
+📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
 
-**⭐ [Samsung's S95F TV: A Matte Screen for Every Room](https://refetch.io/threads/68b0b045002d8849b8df)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://wired.com/review/samsung-s95f/)
+**⭐ [Latest Deals on MacBook Air, AirPods 4, and iPhone 15 Pro Max](https://refetch.io/threads/68b0ccc5002bc16781cb)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/28/deals-macbook-pro-airpods-4-iphone-15-magsafe/)
 
 **⭐ [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
 ---
 
-*Last updated: 2025-08-28T20:01:03.977Z*
+*Last updated: 2025-08-28T22:00:55.634Z*
 
 
 
