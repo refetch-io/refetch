@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Nvidia DGX Spark: A New Era of Workstations](https://refetch.io/threads/68afc4b9003665502ff7)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.nvidia.com/en-us/products/workstations/dgx-spark/)
 
-**🥈 [Building a Fast Bytecode VM for Arithmetic: The Compiler](https://refetch.io/threads/68b0208d0038621431f0)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://abhinavsarkar.net/posts/arithmetic-bytecode-vm-compiler/)
+**🥈 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
-**🥉 [Nvidia's Record Sales Amidst AI Boom: A Closer Look](https://refetch.io/threads/68af7e61000c99889381)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://techcrunch.com/2025/08/27/nvidia-reports-record-sales-as-the-ai-boom-continues/)
+**🥉 [Next-Gen iPhones Poised for Major Upgrades with A20 Chip: Rumor Analysis](https://refetch.io/threads/68b0402b0037f699937a)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/12/next-years-iphones-could-get-bigger-than-usual-upgrades-with-a20-chip/)
 
-**⭐ [Quantum Memory Longevity: Caltech's Breakthrough](https://refetch.io/threads/68afd9ed003332089a93)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250827234137.htm)
+**⭐ [The AI Personhood Trap: A Deep Dive into Artificial Intelligence Mimicking Hu...](https://refetch.io/threads/68b03c9500264e809154)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/the-personhood-trap-how-ai-fakes-human-personality/)
 
-**⭐ [The Impact of AI Chatbots on Big Tech: A Critical Analysis](https://refetch.io/threads/68b00f4a0018b0723a86)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/with-ai-chatbots-big-tech-is-moving-fast-and-breaking-people/)
+**⭐ [The Wisdom Behind Apple's Slow Rollout of AI Agent Capabilities](https://refetch.io/threads/68b04028002a761c6550)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/28/stats-suggest-apples-slow-rollout-of-ai-agent-capabilities-may-be-wise/)
 
 ---
 
-*Last updated: 2025-08-28T10:01:21.034Z*
+*Last updated: 2025-08-28T12:01:19.208Z*
 
 
 
