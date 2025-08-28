@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Wednesday, August 27, 2025)
+## 🔥 Top Posts Today (Thursday, August 28, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
 **🥇 [Security Alert: NX Compromised to Steal Wallets and Credentials](https://refetch.io/threads/68af00460017430c53ba)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://semgrep.dev/blog/2025/security-alert-nx-compromised-to-steal-wallets-and-credentials/)
 
 **🥈 [The Therac-25 Incident: A Lesson in Software Safety](https://refetch.io/threads/68aec1100013056a840a)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://thedailywtf.com/articles/the-therac-25-incident)
 
 **🥉 [Managing a Swarm of 20 AI Agents: Key Learnings](https://refetch.io/threads/68af3f7a001a62e25e5d)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://zachwills.net/i-managed-a-swarm-of-20-ai-agents-for-a-week-here-are-the-8-rules-i-learned/)
 
-**⭐ [Nvidia's Record Sales Amidst AI Boom: A Closer Look](https://refetch.io/threads/68af7e61000c99889381)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/27/nvidia-reports-record-sales-as-the-ai-boom-continues/)
+**⭐ [Reverse-Engineering the Globus INK: A Look at Soviet Spaceflight Navigation](https://refetch.io/threads/68af9acd00057103b470)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.righto.com/2023/03/reverse-engineering-globus-ink-soviet.html)
 
-**⭐ [FCC's Response to DOGE Lawsuit Leaves Judge Unimpressed](https://refetch.io/threads/68af7e6b00039b90620d)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/08/judge-unhappy-with-fccs-vague-and-uninformative-response-to-doge-lawsuit/)
+**⭐ [Nvidia's Sales Jump 56%: A Closer Look](https://refetch.io/threads/68af9acd003b7588ae77)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.nytimes.com/2025/08/27/technology/nvidia-earnings-ai-chips.html)
 
 ---
 
-*Last updated: 2025-08-27T22:01:19.609Z*
+*Last updated: 2025-08-28T00:02:55.522Z*
 
 
 
