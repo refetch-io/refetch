@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
+**🥇 [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
 
-**🥈 [Introducing an Eyecare Foundation Model for Clinical Assistance](https://refetch.io/threads/68b171f8003ab94585ed)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://www.nature.com/articles/s41591-025-03900-7)
+**🥈 [Understanding Nullable vs. Nullable in C#: A Deep Dive](https://refetch.io/threads/68b19194001495a22d63)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://einarwh.no/blog/2025/08/25/nullable-vs-nullable/)
 
-**🥉 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+**🥉 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+**⭐ [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
 
-**⭐ [MCP: The Key to Building Smarter, Modular AI Agents](https://refetch.io/threads/68b16e9d0002745d8f6c)**
-📊 Votes: **0** | ⏰ 50 minutes ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents/)
+**⭐ [Meta's AI Superintelligence Labs: What's Really Going On?](https://refetch.io/threads/68b18dff00276202e0f5)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/767746/meta-ai-superintelligence-lab-departures-scale-zuckerberg-memo)
 
 ---
 
-*Last updated: 2025-08-29T10:00:59.585Z*
+*Last updated: 2025-08-29T12:01:18.233Z*
 
 
 
