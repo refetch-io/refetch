@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Pixel 10's Journal App: Exploring the New Writing Tools and Smart Edit](https://refetch.io/threads/68b120e70002f10c6fee)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/28/pixel-10-journal-app/)
+**🥇 [Security Alert: Libxslt Unmaintained with 5 Unpatched Security Bugs](https://refetch.io/threads/68b13d2500072020f0b8)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vuxml.freebsd.org/freebsd/b0a3466f-5efc-11f0-ae84-99047d0a6bcc.html)
 
 **🥈 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
 **🥉 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [Decoding Machine Learning: A Comprehensive Guide to Key Equations](https://refetch.io/threads/68b04761000631e98951)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://chizkidd.github.io//2025/05/30/machine-learning-key-math-eqns/)
+**⭐ [SpaceX's 'Dumb' Approach to Reuse Proves Successful](https://refetch.io/threads/68b071bf000f7df03edd)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/space/2025/08/with-recent-falcon-9-milestones-spacex-vindicates-its-dumb-approach-to-reuse/)
 
-**⭐ [Group Borrowing: A New Approach to Memory Safety](https://refetch.io/threads/68b058eb0007b76fd3ca)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://verdagon.dev/blog/group-borrowing)
+**⭐ [iOS Elegantbouncer: Catching Threats Without Samples](https://refetch.io/threads/68b0754e00103a6f5577)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.msuiche.com/posts/elegantbouncer-when-you-cant-get-the-samples-but-still-need-to-catch-the-threat/)
 
 ---
 
-*Last updated: 2025-08-29T04:01:17.607Z*
+*Last updated: 2025-08-29T06:01:07.971Z*
 
 
 
