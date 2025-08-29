@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Thursday, August 28, 2025)
+## 🔥 Top Posts Today (Friday, August 29, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+**🥇 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
 
-**🥈 [Understanding Performance Speed Limits in Computing](https://refetch.io/threads/68b0ccae002df506fc2d)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://travisdowns.github.io/blog/2019/06/11/speed-limits.html)
+**🥈 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
-**🥉 [DeepSeek v3.1: A New Contender in Powerful Open AI](https://refetch.io/threads/68b02796002bc257cd04)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://venturebeat.com/ai/deepseek-v3-1-just-dropped-and-it-might-be-the-most-powerful-open-ai-yet)
+**🥉 [Claude Sonnet's Integration in Xcode: What to Expect](https://refetch.io/threads/68b104a70026080556df)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes)
 
-**⭐ [Latest Deals on MacBook Air, AirPods 4, and iPhone 15 Pro Max](https://refetch.io/threads/68b0ccc5002bc16781cb)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/28/deals-macbook-pro-airpods-4-iphone-15-magsafe/)
+**⭐ [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
+**⭐ [The AI Personhood Trap: A Deep Dive into Artificial Intelligence Mimicking Hu...](https://refetch.io/threads/68b03c9500264e809154)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/the-personhood-trap-how-ai-fakes-human-personality/)
 
 ---
 
-*Last updated: 2025-08-28T22:00:55.634Z*
+*Last updated: 2025-08-29T02:00:36.542Z*
 
 
 
