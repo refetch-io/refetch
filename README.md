@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
+**🥇 [The Convergence of Data and Software Engineering](https://refetch.io/threads/68b201ed0014df7b0692)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://clickhouse.com/blog/eight-principles-of-great-developer-experience-for-data-infrastructure)
 
-**🥈 [Unraveling a Century-old Quantum Mystery: New Insights for Developers](https://refetch.io/threads/68b19c45002c12055d08)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052206.htm)
+**🥈 [Windows 11's Next Annual Update Undergoes Release Preview Testing](https://refetch.io/threads/68b201c60004d15efea4)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theverge.com/microsoft-windows/768227/windows-11-25h2-release-preview-test)
 
-**🥉 [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
+**🥉 [Waymo's Robotaxi Testing Expands to Japan](https://refetch.io/threads/68b201c70025f2d41aa2)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theverge.com/2024/12/16/24322769/waymo-japan-robotaxi-test-nihon-kotsu-go)
 
-**⭐ [Intel's Upcoming 'Clearwater Forest' Xeon 7 E-Core CPU](https://refetch.io/threads/68b1bc3200371e20adc0)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/26/intels-clearwater-forest-xeon-7-e-core-cpu-will-be-a-beast/)
+**⭐ [Advanced Spyware Campaign Exploits Apple and WhatsApp Flaws](https://refetch.io/threads/68b1feb7000f582f19f6)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/29/hackers-chained-apple-and-whatsapp-flaws-in-advanced-spyware-campaign/)
 
-**⭐ [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
+**⭐ [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
 
 ---
 
-*Last updated: 2025-08-29T18:00:34.883Z*
+*Last updated: 2025-08-29T20:01:00.410Z*
 
 
 
