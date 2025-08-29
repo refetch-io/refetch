@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Unveiling iOS 26: What's New and What's Changed](https://refetch.io/threads/68b0402d0017c5e1710c)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://9to5mac.com/2025/06/09/ios-26/)
+**🥇 [Pixel 10's Journal App: Exploring the New Writing Tools and Smart Edit](https://refetch.io/threads/68b120e70002f10c6fee)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/28/pixel-10-journal-app/)
 
 **🥈 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
-**🥉 [Claude Sonnet's Integration in Xcode: What to Expect](https://refetch.io/threads/68b104a70026080556df)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes)
+**🥉 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+**⭐ [Decoding Machine Learning: A Comprehensive Guide to Key Equations](https://refetch.io/threads/68b04761000631e98951)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://chizkidd.github.io//2025/05/30/machine-learning-key-math-eqns/)
 
-**⭐ [The AI Personhood Trap: A Deep Dive into Artificial Intelligence Mimicking Hu...](https://refetch.io/threads/68b03c9500264e809154)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/08/the-personhood-trap-how-ai-fakes-human-personality/)
+**⭐ [Group Borrowing: A New Approach to Memory Safety](https://refetch.io/threads/68b058eb0007b76fd3ca)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://verdagon.dev/blog/group-borrowing)
 
 ---
 
-*Last updated: 2025-08-29T02:00:36.542Z*
+*Last updated: 2025-08-29T04:01:17.607Z*
 
 
 
