@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Security Alert: Libxslt Unmaintained with 5 Unpatched Security Bugs](https://refetch.io/threads/68b13d2500072020f0b8)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vuxml.freebsd.org/freebsd/b0a3466f-5efc-11f0-ae84-99047d0a6bcc.html)
+**🥇 [Analyzing Relational Workloads on Modern GPUs](https://refetch.io/threads/68b15928001b7e8443fc)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vldb.org/pvldb/volumes/18/paper/Powerful%20GPUs%20or%20Fast%20Interconnects%3A%20Analyzing%20Relational%20Workloads%20on%20Modern%20GPUs)
 
 **🥈 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
 **🥉 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [SpaceX's 'Dumb' Approach to Reuse Proves Successful](https://refetch.io/threads/68b071bf000f7df03edd)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/space/2025/08/with-recent-falcon-9-milestones-spacex-vindicates-its-dumb-approach-to-reuse/)
+**⭐ [DIY Coding Agent with Pydantic-AI: A Comprehensive Guide](https://refetch.io/threads/68b0ad21003b20df62ae)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://martinfowler.com/articles/build-own-coding-agent.html)
 
-**⭐ [iOS Elegantbouncer: Catching Threats Without Samples](https://refetch.io/threads/68b0754e00103a6f5577)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.msuiche.com/posts/elegantbouncer-when-you-cant-get-the-samples-but-still-need-to-catch-the-threat/)
+**⭐ [OpenAI-Anthropic Cross-Tests Reveal Risks: A Look into GPT-5 Evaluations](https://refetch.io/threads/68b07fb0001b3b2fca56)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://venturebeat.com/ai/openai-anthropic-cross-tests-expose-jailbreak-and-misuse-risks-what-enterprises-must-add-to-gpt-5-evaluations/)
 
 ---
 
-*Last updated: 2025-08-29T06:01:07.971Z*
+*Last updated: 2025-08-29T08:00:33.425Z*
 
 
 
