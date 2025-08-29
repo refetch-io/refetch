@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Analyzing Relational Workloads on Modern GPUs](https://refetch.io/threads/68b15928001b7e8443fc)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://vldb.org/pvldb/volumes/18/paper/Powerful%20GPUs%20or%20Fast%20Interconnects%3A%20Analyzing%20Relational%20Workloads%20on%20Modern%20GPUs)
+**🥇 [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
 
-**🥈 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
+**🥈 [Introducing an Eyecare Foundation Model for Clinical Assistance](https://refetch.io/threads/68b171f8003ab94585ed)**
+📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://www.nature.com/articles/s41591-025-03900-7)
 
-**🥉 [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
+**🥉 [Critical Vulnerability in Passwordstate: Immediate Patch Required](https://refetch.io/threads/68b0ad01002f6d2b614b)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/08/high-severity-vulnerability-in-passwordstate-credential-manager-patch-now/)
 
-**⭐ [DIY Coding Agent with Pydantic-AI: A Comprehensive Guide](https://refetch.io/threads/68b0ad21003b20df62ae)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://martinfowler.com/articles/build-own-coding-agent.html)
+**⭐ [Tencent's R-Zero: A Leap Towards Self-Training Language Learning Models](https://refetch.io/threads/68b0cc9b0001bd467904)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://venturebeat.com/ai/forget-data-labeling-tencents-r-zero-shows-how-llms-can-train-themselves/)
 
-**⭐ [OpenAI-Anthropic Cross-Tests Reveal Risks: A Look into GPT-5 Evaluations](https://refetch.io/threads/68b07fb0001b3b2fca56)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://venturebeat.com/ai/openai-anthropic-cross-tests-expose-jailbreak-and-misuse-risks-what-enterprises-must-add-to-gpt-5-evaluations/)
+**⭐ [MCP: The Key to Building Smarter, Modular AI Agents](https://refetch.io/threads/68b16e9d0002745d8f6c)**
+📊 Votes: **0** | ⏰ 50 minutes ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents/)
 
 ---
 
-*Last updated: 2025-08-29T08:00:33.425Z*
+*Last updated: 2025-08-29T10:00:59.585Z*
 
 
 
