@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Convergence of Data and Software Engineering](https://refetch.io/threads/68b201ed0014df7b0692)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://clickhouse.com/blog/eight-principles-of-great-developer-experience-for-data-infrastructure)
+**🥇 [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
 
-**🥈 [Windows 11's Next Annual Update Undergoes Release Preview Testing](https://refetch.io/threads/68b201c60004d15efea4)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theverge.com/microsoft-windows/768227/windows-11-25h2-release-preview-test)
+**🥈 [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
 
-**🥉 [Waymo's Robotaxi Testing Expands to Japan](https://refetch.io/threads/68b201c70025f2d41aa2)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theverge.com/2024/12/16/24322769/waymo-japan-robotaxi-test-nihon-kotsu-go)
+**🥉 [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
 
-**⭐ [Advanced Spyware Campaign Exploits Apple and WhatsApp Flaws](https://refetch.io/threads/68b1feb7000f582f19f6)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/29/hackers-chained-apple-and-whatsapp-flaws-in-advanced-spyware-campaign/)
+**⭐ [MCP: The Key to Building Smarter, Modular AI Agents](https://refetch.io/threads/68b16e9d0002745d8f6c)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents/)
 
-**⭐ [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
+**⭐ [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
 
 ---
 
-*Last updated: 2025-08-29T20:01:00.410Z*
+*Last updated: 2025-08-29T22:00:55.429Z*
 
 
 
