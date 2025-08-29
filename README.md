@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The White House's Push for Grok: A New AI Initiative](https://refetch.io/threads/68b1adbf002ab8f5a4b0)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://wired.com/story/white-house-elon-musk-xai-grok/)
+**🥇 [The Pixel 10's AI: A Deep Dive into the Latest Developments](https://refetch.io/threads/68b1cd55000c6a5919c4)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://theverge.com/the-vergecast/767883/pixel-10-pro-ai-dish-intel-musk-lawsuit)
 
-**🥈 [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
+**🥈 [Microsoft and Uber Alum Raises $3M for Neobank Munify](https://refetch.io/threads/68b1cd4e0022736bbb88)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/29/microsoft-and-uber-alum-raises-3m-for-yc-backed-munify-a-neobank-for-the-egyptian-diaspora/)
 
-**🥉 [Ambani Collaborates with Google, Meta to Build India's AI Infrastructure](https://refetch.io/threads/68b1adaa003a764c4a33)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/29/billionaire-ambani-taps-google-meta-to-build-indias-ai-backbone/)
+**🥉 [Breaking into the Game Industry: Insights from Garry's Mod Creator](https://refetch.io/threads/68b1ca0a0023eb076048)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://garry.net/posts/how-do-i-get-into-the-game-industry)
 
-**⭐ [Pixel 10 Pro XL Review: Google's 10th Generation Attempt](https://refetch.io/threads/68b1adf3002f1dd7a0dd)**
-📊 Votes: **0** | ⏰ 19 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/29/google-pixel-10-pro-xl-review/)
+**⭐ [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
 
 **⭐ [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
 
 ---
 
-*Last updated: 2025-08-29T14:00:32.193Z*
+*Last updated: 2025-08-29T16:01:08.192Z*
 
 
 
