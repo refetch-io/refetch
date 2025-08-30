@@ -207,6 +207,70 @@ async function scrapeWebsiteForArticles(url) {
     if (response.status === 200) {
       let html = response.data;
       
+      // Debug: Check HTML before cleaning
+      const beforeAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+      const beforeSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
+      
+      // Debug: Check for empty href attributes in raw HTML
+      const emptyHrefMatches = html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || [];
+      if (emptyHrefMatches.length > 0) {
+        console.log(`  ⚠️ Found ${emptyHrefMatches.length} anchor tags with empty href in raw HTML`);
+        console.log(`  📍 Sample empty href: ${emptyHrefMatches[0]}`);
+      }
+      
+      // Debug: Check for different anchor tag patterns
+      const anchorPatterns = {
+        noHref: (html.match(/<a[^>]*>(?!.*href)/gi) || []).length,
+        emptyHref: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
+        hashHref: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
+        javascriptHref: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
+        relativeHref: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
+        absoluteHref: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
+        otherHref: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
+      };
+      
+      console.log(`  📊 Raw HTML anchor patterns: noHref=${anchorPatterns.noHref}, emptyHref=${anchorPatterns.emptyHref}, hashHref=${anchorPatterns.hashHref}, jsHref=${anchorPatterns.javascriptHref}, relativeHref=${anchorPatterns.relativeHref}, absoluteHref=${anchorPatterns.absoluteHref}, otherHref=${anchorPatterns.otherHref}`);
+      
+      // Debug: Show a few raw anchor tags to understand the structure
+      const rawAnchors = html.match(/<a[^>]*>[^<]*<\/a>/gi)?.slice(0, 5) || [];
+      if (rawAnchors.length > 0) {
+        console.log(`  🔍 Raw anchor tags (first 5):`);
+        rawAnchors.forEach((anchor, i) => {
+          console.log(`    ${i + 1}. ${anchor}`);
+        });
+      }
+      
+      // Debug: Check for alternative link patterns (buttons, divs with onclick, etc.)
+      const alternativePatterns = {
+        buttons: (html.match(/<button[^>]*onclick[^>]*>/gi) || []).length,
+        divsWithOnclick: (html.match(/<div[^>]*onclick[^>]*>/gi) || []).length,
+        spansWithOnclick: (html.match(/<span[^>]*onclick[^>]*>/gi) || []).length,
+        dataAttributes: (html.match(/<[^>]*data-[^=]*=[^>]*>/gi) || []).length,
+        ariaButtons: (html.match(/<[^>]*role=["']button["'][^>]*>/gi) || []).length,
+        tabIndexElements: (html.match(/<[^>]*tabindex[^>]*>/gi) || []).length,
+        dataUrlAttributes: (html.match(/<[^>]*data-url[^>]*>/gi) || []).length,
+        dataHrefAttributes: (html.match(/<[^>]*data-href[^>]*>/gi) || []).length
+      };
+      
+      console.log(`  📊 Alternative link patterns: buttons=${alternativePatterns.buttons}, divsWithOnclick=${alternativePatterns.divsWithOnclick}, spansWithOnclick=${alternativePatterns.spansWithOnclick}, dataAttributes=${alternativePatterns.dataAttributes}, ariaButtons=${alternativePatterns.ariaButtons}, tabIndexElements=${alternativePatterns.tabIndexElements}, dataUrlAttributes=${alternativePatterns.dataUrlAttributes}, dataHrefAttributes=${alternativePatterns.dataHrefAttributes}`);
+      
+      // Debug: Check HTML encoding and hidden characters
+      const htmlLength = html.length;
+      const nonAsciiChars = html.match(/[^\x00-\x7F]/g)?.length || 0;
+      const hiddenChars = html.match(/[\u200B-\u200D\uFEFF]/g)?.length || 0;
+      
+      console.log(`  📊 HTML stats: length=${htmlLength}, nonAscii=${nonAsciiChars}, hiddenChars=${hiddenChars}`);
+      
+      // Debug: Check for JavaScript that sets href attributes
+      const jsHrefPatterns = {
+        setAttribute: (html.match(/setAttribute\(["']href["'][^)]*\)/gi) || []).length,
+        hrefAssignment: (html.match(/\.href\s*=/gi) || []).length,
+        innerHTML: (html.match(/innerHTML\s*=/gi) || []).length,
+        outerHTML: (html.match(/outerHTML\s*=/gi) || []).length
+      };
+      
+      console.log(`  📊 JavaScript href patterns: setAttribute=${jsHrefPatterns.setAttribute}, hrefAssignment=${jsHrefPatterns.hrefAssignment}, innerHTML=${jsHrefPatterns.innerHTML}, outerHTML=${jsHrefPatterns.outerHTML}`);
+      
       // Post-process HTML to remove iframes, scripts, and external resources
       html = html
         // Remove iframe tags completely
@@ -215,17 +279,42 @@ async function scrapeWebsiteForArticles(url) {
         .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
         // Remove style tags
         .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-        // Remove link tags (CSS, favicons, etc.)
+        // Remove link tags (CSS, favicons, etc.) - but preserve anchor tags
         .replace(/<link[^>]*>/gi, '')
         // Remove meta tags that might trigger external loads
         .replace(/<meta[^>]*http-equiv=["']refresh["'][^>]*>/gi, '')
         // Remove object and embed tags
         .replace(/<(object|embed)[^>]*>[\s\S]*?<\/(object|embed)>/gi, '')
-        // Remove external resource references
+        // Remove external resource references - but preserve anchor href attributes
         .replace(/src=["'](?!data:)[^"']*["']/gi, 'src=""')
-        .replace(/href=["'](?!data:)[^"']*["']/gi, 'href=""')
+        // Only remove href attributes from link tags (CSS, favicons), not from anchor tags
+        .replace(/<link[^>]*href=["'](?!data:)[^"']*["'][^>]*>/gi, '<link>')
         // Remove any remaining external resource patterns
         .replace(/url\([^)]*\)/gi, 'url()');
+      
+      // Debug: Check HTML after cleaning
+      const afterAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+      const afterSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
+      
+      console.log(`  🔍 HTML cleaning debug: ${beforeAnchorCount} → ${afterAnchorCount} anchor tags with href`);
+      if (beforeSampleAnchors.length > 0) {
+        console.log(`  📍 Before cleaning sample: ${beforeSampleAnchors[0]}`);
+      }
+      if (afterSampleAnchors.length > 0) {
+        console.log(`  📍 After cleaning sample: ${afterSampleAnchors[0]}`);
+      }
+      
+      // Debug: Check for different href patterns
+      const hrefPatterns = {
+        empty: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
+        hash: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
+        javascript: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
+        relative: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
+        absolute: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
+        other: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
+      };
+      
+      console.log(`  📊 Href patterns: empty=${hrefPatterns.empty}, hash=${hrefPatterns.hash}, js=${hrefPatterns.javascript}, relative=${hrefPatterns.relative}, absolute=${hrefPatterns.absolute}, other=${hrefPatterns.other}`);
       
       return html;
     } else {
