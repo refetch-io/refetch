@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
+**🥇 [Indie App Spotlight: 'Profit', an Investment Tracker for Apple Devices](https://refetch.io/threads/68b352e800143cc9c9ac)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/30/indie-app-spotlight-profit-investment-portfolio-tracker-for-iphone/)
 
 **🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 1 hour ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
+📊 Votes: **-1** | ⏰ 3 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
 **🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
 
 **⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
 
 **⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
 
 ---
 
-*Last updated: 2025-08-30T18:01:11.769Z*
+*Last updated: 2025-08-30T20:00:59.529Z*
 
 
 
@@ -97,7 +97,6 @@ Refetch is built with a modern, scalable architecture that prioritizes performan
 ---
 
 ## 📁 Project Structure
-
 
 ```
 refetch/
