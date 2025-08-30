@@ -450,9 +450,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       // Skip empty or invalid URLs
       if (!articleUrl) {
         // Debug: Show what type of invalid URL we're rejecting
-        if (skippedUrls < 3) {
-          console.log(`    Rejecting: empty href attribute`);
-        }
         emptyHrefSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
@@ -460,10 +457,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       }
       
       if (articleUrl === '#') {
-        // Debug: Show what type of invalid URL we're rejecting
-        if (skippedUrls < 3) {
-          console.log(`    Rejecting: href="#" (anchor link)`);
-        }
         hashLinkSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
@@ -471,10 +464,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       }
       
       if (articleUrl === 'javascript:void(0)') {
-        // Debug: Show what type of invalid URL we're rejecting
-        if (skippedUrls < 3) {
-          console.log(`    Rejecting: href="javascript:void(0)" (JS link)`);
-        }
         javascriptLinkSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
@@ -486,7 +475,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         try {
           const originalUrl = articleUrl;
           articleUrl = new URL(articleUrl, baseUrl).href;
-          console.log(`    Converted relative URL: ${originalUrl} → ${articleUrl}`);
         } catch (urlError) {
           urlParsingSkipped++;
           skippedUrls++;
@@ -494,7 +482,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         }
       } else if (!articleUrl.startsWith('http')) {
         // Skip relative URLs that don't start with /
-        console.log(`    Skipping non-HTTP URL: ${articleUrl}`);
         nonHttpSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
@@ -510,9 +497,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         // Count external URLs for reporting
         if (baseDomain !== articleDomain) {
           externalUrlsIncluded++;
-          console.log(`    External URL: ${articleUrl} (from ${baseDomain})`);
-        } else {
-          console.log(`    Same domain URL: ${articleUrl}`);
         }
         
         // Only increment processedUrls after URL validation passes
@@ -676,19 +660,6 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         console.log(`    ${index + 1}. ${article.url.substring(0, 80)}...`);
       });
     }
-    
-    console.log(`  🔍 Debug mode: showing first 5 URLs for analysis`);
-    let debugCount = 0;
-    for (const anchor of anchorTags) {
-      if (debugCount >= 5) break;
-      const url = anchor.getAttribute('href');
-      const text = anchor.textContent.trim();
-      if (url && url !== '#' && url !== 'javascript:void(0)' && text.length > 0) {
-        console.log(`    Debug URL: ${url} | Text: "${text.substring(0, 50)}..."`);
-        debugCount++;
-      }
-    }
-    
     // Also show some URLs that made it through initial validation
     if (processedUrls > 0) {
       console.log(`  ✅ URLs that passed initial validation: ${processedUrls}`);
