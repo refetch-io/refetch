@@ -201,7 +201,7 @@ async function scrapeWebsiteForArticles(url) {
       },
       timeout: 30000,
       // Prevent axios from following redirects to external resources
-      maxRedirects: 0,
+      maxRedirects: 2,
       // Only accept HTML responses
       validateStatus: function (status) {
         return status >= 200 && status < 300;
