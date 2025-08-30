@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
+**🥇 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
+📊 Votes: **0** | ⏰ 51 minutes ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
 
-**🥈 [AI Propaganda: A Look at the Pentagon's Suppression of Dissent](https://refetch.io/threads/68b256310037df01023e)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theintercept.com/2025/08/25/pentagon-military-ai-propaganda-influence/)
+**🥈 [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
 
-**🥉 [The Case for Deleting Tests: A Controversial Perspective](https://refetch.io/threads/68b25633001791cd1b76)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://andre.arko.net/2025/06/30/you-should-delete-tests/)
+**🥉 [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
 
-**⭐ [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
+**⭐ [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
 
-**⭐ [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
+**⭐ [Unraveling a Century-old Quantum Mystery: New Insights for Developers](https://refetch.io/threads/68b19c45002c12055d08)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052206.htm)
 
 ---
 
-*Last updated: 2025-08-30T02:01:01.185Z*
+*Last updated: 2025-08-30T04:01:21.277Z*
 
 
 
