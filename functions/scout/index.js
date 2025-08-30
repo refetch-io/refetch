@@ -712,6 +712,42 @@ Please return a JSON response with the structure specified in the system prompt.
   }
 }
 
+// Helper function to check for duplicate URLs in bulk using array query
+async function checkDuplicateUrlsBulk(urls) {
+  try {
+    if (urls.length === 0) {
+      return new Set();
+    }
+    
+    const cleanUrls = urls.map(url => cleanUrl(url));
+    
+    console.log(`  🔍 Checking ${cleanUrls.length} URLs for duplicates using array query...`);
+    
+    // Use Appwrite's array query to find existing posts with matching links
+    // This is much more efficient than fetching all documents
+    const existingPosts = await databases.listDocuments(
+      process.env.APPWRITE_DATABASE_ID || '',
+      process.env.APPWRITE_POSTS_COLLECTION_ID || '',
+      [
+        Query.equal('link', cleanUrls)
+      ]
+    );
+    
+    // Extract the duplicate URLs from the results
+    const duplicateUrls = new Set(
+      existingPosts.documents.map(post => post.link)
+    );
+    
+    console.log(`  ✅ Found ${duplicateUrls.size} duplicate URLs out of ${cleanUrls.length} total URLs`);
+    return duplicateUrls;
+    
+  } catch (error) {
+    console.error(`❌ Bulk duplicate check failed: ${error.message}`);
+    // Return empty set to avoid blocking the process
+    return new Set();
+  }
+}
+
 // Helper function to check for duplicate URLs
 async function checkDuplicateUrl(url) {
   try {
@@ -829,6 +865,8 @@ async function scoutArticles() {
     executionTime: '',
     urlBreakdown: {
       totalUrlsFound: 0,
+      duplicatesRemoved: 0,
+      uniqueUrlsRemaining: 0,
       urlsAnalyzed: 0,
       urlsFilteredOut: 0,
       urlsFailedAnalysis: 0
@@ -887,6 +925,35 @@ async function scoutArticles() {
       console.log(`  ${shortSource}: ${count} URLs`);
     });
     
+    // Step 1.5: Check for duplicates before AI analysis
+    console.log('\n🔍 Step 1.5: Checking for duplicate URLs...');
+    const allUrls = allArticlesData.map(article => article.url);
+    const duplicateUrls = await checkDuplicateUrlsBulk(allUrls);
+    
+    // Filter out duplicate URLs from the articles data
+    const uniqueArticlesData = allArticlesData.filter(article => !duplicateUrls.has(cleanUrl(article.url)));
+    
+    console.log(`✅ Removed ${duplicateUrls.size} duplicate URLs, ${uniqueArticlesData.length} unique URLs remaining`);
+    
+    // Show deduplication breakdown by source
+    if (duplicateUrls.size > 0) {
+      console.log('📊 Duplicates by source:');
+      const duplicateSourceBreakdown = {};
+      allArticlesData.forEach(article => {
+        if (duplicateUrls.has(cleanUrl(article.url))) {
+          duplicateSourceBreakdown[article.source] = (duplicateSourceBreakdown[article.source] || 0) + 1;
+        }
+      });
+      Object.entries(duplicateSourceBreakdown).forEach(([source, count]) => {
+        const shortSource = source.replace('https://', '').replace('www.', '');
+        console.log(`  ${shortSource}: ${count} duplicates`);
+      });
+    }
+    
+    // Update results
+    results.urlBreakdown.duplicatesRemoved = duplicateUrls.size;
+    results.urlBreakdown.uniqueUrlsRemaining = uniqueArticlesData.length;
+    
     // Step 2: Analyze URLs with AI
     console.log('\n🤖 Step 2: AI analysis of URLs...');
     const analyzedArticles = [];
@@ -898,7 +965,7 @@ async function scoutArticles() {
     for (let i = 0; i < TARGET_WEBSITES.length; i++) {
       const sourceUrl = TARGET_WEBSITES[i];
       
-      const sourceArticles = allArticlesData.filter(article => {
+      const sourceArticles = uniqueArticlesData.filter(article => {
         // Use the source field we tracked during extraction
         return article.source === sourceUrl;
       });
@@ -947,7 +1014,7 @@ async function scoutArticles() {
       }
     }
     
-    console.log(`✅ Analyzed ${analyzedArticles.length}/${allArticlesData.length} URLs successfully`);
+    console.log(`✅ Analyzed ${analyzedArticles.length}/${uniqueArticlesData.length} URLs successfully`);
     
     // Show batching summary if we had multiple batches
     if (totalBatchesProcessed > 1) {
@@ -1005,7 +1072,7 @@ async function scoutArticles() {
     results.executionTime = `${executionTime}s`;
     
     console.log('\n🎉 Scout completed successfully!');
-    console.log(`📊 Results: ${results.websitesScraped} sites → ${results.urlBreakdown.totalUrlsFound} URLs → ${results.articlesAdded} articles added (${results.duplicatesSkipped} duplicates) in ${results.executionTime}s`);
+    console.log(`📊 Results: ${results.websitesScraped} sites → ${results.urlBreakdown.totalUrlsFound} URLs → ${results.urlBreakdown.duplicatesRemoved} duplicates removed → ${results.urlBreakdown.uniqueUrlsRemaining} unique URLs → ${results.articlesAdded} articles added in ${results.executionTime}s`);
     
     // Show final breakdown by source
     if (analyzedArticles.length > 0) {

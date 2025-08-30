@@ -59,7 +59,7 @@ The `TARGET_WEBSITES` environment variable is required and must contain a comma-
 - **Refetch-Style Titles**: Generates titles that match the refetch platform style (similar to Hacker News)
 - **Discussion Starters**: Automatically creates engaging first comments to kick off discussions
 - **Content Classification**: Properly categorizes articles as "link" or "show" types
-- **Duplicate Prevention**: Checks existing database to avoid adding duplicate articles
+- **Bulk Duplicate Prevention**: Efficiently checks all URLs against the database before AI analysis using pagination
 - **Minimal Processing**: Focuses on discovery and initial processing - detailed analysis handled by enhancement functions
 
 ## Configuration
@@ -104,6 +104,35 @@ Create a dedicated user account for the scout function:
 - Username: "Refetch Scout" (or your preferred name)
 - This user will be the author of all auto-discovered articles
 - Ensure this user has proper permissions
+
+## Deduplication
+
+The scout function now includes an efficient bulk deduplication step that runs before AI analysis. This prevents wasting AI API calls on URLs that already exist in your database.
+
+### How Deduplication Works
+
+1. **Bulk Check**: After scraping all websites, the function collects all discovered URLs
+2. **Array Query**: Uses Appwrite's `Query.equal('link', urls)` to efficiently find existing posts
+3. **URL Matching**: Appwrite automatically matches discovered URLs against existing database entries
+4. **Filtering**: Removes duplicate URLs before sending the remaining unique URLs to the AI
+5. **Efficiency**: Single database query instead of pagination or individual URL checks
+
+### Deduplication Configuration
+
+The deduplication process is now fully automatic and requires no additional configuration. Appwrite's array query feature handles the efficient matching of multiple URLs in a single database operation.
+
+### Example Deduplication Output
+
+```
+🔍 Step 1.5: Checking for duplicate URLs...
+  🔍 Checking 150 URLs for duplicates using array query...
+  ✅ Found 25 duplicate URLs out of 150 total URLs
+✅ Removed 25 duplicate URLs, 125 unique URLs remaining
+📊 Duplicates by source:
+  techcrunch.com: 8 duplicates
+  theverge.com: 12 duplicates
+  arstechnica.com: 5 duplicates
+```
 
 ## Batching Configuration
 
