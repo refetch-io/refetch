@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Adafruit Fruit Jam: A Glimpse into a RP2350 Mini Computer Running Classic Mac...](https://refetch.io/threads/68b31af400004a571ffc)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.cnx-software.com/2025/08/27/adafruit-fruit-jam-a-rp2350-mini-computer-running-classic-macintosh/)
+**🥇 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
 
-**🥈 [Designing a DBMS for Telco Requirements: A Guide](https://refetch.io/threads/68b31af50020fc7d837d)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](http://mikaelronstrom.blogspot.com/2025/08/how-to-design-dbms-for-telco.html)
+**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 1 hour ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**🥉 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
+**🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
 
-**⭐ [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
+**⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
 
-**⭐ [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
 
 ---
 
-*Last updated: 2025-08-30T16:00:32.840Z*
+*Last updated: 2025-08-30T18:01:11.769Z*
 
 
 
