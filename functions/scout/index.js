@@ -325,6 +325,10 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     
     let processedUrls = 0;
     let skippedUrls = 0;
+    let patternSkipped = 0;
+    let lengthSkipped = 0;
+    let textSkipped = 0;
+    let externalUrlsIncluded = 0;
     
     for (const anchor of anchorTags) {
       let articleUrl = anchor.getAttribute('href');
@@ -346,12 +350,18 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         continue;
       }
       
-      // For Hacker News, include external URLs (they link to other sites)
-      // For other sites, only include URLs from the same domain
-      if (baseUrl.includes('news.ycombinator.com')) {
-        // HN links to external sites, so we need to handle this differently
-        // We'll include external URLs but mark them as HN-sourced
-      } else if (!articleUrl.startsWith(baseUrl)) {
+      // Allow external URLs for all sources - let the article pattern detection filter quality
+      // This enables finding articles from link aggregators and cross-site references
+      try {
+        const baseDomain = new URL(baseUrl).hostname;
+        const articleDomain = new URL(articleUrl).hostname;
+        
+        // Count external URLs for reporting
+        if (baseDomain !== articleDomain) {
+          externalUrlsIncluded++;
+        }
+      } catch (urlError) {
+        // If URL parsing fails, skip this URL
         skippedUrls++;
         continue;
       }
@@ -420,6 +430,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       ];
       
       if (skipPatterns.some(pattern => pattern.test(articleUrl))) {
+        patternSkipped++;
         skippedUrls++;
         continue;
       }
@@ -433,6 +444,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       // Skip URLs that are too short (likely not articles)
       const urlPath = new URL(articleUrl).pathname;
       if (urlPath.length < 10) {
+        lengthSkipped++;
         skippedUrls++;
         continue;
       }
@@ -445,6 +457,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       const minSlashCount = urlPath.length > 50 ? 2 : 1;
       
       if (slashCount < minSlashCount) {
+        lengthSkipped++;
         skippedUrls++;
         continue;
       }
@@ -485,9 +498,12 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       
       // More lenient approach: if no specific patterns match, still consider it if the URL is substantial
       const hasArticlePattern = articlePatterns.some(pattern => pattern.test(articleUrl));
-      const isSubstantialUrl = urlPath.length > 30 && slashCount >= 1;
+      const isSubstantialUrl = urlPath.length > 20 && slashCount >= 1; // Reduced from 30 to 20
       
-      if (!hasArticlePattern && !isSubstantialUrl) {
+      // Even more lenient: accept URLs that are just substantial enough
+      const isMinimallyValid = urlPath.length > 15 && slashCount >= 1;
+      
+      if (!hasArticlePattern && !isSubstantialUrl && !isMinimallyValid) {
         skippedUrls++;
         continue;
       }
@@ -499,6 +515,8 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
           label: linkText,
           source: baseUrl // Track which website this URL came from
         });
+      } else {
+        textSkipped++;
       }
     }
     
@@ -519,6 +537,34 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       console.log(`  ${finalArticles.length} articles found`);
     } else {
       console.log(`  ⚠️ No articles found`);
+    }
+    
+    // Log detailed skip reasons for debugging
+    console.log(`  📊 Skip breakdown: ${patternSkipped} pattern, ${lengthSkipped} length, ${textSkipped} text, ${processedUrls - skippedUrls} processed`);
+    
+    // Show external URLs count for link aggregator sites
+    if (externalUrlsIncluded > 0) {
+      console.log(`  🌐 External URLs included: ${externalUrlsIncluded} (from link aggregator sites)`);
+    }
+    
+    // Show some sample URLs that were processed (for debugging)
+    if (finalArticles.length > 0) {
+      console.log(`  📝 Sample URLs found:`);
+      finalArticles.slice(0, 3).forEach((article, index) => {
+        console.log(`    ${index + 1}. ${article.url.substring(0, 80)}...`);
+      });
+    }
+    
+    console.log(`  🔍 Debug mode: showing first 5 skipped URLs for analysis`);
+    let debugCount = 0;
+    for (const anchor of anchorTags) {
+      if (debugCount >= 5) break;
+      const url = anchor.getAttribute('href');
+      const text = anchor.textContent.trim();
+      if (url && url !== '#' && url !== 'javascript:void(0)' && text.length > 0) {
+        console.log(`    Debug URL: ${url} | Text: "${text.substring(0, 50)}..."`);
+        debugCount++;
+      }
     }
     
     return finalArticles;
