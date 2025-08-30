@@ -98,6 +98,7 @@ Refetch is built with a modern, scalable architecture that prioritizes performan
 
 ## 📁 Project Structure
 
+
 ```
 refetch/
 ├── app/                    # Next.js App Router pages
