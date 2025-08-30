@@ -129,11 +129,7 @@ function extractUrlsWithRegex(html, baseUrl) {
       } else if (!url.startsWith('http')) {
         continue;
       }
-      
-      if (!baseUrl.includes('news.ycombinator.com') && !fullUrl.startsWith(baseUrl)) {
-        continue;
-      }
-      
+
       const urlPath = new URL(fullUrl).pathname;
       if (urlPath.length < 10) continue;
       
@@ -348,6 +344,10 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     
     let initialValidationSkipped = 0;
     let urlParsingSkipped = 0;
+    let emptyHrefSkipped = 0;
+    let hashLinkSkipped = 0;
+    let javascriptLinkSkipped = 0;
+    let nonHttpSkipped = 0;
     
     for (const anchor of anchorTags) {
       let articleUrl = anchor.getAttribute('href');
@@ -359,17 +359,34 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       }
       
       // Skip empty or invalid URLs
-      if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+      if (!articleUrl) {
         // Debug: Show what type of invalid URL we're rejecting
         if (skippedUrls < 3) {
-          if (!articleUrl) {
-            console.log(`    Rejecting: empty href attribute`);
-          } else if (articleUrl === '#') {
-            console.log(`    Rejecting: href="#" (anchor link)`);
-          } else if (articleUrl === 'javascript:void(0)') {
-            console.log(`    Rejecting: href="javascript:void(0)" (JS link)`);
-          }
+          console.log(`    Rejecting: empty href attribute`);
         }
+        emptyHrefSkipped++;
+        initialValidationSkipped++;
+        skippedUrls++;
+        continue;
+      }
+      
+      if (articleUrl === '#') {
+        // Debug: Show what type of invalid URL we're rejecting
+        if (skippedUrls < 3) {
+          console.log(`    Rejecting: href="#" (anchor link)`);
+        }
+        hashLinkSkipped++;
+        initialValidationSkipped++;
+        skippedUrls++;
+        continue;
+      }
+      
+      if (articleUrl === 'javascript:void(0)') {
+        // Debug: Show what type of invalid URL we're rejecting
+        if (skippedUrls < 3) {
+          console.log(`    Rejecting: href="javascript:void(0)" (JS link)`);
+        }
+        javascriptLinkSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
         continue;
@@ -389,6 +406,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       } else if (!articleUrl.startsWith('http')) {
         // Skip relative URLs that don't start with /
         console.log(`    Skipping non-HTTP URL: ${articleUrl}`);
+        nonHttpSkipped++;
         initialValidationSkipped++;
         skippedUrls++;
         continue;
@@ -495,7 +513,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       
       // Skip URLs that are too short (likely not articles)
       const urlPath = new URL(articleUrl).pathname;
-      if (urlPath.length < 10) {
+      if (urlPath.length < 8) { // Reduced from 10 to 8
         lengthSkipped++;
         skippedUrls++;
         continue;
@@ -504,9 +522,8 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       // Skip URLs with too few slashes (likely not articles)
       const slashCount = (urlPath.match(/\//g) || []).length;
       
-      // Adaptive requirements based on URL structure
-      // Sites with more complex URLs need more structure, simpler sites can have less
-      const minSlashCount = urlPath.length > 50 ? 2 : 1;
+      // More lenient requirements - just need basic structure
+      const minSlashCount = 1; // Always require at least 1 slash
       
       if (slashCount < minSlashCount) {
         lengthSkipped++;
@@ -514,54 +531,18 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         continue;
       }
       
-      // Look for article-like patterns in the URL
-      const articlePatterns = [
-        // Date patterns
-        /\d{4}\/\d{2}\/\d{2}/i,  // Date patterns (YYYY/MM/DD)
-        /\d{4}\/\d{2}/i,          // Date patterns (YYYY/MM)
-        
-        // General article patterns
-        /article/i,
-        /story/i,
-        /news/i,
-        /post/i,
-        /blog/i,
-        /entry/i,
-        /item/i,
-        
-        // Technology patterns
-        /tech/i,
-        /technology/i,
-        /software/i,
-        /hardware/i,
-        
-        // Community patterns
-        /comments/i,
-        /discussion/i,
-        /thread/i,
-        
-        // Generic content patterns
-        /content/i,
-        /page/i,
-        /view/i,
-        /show/i,
-        /display/i
-      ];
+      // Simplified approach: accept URLs that meet basic structural requirements
+      // No more restrictive pattern matching - let the AI decide what's valuable
+      const isMinimallyValid = urlPath.length > 12 && slashCount >= 1; // Reduced from 15 to 12
       
-      // More lenient approach: if no specific patterns match, still consider it if the URL is substantial
-      const hasArticlePattern = articlePatterns.some(pattern => pattern.test(articleUrl));
-      const isSubstantialUrl = urlPath.length > 20 && slashCount >= 1; // Reduced from 30 to 20
-      
-      // Even more lenient: accept URLs that are just substantial enough
-      const isMinimallyValid = urlPath.length > 15 && slashCount >= 1;
-      
-      if (!hasArticlePattern && !isSubstantialUrl && !isMinimallyValid) {
+      if (!isMinimallyValid) {
+        lengthSkipped++;
         skippedUrls++;
         continue;
       }
       
       // Only include if we have meaningful link text
-      if (linkText && linkText.length > 5 && linkText.length < 200) {
+      if (linkText && linkText.length > 3 && linkText.length < 300) { // Reduced from 5 to 3, increased from 200 to 300
         articleData.push({
           url: articleUrl,
           label: linkText,
@@ -592,7 +573,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     }
     
     // Log detailed skip reasons for debugging
-    console.log(`  📊 Skip breakdown: ${initialValidationSkipped} initial, ${urlParsingSkipped} parsing, ${patternSkipped} pattern, ${lengthSkipped} length, ${textSkipped} text, ${processedUrls} processed`);
+    console.log(`  📊 Skip breakdown: ${initialValidationSkipped} initial (${emptyHrefSkipped} empty, ${hashLinkSkipped} hash, ${javascriptLinkSkipped} js, ${nonHttpSkipped} non-http), ${urlParsingSkipped} parsing, ${patternSkipped} pattern, ${lengthSkipped} length, ${textSkipped} text, ${processedUrls} processed`);
     
     // Show external URLs count for link aggregator sites
     if (externalUrlsIncluded > 0) {
