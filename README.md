@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, August 25, 2025)
+## 🔥 Top Posts Today (Saturday, August 30, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Testing Agentic AI Browsers: A Study in Scamlexity](https://refetch.io/threads/68ac3a310021de2e6f2d)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://guard.io/labs/scamlexity-we-put-agentic-ai-browsers-to-the-test-they-clicked-they-paid-they-failed)
+**🥇 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
 
-**🥈 [Elon Musk's Legal Battle Against Apple and OpenAI Over Exclusive ChatGPT Inte...](https://refetch.io/threads/68acbc1f0008feeef540)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/08/elon-musk-sues-apple-openai-to-block-exclusive-iphone-chatgpt-integration/)
+**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 1 hour ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**🥉 [Everything Unveiled at Made by Google 2025: Pixel 10 Pro, Fold, Watch 4, and ...](https://refetch.io/threads/68acab1c00064c7239f7)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://zdnet.com/article/everything-announced-at-made-by-google-2025-pixel-10-pro-fold-watch-4-and-more/)
+**🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
 
-**⭐ [Elon Musk's Legal Battle with OpenAI and Sam Altman over Nonprofit AI Mission](https://refetch.io/threads/68acb87a000f0ae4b35d)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2024/03/01/elon-musk-openai-sam-altman-court/)
+**⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
 
-**⭐ [Pixel Studio 2.0: A New Image Editor with Advanced AI Tools](https://refetch.io/threads/68acb8ce0000d714aa10)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://9to5google.com/2025/08/25/pixel-studio-2-0-editor/)
+**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
 
 ---
 
-*Last updated: 2025-08-25T20:01:22.967Z*
+*Last updated: 2025-08-30T18:01:11.769Z*
 
 
 
