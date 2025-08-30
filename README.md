@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
+**🥇 [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
 
-**🥈 [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
+**🥈 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
 
-**🥉 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
+**🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
 
-**⭐ [Intel's Upcoming 'Clearwater Forest' Xeon 7 E-Core CPU](https://refetch.io/threads/68b1bc3200371e20adc0)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/26/intels-clearwater-forest-xeon-7-e-core-cpu-will-be-a-beast/)
+**⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
 
-**⭐ [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+**⭐ [Resolving .NET Core Native Library Loading Issue on Alpine](https://refetch.io/threads/68b1d7c700254eddf4b6)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://andrewlock.net/fixing-an-old-dotnet-core-native-library-loading-issue-on-alpine/)
 
 ---
 
-*Last updated: 2025-08-30T06:00:32.901Z*
+*Last updated: 2025-08-30T08:01:13.045Z*
 
 
 
