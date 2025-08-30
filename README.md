@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Indie App Spotlight: 'Profit', an Investment Tracker for Apple Devices](https://refetch.io/threads/68b352e800143cc9c9ac)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/30/indie-app-spotlight-profit-investment-portfolio-tracker-for-iphone/)
+**🥇 [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/autonomous-cars)
 
-**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 3 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
+**🥈 [Two Unnamed Customers Contribute to 39% of Nvidia's Q2 Revenue](https://refetch.io/threads/68b372470037f263a8fa)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/30/nvidia-says-two-mystery-customers-accounted-for-39-of-q2-revenue/)
 
-**🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+**🥉 [Yooka-Laylee Remaster Coming to Consoles and PC](https://refetch.io/threads/68b37269002b39e80cba)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/yooka-laylee-remaster-comes-to-consoles-and-pc-on-october-9-180052250.html)
 
-**⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
+**⭐ [Exploring the Landscape of Cyber Security](https://refetch.io/threads/68b36eae0028aba5ca42)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/cyber-security)
 
-**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+**⭐ [The Rise of Electric Cars: A Closer Look](https://refetch.io/threads/68b36eb00011abeb2808)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/electric-cars)
 
 ---
 
-*Last updated: 2025-08-30T20:00:59.529Z*
+*Last updated: 2025-08-30T22:00:57.599Z*
 
 
 
