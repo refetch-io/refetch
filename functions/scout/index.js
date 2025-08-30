@@ -183,17 +183,55 @@ function extractUrlsWithRegex(html, baseUrl) {
 }
 
 // Helper function to scrape a website's main page and extract article links with labels
+// This function is designed to avoid loading any external resources (iframes, CSS, scripts, images)
+// by using restrictive headers and post-processing HTML to remove external references
 async function scrapeWebsiteForArticles(url) {
   try {
     const response = await axios.get(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        // Prevent loading of external resources
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        // Explicitly reject iframes, CSS, JS, and other media
+        'X-Requested-With': 'XMLHttpRequest'
       },
-      timeout: 30000
+      timeout: 30000,
+      // Prevent axios from following redirects to external resources
+      maxRedirects: 0,
+      // Only accept HTML responses
+      validateStatus: function (status) {
+        return status >= 200 && status < 300;
+      }
     });
     
     if (response.status === 200) {
-      return response.data;
+      let html = response.data;
+      
+      // Post-process HTML to remove iframes, scripts, and external resources
+      html = html
+        // Remove iframe tags completely
+        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '')
+        // Remove script tags
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        // Remove style tags
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        // Remove link tags (CSS, favicons, etc.)
+        .replace(/<link[^>]*>/gi, '')
+        // Remove meta tags that might trigger external loads
+        .replace(/<meta[^>]*http-equiv=["']refresh["'][^>]*>/gi, '')
+        // Remove object and embed tags
+        .replace(/<(object|embed)[^>]*>[\s\S]*?<\/(object|embed)>/gi, '')
+        // Remove external resource references
+        .replace(/src=["'](?!data:)[^"']*["']/gi, 'src=""')
+        .replace(/href=["'](?!data:)[^"']*["']/gi, 'href=""')
+        // Remove any remaining external resource patterns
+        .replace(/url\([^)]*\)/gi, 'url()');
+      
+      return html;
     } else {
       console.error(`❌ ${url}: HTTP ${response.status}`);
       return null;
@@ -216,25 +254,49 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       .replace(/<link[^>]*rel=["']stylesheet["'][^>]*>/gi, '') // Remove stylesheet links
       .replace(/<!--[\s\S]*?-->/g, ''); // Remove HTML comments
     
-    // Try to create JSDOM with CSS completely disabled
+    // Try to create JSDOM with all external resources completely disabled
     let dom;
     try {
       dom = new JSDOM(cleanedHtml, {
-        runScripts: 'outside-only',
-        resources: 'usable',
+        runScripts: 'dangerously', // Allow scripts but they won't have external resources
+        resources: 'usable', // But we've already removed all external resources
         includeNodeLocations: false,
         pretendToBeVisual: false,
-        // Completely disable CSS parsing
+        // Completely disable all external resource fetching
         features: {
           FetchExternalResources: false,
           ProcessExternalResources: false,
-          SkipExternalResources: false
+          SkipExternalResources: false,
+          // Disable specific resource types
+          FetchExternalResources: ['script', 'css', 'img', 'iframe', 'object', 'embed'],
+          ProcessExternalResources: ['script', 'css', 'img', 'iframe', 'object', 'embed'],
+          SkipExternalResources: ['script', 'css', 'img', 'iframe', 'object', 'embed']
         },
-        // Disable all CSS processing
+        // Disable all external resource processing
         beforeParse(window) {
-          // Remove CSS processing capabilities
+          // Remove all external resource processing capabilities
           window.CSS = undefined;
           window.StyleSheet = undefined;
+          window.Image = undefined;
+          window.HTMLIFrameElement = undefined;
+          window.HTMLObjectElement = undefined;
+          window.HTMLEmbedElement = undefined;
+          
+          // Override fetch to prevent any external requests
+          if (window.fetch) {
+            window.fetch = () => Promise.reject(new Error('External fetching disabled'));
+          }
+          
+          // Override XMLHttpRequest to prevent external requests
+          if (window.XMLHttpRequest) {
+            const originalOpen = window.XMLHttpRequest.prototype.open;
+            window.XMLHttpRequest.prototype.open = function(method, url) {
+              if (url && !url.startsWith('data:') && !url.startsWith('blob:')) {
+                throw new Error('External requests disabled');
+              }
+              return originalOpen.apply(this, arguments);
+            };
+          }
         }
       });
     } catch (jsdomError) {
