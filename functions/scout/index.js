@@ -330,22 +330,35 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     let textSkipped = 0;
     let externalUrlsIncluded = 0;
     
+    let initialValidationSkipped = 0;
+    let urlParsingSkipped = 0;
+    
     for (const anchor of anchorTags) {
       let articleUrl = anchor.getAttribute('href');
       const linkText = anchor.textContent.trim();
-      processedUrls++;
       
       // Skip empty or invalid URLs
       if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+        initialValidationSkipped++;
         skippedUrls++;
         continue;
       }
       
       // Convert relative URLs to absolute
       if (articleUrl.startsWith('/')) {
-        articleUrl = new URL(articleUrl, baseUrl).href;
+        try {
+          const originalUrl = articleUrl;
+          articleUrl = new URL(articleUrl, baseUrl).href;
+          console.log(`    Converted relative URL: ${originalUrl} → ${articleUrl}`);
+        } catch (urlError) {
+          urlParsingSkipped++;
+          skippedUrls++;
+          continue;
+        }
       } else if (!articleUrl.startsWith('http')) {
         // Skip relative URLs that don't start with /
+        console.log(`    Skipping non-HTTP URL: ${articleUrl}`);
+        initialValidationSkipped++;
         skippedUrls++;
         continue;
       }
@@ -359,9 +372,17 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         // Count external URLs for reporting
         if (baseDomain !== articleDomain) {
           externalUrlsIncluded++;
+          console.log(`    External URL: ${articleUrl} (from ${baseDomain})`);
+        } else {
+          console.log(`    Same domain URL: ${articleUrl}`);
         }
+        
+        // Only increment processedUrls after URL validation passes
+        processedUrls++;
       } catch (urlError) {
         // If URL parsing fails, skip this URL
+        console.log(`    URL parsing failed: ${articleUrl} - ${urlError.message}`);
+        urlParsingSkipped++;
         skippedUrls++;
         continue;
       }
@@ -540,7 +561,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     }
     
     // Log detailed skip reasons for debugging
-    console.log(`  📊 Skip breakdown: ${patternSkipped} pattern, ${lengthSkipped} length, ${textSkipped} text, ${processedUrls - skippedUrls} processed`);
+    console.log(`  📊 Skip breakdown: ${initialValidationSkipped} initial, ${urlParsingSkipped} parsing, ${patternSkipped} pattern, ${lengthSkipped} length, ${textSkipped} text, ${processedUrls} processed`);
     
     // Show external URLs count for link aggregator sites
     if (externalUrlsIncluded > 0) {
@@ -555,7 +576,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       });
     }
     
-    console.log(`  🔍 Debug mode: showing first 5 skipped URLs for analysis`);
+    console.log(`  🔍 Debug mode: showing first 5 URLs for analysis`);
     let debugCount = 0;
     for (const anchor of anchorTags) {
       if (debugCount >= 5) break;
@@ -565,6 +586,13 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
         console.log(`    Debug URL: ${url} | Text: "${text.substring(0, 50)}..."`);
         debugCount++;
       }
+    }
+    
+    // Also show some URLs that made it through initial validation
+    if (processedUrls > 0) {
+      console.log(`  ✅ URLs that passed initial validation: ${processedUrls}`);
+    } else {
+      console.log(`  ❌ No URLs passed initial validation - all were filtered out early`);
     }
     
     return finalArticles;
