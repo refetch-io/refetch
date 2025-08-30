@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
-📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
+**🥇 [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
 
-**🥈 [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
-📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
+**🥈 [AI Propaganda: A Look at the Pentagon's Suppression of Dissent](https://refetch.io/threads/68b256310037df01023e)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://theintercept.com/2025/08/25/pentagon-military-ai-propaganda-influence/)
 
-**🥉 [Deploying DeepSeek on 96 H100 GPUs: A Large-Scale Endeavor](https://refetch.io/threads/68b1bf68000e84ca1d79)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://lmsys.org/blog/2025-05-05-large-scale-ep/)
+**🥉 [The Case for Deleting Tests: A Controversial Perspective](https://refetch.io/threads/68b25633001791cd1b76)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://andre.arko.net/2025/06/30/you-should-delete-tests/)
 
-**⭐ [MCP: The Key to Building Smarter, Modular AI Agents](https://refetch.io/threads/68b16e9d0002745d8f6c)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents/)
+**⭐ [Apple iPhone 17 Launch: What's on the Horizon?](https://refetch.io/threads/68b19510003956b5b7b2)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/iphone/767381/apple-iphone-17-awe-dropping-launch-what-to-expect)
 
-**⭐ [MCP: A Universal Connector for Smarter, Modular AI Agents](https://refetch.io/threads/68b171ee001ae595bd6c)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/articles/mcp-connector-for-building-smarter-modular-ai-agents)
+**⭐ [Scientists Develop Quantum Node for Light-Matter Interaction](https://refetch.io/threads/68b1aa25002bf823a52c)**
+📊 Votes: **1** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250829052210.htm)
 
 ---
 
-*Last updated: 2025-08-30T00:00:07.022Z*
+*Last updated: 2025-08-30T02:01:01.185Z*
 
 
 
