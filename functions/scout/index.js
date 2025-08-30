@@ -11,36 +11,32 @@ import axios from 'axios';
 import { JSDOM } from 'jsdom';
 
 // Target websites to scout
-const TARGET_WEBSITES = [
-  // Tech News & Startups
-  "https://techcrunch.com",
-  "https://theverge.com", 
-  "https://arstechnica.com",
-  "https://wired.com",
-  "https://venturebeat.com",
-  "https://engadget.com",
+function getTargetWebsites() {
+  // Get from environment variable
+  const envWebsites = process.env.TARGET_WEBSITES;
   
-  // Developer & Technical
-  "https://infoq.com",
-  "https://news.ycombinator.com",
-  "https://lobste.rs",
-  "https://reddit.com/r/programming",
+  if (!envWebsites) {
+    throw new Error('TARGET_WEBSITES environment variable is required. Please set it with a comma-separated list of URLs.');
+  }
   
-  // Scientific & Research
-  "https://sciencedaily.com",
-  "https://nature.com/nature/technology",
-  
-  // Platform-Specific Tech
-  "https://9to5mac.com",
-  "https://9to5google.com",
-  
-  // Enterprise & Business Tech
-  "https://theregister.com",
-  "https://zdnet.com",
-  
-  // Emerging Tech & Research
-  "https://www.technologyreview.com/tag/the-algorithm"
-];
+  try {
+    // Parse comma-separated URLs
+    const websites = envWebsites
+      .split(',')
+      .map(url => url.trim())
+      .filter(url => url.length > 0);
+    
+    if (websites.length === 0) {
+      throw new Error('TARGET_WEBSITES environment variable contains no valid URLs');
+    }
+    
+    console.log(`📋 Using ${websites.length} target websites from TARGET_WEBSITES environment variable`);
+    return websites;
+    
+  } catch (parseError) {
+    throw new Error(`Failed to parse TARGET_WEBSITES environment variable: ${parseError.message}. Expected format: "url1,url2,url3"`);
+  }
+}
 
 // System prompt for AI content analysis
 const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platform called "refetch" (similar to Hacker News but an open source alternative). 
@@ -797,6 +793,8 @@ async function scoutArticles() {
     // Step 1: Scrape main pages and extract article URLs
     console.log('\n📋 Step 1: Scraping websites for article URLs...');
     const allArticlesData = [];
+    
+    const TARGET_WEBSITES = getTargetWebsites();
     
     for (let i = 0; i < TARGET_WEBSITES.length; i++) {
       const url = TARGET_WEBSITES[i];

@@ -13,7 +13,11 @@ The Scout Function:
 
 ## Target Websites
 
-The function is configured to scan these tech news sources:
+The function is configured to scan tech news sources. You must configure the target websites using the `TARGET_WEBSITES` environment variable.
+
+### Required Configuration
+
+The `TARGET_WEBSITES` environment variable is required and must contain a comma-separated list of URLs to scout.
 
 ### Tech News & Startups
 - **TechCrunch** — Startups, funding, product launches
@@ -82,6 +86,10 @@ SCOUT_USER_NAME=Refetch Scout
 MAX_ARTICLES_PER_RUN=10
 SCRAPING_DELAY_MS=2000
 MAX_URLS_PER_SOURCE=25
+
+# Target Websites (comma-separated URLs)
+# This should be a comma-separated list of URLs
+TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm
 
 # Batching Configuration (Optional)
 LLM_MAX_TOKENS=6000
@@ -225,22 +233,23 @@ The function returns a JSON response with:
 
 ### Adding New Websites
 
-To add new websites to scout, modify the `TARGET_WEBSITES` array in `index.js`:
+To add new websites to scout, set the `TARGET_WEBSITES` environment variable with a comma-separated list of URLs:
 
-```javascript
-const TARGET_WEBSITES = [
-  // ... existing websites
-  {
-    name: "New Tech Site",
-    url: "https://newtechsite.com",
-    selectors: {
-      articleLinks: "a[href*='/article/']",
-      title: "h1, h2",
-      description: ".description, .excerpt",
-      content: ".content, .article-body"
-    }
-  }
-];
+```bash
+# Add new websites to your environment variables
+TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://newtechsite.com,https://anothertechblog.com
+```
+
+**Important Notes:**
+- The value must be a comma-separated list of URLs
+- Each URL should be a complete, valid URL
+- No spaces around the commas (though the function will trim whitespace)
+- The environment variable is required - the function will not work without it
+
+**Example of adding a new site:**
+```bash
+# Start with existing list and add your new site
+TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm,https://yournewtechsite.com
 ```
 
 ### Adjusting Quality Thresholds
