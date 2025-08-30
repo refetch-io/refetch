@@ -254,6 +254,11 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       .replace(/<link[^>]*rel=["']stylesheet["'][^>]*>/gi, '') // Remove stylesheet links
       .replace(/<!--[\s\S]*?-->/g, ''); // Remove HTML comments
     
+    // Debug: Check if HTML cleaning is affecting anchor tags
+    const originalAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+    const cleanedAnchorCount = (cleanedHtml.match(/<a[^>]*href=/gi) || []).length;
+    console.log(`  📊 HTML cleaning: ${originalAnchorCount} → ${cleanedAnchorCount} anchor tags with href`);
+    
     // Try to create JSDOM with all external resources completely disabled
     let dom;
     try {
@@ -315,6 +320,17 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     try {
       anchorTags = document.querySelectorAll('a[href]');
       console.log(`  - Found ${anchorTags.length} anchor tags with href attributes`);
+      
+      // Debug: Show first few anchor tags to understand HTML structure
+      if (anchorTags.length > 0) {
+        console.log(`  🔍 Sample anchor tags:`);
+        for (let i = 0; i < Math.min(3, anchorTags.length); i++) {
+          const anchor = anchorTags[i];
+          const href = anchor.getAttribute('href');
+          const text = anchor.textContent.trim();
+          console.log(`    ${i + 1}. <a href="${href}">${text.substring(0, 50)}...</a>`);
+        }
+      }
     } catch (parseError) {
       if (parseError.message.includes('CSS') || parseError.message.includes('stylesheet')) {
         console.log(`  CSS parsing error during query, using regex extraction`);
@@ -337,8 +353,23 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       let articleUrl = anchor.getAttribute('href');
       const linkText = anchor.textContent.trim();
       
+      // Debug: Show first few URLs to understand what's being extracted
+      if (processedUrls === 0 && skippedUrls < 5) {
+        console.log(`    Sample URL: href="${articleUrl}" text="${linkText.substring(0, 30)}..."`);
+      }
+      
       // Skip empty or invalid URLs
       if (!articleUrl || articleUrl === '#' || articleUrl === 'javascript:void(0)') {
+        // Debug: Show what type of invalid URL we're rejecting
+        if (skippedUrls < 3) {
+          if (!articleUrl) {
+            console.log(`    Rejecting: empty href attribute`);
+          } else if (articleUrl === '#') {
+            console.log(`    Rejecting: href="#" (anchor link)`);
+          } else if (articleUrl === 'javascript:void(0)') {
+            console.log(`    Rejecting: href="javascript:void(0)" (JS link)`);
+          }
+        }
         initialValidationSkipped++;
         skippedUrls++;
         continue;
