@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Significant Leap in Solar Thermoelectric Generator Performance](https://refetch.io/threads/68b26b6f0018c965bc70)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.nature.com/articles/s41377-025-01916-9)
 
 **🥈 [Software Dominates Cybersecurity Budgets as AI Defense Takes Center Stage](https://refetch.io/threads/68b2561c0036d0a0623b)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://venturebeat.com/security/software-is-40-of-security-budgets-as-cisos-shift-to-ai-defense/)
 
 **🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
 
 **⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
 
-**⭐ [Turbulence at Meta: AI Team Faces Rapid Turnover](https://refetch.io/threads/68b1f05a0006b2fe9a82)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/08/zuckerbergs-ai-hires-disrupt-meta-with-swift-exits-and-threats-to-leave/)
+**⭐ [Streamlining Bug Bounty Process with Automation Using N8n](https://refetch.io/threads/68b2e2bb0021223b6bd3)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.lampysecurity.com/post/automating-bug-bounty-with-n8n)
 
 ---
 
-*Last updated: 2025-08-30T10:01:00.777Z*
+*Last updated: 2025-08-30T12:01:20.214Z*
 
 
 
