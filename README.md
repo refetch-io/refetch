@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
+**🥇 [Installing UEFI Firmware on ARM SBCs: A Comprehensive Guide](https://refetch.io/threads/68b4a7d800306563b723)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://interfacinglinux.com/2025/08/25/edk2-uefi-for-the-rock-5-itx/)
 
-**🥈 [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
+**🥈 [Show HN: A New Approach to Anonymous Age Verification](https://refetch.io/threads/68b4a7d9002530153134)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://gist.github.com/JWally/bf4681f79c0725eb378ec3c246cf0664)
 
-**🥉 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
+**🥉 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
 
-**⭐ [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
+**⭐ [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
 
-**⭐ [Webb Telescope Discovers 300 Unexplainable Galaxies](https://refetch.io/threads/68b3dbe80039a7c221f8)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001153.htm)
+**⭐ [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
 
 ---
 
-*Last updated: 2025-08-31T18:01:19.688Z*
+*Last updated: 2025-08-31T20:00:22.096Z*
 
 
 
