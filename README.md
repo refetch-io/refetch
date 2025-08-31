@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Dark Side of Affiliates: A Look at Scam Gambling Machines](https://refetch.io/threads/68b38e92000cba0e10de)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://krebsonsecurity.com/2025/08/affiliates-flock-to-soulless-scam-gambling-machine/)
+**🥇 [Running Docker Registry On-Premises with Harbor: A Case Study](https://refetch.io/threads/68b3aa9c0013fdb4a197)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://dev.37signals.com/running-our-docker-registry-on-prem-with-harbor/)
 
-**🥈 [Building a Jeopardy Game with Laravel: A Case Study](https://refetch.io/threads/68b38e970011284a7d0e)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://www.geocod.io/code-and-coordinates/2025-08-27-building-laravel-jeopardy/)
+**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 9 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**🥉 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 7 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
-
-**⭐ [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
+**🥉 [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
 
 **⭐ [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+
+**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
 
 ---
 
-*Last updated: 2025-08-31T00:02:35.239Z*
+*Last updated: 2025-08-31T02:01:01.521Z*
 
 
 
