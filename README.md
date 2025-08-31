@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 11 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
+**🥇 [Building Zellij: A Web Terminal You Can Bookmark](https://refetch.io/threads/68b3e2fe000e29e5a9ef)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://poor.dev/blog/building-zellij-web-terminal/)
 
-**🥈 [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
+**🥈 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
 
-**🥉 [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+**🥉 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 13 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+**⭐ [Webb Telescope Discovers 300 Unexplainable Galaxies](https://refetch.io/threads/68b3dbe80039a7c221f8)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001153.htm)
 
-**⭐ [Nvidia's Potential Trillion Dollar Valuation: An In-depth Analysis](https://refetch.io/threads/68b3677600342d715256)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://techcrunch.com/podcast/trillion-with-a-t-thats-a-lot-of-dollars-nvidia/)
+**⭐ [Hidden Shards of Mars' Violent Birth Unearthed](https://refetch.io/threads/68b3dbea001f15168ec6)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001148.htm)
 
 ---
 
-*Last updated: 2025-08-31T04:01:30.226Z*
+*Last updated: 2025-08-31T06:00:11.697Z*
 
 
 
