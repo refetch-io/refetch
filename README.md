@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Running Docker Registry On-Premises with Harbor: A Case Study](https://refetch.io/threads/68b3aa9c0013fdb4a197)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://dev.37signals.com/running-our-docker-registry-on-prem-with-harbor/)
+**🥇 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 11 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 9 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
+**🥈 [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
 
-**🥉 [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
-
-**⭐ [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+**🥉 [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
 
 **⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+
+**⭐ [Nvidia's Potential Trillion Dollar Valuation: An In-depth Analysis](https://refetch.io/threads/68b3677600342d715256)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://techcrunch.com/podcast/trillion-with-a-t-thats-a-lot-of-dollars-nvidia/)
 
 ---
 
-*Last updated: 2025-08-31T02:01:01.521Z*
+*Last updated: 2025-08-31T04:01:30.226Z*
 
 
 
