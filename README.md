@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Saturday, August 30, 2025)
+## 🔥 Top Posts Today (Sunday, August 31, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+**🥇 [The Dark Side of Affiliates: A Look at Scam Gambling Machines](https://refetch.io/threads/68b38e92000cba0e10de)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://krebsonsecurity.com/2025/08/affiliates-flock-to-soulless-scam-gambling-machine/)
 
-**🥈 [Two Unnamed Customers Contribute to 39% of Nvidia's Q2 Revenue](https://refetch.io/threads/68b372470037f263a8fa)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/08/30/nvidia-says-two-mystery-customers-accounted-for-39-of-q2-revenue/)
+**🥈 [Building a Jeopardy Game with Laravel: A Case Study](https://refetch.io/threads/68b38e970011284a7d0e)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://www.geocod.io/code-and-coordinates/2025-08-27-building-laravel-jeopardy/)
 
-**🥉 [Yooka-Laylee Remaster Coming to Consoles and PC](https://refetch.io/threads/68b37269002b39e80cba)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/yooka-laylee-remaster-comes-to-consoles-and-pc-on-october-9-180052250.html)
+**🥉 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
+📊 Votes: **-1** | ⏰ 7 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
 
-**⭐ [Exploring the Landscape of Cyber Security](https://refetch.io/threads/68b36eae0028aba5ca42)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/cyber-security)
+**⭐ [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
 
-**⭐ [The Rise of Electric Cars: A Closer Look](https://refetch.io/threads/68b36eb00011abeb2808)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://theverge.com/electric-cars)
+**⭐ [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
 
 ---
 
-*Last updated: 2025-08-30T22:00:57.599Z*
+*Last updated: 2025-08-31T00:02:35.239Z*
 
 
 
