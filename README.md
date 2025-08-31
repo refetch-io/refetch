@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
+**🥇 [Getting Cozy with 'Discounty': A Game Review](https://refetch.io/threads/68b46f5f003a45006114)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.theverge.com/games-review/768145/discounty-review-switch-ps5-xbox-steam)
 
-**🥈 [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
+**🥈 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
 
-**🥉 [Understanding Verizon's Software Issue and Its Impact on Wireless Customers](https://refetch.io/threads/68b3760100326f04a27b)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/verizon/768450/verizon-is-down-outage-network-software-issue)
+**🥉 [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
 
 **⭐ [Running Docker Registry On-Premises with Harbor: A Case Study](https://refetch.io/threads/68b3aa9c0013fdb4a197)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://dev.37signals.com/running-our-docker-registry-on-prem-with-harbor/)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://dev.37signals.com/running-our-docker-registry-on-prem-with-harbor/)
 
 **⭐ [Webb Telescope Discovers 300 Unexplainable Galaxies](https://refetch.io/threads/68b3dbe80039a7c221f8)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001153.htm)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001153.htm)
 
 ---
 
-*Last updated: 2025-08-31T14:00:24.771Z*
+*Last updated: 2025-08-31T16:00:14.132Z*
 
 
 
