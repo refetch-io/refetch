@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [When Software Is Done: A Reflection on Hugo](https://refetch.io/threads/68b41b130011bf7f2c28)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://commaok.xyz/post/on_hugo/)
+**🥇 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
 
-**🥈 [James Webb Finds Planet Nursery Rich in Carbon Dioxide](https://refetch.io/threads/68b3dbe9002cd22b7377)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001150.htm)
+**🥈 [CUDA-based Fluid Simulation: An ncurses Approach](https://refetch.io/threads/68b433de000cea4e5642)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://github.com/seanwevans/fluid-sims)
 
 **🥉 [IBM and AMD Collaborate on Hybrid Classical-Quantum Supercomputers](https://refetch.io/threads/68b367a6002bb0b36a08)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/08/27/ibm-and-amd-tag-team-on-hybrid-classical-quantum-supercomputers/)
 
 **⭐ [Autonomous Cars: The Road Ahead](https://refetch.io/threads/68b36eb10006ed03404f)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/autonomous-cars)
 
 **⭐ [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
 
 ---
 
-*Last updated: 2025-08-31T10:00:58.865Z*
+*Last updated: 2025-08-31T12:00:54.026Z*
 
 
 
