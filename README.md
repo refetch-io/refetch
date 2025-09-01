@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Latam-GPT: A New Era of Open Source and Collaborative AI in Latin America](https://refetch.io/threads/68b58570001f0c97cf89)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://wired.com/story/latam-gpt-the-free-open-source-and-collaborative-ai-of-latin-america/)
+**🥇 [Sony's State of Play Showcase for 007 First Light](https://refetch.io/threads/68b5bda7002c931662ec)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/sony-is-hosting-a-state-of-play-showcase-for-007-first-light-on-september-3-151958435.html)
 
-**🥈 [The Deprecation of CocoaPods: What's Next for iOS Developers?](https://refetch.io/threads/68b585800008f2f673ad)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blog.cocoapods.org/CocoaPods-Specs-Repo/)
+**🥈 [Zfsbackrest: Encrypted Backups for ZFS Filesystems](https://refetch.io/threads/68b5bdb5001e67fddd4c)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://github.com/gargakshit/zfsbackrest)
 
 **🥉 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
-**⭐ [AI and Software Engineering: The End or the Next Evolution?](https://refetch.io/threads/68b581e100017268b43a)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/767973/vibe-coding-ai-future-end-evolution)
+**⭐ [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
 
-**⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
+**⭐ [Runway's Future Revenue Growth Strategy: The Robotics Industry](https://refetch.io/threads/68b5b69d0022d3954cd0)**
+📊 Votes: **1** | ⏰ 54 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/why-runway-is-eyeing-the-robotics-industry-for-future-revenue-growth/)
 
 ---
 
-*Last updated: 2025-09-01T12:00:57.079Z*
+*Last updated: 2025-09-01T16:01:19.253Z*
 
 
 
