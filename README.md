@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+**🥇 [Latam-GPT: A New Era of Open Source and Collaborative AI in Latin America](https://refetch.io/threads/68b58570001f0c97cf89)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://wired.com/story/latam-gpt-the-free-open-source-and-collaborative-ai-of-latin-america/)
 
-**🥈 [The Future of Smart Homes: Best Gadgets for 2025](https://refetch.io/threads/68b565b70003123ed0de)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/home/smart-home/best-smart-home-gadgets-125608958.html)
+**🥈 [The Deprecation of CocoaPods: What's Next for iOS Developers?](https://refetch.io/threads/68b585800008f2f673ad)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blog.cocoapods.org/CocoaPods-Specs-Repo/)
 
-**🥉 [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
+**🥉 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
-**⭐ [C++: Decoding the 'Strongly Happens Before' Concept](https://refetch.io/threads/68b5624300229e7a0865)**
-📊 Votes: **0** | ⏰ 52 minutes ago | 🔗 [Original](https://nekrozqliphort.github.io/posts/happens-b4/)
+**⭐ [AI and Software Engineering: The End or the Next Evolution?](https://refetch.io/threads/68b581e100017268b43a)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/767973/vibe-coding-ai-future-end-evolution)
 
-**⭐ [Unraveling the Speed of Ultrassembler](https://refetch.io/threads/68b48fd20002e0a8ecbf)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://jghuff.com/articles/ultrassembler-so-fast/)
+**⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
 
 ---
 
-*Last updated: 2025-09-01T10:00:12.059Z*
+*Last updated: 2025-09-01T12:00:57.079Z*
 
 
 
