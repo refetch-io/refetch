@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
-**🥈 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
+**🥈 [The Future of Smart Homes: Best Gadgets for 2025](https://refetch.io/threads/68b565b70003123ed0de)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/home/smart-home/best-smart-home-gadgets-125608958.html)
 
-**🥉 [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
+**🥉 [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
 
-**⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
+**⭐ [C++: Decoding the 'Strongly Happens Before' Concept](https://refetch.io/threads/68b5624300229e7a0865)**
+📊 Votes: **0** | ⏰ 52 minutes ago | 🔗 [Original](https://nekrozqliphort.github.io/posts/happens-b4/)
 
-**⭐ [Exploring the First Case of AI-Induced Psychosis Leading to Murder-Suicide](https://refetch.io/threads/68b506d9002af1ccd40d)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
+**⭐ [Unraveling the Speed of Ultrassembler](https://refetch.io/threads/68b48fd20002e0a8ecbf)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://jghuff.com/articles/ultrassembler-so-fast/)
 
 ---
 
-*Last updated: 2025-09-01T08:01:10.448Z*
+*Last updated: 2025-09-01T10:00:12.059Z*
 
 
 
