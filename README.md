@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Inside Amazon's AI Talent Strategy: A Different Approach](https://refetch.io/threads/68b5f5a80021e0ceda27)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.businessinsider.com/amazon-ai-talent-wars-internal-document-2025-8)
+**🥇 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
 
-**🥈 [Behind the Scenes: Implementing a Foil Sticker Effect](https://refetch.io/threads/68b5f5ac0010282d9008)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.4rknova.com/blog/2025/08/30/foil-sticker)
+**🥈 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**🥉 [Understanding the Isolated(any) in Swift](https://refetch.io/threads/68b5f24d0031b7a1a970)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://nshipster.com/isolated-any/)
+**🥉 [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
+📊 Votes: **1** | ⏰ 54 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
 
-**⭐ [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**⭐ [A Comprehensive Guide to Buying a GPU in 2025](https://refetch.io/threads/68b5464700127736aeee)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.engadget.com/gaming/pc/how-to-buy-a-gpu-160100017.html)
 
-**⭐ [Top Noise-Canceling Earbuds for 2025](https://refetch.io/threads/68b5f23e0007aa22dbca)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/audio/headphones/best-noise-canceling-earbuds-150026857.html)
+**⭐ [C++: Decoding the 'Strongly Happens Before' Concept](https://refetch.io/threads/68b5624300229e7a0865)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://nekrozqliphort.github.io/posts/happens-b4/)
 
 ---
 
-*Last updated: 2025-09-01T20:00:38.567Z*
+*Last updated: 2025-09-01T22:00:57.785Z*
 
 
 
