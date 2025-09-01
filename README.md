@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+**🥇 [Inside Amazon's AI Talent Strategy: A Different Approach](https://refetch.io/threads/68b5f5a80021e0ceda27)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.businessinsider.com/amazon-ai-talent-wars-internal-document-2025-8)
 
-**🥈 [Achieving 93% of GPT-4 Performance at 1/4 Cost](https://refetch.io/threads/68b5d6610002d9a86c06)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.21141)
+**🥈 [Behind the Scenes: Implementing a Foil Sticker Effect](https://refetch.io/threads/68b5f5ac0010282d9008)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.4rknova.com/blog/2025/08/30/foil-sticker)
 
-**🥉 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**🥉 [Understanding the Isolated(any) in Swift](https://refetch.io/threads/68b5f24d0031b7a1a970)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://nshipster.com/isolated-any/)
 
-**⭐ [US Imposes Restrictions on Samsung, SK hynix Fabs in China](https://refetch.io/threads/68b5d6700039a549fcca)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://blocksandfiles.com/2025/09/01/us-samsung-sk-hynix-china/)
+**⭐ [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
 
-**⭐ [Exploring the First Case of AI-Induced Psychosis Leading to Murder-Suicide](https://refetch.io/threads/68b506d9002af1ccd40d)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
+**⭐ [Top Noise-Canceling Earbuds for 2025](https://refetch.io/threads/68b5f23e0007aa22dbca)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/audio/headphones/best-noise-canceling-earbuds-150026857.html)
 
 ---
 
-*Last updated: 2025-09-01T18:01:22.757Z*
+*Last updated: 2025-09-01T20:00:38.567Z*
 
 
 
