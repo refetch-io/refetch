@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring the USB-C Compatibility of the Nintendo Switch 2 Dock](https://refetch.io/threads/68b4fc3800086318c46e)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.lttlabs.com/blog/2025/08/30/nintendo-switch-2-dock)
+**🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
 **🥈 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
 
 **🥉 [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
 
 **⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
 
-**⭐ [Bitwig Studio 6: A Deep Dive into the New Features](https://refetch.io/threads/68b43b12003bcc2e298b)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://cdm.link/bitwig-studio-6-details/)
+**⭐ [Exploring the First Case of AI-Induced Psychosis Leading to Murder-Suicide](https://refetch.io/threads/68b506d9002af1ccd40d)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
 
 ---
 
-*Last updated: 2025-09-01T02:01:08.295Z*
+*Last updated: 2025-09-01T04:01:26.552Z*
 
 
 
