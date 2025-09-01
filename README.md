@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Sony's State of Play Showcase for 007 First Light](https://refetch.io/threads/68b5bda7002c931662ec)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/sony-is-hosting-a-state-of-play-showcase-for-007-first-light-on-september-3-151958435.html)
+**🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
-**🥈 [Zfsbackrest: Encrypted Backups for ZFS Filesystems](https://refetch.io/threads/68b5bdb5001e67fddd4c)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://github.com/gargakshit/zfsbackrest)
+**🥈 [Achieving 93% of GPT-4 Performance at 1/4 Cost](https://refetch.io/threads/68b5d6610002d9a86c06)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.21141)
 
-**🥉 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+**🥉 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
 
-**⭐ [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**⭐ [US Imposes Restrictions on Samsung, SK hynix Fabs in China](https://refetch.io/threads/68b5d6700039a549fcca)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://blocksandfiles.com/2025/09/01/us-samsung-sk-hynix-china/)
 
-**⭐ [Runway's Future Revenue Growth Strategy: The Robotics Industry](https://refetch.io/threads/68b5b69d0022d3954cd0)**
-📊 Votes: **1** | ⏰ 54 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/why-runway-is-eyeing-the-robotics-industry-for-future-revenue-growth/)
+**⭐ [Exploring the First Case of AI-Induced Psychosis Leading to Murder-Suicide](https://refetch.io/threads/68b506d9002af1ccd40d)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
 
 ---
 
-*Last updated: 2025-09-01T16:01:19.253Z*
+*Last updated: 2025-09-01T18:01:22.757Z*
 
 
 
