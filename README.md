@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Sunday, August 31, 2025)
+## 🔥 Top Posts Today (Monday, September 1, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Introducing New Ruby Curl Bindings with Fiber Native Support](https://refetch.io/threads/68b4c089000e33938b2a)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://github.com/taf2/curb/blob/master/ChangeLog.md)
+**🥇 [Exploring the USB-C Compatibility of the Nintendo Switch 2 Dock](https://refetch.io/threads/68b4fc3800086318c46e)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.lttlabs.com/blog/2025/08/30/nintendo-switch-2-dock)
 
-**🥈 [Understanding Traces and Spans in OpenTelemetry](https://refetch.io/threads/68b3f0ee003b9bf488b9)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://oneuptime.com/blog/post/2025-08-27-traces-and-spans-in-opentelemetry/view)
+**🥈 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
 
-**🥉 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
+**🥉 [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
 
-**⭐ [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
+**⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
 
-**⭐ [Deep Dive into the MacBook Pro](https://refetch.io/threads/68b3e66e001b93963758)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://9to5mac.com/guides/macbook-pro/)
+**⭐ [Bitwig Studio 6: A Deep Dive into the New Features](https://refetch.io/threads/68b43b12003bcc2e298b)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://cdm.link/bitwig-studio-6-details/)
 
 ---
 
-*Last updated: 2025-08-31T22:00:33.126Z*
+*Last updated: 2025-09-01T02:01:08.295Z*
 
 
 
