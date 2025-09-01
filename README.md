@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Universe's First Known Black Hole: A Scientific Revelation](https://refetch.io/threads/68b514e6003afa6dbd0e)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250831225227.htm)
 
 **🥈 [Understanding Transformer Embeddings through a 20-Year-Old Algorithm](https://refetch.io/threads/68b4731f003800a9753b)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](http://ai.stanford.edu/blog/db-ksvd/)
 
 **🥉 [eBPF 101: A Primer on Kernel Programming](https://refetch.io/threads/68b47db70038e561b338)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://journal.hexmos.com/ebpf-introduction/)
 
 **⭐ [Boosting LLVM -O0 Back-End Speed by 10-20x](https://refetch.io/threads/68b4cb2f002cadf2823c)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://discourse.llvm.org/t/tpde-llvm-10-20x-faster-llvm-o0-back-end/86664)
 
 **⭐ [Exploring the First Case of AI-Induced Psychosis Leading to Murder-Suicide](https://refetch.io/threads/68b506d9002af1ccd40d)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://gizmodo.com/connecticut-mans-case-believed-to-be-first-murder-suicide-associated-with-ai-psychosis-2000650497)
 
 ---
 
-*Last updated: 2025-09-01T06:01:14.488Z*
+*Last updated: 2025-09-01T08:01:10.448Z*
 
 
 
