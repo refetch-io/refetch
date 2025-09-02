@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Efficient Image Generation through Reusing Computation in Text-to-Image Diffu...](https://refetch.io/threads/68b70f73002f441a95a0)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.21032)
+**🥇 [OpenAI's Controversial Practice of Scanning User Conversations](https://refetch.io/threads/68b72efa000eb8de5d32)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://futurism.com/openai-scanning-conversations-police)
 
-**🥈 [Microsoft's Strategy to Accelerate AI Adoption in the US Government](https://refetch.io/threads/68b70f58002127a18efe)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blogs.microsoft.com/blog/2025/09/02/accelerating-ai-adoption-for-the-us-government/)
+**🥈 [Anthropic's Massive Series F Funding: A Closer Look at the $183B Valuation](https://refetch.io/threads/68b72b40000eea9b05b9)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/02/anthropic-raises-13b-series-f-at-183b-valuation/)
 
-**🥉 [Expectations for Apple's 'Awe-Dropping' iPhone 17 Event](https://refetch.io/threads/68b70f6b0000a1c8b994)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/apples-iphone-17-awe-dropping-event-is-next-week--heres-what-we-expect-on-september-9-090059897.html)
+**🥉 [Looming Chip Tariffs: Tech Firms in a Scramble](https://refetch.io/threads/68b72b4e0026a789a001)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/ars-live-consumer-tech-firms-stuck-scrambling-ahead-of-looming-chip-tariffs/)
 
-**⭐ [Rubrik Expands Air-Gapped Cloud Backup Vault to Google Cloud](https://refetch.io/threads/68b70f840034ed070c6f)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://blocksandfiles.com/2025/09/01/google-cloud-rubrik-backup-vault/)
+**⭐ [Decoding the Popularity of Async in Python](https://refetch.io/threads/68b72b6500154ef3824c)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://tonybaloney.github.io/posts/why-isnt-python-async-more-popular.html)
 
-**⭐ [OpenAI's Claude ChatGPT and its Implications for Government](https://refetch.io/threads/68b70f5a0015ff5fb954)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/policy/758189/openai-anthropic-claude-chatgpt-government)
+**⭐ [Writing a Hypervisor in 1k Lines: A Deep Dive](https://refetch.io/threads/68b72b67001921ff45e0)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://seiya.me/blog/hypervisor-in-1000-lines)
 
 ---
 
-*Last updated: 2025-09-02T16:01:12.813Z*
+*Last updated: 2025-09-02T18:00:46.542Z*
 
 
 
