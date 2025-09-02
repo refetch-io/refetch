@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [A Guide on How to Buy a GPU in 2025](https://refetch.io/threads/68b64a240007812e518f)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/how-to-buy-a-gpu-160100017.html)
+**🥇 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
-**🥈 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**🥈 [U.S. and Indian VCs Form $1B+ Alliance to Fund India's Deep Tech Startups](https://refetch.io/threads/68b66991003dbb7bbb57)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/u-s-and-indian-vcs-just-formed-a-1b-alliance-to-fund-indias-deep-tech-startups/)
 
-**🥉 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**🥉 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+
+**⭐ [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
 **⭐ [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
-📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
-
-**⭐ [AI and Software Engineering: The End or the Next Evolution?](https://refetch.io/threads/68b581e100017268b43a)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/767973/vibe-coding-ai-future-end-evolution)
+📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
 
 ---
 
-*Last updated: 2025-09-02T02:00:15.829Z*
+*Last updated: 2025-09-02T04:01:28.334Z*
 
 
 
