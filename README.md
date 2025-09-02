@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [OpenAI's Controversial Practice of Scanning User Conversations](https://refetch.io/threads/68b72efa000eb8de5d32)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://futurism.com/openai-scanning-conversations-police)
+**🥇 [Waymo, Tariffs, and the Future of EV Imports](https://refetch.io/threads/68b76386000faeee1d28)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/2024/8/12/24218528/waymo-zeekr-geely-robotaxi-china-biden-tariff-ev-import)
 
-**🥈 [Anthropic's Massive Series F Funding: A Closer Look at the $183B Valuation](https://refetch.io/threads/68b72b40000eea9b05b9)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/02/anthropic-raises-13b-series-f-at-183b-valuation/)
+**🥈 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
 
-**🥉 [Looming Chip Tariffs: Tech Firms in a Scramble](https://refetch.io/threads/68b72b4e0026a789a001)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/ars-live-consumer-tech-firms-stuck-scrambling-ahead-of-looming-chip-tariffs/)
+**🥉 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
 
-**⭐ [Decoding the Popularity of Async in Python](https://refetch.io/threads/68b72b6500154ef3824c)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://tonybaloney.github.io/posts/why-isnt-python-async-more-popular.html)
+**⭐ [Slack's AI-Driven Migration from Enzyme to React Testing Library](https://refetch.io/threads/68b719f6001497f34ff7)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://infoq.com/presentations/ai-migration-large-scale)
 
-**⭐ [Writing a Hypervisor in 1k Lines: A Deep Dive](https://refetch.io/threads/68b72b67001921ff45e0)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://seiya.me/blog/hypervisor-in-1000-lines)
+**⭐ [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
 
 ---
 
-*Last updated: 2025-09-02T18:00:46.542Z*
+*Last updated: 2025-09-02T22:00:49.771Z*
 
 
 
