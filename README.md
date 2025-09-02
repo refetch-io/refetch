@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Switzerland's Leap into Open-Source AI](https://refetch.io/threads/68b6f6b5002b06318848)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/switzerland-launches-its-own-open-source-ai-model-133051578.html)
+**🥇 [Efficient Image Generation through Reusing Computation in Text-to-Image Diffu...](https://refetch.io/threads/68b70f73002f441a95a0)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.21032)
 
-**🥈 [Webb Space Telescope Unveils Secrets of Interstellar Comet 3I/ATLAS](https://refetch.io/threads/68b6f6c50031258c8e21)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250902084955.htm)
+**🥈 [Microsoft's Strategy to Accelerate AI Adoption in the US Government](https://refetch.io/threads/68b70f58002127a18efe)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blogs.microsoft.com/blog/2025/09/02/accelerating-ai-adoption-for-the-us-government/)
 
-**🥉 [RubyMine Now Free for Non-Commercial Use](https://refetch.io/threads/68b6f325002ad6b24ef9)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blog.jetbrains.com/ruby/2025/09/rubymine-is-now-free-for-non-commercial-use/)
+**🥉 [Expectations for Apple's 'Awe-Dropping' iPhone 17 Event](https://refetch.io/threads/68b70f6b0000a1c8b994)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/apples-iphone-17-awe-dropping-event-is-next-week--heres-what-we-expect-on-september-9-090059897.html)
 
-**⭐ [Exploring the Quirks of Common Lisp Types](https://refetch.io/threads/68b6f324002ea8b9c5a6)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.fosskers.ca/en/blog/cl-type-quirks)
+**⭐ [Rubrik Expands Air-Gapped Cloud Backup Vault to Google Cloud](https://refetch.io/threads/68b70f840034ed070c6f)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://blocksandfiles.com/2025/09/01/google-cloud-rubrik-backup-vault/)
 
-**⭐ [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+**⭐ [OpenAI's Claude ChatGPT and its Implications for Government](https://refetch.io/threads/68b70f5a0015ff5fb954)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/policy/758189/openai-anthropic-claude-chatgpt-government)
 
 ---
 
-*Last updated: 2025-09-02T14:00:55.459Z*
+*Last updated: 2025-09-02T16:01:12.813Z*
 
 
 
