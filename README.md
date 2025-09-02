@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
+**🥇 [Can Worms Help Solve Plastic Pollution?](https://refetch.io/threads/68b6da580036377559c5)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://wired.com/story/could-plastic-eating-moth-larvae-be-a-solution-to-environmental-pollution/)
 
 **🥈 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
-**🥉 [The Best Budget-Friendly Android Phones for 2025](https://refetch.io/threads/68b6bad100282cce2ecb)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/best-cheap-android-phone-160029703.html)
+**🥉 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
 
 **⭐ [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**⭐ [Tesla's Master Plan Part Three: A Future Outlook](https://refetch.io/threads/68b6b410000b27e2ee95)**
-📊 Votes: **0** | ⏰ 51 minutes ago | 🔗 [Original](https://theverge.com/2023/3/1/23620698/tesla-master-plan-3-elon-musk-ev-solar-fsd-gigafactory-investor-day)
+**⭐ [FCC Republicans Accelerate Rule Removal: An Analysis](https://refetch.io/threads/68b6d34c0038b11f2fea)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/delete-delete-delete-how-fcc-republicans-are-killing-rules-faster-than-ever/)
 
 ---
 
-*Last updated: 2025-09-02T10:00:08.300Z*
+*Last updated: 2025-09-02T12:00:31.772Z*
 
 
 
