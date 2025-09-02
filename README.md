@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+**🥇 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
 
-**🥈 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**🥈 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
+📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
-**🥉 [Top Mobile Microphones for Recording in 2025](https://refetch.io/threads/68b69ae900372edd33be)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/computing/accessories/best-mobile-microphones-for-recording-with-a-phone-154536629.html)
+**🥉 [The Best Budget-Friendly Android Phones for 2025](https://refetch.io/threads/68b6bad100282cce2ecb)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/best-cheap-android-phone-160029703.html)
 
-**⭐ [Understanding the Isolated(any) in Swift](https://refetch.io/threads/68b5f24d0031b7a1a970)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://nshipster.com/isolated-any/)
+**⭐ [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**⭐ [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
-📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
+**⭐ [Tesla's Master Plan Part Three: A Future Outlook](https://refetch.io/threads/68b6b410000b27e2ee95)**
+📊 Votes: **0** | ⏰ 51 minutes ago | 🔗 [Original](https://theverge.com/2023/3/1/23620698/tesla-master-plan-3-elon-musk-ev-solar-fsd-gigafactory-investor-day)
 
 ---
 
-*Last updated: 2025-09-02T08:01:08.557Z*
+*Last updated: 2025-09-02T10:00:08.300Z*
 
 
 
