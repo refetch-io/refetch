@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Indian Grocery Startup Citymall Raises $47M to Challenge Ultra-Fast Delivery ...](https://refetch.io/threads/68b685b9000b9343345d)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/indian-grocery-startup-citymall-raises-47m-to-challenge-ultra-fast-delivery-giants/)
+**🥇 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
-**🥈 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+**🥈 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**🥉 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**🥉 [Top Mobile Microphones for Recording in 2025](https://refetch.io/threads/68b69ae900372edd33be)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/computing/accessories/best-mobile-microphones-for-recording-with-a-phone-154536629.html)
 
-**⭐ [Software Fault Leads to Tesla SUVs Recall: A Cautionary Tale](https://refetch.io/threads/68b5af9a0033fabd5a42)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.theguardian.com/technology/2025/sep/01/thousands-of-tesla-suvs-recalled-in-australia-over-software-fault-that-can-increase-risk-of-injury)
+**⭐ [Understanding the Isolated(any) in Swift](https://refetch.io/threads/68b5f24d0031b7a1a970)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://nshipster.com/isolated-any/)
 
-**⭐ [Runway's Future Revenue Growth Strategy: The Robotics Industry](https://refetch.io/threads/68b5b69d0022d3954cd0)**
-📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/why-runway-is-eyeing-the-robotics-industry-for-future-revenue-growth/)
+**⭐ [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
 
 ---
 
-*Last updated: 2025-09-02T06:01:11.080Z*
+*Last updated: 2025-09-02T08:01:08.557Z*
 
 
 
