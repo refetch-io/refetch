@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, September 1, 2025)
+## 🔥 Top Posts Today (Tuesday, September 2, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**🥇 [A Guide on How to Buy a GPU in 2025](https://refetch.io/threads/68b64a240007812e518f)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/how-to-buy-a-gpu-160100017.html)
 
-**🥈 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**🥈 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
 
-**🥉 [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
-📊 Votes: **1** | ⏰ 54 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
+**🥉 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**⭐ [A Comprehensive Guide to Buying a GPU in 2025](https://refetch.io/threads/68b5464700127736aeee)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.engadget.com/gaming/pc/how-to-buy-a-gpu-160100017.html)
+**⭐ [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
+📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
 
-**⭐ [C++: Decoding the 'Strongly Happens Before' Concept](https://refetch.io/threads/68b5624300229e7a0865)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://nekrozqliphort.github.io/posts/happens-b4/)
+**⭐ [AI and Software Engineering: The End or the Next Evolution?](https://refetch.io/threads/68b581e100017268b43a)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/767973/vibe-coding-ai-future-end-evolution)
 
 ---
 
-*Last updated: 2025-09-01T22:00:57.785Z*
+*Last updated: 2025-09-02T02:00:15.829Z*
 
 
 
