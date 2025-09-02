@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Can Worms Help Solve Plastic Pollution?](https://refetch.io/threads/68b6da580036377559c5)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://wired.com/story/could-plastic-eating-moth-larvae-be-a-solution-to-environmental-pollution/)
+**🥇 [Switzerland's Leap into Open-Source AI](https://refetch.io/threads/68b6f6b5002b06318848)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/switzerland-launches-its-own-open-source-ai-model-133051578.html)
 
-**🥈 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **1** | ⏰ 8 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+**🥈 [Webb Space Telescope Unveils Secrets of Interstellar Comet 3I/ATLAS](https://refetch.io/threads/68b6f6c50031258c8e21)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250902084955.htm)
 
-**🥉 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
+**🥉 [RubyMine Now Free for Non-Commercial Use](https://refetch.io/threads/68b6f325002ad6b24ef9)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://blog.jetbrains.com/ruby/2025/09/rubymine-is-now-free-for-non-commercial-use/)
 
-**⭐ [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**⭐ [Exploring the Quirks of Common Lisp Types](https://refetch.io/threads/68b6f324002ea8b9c5a6)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.fosskers.ca/en/blog/cl-type-quirks)
 
-**⭐ [FCC Republicans Accelerate Rule Removal: An Analysis](https://refetch.io/threads/68b6d34c0038b11f2fea)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/delete-delete-delete-how-fcc-republicans-are-killing-rules-faster-than-ever/)
+**⭐ [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
+📊 Votes: **1** | ⏰ 10 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
 ---
 
-*Last updated: 2025-09-02T12:00:31.772Z*
+*Last updated: 2025-09-02T14:00:55.459Z*
 
 
 
