@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
+**🥇 [Indian Grocery Startup Citymall Raises $47M to Challenge Ultra-Fast Delivery ...](https://refetch.io/threads/68b685b9000b9343345d)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/indian-grocery-startup-citymall-raises-47m-to-challenge-ultra-fast-delivery-giants/)
 
-**🥈 [U.S. and Indian VCs Form $1B+ Alliance to Fund India's Deep Tech Startups](https://refetch.io/threads/68b66991003dbb7bbb57)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/01/u-s-and-indian-vcs-just-formed-a-1b-alliance-to-fund-indias-deep-tech-startups/)
+**🥈 [Internet Censorship as a Business: A Case Study of Turkmenistan](https://refetch.io/threads/68b669b4003a7bb01207)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://blog.torproject.org/Corruption-Control-Turkmenistan-internet-censorship-business/)
 
-**🥉 [Maintaining Order in Concurrent Go Applications: A Comparison of Three Approa...](https://refetch.io/threads/68b5a1a40003014b1972)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://destel.dev/blog/preserving-order-in-concurrent-go)
+**🥉 [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
 
-**⭐ [SparseLoCo: A New Approach to Communication-Efficient LLM Training](https://refetch.io/threads/68b6005e002a24d71968)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.15706)
+**⭐ [Software Fault Leads to Tesla SUVs Recall: A Cautionary Tale](https://refetch.io/threads/68b5af9a0033fabd5a42)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.theguardian.com/technology/2025/sep/01/thousands-of-tesla-suvs-recalled-in-australia-over-software-fault-that-can-increase-risk-of-injury)
 
-**⭐ [VCs Embrace Space Investing, Ditching Rocket Science Prerequisites](https://refetch.io/threads/68b60ae3000c48ade32a)**
-📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/space-investing-goes-mainstream-as-vcs-ditch-the-rocket-science-requirements/)
+**⭐ [Runway's Future Revenue Growth Strategy: The Robotics Industry](https://refetch.io/threads/68b5b69d0022d3954cd0)**
+📊 Votes: **1** | ⏰ 14 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/01/why-runway-is-eyeing-the-robotics-industry-for-future-revenue-growth/)
 
 ---
 
-*Last updated: 2025-09-02T04:01:28.334Z*
+*Last updated: 2025-09-02T06:01:11.080Z*
 
 
 
