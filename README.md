@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
-📊 Votes: **2** | ⏰ 22 minutes ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
+**🥇 [Orchard Robotics: Revolutionizing Agriculture with AI](https://refetch.io/threads/68b880490005a03c1559)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/)
 
-**🥈 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
-📊 Votes: **2** | ⏰ 2 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
+**🥈 [AI-Generated Metal Kernels: A Leap in PyTorch Inference Speed](https://refetch.io/threads/68b8806f002b4d110e8f)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://gimletlabs.ai/blog/ai-generated-metal-kernels)
 
-**🥉 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+**🥉 [Ride-Sharing: A Modern Approach to Transportation](https://refetch.io/threads/68b880500025647c3533)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/ride-sharing)
 
-**⭐ [Effective Practices for Architecting a RAG Pipeline](https://refetch.io/threads/68b808fc0005f60a4604)**
-📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/architecting-rag-pipeline)
+**⭐ [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
+📊 Votes: **9** | ⏰ 10 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
 
-**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
+**⭐ [The Best Mesh Wi-Fi Systems of 2025: A Forecast](https://refetch.io/threads/68b88067003798a97cc7)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/home/smart-home/best-mesh-wifi-system-130028701.html)
 
 ---
 
-*Last updated: 2025-09-03T10:01:00.072Z*
+*Last updated: 2025-09-03T18:01:14.496Z*
 
 
 
