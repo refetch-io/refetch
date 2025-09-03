@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Waymo's Expansion to Denver and Seattle with Zeekr-Made Vans](https://refetch.io/threads/68b79f07002869a7f2f9)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/02/waymo-expands-to-denver-and-seattle-with-its-zeekr-made-vans/)
+**🥇 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
 
-**🥈 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+**🥈 [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
 
-**🥉 [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
-
-**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
+**🥉 [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
 
 **⭐ [Parallel AI Agents: A Game-Changing Approach](https://refetch.io/threads/68b77c0d0002d0d140bf)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://morningcoffee.io/parallel-ai-agents-are-a-game-changer.html)
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://morningcoffee.io/parallel-ai-agents-are-a-game-changer.html)
+
+**⭐ [Efficient Image Generation through Reusing Computation in Text-to-Image Diffu...](https://refetch.io/threads/68b70f73002f441a95a0)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.21032)
 
 ---
 
-*Last updated: 2025-09-03T02:00:46.778Z*
+*Last updated: 2025-09-03T06:00:30.274Z*
 
 
 
