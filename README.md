@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+**🥇 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
+📊 Votes: **2** | ⏰ 22 minutes ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
 
-**🥈 [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
+**🥈 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
+📊 Votes: **2** | ⏰ 2 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
 
-**🥉 [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
+**🥉 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
+📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
 
-**⭐ [Parallel AI Agents: A Game-Changing Approach](https://refetch.io/threads/68b77c0d0002d0d140bf)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://morningcoffee.io/parallel-ai-agents-are-a-game-changer.html)
+**⭐ [Effective Practices for Architecting a RAG Pipeline](https://refetch.io/threads/68b808fc0005f60a4604)**
+📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/architecting-rag-pipeline)
 
-**⭐ [Efficient Image Generation through Reusing Computation in Text-to-Image Diffu...](https://refetch.io/threads/68b70f73002f441a95a0)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arxiv.org/abs/2508.21032)
+**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
 
 ---
 
-*Last updated: 2025-09-03T06:00:30.274Z*
+*Last updated: 2025-09-03T10:01:00.072Z*
 
 
 
