@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Parallel AI Agents: A Game-Changing Approach](https://refetch.io/threads/68b77c0d0002d0d140bf)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://morningcoffee.io/parallel-ai-agents-are-a-game-changer.html)
+**🥇 [Waymo's Expansion to Denver and Seattle with Zeekr-Made Vans](https://refetch.io/threads/68b79f07002869a7f2f9)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/02/waymo-expands-to-denver-and-seattle-with-its-zeekr-made-vans/)
 
 **🥈 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
 
-**🥉 [Exploring the Potential of 'Heavy' Electrons in Quantum Computing](https://refetch.io/threads/68b6bae100213f4843d8)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250901104650.htm)
+**🥉 [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
 
-**⭐ [WordPress Showcases Telex: An Experimental AI Development Tool](https://refetch.io/threads/68b71d240033e398c9fd)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/02/wordpress-shows-off-telex-its-experimental-ai-development-tool/)
+**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
 
-**⭐ [SpaceX's Progress Towards In-house Rocket Fuel Production](https://refetch.io/threads/68b7394e0007fce3edb3)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://arstechnica.com/space/2025/09/spacex-moves-closer-to-making-its-own-rocket-fuel-at-starship-launch-site/)
+**⭐ [Parallel AI Agents: A Game-Changing Approach](https://refetch.io/threads/68b77c0d0002d0d140bf)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://morningcoffee.io/parallel-ai-agents-are-a-game-changer.html)
 
 ---
 
-*Last updated: 2025-09-03T00:02:40.110Z*
+*Last updated: 2025-09-03T02:00:46.778Z*
 
 
 
