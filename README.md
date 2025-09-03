@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring the Theoretical Limitations of Embedding-Based Retrieval](https://refetch.io/threads/68b89c4f0023d09dee84)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.alphaxiv.org/abs/2508.21038v1)
+**🥇 [Misinterpretations of The Bitter Lesson](https://refetch.io/threads/68b8b85e002c00060cd2)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://obviouslywrong.substack.com/p/the-bitter-lesson-is-misunderstood)
 
-**🥈 [CoreWeave Acquires OpenPipe: A New Era for Agent Training](https://refetch.io/threads/68b89c2b002f63fd2db1)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/03/coreweave-acquires-agent-training-startup-openpipe/)
+**🥈 [Questioning the Validity of AI Coding Claims](https://refetch.io/threads/68b8b86100372b614782)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding)
 
-**🥉 [Understanding the Politics Behind NASA's 'Senate Launch System'](https://refetch.io/threads/68b89c380010ab0b1184)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://arstechnica.com/space/2025/09/ted-cruz-reminds-us-why-nasas-rocket-is-called-the-senate-launch-system/)
-
-**⭐ [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
-📊 Votes: **9** | ⏰ 12 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
+**🥉 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
+📊 Votes: **9** | ⏰ 14 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
 
 **⭐ [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
-📊 Votes: **2** | ⏰ 4 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
+📊 Votes: **2** | ⏰ 6 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
+
+**⭐ [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
+📊 Votes: **3** | ⏰ 5 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
 
 ---
 
-*Last updated: 2025-09-03T20:01:03.445Z*
+*Last updated: 2025-09-03T22:00:57.535Z*
 
 
 
