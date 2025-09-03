@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Saturday, August 30, 2025)
+## 🔥 Top Posts Today (Wednesday, September 3, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Indie App Spotlight: 'Profit', an Investment Tracker for Apple Devices](https://refetch.io/threads/68b352e800143cc9c9ac)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://9to5mac.com/2025/08/30/indie-app-spotlight-profit-investment-portfolio-tracker-for-iphone/)
+**🥇 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
+📊 Votes: **2** | ⏰ 22 minutes ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
 
-**🥈 [Building Resilient Multi-Tenant Systems with Amazon SQS Fair Queues](https://refetch.io/threads/68b32211002f6deed02f)**
-📊 Votes: **-1** | ⏰ 3 hours ago | 🔗 [Original](https://aws.amazon.com/blogs/compute/building-resilient-multi-tenant-systems-with-amazon-sqs-fair-queues/)
+**🥈 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
+📊 Votes: **2** | ⏰ 2 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
 
-**🥉 [Error Backtraces in Rust Libraries: A Deep Dive](https://refetch.io/threads/68b2803d003cab6bed4e)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.iroh.computer/blog/error-handling-in-iroh)
+**🥉 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
+📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
 
-**⭐ [Emulating aarch64 in Software Using JIT Compilation and Rust](https://refetch.io/threads/68b29c31001896437c55)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://pitsidianak.is/blog/posts/2025-08-25_emulating_aarch64_in_software_using_JIT_compilation.html)
+**⭐ [Effective Practices for Architecting a RAG Pipeline](https://refetch.io/threads/68b808fc0005f60a4604)**
+📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/architecting-rag-pipeline)
 
-**⭐ [AI Model Predicts Disease-Driving Genetic Mutations](https://refetch.io/threads/68b305fa003caa0bae3a)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/08/250830001209.htm)
+**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
 
 ---
 
-*Last updated: 2025-08-30T20:00:59.529Z*
+*Last updated: 2025-09-03T10:01:00.072Z*
 
 
 
