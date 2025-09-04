@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Wednesday, September 3, 2025)
+## 🔥 Top Posts Today (Thursday, September 4, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Misinterpretations of The Bitter Lesson](https://refetch.io/threads/68b8b85e002c00060cd2)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://obviouslywrong.substack.com/p/the-bitter-lesson-is-misunderstood)
+**🥇 [AI's Impact on Job Market for Young Professionals](https://refetch.io/threads/68b8d48e001c48510ace)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.derekthompson.org/p/the-evidence-that-ai-is-destroying)
 
-**🥈 [Questioning the Validity of AI Coding Claims](https://refetch.io/threads/68b8b86100372b614782)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://mikelovesrobots.substack.com/p/wheres-the-shovelware-why-ai-coding)
+**🥈 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
+📊 Votes: **3** | ⏰ 7 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
 
-**🥉 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
-📊 Votes: **9** | ⏰ 14 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
+**🥉 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
+📊 Votes: **6** | ⏰ 14 hours ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
+
+**⭐ [Leading with Architecture: Scaling for Today and Shaping Tomorrow](https://refetch.io/threads/68b828c2002990ade1ce)**
+📊 Votes: **6** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/presentations/architecture-scale-change)
 
 **⭐ [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
-📊 Votes: **2** | ⏰ 6 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
-
-**⭐ [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
-📊 Votes: **3** | ⏰ 5 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
+📊 Votes: **2** | ⏰ 8 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
 
 ---
 
-*Last updated: 2025-09-03T22:00:57.535Z*
+*Last updated: 2025-09-04T00:00:06.090Z*
 
 
 
