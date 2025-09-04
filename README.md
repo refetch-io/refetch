@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Real-time Observation of Atomic Nucleus Flip](https://refetch.io/threads/68b941ae0005f983f820)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904014149.htm)
+**🥇 [Polars Cloud and Distributed Polars: New Launch](https://refetch.io/threads/68b95a970036a710ac4e)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://pola.rs/posts/polars-cloud-launch/)
 
-**🥈 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
-📊 Votes: **4** | ⏰ 15 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
+**🥈 [The Fault in Our Carbon Calculations: Major Polluters' Loophole](https://refetch.io/threads/68b95df9001e104e9f6c)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250903075156.htm)
 
 **🥉 [Introducing Nyxstone: An LLVM-Based (Dis)assembly Framework](https://refetch.io/threads/68b91e8e002561cf9b56)**
-📊 Votes: **1** | ⏰ 2 hours ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
+📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
 
 **⭐ [AI Model Enables Humanoid Robot to Master Human-like Movements](https://refetch.io/threads/68b88af000312c720331)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
 
-**⭐ [The Challenges Confronting Large Language Models](https://refetch.io/threads/68b88441003e6c70d867)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2507.19703)
+**⭐ [Real-time Observation of Atomic Nucleus Flip](https://refetch.io/threads/68b941ae0005f983f820)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904014149.htm)
 
 ---
 
-*Last updated: 2025-09-04T08:01:12.214Z*
+*Last updated: 2025-09-04T10:01:06.820Z*
 
 
 
