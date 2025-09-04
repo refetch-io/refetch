@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Polars Cloud and Distributed Polars: New Launch](https://refetch.io/threads/68b95a970036a710ac4e)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://pola.rs/posts/polars-cloud-launch/)
+**🥇 [The Best E-Ink Tablets for 2025: A Comprehensive Review](https://refetch.io/threads/68b97a290025f5063fd0)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/tablets/best-e-ink-tablet-130037939.html)
 
-**🥈 [The Fault in Our Carbon Calculations: Major Polluters' Loophole](https://refetch.io/threads/68b95df9001e104e9f6c)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250903075156.htm)
+**🥈 [Introducing Nyxstone: An LLVM-Based (Dis)assembly Framework](https://refetch.io/threads/68b91e8e002561cf9b56)**
+📊 Votes: **1** | ⏰ 6 hours ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
 
-**🥉 [Introducing Nyxstone: An LLVM-Based (Dis)assembly Framework](https://refetch.io/threads/68b91e8e002561cf9b56)**
-📊 Votes: **1** | ⏰ 4 hours ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
-
-**⭐ [AI Model Enables Humanoid Robot to Master Human-like Movements](https://refetch.io/threads/68b88af000312c720331)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
+**🥉 [Hue's Entry-Level Essential Smart Bulb Lineup](https://refetch.io/threads/68b976b40005bf9ed444)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.engadget.com/home/smart-home/hue-takes-on-cheaper-rivals-with-the-entry-level-essential-smart-bulb-lineup-110415932.html)
 
 **⭐ [Real-time Observation of Atomic Nucleus Flip](https://refetch.io/threads/68b941ae0005f983f820)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904014149.htm)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904014149.htm)
+
+**⭐ [Philips Hue Lights: A Major Product Refresh](https://refetch.io/threads/68b948f50031ca7219b1)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://theverge.com/ifa-berlin/769934/philips-hue-essentials-bridge-pro-light-strip-matter-ifa-launch)
 
 ---
 
-*Last updated: 2025-09-04T10:01:06.820Z*
+*Last updated: 2025-09-04T12:00:30.120Z*
 
 
 
