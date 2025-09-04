@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [AI's Impact on Job Market for Young Professionals](https://refetch.io/threads/68b8d48e001c48510ace)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.derekthompson.org/p/the-evidence-that-ai-is-destroying)
+**🥇 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
+📊 Votes: **3** | ⏰ 9 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
 
-**🥈 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
-📊 Votes: **3** | ⏰ 7 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
+**🥈 [Leading with Architecture: Scaling for Today and Shaping Tomorrow](https://refetch.io/threads/68b828c2002990ade1ce)**
+📊 Votes: **6** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/presentations/architecture-scale-change)
 
-**🥉 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
-📊 Votes: **6** | ⏰ 14 hours ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
+**🥉 [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
+📊 Votes: **2** | ⏰ 10 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
 
-**⭐ [Leading with Architecture: Scaling for Today and Shaping Tomorrow](https://refetch.io/threads/68b828c2002990ade1ce)**
-📊 Votes: **6** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/presentations/architecture-scale-change)
+**⭐ [Tencent's Open Source 3D World Model: HunyuanWorld-Voyager](https://refetch.io/threads/68b82c310026c9478163)**
+📊 Votes: **6** | ⏰ 14 hours ago | 🔗 [Original](https://github.com/Tencent-Hunyuan/HunyuanWorld-Voyager)
 
-**⭐ [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
-📊 Votes: **2** | ⏰ 8 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
+**⭐ [AI Model Enables Humanoid Robot to Master Human-like Movements](https://refetch.io/threads/68b88af000312c720331)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
 
 ---
 
-*Last updated: 2025-09-04T00:00:06.090Z*
+*Last updated: 2025-09-04T02:00:20.343Z*
 
 
 
