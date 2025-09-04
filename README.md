@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Leak Reveals Valve's New 'Roy' Controllers](https://refetch.io/threads/68b9ea97000d06fbaf1a)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/games/2024/11/19/24300757/valve-steam-controller-2-roy-deckard-leak)
+**🥇 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
+📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
 
-**🥈 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
+**🥈 [Tech Giants Pledge to Prepare Americans for an AI-Dominated Future](https://refetch.io/threads/68ba0693001cc64d8ecb)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/policy/772084/amazon-google-microsoft-white-house-ai-education)
 
-**🥉 [Valve Trademarks 'Steam Frame' for Upcoming Gaming Gadget](https://refetch.io/threads/68b9ea97003e3bfc8aa9)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/pc-gaming/770811/valve-trademarks-steam-frame-for-its-next-gaming-gadget-whats-your-guess)
+**🥉 [Big Tech and White House Collaborate for AI Education in US Schools](https://refetch.io/threads/68ba06a3002ac04ea613)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/ai/big-tech-signs-on-to-white-house-plan-for-ai-education-in-us-schools-212646999.html)
 
-**⭐ [The Debate on Legal Rights for AI](https://refetch.io/threads/68b9ea9f0024afa023aa)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://wired.com/story/model-welfare-artificial-intelligence-sentience/)
+**⭐ [Facebook's Legal Conundrum: Mark Zuckerberg Sues His Namesake](https://refetch.io/threads/68ba0685003b5532b60f)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/04/mark-zuckerberg-sues-mark-zuckerberg/)
 
-**⭐ [Belkin's New Qi2 Magnetic Charger Unveiled at IFA 2025](https://refetch.io/threads/68b9eaa80034fa8138ff)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/belkin-unveils-qi2-magnetic-charger-at-ifa-2025-180647711.html)
+**⭐ [AI Revolution in Fashion: Retailers Introduce Personalized Styling Tool 'Ella'](https://refetch.io/threads/68ba0686002d5cb6a47c)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/04/fashion-retailers-partner-to-offer-personalized-ai-styling-tool-ella/)
 
 ---
 
-*Last updated: 2025-09-04T20:01:07.070Z*
+*Last updated: 2025-09-04T22:00:39.759Z*
 
 
 
