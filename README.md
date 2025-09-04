@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
-📊 Votes: **3** | ⏰ 11 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
+📊 Votes: **3** | ⏰ 13 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
 
 **🥈 [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
-📊 Votes: **2** | ⏰ 12 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
+📊 Votes: **2** | ⏰ 14 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
 
-**🥉 [ChatGPT: An Overview and Its Potential Benefits](https://refetch.io/threads/68b905c10011c54350ee)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://zdnet.com/article/what-is-chatgpt-how-the-worlds-most-popular-ai-chatbot-can-benefit-you/)
-
-**⭐ [Diving into the Tech of Solos Smart Glasses](https://refetch.io/threads/68b9092c0031d703e551)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://jfloren.net/b/2025/8/28/0)
+**🥉 [Introducing Nyxstone: An LLVM-Based (Dis)assembly Framework](https://refetch.io/threads/68b91e8e002561cf9b56)**
+📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
 
 **⭐ [AI Model Enables Humanoid Robot to Master Human-like Movements](https://refetch.io/threads/68b88af000312c720331)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
+
+**⭐ [The Challenges Confronting Large Language Models](https://refetch.io/threads/68b88441003e6c70d867)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arxiv.org/abs/2507.19703)
 
 ---
 
-*Last updated: 2025-09-04T04:00:23.088Z*
+*Last updated: 2025-09-04T06:01:14.568Z*
 
 
 
