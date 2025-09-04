@@ -16,6 +16,7 @@ import { handleVote } from "@/lib/voteHandler"
 import { deleteComment } from "@/lib/commentHandler"
 import { ArrowUpDown, Clock, TrendingUp, Reply, X, Trash2 } from "lucide-react"
 import { BotLabel } from "@/components/bot-label"
+import { ParsedText } from "@/components/parsed-text"
 
 interface CommentItemProps {
   comment: Comment
@@ -121,7 +122,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           )}
 
         </div>
-        <p className={`text-gray-700 mt-1 text-sm ${isMobile ? 'mt-0.5 text-xs' : 'mt-1'}`}>{comment.text}</p>
+        <ParsedText text={comment.text} />
         
         {/* Action Buttons */}
         <div className={`flex items-center gap-3 mt-2 ${isMobile ? 'gap-1.5 mt-1' : 'gap-3 mt-2'}`}>
