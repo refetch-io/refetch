@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
-📊 Votes: **3** | ⏰ 13 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
+**🥇 [Real-time Observation of Atomic Nucleus Flip](https://refetch.io/threads/68b941ae0005f983f820)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904014149.htm)
 
-**🥈 [Introducing Claude Code: Now in Beta in Zed](https://refetch.io/threads/68b864c0000ec09b4266)**
-📊 Votes: **2** | ⏰ 14 hours ago | 🔗 [Original](https://zed.dev/blog/claude-code-via-acp)
+**🥈 [Introducing Warp Code: The Fastest Way from Prompt to Production](https://refetch.io/threads/68b867fa00019798545b)**
+📊 Votes: **4** | ⏰ 15 hours ago | 🔗 [Original](https://www.warp.dev/blog/introducing-warp-code-prompt-to-prod)
 
 **🥉 [Introducing Nyxstone: An LLVM-Based (Dis)assembly Framework](https://refetch.io/threads/68b91e8e002561cf9b56)**
-📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
+📊 Votes: **1** | ⏰ 2 hours ago | 🔗 [Original](https://www.emproof.com/introducing-nyxstone-an-llvm-based-disassembly-framework/)
 
 **⭐ [AI Model Enables Humanoid Robot to Master Human-like Movements](https://refetch.io/threads/68b88af000312c720331)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://wired.com/story/this-humanoid-robot-is-showing-signs-of-generalized-learning/)
 
 **⭐ [The Challenges Confronting Large Language Models](https://refetch.io/threads/68b88441003e6c70d867)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arxiv.org/abs/2507.19703)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2507.19703)
 
 ---
 
-*Last updated: 2025-09-04T06:01:14.568Z*
+*Last updated: 2025-09-04T08:01:12.214Z*
 
 
 
