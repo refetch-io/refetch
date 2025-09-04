@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Wednesday, September 3, 2025)
+## 🔥 Top Posts Today (Thursday, September 4, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
-📊 Votes: **2** | ⏰ 22 minutes ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
+**🥇 [Leak Reveals Valve's New 'Roy' Controllers](https://refetch.io/threads/68b9ea97000d06fbaf1a)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/games/2024/11/19/24300757/valve-steam-controller-2-roy-deckard-leak)
 
-**🥈 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
-📊 Votes: **2** | ⏰ 2 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
+**🥈 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
 
-**🥉 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+**🥉 [Valve Trademarks 'Steam Frame' for Upcoming Gaming Gadget](https://refetch.io/threads/68b9ea97003e3bfc8aa9)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://theverge.com/pc-gaming/770811/valve-trademarks-steam-frame-for-its-next-gaming-gadget-whats-your-guess)
 
-**⭐ [Effective Practices for Architecting a RAG Pipeline](https://refetch.io/threads/68b808fc0005f60a4604)**
-📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/architecting-rag-pipeline)
+**⭐ [The Debate on Legal Rights for AI](https://refetch.io/threads/68b9ea9f0024afa023aa)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://wired.com/story/model-welfare-artificial-intelligence-sentience/)
 
-**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
+**⭐ [Belkin's New Qi2 Magnetic Charger Unveiled at IFA 2025](https://refetch.io/threads/68b9eaa80034fa8138ff)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/belkin-unveils-qi2-magnetic-charger-at-ifa-2025-180647711.html)
 
 ---
 
-*Last updated: 2025-09-03T10:01:00.072Z*
+*Last updated: 2025-09-04T20:01:07.070Z*
 
 
 
