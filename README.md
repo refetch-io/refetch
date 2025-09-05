@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Indie Dev Outshining Tech Giants on GitHub](https://refetch.io/threads/68ba9556003a6f94b176)**
-📊 Votes: **0** | ⏰ 14 minutes ago | 🔗 [Original](https://www.open-source-ward.com/the-indie-dev-outshining-tech-giants-on-github/)
-
-**🥈 [Warner Bros. Discovery Sues Midjourney for Copyright Infringement](https://refetch.io/threads/68ba8f6b002edf4e0eb8)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/ai/warner-bros-discovery-is-suing-midjourney-for-copyright-infringement-035850831.html)
-
-**🥉 [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
+**🥇 [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
 📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
 
-**⭐ [Building an Interpreter for Swift: A Compiled Language Explored](https://refetch.io/threads/68b9dc99000fb80d8c0a)**
+**🥈 [Building an Interpreter for Swift: A Compiled Language Explored](https://refetch.io/threads/68b9dc99000fb80d8c0a)**
 📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.bitrig.app/blog/swift-interpreter)
 
-**⭐ [Building OAuth Authentication for MCP Servers: A Supabase-Like Approach](https://refetch.io/threads/68ba8c0d0031802dcc1c)**
-📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://hyprmcp.com/blog/mcp-server-authentication/)
+**🥉 [Adobe Premiere Set to Launch on iOS](https://refetch.io/threads/68b9dc8e000182196970)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.engadget.com/mobile/adobe-premiere-is-coming-to-ios-later-this-month-155019427.html)
+
+**⭐ [A Comprehensive Guide to AI Agent Architecture for Product Managers](https://refetch.io/threads/68b9dc960014e93a0fea)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.productcurious.com/p/a-pms-guide-to-ai-agent-architecture)
+
+**⭐ [Leak Reveals Valve's New 'Roy' Controllers](https://refetch.io/threads/68b9ea97000d06fbaf1a)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://theverge.com/games/2024/11/19/24300757/valve-steam-controller-2-roy-deckard-leak)
 
 ---
 
-*Last updated: 2025-09-05T08:00:45.133Z*
+*Last updated: 2025-09-05T08:36:03.352Z*
 
 
 
