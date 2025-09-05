@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Volkswagen and Audi's Leap into the EV Market](https://refetch.io/threads/68bb072f00237dca5607)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/2023/12/19/24008426/volkswagen-audi-porsche-tesla-nacs-ev-charging-plug)
+**🥇 [Exploring the Size of Embeddings in Machine Learning](https://refetch.io/threads/68bb234400087a97d65e)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://vickiboykis.com/2025/09/01/how-big-are-our-embeddings-now-and-why/)
 
-**🥈 [AI Doomers: A Deep Dive into the Fear of Artificial Intelligence](https://refetch.io/threads/68bb0738002a1798237c)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://wired.com/story/the-doomers-who-insist-ai-will-kill-us-all/)
+**🥈 [DJI Drones Out of Stock: A Market Shift or Temporary Shortage?](https://refetch.io/threads/68bb23270027de341d37)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/report/692398/dji-drones-out-of-stock-best-buy-amazon-deny-us-exit)
 
-**🥉 [BMW Unveils Tech-Loaded iX3 Electric SUV](https://refetch.io/threads/68bab2ae00051431482c)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://arstechnica.com/cars/2025/09/neue-klasse-bmws-tech-filled-ix3-electric-suv-is-unveiled/)
+**🥉 [Tesla's Board Challenges Elon Musk: Achieve Milestones to Become a Trillionaire](https://refetch.io/threads/68bb2338000207cf4e70)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/teslas-board-to-elon-musk-hit-these-milestones-and-well-make-you-a-trillionaire-170914461.html)
 
 **⭐ [Unpacking the Heap-Based Buffer Overflow in Kernel Streaming](https://refetch.io/threads/68bae4020022a904f42e)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
 
 **⭐ [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
 
 ---
 
-*Last updated: 2025-09-05T16:00:40.246Z*
+*Last updated: 2025-09-05T18:00:23.829Z*
 
 
 
