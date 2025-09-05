@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring the Size of Embeddings in Machine Learning](https://refetch.io/threads/68bb234400087a97d65e)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://vickiboykis.com/2025/09/01/how-big-are-our-embeddings-now-and-why/)
+**🥇 [OpenAI Receives Warning from Attorneys General Over Potential Harm to Children](https://refetch.io/threads/68bb3f76000b8bca036e)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/05/attorneys-general-warn-openai-harm-to-children-will-not-be-tolerated/)
 
-**🥈 [DJI Drones Out of Stock: A Market Shift or Temporary Shortage?](https://refetch.io/threads/68bb23270027de341d37)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/report/692398/dji-drones-out-of-stock-best-buy-amazon-deny-us-exit)
+**🥈 [Google Fined €2.95B by Europe for Adtech Monopoly](https://refetch.io/threads/68bb3f83000a0bfa4091)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/europe-slaps-google-with-2-95b-euro-fine-over-advertising-monopoly/)
 
-**🥉 [Tesla's Board Challenges Elon Musk: Achieve Milestones to Become a Trillionaire](https://refetch.io/threads/68bb2338000207cf4e70)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/teslas-board-to-elon-musk-hit-these-milestones-and-well-make-you-a-trillionaire-170914461.html)
+**🥉 [Anthropic's Major AI Copyright Settlement](https://refetch.io/threads/68bb3f8800289ebbb445)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://wired.com/story/anthropic-settlement-lawsuit-copyright/)
 
-**⭐ [Unpacking the Heap-Based Buffer Overflow in Kernel Streaming](https://refetch.io/threads/68bae4020022a904f42e)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
+**⭐ [Anthropic Settles Copyright Lawsuit with Authors for a Record-breaking $1.5 B...](https://refetch.io/threads/68bb3f9000378324fe13)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.engadget.com/ai/anthropic-will-pay-a-record-breaking-15-billion-to-settle-copyright-lawsuit-with-authors-192800292.html)
 
-**⭐ [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
+**⭐ [EU Slaps Google with $3.5 Billion Fine for Adtech Antitrust Violations](https://refetch.io/threads/68bb38ce0026dee9260b)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.engadget.com/big-tech/eu-fines-google-35-billion-over-adtech-antitrust-violations-183701640.html)
 
 ---
 
-*Last updated: 2025-09-05T18:00:23.829Z*
+*Last updated: 2025-09-05T20:00:38.145Z*
 
 
 
