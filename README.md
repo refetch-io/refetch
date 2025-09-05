@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Parkinson’s Protein Drilling Holes in Brain Cells: A New Study](https://refetch.io/threads/68ba423200110901b083)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904103922.htm)
+**🥇 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
 
-**🥈 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
+**🥈 [Inverting the Xorshift128 Random Number Generator](https://refetch.io/threads/68b9847b002b5199d8e5)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://littlemaninmyhead.wordpress.com/2025/08/31/inverting-the-xorshift128-random-number-generator/)
 
-**🥉 [AI-Driven Migration from Enzyme to React Testing Library at Slack](https://refetch.io/threads/68b96571000480c0ccf1)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://infoq.com/presentations/ai-migration-large-scale)
+**🥉 [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
 
-**⭐ [Inverting the Xorshift128 Random Number Generator](https://refetch.io/threads/68b9847b002b5199d8e5)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://littlemaninmyhead.wordpress.com/2025/08/31/inverting-the-xorshift128-random-number-generator/)
+**⭐ [Building an Interpreter for Swift: A Compiled Language Explored](https://refetch.io/threads/68b9dc99000fb80d8c0a)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.bitrig.app/blog/swift-interpreter)
 
-**⭐ [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
+**⭐ [DuckDuckGo Enhances Subscription Plan with Advanced Models](https://refetch.io/threads/68b980f500304a0cb820)**
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/04/duckduckgo-adds-access-to-advanced-models-to-it-subscription-plan/)
 
 ---
 
-*Last updated: 2025-09-05T02:00:12.657Z*
+*Last updated: 2025-09-05T04:01:37.840Z*
 
 
 
