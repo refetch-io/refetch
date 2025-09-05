@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [OpenAI to Start Producing its Own AI Chips Next Year](https://refetch.io/threads/68bacf13002c161a0f39)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.engadget.com/ai/openai-is-reportedly-producing-its-own-ai-chips-starting-next-year-113924707.html)
+**🥇 [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
 
-**🥈 [BMW Unveils Tech-Loaded iX3 Electric SUV](https://refetch.io/threads/68bab2ae00051431482c)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://arstechnica.com/cars/2025/09/neue-klasse-bmws-tech-filled-ix3-electric-suv-is-unveiled/)
+**🥈 [AI Intervention in Columbia University's Student Tensions](https://refetch.io/threads/68baeafa001382f3ecde)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/770510/columbia-university-sway-ai-to-cool-off-student-tensions-israel-palestine-protests)
 
-**🥉 [Neutron's Launch Pad Opens and SpaceX's Falcon 9 Gets Approval](https://refetch.io/threads/68bac7d7003bcd8c9200)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://arstechnica.com/space/2025/09/rocket-report-neutrons-pad-opens-for-business-spacex-gets-falcon-9-green-light/)
+**🥉 [Court Reinstates FTC Democrat: A Look at Supreme Court Precedent](https://refetch.io/threads/68baeb0100319c7ab444)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/trump-cant-fire-ftc-commissioners-just-because-he-wants-to-judges-rule/)
 
-**⭐ [AI Logistics Startup Augment Raises $85M in Series A Funding](https://refetch.io/threads/68b9f1bb0011eda0a696)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/04/ai-logistics-startup-augment-from-deliverrs-founder-raises-massive-85m-series-a/)
+**⭐ [Debunking the Myth: Development Speed as a Bottleneck](https://refetch.io/threads/68baeb13003956fdeaef)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://pawelbrodzinski.substack.com/p/development-speed-is-not-a-bottleneck)
 
-**⭐ [Waymo Gets Green Light to Offer Robotaxi Rides at San Jose Airport](https://refetch.io/threads/68b9f1bc00074395e6d1)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/04/waymo-cleared-to-offer-robotaxi-rides-at-san-jose-airport/)
+**⭐ [Unpacking the Heap-Based Buffer Overflow in Kernel Streaming](https://refetch.io/threads/68bae4020022a904f42e)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
 
 ---
 
-*Last updated: 2025-09-05T12:00:50.844Z*
+*Last updated: 2025-09-05T14:00:24.372Z*
 
 
 
