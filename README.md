@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
+**🥇 [Volkswagen and Audi's Leap into the EV Market](https://refetch.io/threads/68bb072f00237dca5607)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/2023/12/19/24008426/volkswagen-audi-porsche-tesla-nacs-ev-charging-plug)
 
-**🥈 [AI Intervention in Columbia University's Student Tensions](https://refetch.io/threads/68baeafa001382f3ecde)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/770510/columbia-university-sway-ai-to-cool-off-student-tensions-israel-palestine-protests)
+**🥈 [AI Doomers: A Deep Dive into the Fear of Artificial Intelligence](https://refetch.io/threads/68bb0738002a1798237c)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://wired.com/story/the-doomers-who-insist-ai-will-kill-us-all/)
 
-**🥉 [Court Reinstates FTC Democrat: A Look at Supreme Court Precedent](https://refetch.io/threads/68baeb0100319c7ab444)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/trump-cant-fire-ftc-commissioners-just-because-he-wants-to-judges-rule/)
-
-**⭐ [Debunking the Myth: Development Speed as a Bottleneck](https://refetch.io/threads/68baeb13003956fdeaef)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://pawelbrodzinski.substack.com/p/development-speed-is-not-a-bottleneck)
+**🥉 [BMW Unveils Tech-Loaded iX3 Electric SUV](https://refetch.io/threads/68bab2ae00051431482c)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://arstechnica.com/cars/2025/09/neue-klasse-bmws-tech-filled-ix3-electric-suv-is-unveiled/)
 
 **⭐ [Unpacking the Heap-Based Buffer Overflow in Kernel Streaming](https://refetch.io/threads/68bae4020022a904f42e)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.crowdfense.com/cve-2025-53149-windows-ksthunk-heap-overflow/)
+
+**⭐ [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
 
 ---
 
-*Last updated: 2025-09-05T14:00:24.372Z*
+*Last updated: 2025-09-05T16:00:40.246Z*
 
 
 
