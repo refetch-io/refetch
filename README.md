@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
+**🥇 [Parkinson’s Protein Drilling Holes in Brain Cells: A New Study](https://refetch.io/threads/68ba423200110901b083)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250904103922.htm)
 
-**🥈 [Over-the-counter Nasal Spray Reduces COVID Infections by 67% in Trial](https://refetch.io/threads/68ba227a001c0df437d4)**
-📊 Votes: **0** | ⏰ 26 minutes ago | 🔗 [Original](https://arstechnica.com/health/2025/09/otc-nasal-spray-seemed-to-cut-covid-infections-by-67-in-mid-sized-trial/)
+**🥈 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
 
-**🥉 [Building a Personal Music Stack: A Spotify Migration Story](https://refetch.io/threads/68ba228d00193882c5f2)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://leshicodes.github.io/blog/spotify-migration/)
+**🥉 [AI-Driven Migration from Enzyme to React Testing Library at Slack](https://refetch.io/threads/68b96571000480c0ccf1)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://infoq.com/presentations/ai-migration-large-scale)
 
-**⭐ [Philips Hue Lights: A Major Product Refresh](https://refetch.io/threads/68b948f50031ca7219b1)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/ifa-berlin/769934/philips-hue-essentials-bridge-pro-light-strip-matter-ifa-launch)
+**⭐ [Inverting the Xorshift128 Random Number Generator](https://refetch.io/threads/68b9847b002b5199d8e5)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://littlemaninmyhead.wordpress.com/2025/08/31/inverting-the-xorshift128-random-number-generator/)
 
-**⭐ [Polars Cloud and Distributed Polars: New Launch](https://refetch.io/threads/68b95a970036a710ac4e)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://pola.rs/posts/polars-cloud-launch/)
+**⭐ [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
 
 ---
 
-*Last updated: 2025-09-05T00:02:31.771Z*
+*Last updated: 2025-09-05T02:00:12.657Z*
 
 
 
