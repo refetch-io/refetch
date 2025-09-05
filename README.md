@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [OpenAI Receives Warning from Attorneys General Over Potential Harm to Children](https://refetch.io/threads/68bb3f76000b8bca036e)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/05/attorneys-general-warn-openai-harm-to-children-will-not-be-tolerated/)
+**🥇 [Exploring Psychological Tricks to Make LLMs Respond to Forbidden Prompts](https://refetch.io/threads/68bb5826000842287a3a)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/science/2025/09/these-psychological-tricks-can-get-llms-to-respond-to-forbidden-prompts/)
 
-**🥈 [Google Fined €2.95B by Europe for Adtech Monopoly](https://refetch.io/threads/68bb3f83000a0bfa4091)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/europe-slaps-google-with-2-95b-euro-fine-over-advertising-monopoly/)
+**🥈 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
 
-**🥉 [Anthropic's Major AI Copyright Settlement](https://refetch.io/threads/68bb3f8800289ebbb445)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://wired.com/story/anthropic-settlement-lawsuit-copyright/)
+**🥉 [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
 
-**⭐ [Anthropic Settles Copyright Lawsuit with Authors for a Record-breaking $1.5 B...](https://refetch.io/threads/68bb3f9000378324fe13)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.engadget.com/ai/anthropic-will-pay-a-record-breaking-15-billion-to-settle-copyright-lawsuit-with-authors-192800292.html)
+**⭐ [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
 
-**⭐ [EU Slaps Google with $3.5 Billion Fine for Adtech Antitrust Violations](https://refetch.io/threads/68bb38ce0026dee9260b)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.engadget.com/big-tech/eu-fines-google-35-billion-over-adtech-antitrust-violations-183701640.html)
+**⭐ [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
 
 ---
 
-*Last updated: 2025-09-05T20:00:38.145Z*
+*Last updated: 2025-09-05T22:01:17.524Z*
 
 
 
