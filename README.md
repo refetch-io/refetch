@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Leveraging AI to Perceive the Universe More Deeply](https://refetch.io/threads/68ba7a3d00200a6bd1c2)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://deepmind.google/discover/blog/using-ai-to-perceive-the-universe-in-greater-depth/)
+**🥇 [The Indie Dev Outshining Tech Giants on GitHub](https://refetch.io/threads/68ba9556003a6f94b176)**
+📊 Votes: **0** | ⏰ 14 minutes ago | 🔗 [Original](https://www.open-source-ward.com/the-indie-dev-outshining-tech-giants-on-github/)
 
-**🥈 [HPE Systems Bounce Back with Juniper's Assistance](https://refetch.io/threads/68ba7a470004f0d16a4b)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://www.nextplatform.com/2025/09/04/hpe-systems-rebound-as-juniper-brings-a-further-boost/)
+**🥈 [Warner Bros. Discovery Sues Midjourney for Copyright Infringement](https://refetch.io/threads/68ba8f6b002edf4e0eb8)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/ai/warner-bros-discovery-is-suing-midjourney-for-copyright-infringement-035850831.html)
 
-**🥉 [DeepSeek's Impact on the AI Industry and Nvidia's Role](https://refetch.io/threads/68b9a446000574183e71)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/598846/deepseek-big-tech-ai-industry-nvidia-impac)
-
-**⭐ [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
+**🥉 [Microsoft Open-Sources Bill Gates' 6502 BASIC from 1978: A Nostalgic Journey ...](https://refetch.io/threads/68b9dc7c0008bda5f461)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/microsoft-open-sources-bill-gates-6502-basic-from-1978/)
 
 **⭐ [Building an Interpreter for Swift: A Compiled Language Explored](https://refetch.io/threads/68b9dc99000fb80d8c0a)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://www.bitrig.app/blog/swift-interpreter)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.bitrig.app/blog/swift-interpreter)
+
+**⭐ [Building OAuth Authentication for MCP Servers: A Supabase-Like Approach](https://refetch.io/threads/68ba8c0d0031802dcc1c)**
+📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://hyprmcp.com/blog/mcp-server-authentication/)
 
 ---
 
-*Last updated: 2025-09-05T06:01:17.096Z*
+*Last updated: 2025-09-05T08:00:45.133Z*
 
 
 
