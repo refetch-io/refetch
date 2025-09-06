@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Porsche and Audi EVs Now Compatible with Tesla Superchargers](https://refetch.io/threads/68bc74780011f83c724c)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/porsche-and-audis-evs-can-now-recharge-on-any-tesla-supercharger-in-north-america-173333649.html)
+**🥇 [In-Browser Processing of Piano Tutorial Videos: A New Approach](https://refetch.io/threads/68bcace3000c19a2a0cd)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.heyraviteja.com/post/portfolio/piano-reader/)
 
-**🥈 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+**🥈 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
 
-**🥉 [Google Fined $3.5B by EU Over Adtech Abuse](https://refetch.io/threads/68bc6d5e0035d27d7d47)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/eu-fines-google-3-5b-over-adtech-abuse/)
+**🥉 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
-**⭐ [The Ongoing Debate Over Age Verification Laws Expansion](https://refetch.io/threads/68bc745f000c5323d4ec)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/wtf-is-going-on-with-age-verification-laws/)
+**⭐ [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
 
-**⭐ [Exploring the Oldest Recorded Transaction](https://refetch.io/threads/68bc7482002600a7359a)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://avi.im/blag/2025/oldest-txn/)
+**⭐ [Apple's Legal Challenge: Alleged Use of Pirated Books for AI Training](https://refetch.io/threads/68bc5f7c000a4954c28f)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.engadget.com/ai/apple-faces-lawsuit-over-alleged-use-of-pirated-books-for-ai-training-160016161.html)
 
 ---
 
-*Last updated: 2025-09-06T18:00:39.333Z*
+*Last updated: 2025-09-06T22:00:18.583Z*
 
 
 
