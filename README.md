@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Long-Term Impact of Early Smartphone Usage on Mental Health](https://refetch.io/threads/68bc589100363c99ea22)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250906013448.htm)
+**🥇 [Porsche and Audi EVs Now Compatible with Tesla Superchargers](https://refetch.io/threads/68bc74780011f83c724c)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/porsche-and-audis-evs-can-now-recharge-on-any-tesla-supercharger-in-north-america-173333649.html)
 
 **🥈 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
-**🥉 [DuckDuckGo Founder's Take on AI Surveillance](https://refetch.io/threads/68bc51a7002bc5abe082)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://gabrielweinberg.com/p/ai-surveillance-should-be-banned)
+**🥉 [Google Fined $3.5B by EU Over Adtech Abuse](https://refetch.io/threads/68bc6d5e0035d27d7d47)**
+📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/eu-fines-google-3-5b-over-adtech-abuse/)
 
-**⭐ [Developing a Space Flight Simulator with Clojure](https://refetch.io/threads/68bb9ae800300f87cd33)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.wedesoft.de/software/2025/09/05/clojure-game/)
+**⭐ [The Ongoing Debate Over Age Verification Laws Expansion](https://refetch.io/threads/68bc745f000c5323d4ec)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/wtf-is-going-on-with-age-verification-laws/)
 
-**⭐ [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
+**⭐ [Exploring the Oldest Recorded Transaction](https://refetch.io/threads/68bc7482002600a7359a)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://avi.im/blag/2025/oldest-txn/)
 
 ---
 
-*Last updated: 2025-09-06T16:00:14.121Z*
+*Last updated: 2025-09-06T18:00:39.333Z*
 
 
 
