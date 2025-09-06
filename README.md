@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
+**🥇 [Sparrow: C++20 APIs for the Apache Arrow Columnar Format](https://refetch.io/threads/68bbe7f3001363086a49)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/man-group/sparrow)
 
-**🥈 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
+**🥈 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
 
-**🥉 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
+**🥉 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
+
+**⭐ [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
 
 **⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
-
-**⭐ [Exploring the Size of Embeddings in Machine Learning](https://refetch.io/threads/68bb234400087a97d65e)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://vickiboykis.com/2025/09/01/how-big-are-our-embeddings-now-and-why/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
 
 ---
 
-*Last updated: 2025-09-06T06:01:08.884Z*
+*Last updated: 2025-09-06T08:01:08.235Z*
 
 
 
