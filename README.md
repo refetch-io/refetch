@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
+**🥇 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
-**🥈 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
+**🥈 [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
 
-**🥉 [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
+**🥉 [Exploring a Disciplined Approach to AI Software Development](https://refetch.io/threads/68bc3c63000601060a6a)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/Varietyz/Disciplined-AI-Software-Development)
 
-**⭐ [Exploring Pretraining Optimizers: A Comprehensive Study](https://refetch.io/threads/68bb468f001f1597270e)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.02046)
+**⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
 
-**⭐ [Optimizing Pandas Workflows: Spotting and Fixing Performance Bottlenecks](https://refetch.io/threads/68bb468c0038ed19a9b5)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://developer.nvidia.com/blog/how-to-spot-and-fix-5-common-performance-bottlenecks-in-pandas-workflows/)
+**⭐ [Atlassian's $610M Gamble and the Battle for Browser Dominance](https://refetch.io/threads/68bb694f0011a7127a66)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/podcast/atlassians-610m-bet-and-why-everyones-fighting-over-your-browser/)
 
 ---
 
-*Last updated: 2025-09-06T12:01:06.748Z*
+*Last updated: 2025-09-06T14:01:01.688Z*
 
 
 
