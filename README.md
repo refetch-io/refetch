@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Wednesday, September 3, 2025)
+## 🔥 Top Posts Today (Saturday, September 6, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Detecting Exposed Ollama Instances Using Shodan: A Case Study](https://refetch.io/threads/68b80c88001461e9591b)**
-📊 Votes: **2** | ⏰ 22 minutes ago | 🔗 [Original](https://blogs.cisco.com/security/detecting-exposed-llm-servers-shodan-case-study-on-ollama)
+**🥇 [Porsche and Audi EVs Now Compatible with Tesla Superchargers](https://refetch.io/threads/68bc74780011f83c724c)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/porsche-and-audis-evs-can-now-recharge-on-any-tesla-supercharger-in-north-america-173333649.html)
 
-**🥈 [Exploring Kernel Hack Drill and CVE-2024-50264 Exploitation](https://refetch.io/threads/68b7ec9d0028e53f2630)**
-📊 Votes: **2** | ⏰ 2 hours ago | 🔗 [Original](https://a13xp0p0v.github.io/2025/09/02/kernel-hack-drill-and-CVE-2024-50264.html)
+**🥈 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
-**🥉 [Tesla's Autonomous Van: A Glimpse into the Future of Transportation](https://refetch.io/threads/68b751f6003c680b22fc)**
-📊 Votes: **2** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/2024/10/10/24267158/tesla-van-robotaxi-autonomous-price-release-date)
+**🥉 [Google Fined $3.5B by EU Over Adtech Abuse](https://refetch.io/threads/68bc6d5e0035d27d7d47)**
+📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/eu-fines-google-3-5b-over-adtech-abuse/)
 
-**⭐ [Effective Practices for Architecting a RAG Pipeline](https://refetch.io/threads/68b808fc0005f60a4604)**
-📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/architecting-rag-pipeline)
+**⭐ [The Ongoing Debate Over Age Verification Laws Expansion](https://refetch.io/threads/68bc745f000c5323d4ec)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/06/wtf-is-going-on-with-age-verification-laws/)
 
-**⭐ [Ableton Live 12.3: Public Beta Now Available](https://refetch.io/threads/68b7474500070b8c0f9b)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.ableton.com/en/blog/live-12-3-is-coming/)
+**⭐ [Exploring the Oldest Recorded Transaction](https://refetch.io/threads/68bc7482002600a7359a)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://avi.im/blag/2025/oldest-txn/)
 
 ---
 
-*Last updated: 2025-09-03T10:01:00.072Z*
+*Last updated: 2025-09-06T18:00:39.333Z*
 
 
 

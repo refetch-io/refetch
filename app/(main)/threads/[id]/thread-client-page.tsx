@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Clock, TrendingUp, Reply, ChevronDown, ChevronUp, Trash2 } from "lucide-react"
 import { BotLabel } from "@/components/bot-label"
+import { ParsedText } from "@/components/parsed-text"
 
 interface ThreadClientPageProps {
   article: NewsItem
@@ -99,7 +100,9 @@ const CommentItem = memo<CommentItemProps>(({
           <span className="text-gray-500">•</span>
           <span className="text-gray-500 text-xs">{comment.timeAgo}</span>
         </div>
-        <div className="text-gray-700 text-sm mb-3 whitespace-pre-wrap">{comment.text}</div>
+        <div className="mb-3">
+          <ParsedText text={comment.text} />
+        </div>
         
         <div className="flex items-center gap-3">
           <CommentVote
