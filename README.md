@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Friday, September 5, 2025)
+## 🔥 Top Posts Today (Saturday, September 6, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Exploring Psychological Tricks to Make LLMs Respond to Forbidden Prompts](https://refetch.io/threads/68bb5826000842287a3a)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/science/2025/09/these-psychological-tricks-can-get-llms-to-respond-to-forbidden-prompts/)
+**🥇 [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
 
-**🥈 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
+**🥈 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
 
-**🥉 [OpenAI and Broadcom Collaboration: The Birth of New AI Chips](https://refetch.io/threads/68baeafe003b581476e0)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/openai-links-up-with-broadcom-to-produce-its-own-ai-chips/)
+**🥉 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
 
-**⭐ [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
+**⭐ [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
 
-**⭐ [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
+**⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
 
 ---
 
-*Last updated: 2025-09-05T22:01:17.524Z*
+*Last updated: 2025-09-06T02:01:01.999Z*
 
 
 
