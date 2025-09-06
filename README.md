@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+**🥇 [The Long-Term Impact of Early Smartphone Usage on Mental Health](https://refetch.io/threads/68bc589100363c99ea22)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250906013448.htm)
 
-**🥈 [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
+**🥈 [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
-**🥉 [Exploring a Disciplined Approach to AI Software Development](https://refetch.io/threads/68bc3c63000601060a6a)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/Varietyz/Disciplined-AI-Software-Development)
+**🥉 [DuckDuckGo Founder's Take on AI Surveillance](https://refetch.io/threads/68bc51a7002bc5abe082)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://gabrielweinberg.com/p/ai-surveillance-should-be-banned)
 
-**⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
+**⭐ [Developing a Space Flight Simulator with Clojure](https://refetch.io/threads/68bb9ae800300f87cd33)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.wedesoft.de/software/2025/09/05/clojure-game/)
 
-**⭐ [Atlassian's $610M Gamble and the Battle for Browser Dominance](https://refetch.io/threads/68bb694f0011a7127a66)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/podcast/atlassians-610m-bet-and-why-everyones-fighting-over-your-browser/)
+**⭐ [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
 
 ---
 
-*Last updated: 2025-09-06T14:01:01.688Z*
+*Last updated: 2025-09-06T16:00:14.121Z*
 
 
 
