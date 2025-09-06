@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
+**🥇 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
 
-**🥈 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
+**🥈 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
 
-**🥉 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
-
-**⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
+**🥉 [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
 
 **⭐ [Exploring Pretraining Optimizers: A Comprehensive Study](https://refetch.io/threads/68bb468f001f1597270e)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.02046)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.02046)
+
+**⭐ [Optimizing Pandas Workflows: Spotting and Fixing Performance Bottlenecks](https://refetch.io/threads/68bb468c0038ed19a9b5)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://developer.nvidia.com/blog/how-to-spot-and-fix-5-common-performance-bottlenecks-in-pandas-workflows/)
 
 ---
 
-*Last updated: 2025-09-06T10:00:53.975Z*
+*Last updated: 2025-09-06T12:01:06.748Z*
 
 
 
