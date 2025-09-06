@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Sparrow: C++20 APIs for the Apache Arrow Columnar Format](https://refetch.io/threads/68bbe7f3001363086a49)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/man-group/sparrow)
+**🥇 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
 
-**🥈 [Unveiling the Hidden Quantum Geometry Influencing Electron Behavior](https://refetch.io/threads/68bb2a56000ee96759de)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250905112310.htm)
+**🥈 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
 
-**🥉 [Unprecedented AI Settlement: Anthropic to Compensate Authors with $1.5 Billion](https://refetch.io/threads/68bb49d30013b572e64f)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/first-of-its-kind-ai-settlement-anthropic-to-pay-authors-1-5-billion/)
-
-**⭐ [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
+**🥉 [Anthropic's Landmark AI Settlement: A $1.5 Billion Payout](https://refetch.io/threads/68bb4d5000281d0aca8e)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/anthropic/773087/anthropic-to-pay-1-5-billion-to-authors-in-landmark-ai-settlement)
 
 **⭐ [Apertus 70B: A Truly Open AI Model by Swiss AI](https://refetch.io/threads/68bb73ea000a4b68754e)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://huggingface.co/swiss-ai/Apertus-70B-2509)
+
+**⭐ [Exploring Pretraining Optimizers: A Comprehensive Study](https://refetch.io/threads/68bb468f001f1597270e)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.02046)
 
 ---
 
-*Last updated: 2025-09-06T08:01:08.235Z*
+*Last updated: 2025-09-06T10:00:53.975Z*
 
 
 
