@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Game Launcher's Root CA Certificate Installation: A Security Concern](https://refetch.io/threads/68bce514002e29ea2b78)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/SoapboxRaceWorld/GameLauncher_NFSW/issues/276)
+**🥇 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
+📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
 
-**🥈 [The Impact of Card Shuffling Math on an Online Poker Empire](https://refetch.io/threads/68bce5180007b9c36a6e)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.scientificamerican.com/article/how-the-math-of-shuffling-cards-almost-brought-down-an-online-poker-empire/)
+**🥈 [Braincraft Challenge: A Test of Neural Capabilities](https://refetch.io/threads/68bd013d0008f644e355)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/rougier/braincraft)
 
-**🥉 [Microsoft Azure's Subsea Cable Issue: An Analysis](https://refetch.io/threads/68bce51a000e3abfc779)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://azure.status.microsoft/en-gb/status)
-
-**⭐ [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
+**🥉 [Repurposing Old Tech: Hosting a Blog on an iPad](https://refetch.io/threads/68bd013f0003f6f93bd5)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](http://odb.ar/blog/2025/09/05/hosting-my-blog-on-an-iPad-2.html)
 
 **⭐ [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+
+**⭐ [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
 
 ---
 
-*Last updated: 2025-09-07T02:00:34.177Z*
+*Last updated: 2025-09-07T04:01:14.340Z*
 
 
 
