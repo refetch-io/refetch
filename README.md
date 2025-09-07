@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
-📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
+**🥇 [Game Launcher's Root CA Certificate Installation: A Security Concern](https://refetch.io/threads/68bce514002e29ea2b78)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/SoapboxRaceWorld/GameLauncher_NFSW/issues/276)
 
-**🥈 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
-📊 Votes: **0** | ⏰ 55 minutes ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
+**🥈 [The Impact of Card Shuffling Math on an Online Poker Empire](https://refetch.io/threads/68bce5180007b9c36a6e)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.scientificamerican.com/article/how-the-math-of-shuffling-cards-almost-brought-down-an-online-poker-empire/)
 
-**🥉 [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
-📊 Votes: **0** | ⏰ 41 minutes ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
+**🥉 [Microsoft Azure's Subsea Cable Issue: An Analysis](https://refetch.io/threads/68bce51a000e3abfc779)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://azure.status.microsoft/en-gb/status)
+
+**⭐ [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
 
 **⭐ [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
-
-**⭐ [A Comprehensive Look at New Java Language Features Since Java 21](https://refetch.io/threads/68bc3c640025b2f28c58)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://inside.java/2025/08/31/roadto25-java-language/)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
 
 ---
 
-*Last updated: 2025-09-07T00:02:36.955Z*
+*Last updated: 2025-09-07T02:00:34.177Z*
 
 
 
