@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Reviving History: Running a Rational R1000/400 Computer](https://refetch.io/threads/68bd71b7002985c1bb21)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://datamuseum.dk/wiki/Rational/R1000s400/Logbook/2019)
+**🥇 [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
 
-**🥈 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
+**🥈 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
 
-**🥉 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
+**🥉 [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
 
-**⭐ [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
+**⭐ [Porsche's Innovative Hybrid Engine Arrives in the 911 Turbo S](https://refetch.io/threads/68bd86ae000b2903be11)**
+📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://arstechnica.com/cars/2025/09/porsches-insanely-clever-hybrid-engine-comes-to-the-911-turbo-s/)
 
-**⭐ [Anticipating Apple's iPhone 17 Announcement](https://refetch.io/threads/68bd6a7d000623f1ca92)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://wired.com/story/apple-iphone-17-event-how-to-watch-what-to-expect/)
+**⭐ [Show Refetch: ZapTransfer – A privacy-first file sharing service](https://refetch.io/threads/68bd84c50011cda81383)**
+📊 Votes: **0** | ⏰ 48 minutes ago | 🔗 [Original](https://zaptransfer.xyz/)
 
 ---
 
-*Last updated: 2025-09-07T12:01:13.090Z*
+*Last updated: 2025-09-07T14:01:09.714Z*
 
 
 
