@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Azure Services Impacted After Undersea Cables Severed in Red Sea](https://refetch.io/threads/68bda9da0020aa3b8997)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/07/microsoft-says-azure-affected-after-cables-cut-in-the-red-sea/)
+**🥇 [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
 
-**🥈 [Exploring AI Mode: A New Frontier](https://refetch.io/threads/68bda9fa002abb2cbdbe)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://simonwillison.net/2025/Sep/7/ai-mode/)
+**🥈 [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
 
-**🥉 [Study Finds Human Stem Cells Age More Rapidly in Space](https://refetch.io/threads/68bda2e70031ecaeda02)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/human-stem-cells-age-more-rapidly-in-space-study-finds-145651426.html)
+**🥉 [Garmin Outpaces Apple with Satellite-Connected Smartwatch](https://refetch.io/threads/68bd98760017f158cc4e)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.macrumors.com/2025/09/03/garmin-satellite-smartwatch/)
 
-**⭐ [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
+**⭐ [Introducing Flint: A Lightweight Tool for Managing Linux Virtual Machines](https://refetch.io/threads/68bd08260016e1200370)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://github.com/ccheshirecat/flint)
 
-**⭐ [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
+**⭐ [Transitioning from Intel to AMD Ryzen 9950X3D: A Developer's Experience](https://refetch.io/threads/68bd35e800280fc55c26)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://michael.stapelberg.ch/posts/2025-09-07-bye-intel-hi-amd-9950x3d/)
 
 ---
 
-*Last updated: 2025-09-07T16:01:07.611Z*
+*Last updated: 2025-09-07T18:00:30.461Z*
 
 
 
