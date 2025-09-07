@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Microsoft's Cloud Service Restored After Red Sea Cable Cut Incident](https://refetch.io/threads/68bde22e002bd0ab5a42)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/big-tech/microsofts-cloud-service-restored-after-reports-of-cut-cables-in-the-red-sea-192312354.html)
+**🥇 [First Visible Time Crystal: A Quantum Leap in Science](https://refetch.io/threads/68bdf749000e08ae125f)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024555.htm)
 
-**🥈 [Campfire: An Open Source Web-Based Chat Application](https://refetch.io/threads/68bde23d000906699123)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/basecamp/once-campfire)
+**🥈 [Exploring the Role of Incentives in AI Hallucinations](https://refetch.io/threads/68bdfa9d002d4982dd8f)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/07/are-bad-incentives-to-blame-for-ai-hallucinations/)
 
-**🥉 [Securing Your Logs: A Comprehensive Guide](https://refetch.io/threads/68bddb29003b1e766794)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://allan.reyes.sh/posts/keeping-secrets-out-of-logs/)
+**🥉 [The Race to Build a Distributed GPU Runtime: A Deep Dive](https://refetch.io/threads/68bde5c70026314b4a78)**
+📊 Votes: **1** | ⏰ 1 hour ago | 🔗 [Original](https://voltrondata.com/blog/the-race-to-build-a-distributed-gpu-runtime)
 
-**⭐ [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
+**⭐ [CRISPR Efficiency Tripled: A New Breakthrough in Gene Editing](https://refetch.io/threads/68bdf05300358c8d2ece)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024543.htm)
 
-**⭐ [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
+**⭐ [Hyundai's eVTOL Startup Supernal Halts Operations Amidst Leadership Changes](https://refetch.io/threads/68bdfa9a003c43ee80e5)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/07/hyundais-evtol-startup-supernal-pauses-work-following-ceo-and-cto-departures/)
 
 ---
 
-*Last updated: 2025-09-07T20:00:44.584Z*
+*Last updated: 2025-09-07T22:00:57.797Z*
 
 
 
