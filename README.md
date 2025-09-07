@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
-📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
+📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
 
-**🥈 [Braincraft Challenge: A Test of Neural Capabilities](https://refetch.io/threads/68bd013d0008f644e355)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/rougier/braincraft)
+**🥈 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
 
-**🥉 [Repurposing Old Tech: Hosting a Blog on an iPad](https://refetch.io/threads/68bd013f0003f6f93bd5)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](http://odb.ar/blog/2025/09/05/hosting-my-blog-on-an-iPad-2.html)
+**🥉 [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
 
-**⭐ [The Burger King Hack: A Case Study in Auth Bypass and Audio Surveillance](https://refetch.io/threads/68bc3c62000eb954ebb0)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://bobdahacker.com/blog/rbi-hacked-drive-thrus/)
+**⭐ [Apple's Legal Challenge: Alleged Use of Pirated Books for AI Training](https://refetch.io/threads/68bc5f7c000a4954c28f)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.engadget.com/ai/apple-faces-lawsuit-over-alleged-use-of-pirated-books-for-ai-training-160016161.html)
 
-**⭐ [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
+**⭐ [Google Fined $3.5B by EU Over Adtech Abuse](https://refetch.io/threads/68bc6d5e0035d27d7d47)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/06/eu-fines-google-3-5b-over-adtech-abuse/)
 
 ---
 
-*Last updated: 2025-09-07T04:01:14.340Z*
+*Last updated: 2025-09-07T06:01:12.277Z*
 
 
 
