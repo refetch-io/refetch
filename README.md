@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
+**🥇 [The CoPilot Productivity Paradox: A Deep Dive into AI Assistants](https://refetch.io/threads/68bd556d003a6d7db527)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.marginalia.nu/log/a_125_ai_assistants/)
 
-**🥈 [Transitioning from Intel to AMD Ryzen 9950X3D: A Developer's Experience](https://refetch.io/threads/68bd35e800280fc55c26)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://michael.stapelberg.ch/posts/2025-09-07-bye-intel-hi-amd-9950x3d/)
+**🥈 [Inside the 'Kim' Dump: Unveiling North Korea's Credential Theft Strategies](https://refetch.io/threads/68bc9ecb0009fd2f4129)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://dti.domaintools.com/inside-the-kimsuky-leak-how-the-kim-dump-exposed-north-koreas-credential-theft-playbook/)
 
-**🥉 [The Claude Code Framework Wars: An Analysis](https://refetch.io/threads/68bd35ee001b58f99ddd)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://shmck.substack.com/p/claude-code-framework-wars)
-
-**⭐ [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
+**🥉 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
 
 **⭐ [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
+
+**⭐ [Europe's Leap into Exascale Supercomputing with Jupiter](https://refetch.io/threads/68bc9ecb0038f9956865)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://ec.europa.eu/commission/presscorner/detail/en/ip_25_2029)
 
 ---
 
-*Last updated: 2025-09-07T08:01:03.926Z*
+*Last updated: 2025-09-07T10:00:25.972Z*
 
 
 
