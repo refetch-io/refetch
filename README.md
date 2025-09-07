@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
+**🥇 [Azure Services Impacted After Undersea Cables Severed in Red Sea](https://refetch.io/threads/68bda9da0020aa3b8997)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/07/microsoft-says-azure-affected-after-cables-cut-in-the-red-sea/)
 
-**🥈 [Optimizing Matrix Multiplication on Nvidia's Blackwell: A Deep Dive](https://refetch.io/threads/68bcbea0003a5cd9ab11)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.modular.com/blog/matrix-multiplication-on-nvidias-blackwell-part-2-using-hardware-features-to-optimize-matmul)
+**🥈 [Exploring AI Mode: A New Frontier](https://refetch.io/threads/68bda9fa002abb2cbdbe)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://simonwillison.net/2025/Sep/7/ai-mode/)
 
-**🥉 [C++26: Understanding and Mitigating Erroneous Behaviour](https://refetch.io/threads/68bcc1ee000b830ab9ef)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.sandordargo.com/blog/2025/02/05/cpp26-erroneous-behaviour)
+**🥉 [Study Finds Human Stem Cells Age More Rapidly in Space](https://refetch.io/threads/68bda2e70031ecaeda02)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://www.engadget.com/human-stem-cells-age-more-rapidly-in-space-study-finds-145651426.html)
 
-**⭐ [Porsche's Innovative Hybrid Engine Arrives in the 911 Turbo S](https://refetch.io/threads/68bd86ae000b2903be11)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://arstechnica.com/cars/2025/09/porsches-insanely-clever-hybrid-engine-comes-to-the-911-turbo-s/)
+**⭐ [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
 
-**⭐ [Show Refetch: ZapTransfer – A privacy-first file sharing service](https://refetch.io/threads/68bd84c50011cda81383)**
-📊 Votes: **0** | ⏰ 48 minutes ago | 🔗 [Original](https://zaptransfer.xyz/)
+**⭐ [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
 
 ---
 
-*Last updated: 2025-09-07T14:01:09.714Z*
+*Last updated: 2025-09-07T16:01:07.611Z*
 
 
 
