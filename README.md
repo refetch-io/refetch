@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
+**🥇 [Microsoft's Cloud Service Restored After Red Sea Cable Cut Incident](https://refetch.io/threads/68bde22e002bd0ab5a42)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://www.engadget.com/big-tech/microsofts-cloud-service-restored-after-reports-of-cut-cables-in-the-red-sea-192312354.html)
 
-**🥈 [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
+**🥈 [Campfire: An Open Source Web-Based Chat Application](https://refetch.io/threads/68bde23d000906699123)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/basecamp/once-campfire)
 
-**🥉 [Garmin Outpaces Apple with Satellite-Connected Smartwatch](https://refetch.io/threads/68bd98760017f158cc4e)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.macrumors.com/2025/09/03/garmin-satellite-smartwatch/)
+**🥉 [Securing Your Logs: A Comprehensive Guide](https://refetch.io/threads/68bddb29003b1e766794)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://allan.reyes.sh/posts/keeping-secrets-out-of-logs/)
 
-**⭐ [Introducing Flint: A Lightweight Tool for Managing Linux Virtual Machines](https://refetch.io/threads/68bd08260016e1200370)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://github.com/ccheshirecat/flint)
+**⭐ [Exploring Algebraic Effects in Practice with Flix](https://refetch.io/threads/68bd8df4001bcc8c9b9e)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.relax.software/blog/flix-effects-intro/)
 
-**⭐ [Transitioning from Intel to AMD Ryzen 9950X3D: A Developer's Experience](https://refetch.io/threads/68bd35e800280fc55c26)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://michael.stapelberg.ch/posts/2025-09-07-bye-intel-hi-amd-9950x3d/)
+**⭐ [Solving the Expression Problem: A Deep Dive](https://refetch.io/threads/68bd94c20016f41f6934)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://eli.thegreenplace.net/2016/the-expression-problem-and-its-solutions/)
 
 ---
 
-*Last updated: 2025-09-07T18:00:30.461Z*
+*Last updated: 2025-09-07T20:00:44.584Z*
 
 
 
