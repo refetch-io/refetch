@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [C++ Library for Reading MacBook Lid Angle Sensor Data](https://refetch.io/threads/68be8b27001a360eee36)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://github.com/ufoym/mac-angle)
+**🥇 [Nest Cam Doorbell 2K: A Closer Look](https://refetch.io/threads/68bea74c0000a442a3dd)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://9to5google.com/2025/09/07/nest-cam-doorbell-2k/)
 
 **🥈 [The Race to Build a Distributed GPU Runtime: A Deep Dive](https://refetch.io/threads/68bde5c70026314b4a78)**
-📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://voltrondata.com/blog/the-race-to-build-a-distributed-gpu-runtime)
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://voltrondata.com/blog/the-race-to-build-a-distributed-gpu-runtime)
 
 **🥉 [CRISPR Efficiency Tripled: A New Breakthrough in Gene Editing](https://refetch.io/threads/68bdf05300358c8d2ece)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024543.htm)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024543.htm)
 
 **⭐ [First Visible Time Crystal: A Quantum Leap in Science](https://refetch.io/threads/68bdf749000e08ae125f)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024555.htm)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024555.htm)
 
 **⭐ [Analog Optical Computing: A New Approach to AI Inference and Combinatorial Op...](https://refetch.io/threads/68be1376003c7ce68e2c)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.nature.com/articles/s41586-025-09430-z)
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.nature.com/articles/s41586-025-09430-z)
 
 ---
 
-*Last updated: 2025-09-08T08:01:06.270Z*
+*Last updated: 2025-09-08T10:01:04.389Z*
 
 
 
