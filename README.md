@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Security Alert: NPM debug and chalk packages compromised](https://refetch.io/threads/68befbd70011a0129c10)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.aikido.dev/blog/npm-debug-and-chalk-packages-compromised)
+**🥇 [Signal Introduces Free and Paid Backup Plans for User Chats](https://refetch.io/threads/68bf17e90009beea0959)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/signal-introduces-free-and-paid-backup-plans-for-your-chats/)
 
-**🥈 [The Best Doorbell Cameras: A Comparative Analysis](https://refetch.io/threads/68befbc0001460739275)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/22954554/best-video-doorbell-camera)
+**🥈 [Salesloft Links Drift Customer Data Thefts to March GitHub Account Hack](https://refetch.io/threads/68bf17e9003cd62b9add)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/salesloft-says-drift-customer-data-thefts-linked-to-march-github-account-hack/)
 
-**🥉 [Y Combinator-Backed Motion Secures $38M to Develop 'Microsoft Office' of AI A...](https://refetch.io/threads/68bef4df00093acb22f4)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/y-combinator-backed-motion-raises-fresh-38m-to-build-the-microsoft-office-of-ai-agents/)
+**🥉 [Debunking the Myth: AI is Not a Bubble](https://refetch.io/threads/68bf1811001c7b299e0e)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://danielmiessler.com/blog/no-ai-is-not-a-bubble)
 
-**⭐ [Exploring Local LLMs on macOS: A Deep Dive](https://refetch.io/threads/68bef5010006538cee41)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://blog.6nok.org/experimenting-with-local-llms-on-macos/)
+**⭐ [Experiencing the World's Biggest Tech Show in a One-Horsepower Exoskeleton](https://refetch.io/threads/68bf140800022a0ee860)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/report/624358/exoskeletons-hypershell-ces-test-pro-x-skip-robotics-arcteryx-mogo)
 
-**⭐ [AMD's Bold Claim: No Efficiency Advantage of Arm ISA over x86](https://refetch.io/threads/68bef503002dc9aac333)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.techpowerup.com/340779/amd-claims-arm-isa-doesnt-offer-efficiency-advantage-over-x86)
+**⭐ [AI Integration in IT Work: A Future Without Job Bloodbath](https://refetch.io/threads/68bf14080033426ad804)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/09/no-ai-jobs-bloodbath-as-ai-permeates-all-it-work-over-the-next-5-years/)
 
 ---
 
-*Last updated: 2025-09-08T16:00:36.236Z*
+*Last updated: 2025-09-08T18:00:16.349Z*
 
 
 
