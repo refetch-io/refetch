@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Silicon-Carbon Battery in iPhone 17 Air: A New Era in Battery Technology?](https://refetch.io/threads/68bec37700297698759b)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://wired.com/story/iphone-17-air-silicon-carbon-battery-what-is-it/)
+**🥇 [GenAI at Scale: Understanding Its Enablers, Costs, and Ways to Reduce the Pain](https://refetch.io/threads/68bedf950007b679c798)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/genai-scale)
 
-**🥈 [The Art of Bug Hunting: A Developer's Guide](https://refetch.io/threads/68bec38900159bb9bbf1)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://matklad.github.io/2025/09/04/look-for-bugs.html)
+**🥈 [SpaceX Acquires EchoStar's Spectrum for Starlink's Direct-to-Phone Service](https://refetch.io/threads/68bedf7600010fea8102)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/spacex-strikes-17b-deal-to-buy-echostars-spectrum-for-starlinks-direct-to-phone-service/)
 
-**🥉 [The Race to Build a Distributed GPU Runtime: A Deep Dive](https://refetch.io/threads/68bde5c70026314b4a78)**
-📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://voltrondata.com/blog/the-race-to-build-a-distributed-gpu-runtime)
+**🥉 [Ford's F-150 Lightning STX: A New Era for Electric Trucks](https://refetch.io/threads/68bedf8d001c671d89c9)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/fords-f-150-lightning-stx-replaces-the-xlt-while-boosting-range-and-power-130846462.html)
 
-**⭐ [A Deep Dive into Safely Changing Software to Avoid Incidents](https://refetch.io/threads/68bebc7c0001879f4f7b)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://infoq.com/podcasts/safely-changing-software-avoid-incidents)
+**⭐ [Analog Optical Computing: A New Approach to AI Inference and Combinatorial Op...](https://refetch.io/threads/68be1376003c7ce68e2c)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.nature.com/articles/s41586-025-09430-z)
 
-**⭐ [CRISPR Efficiency Tripled: A New Breakthrough in Gene Editing](https://refetch.io/threads/68bdf05300358c8d2ece)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907024543.htm)
+**⭐ [Potential Makeover for iPhone 17: A Significant Upgrade](https://refetch.io/threads/68bed8a2000589452011)**
+📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://theverge.com/tech/773538/iphone-17-event-awe-dropping-upgrade-apple-intelligence)
 
 ---
 
-*Last updated: 2025-09-08T12:01:34.339Z*
+*Last updated: 2025-09-08T14:00:20.985Z*
 
 
 
