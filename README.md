@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [GenAI at Scale: Understanding Its Enablers, Costs, and Ways to Reduce the Pain](https://refetch.io/threads/68bedf950007b679c798)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/genai-scale)
+**🥇 [Security Alert: NPM debug and chalk packages compromised](https://refetch.io/threads/68befbd70011a0129c10)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.aikido.dev/blog/npm-debug-and-chalk-packages-compromised)
 
-**🥈 [SpaceX Acquires EchoStar's Spectrum for Starlink's Direct-to-Phone Service](https://refetch.io/threads/68bedf7600010fea8102)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/spacex-strikes-17b-deal-to-buy-echostars-spectrum-for-starlinks-direct-to-phone-service/)
+**🥈 [The Best Doorbell Cameras: A Comparative Analysis](https://refetch.io/threads/68befbc0001460739275)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/22954554/best-video-doorbell-camera)
 
-**🥉 [Ford's F-150 Lightning STX: A New Era for Electric Trucks](https://refetch.io/threads/68bedf8d001c671d89c9)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/fords-f-150-lightning-stx-replaces-the-xlt-while-boosting-range-and-power-130846462.html)
+**🥉 [Y Combinator-Backed Motion Secures $38M to Develop 'Microsoft Office' of AI A...](https://refetch.io/threads/68bef4df00093acb22f4)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/y-combinator-backed-motion-raises-fresh-38m-to-build-the-microsoft-office-of-ai-agents/)
 
-**⭐ [Analog Optical Computing: A New Approach to AI Inference and Combinatorial Op...](https://refetch.io/threads/68be1376003c7ce68e2c)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.nature.com/articles/s41586-025-09430-z)
+**⭐ [Exploring Local LLMs on macOS: A Deep Dive](https://refetch.io/threads/68bef5010006538cee41)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://blog.6nok.org/experimenting-with-local-llms-on-macos/)
 
-**⭐ [Potential Makeover for iPhone 17: A Significant Upgrade](https://refetch.io/threads/68bed8a2000589452011)**
-📊 Votes: **1** | ⏰ 37 minutes ago | 🔗 [Original](https://theverge.com/tech/773538/iphone-17-event-awe-dropping-upgrade-apple-intelligence)
+**⭐ [AMD's Bold Claim: No Efficiency Advantage of Arm ISA over x86](https://refetch.io/threads/68bef503002dc9aac333)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.techpowerup.com/340779/amd-claims-arm-isa-doesnt-offer-efficiency-advantage-over-x86)
 
 ---
 
-*Last updated: 2025-09-08T14:00:20.985Z*
+*Last updated: 2025-09-08T16:00:36.236Z*
 
 
 
