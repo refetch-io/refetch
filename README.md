@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Signal Introduces Free and Paid Backup Plans for User Chats](https://refetch.io/threads/68bf17e90009beea0959)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/signal-introduces-free-and-paid-backup-plans-for-your-chats/)
+**🥇 [Google Admits Open Web is Deteriorating Rapidly](https://refetch.io/threads/68bf3410002a85f7c2de)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/google/2025/09/in-court-filing-google-concedes-the-open-web-is-in-rapid-decline/)
 
-**🥈 [Salesloft Links Drift Customer Data Thefts to March GitHub Account Hack](https://refetch.io/threads/68bf17e9003cd62b9add)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/salesloft-says-drift-customer-data-thefts-linked-to-march-github-account-hack/)
+**🥈 [Google's AI Mode Now Supports Languages Beyond English](https://refetch.io/threads/68bf341d00225136a65a)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/google-expands-ai-mode-beyond-english-for-the-first-time-192245955.html)
 
-**🥉 [Debunking the Myth: AI is Not a Bubble](https://refetch.io/threads/68bf1811001c7b299e0e)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://danielmiessler.com/blog/no-ai-is-not-a-bubble)
+**🥉 [Setting Up Local LLMs for R and Python: A Step-by-Step Guide](https://refetch.io/threads/68bf342b000d9d6f677a)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://posit.co/blog/setting-up-local-llms-for-r-and-python/)
 
-**⭐ [Experiencing the World's Biggest Tech Show in a One-Horsepower Exoskeleton](https://refetch.io/threads/68bf140800022a0ee860)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/report/624358/exoskeletons-hypershell-ces-test-pro-x-skip-robotics-arcteryx-mogo)
+**⭐ [Bluesky Introduces Private Bookmarks Feature](https://refetch.io/threads/68bf340800146564861c)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/bluesky-adds-private-bookmarks/)
 
-**⭐ [AI Integration in IT Work: A Future Without Job Bloodbath](https://refetch.io/threads/68bf14080033426ad804)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/information-technology/2025/09/no-ai-jobs-bloodbath-as-ai-permeates-all-it-work-over-the-next-5-years/)
+**⭐ [Polestar 5: An 884hp Electric Fastback Sedan Challenging Porsche](https://refetch.io/threads/68bf1eb80019f3392682)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/electric-cars/773730/polestar-5-ev-horsepower-range-speed-specs)
 
 ---
 
-*Last updated: 2025-09-08T18:00:16.349Z*
+*Last updated: 2025-09-08T20:01:18.321Z*
 
 
 
