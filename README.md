@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
+**🥇 [Top SSDs to Look Out for in 2025](https://refetch.io/threads/68bff54800177dc2a59e)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/computing/accessories/best-ssds-140014262.html)
 
-**🥈 [CATL Launches LFP Battery with 470 Miles Range: A Game Changer?](https://refetch.io/threads/68bf7355000be0c5f578)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
+**🥈 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
 
-**🥉 [Quantum Computers Built Like LEGO Bricks: A New Era of Modular Computing](https://refetch.io/threads/68bfab6a00224c11b3e2)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175454.htm)
+**🥉 [CATL Launches LFP Battery with 470 Miles Range: A Game Changer?](https://refetch.io/threads/68bf7355000be0c5f578)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
+
+**⭐ [Quantum Computers Built Like LEGO Bricks: A New Era of Modular Computing](https://refetch.io/threads/68bfab6a00224c11b3e2)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175454.htm)
 
 **⭐ [Light-powered AI Chip: A Leap Towards Energy Efficiency](https://refetch.io/threads/68bfb971001fcdbb191b)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175458.htm)
-
-**⭐ [Amazon S3 Vectors: A Threat or Savior for Vector Databases?](https://refetch.io/threads/68bf02e000342ed17506)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://zilliz.com/blog/will-amazon-s3-vectors-kill-vector-databases-or-save-them)
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175458.htm)
 
 ---
 
-*Last updated: 2025-09-09T08:01:19.895Z*
+*Last updated: 2025-09-09T10:00:11.533Z*
 
 
 
