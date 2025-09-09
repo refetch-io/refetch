@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Top SSDs to Look Out for in 2025](https://refetch.io/threads/68bff54800177dc2a59e)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://www.engadget.com/computing/accessories/best-ssds-140014262.html)
+**🥇 [Xbox and LG Collaborate to Introduce Cloud Gaming in Cars](https://refetch.io/threads/68c0313b001b17d64bbf)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/xbox/xbox-and-lg-are-bringing-cloud-gaming-to-cars-133016305.html)
 
-**🥈 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
+**🥈 [Promoting Mental Peace at Work with GenAI](https://refetch.io/threads/68c03143001d91bbac8f)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/genai-well-being)
 
-**🥉 [CATL Launches LFP Battery with 470 Miles Range: A Game Changer?](https://refetch.io/threads/68bf7355000be0c5f578)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
+**🥉 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
 
-**⭐ [Quantum Computers Built Like LEGO Bricks: A New Era of Modular Computing](https://refetch.io/threads/68bfab6a00224c11b3e2)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175454.htm)
+**⭐ [Canon's C50 Cinema Camera: A Compact Powerhouse](https://refetch.io/threads/68c02a1a001b0603d60b)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/cameras/canons-tiny-c50-cinema-camera-can-shoot-widescreen-and-vertical-video-simultaneously-130001859.html)
 
-**⭐ [Light-powered AI Chip: A Leap Towards Energy Efficiency](https://refetch.io/threads/68bfb971001fcdbb191b)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175458.htm)
+**⭐ [Unifying OCaml Modules and Values: X Design Notes](https://refetch.io/threads/68c02a27001363cdc900)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://blog.polybdenum.com/2025/08/19/x-design-notes-unifying-ocaml-modules-and-values.html)
 
 ---
 
-*Last updated: 2025-09-09T10:00:11.533Z*
+*Last updated: 2025-09-09T14:01:07.193Z*
 
 
 
