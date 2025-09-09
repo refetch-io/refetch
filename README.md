@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, September 8, 2025)
+## 🔥 Top Posts Today (Tuesday, September 9, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Google Admits Open Web is Deteriorating Rapidly](https://refetch.io/threads/68bf3410002a85f7c2de)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/google/2025/09/in-court-filing-google-concedes-the-open-web-is-in-rapid-decline/)
+**🥇 [Snap's Strategy Shift: Startup Squads Amid Stalling Ad Revenue](https://refetch.io/threads/68bf88070032e75e3c14)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/snap-breaks-into-startup-squads-as-ad-revenue-stalls/)
 
-**🥈 [Google's AI Mode Now Supports Languages Beyond English](https://refetch.io/threads/68bf341d00225136a65a)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/google-expands-ai-mode-beyond-english-for-the-first-time-192245955.html)
+**🥈 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
 
-**🥉 [Setting Up Local LLMs for R and Python: A Step-by-Step Guide](https://refetch.io/threads/68bf342b000d9d6f677a)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://posit.co/blog/setting-up-local-llms-for-r-and-python/)
+**🥉 [Exploring the Early Stages of Contracts for C](https://refetch.io/threads/68bf84ac0028554446ee)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://gustedt.wordpress.com/2025/03/10/contracts-for-c/)
 
-**⭐ [Bluesky Introduces Private Bookmarks Feature](https://refetch.io/threads/68bf340800146564861c)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/08/bluesky-adds-private-bookmarks/)
+**⭐ [CATL Launches LFP Battery with 470 Miles Range: A Game Changer?](https://refetch.io/threads/68bf7355000be0c5f578)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
 
-**⭐ [Polestar 5: An 884hp Electric Fastback Sedan Challenging Porsche](https://refetch.io/threads/68bf1eb80019f3392682)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/electric-cars/773730/polestar-5-ev-horsepower-range-speed-specs)
+**⭐ [GenAI at Scale: Understanding Its Enablers, Costs, and Ways to Reduce the Pain](https://refetch.io/threads/68bedf950007b679c798)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/presentations/genai-scale)
 
 ---
 
-*Last updated: 2025-09-08T20:01:18.321Z*
+*Last updated: 2025-09-09T02:00:41.778Z*
 
 
 
