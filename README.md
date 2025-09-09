@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Xbox and LG Collaborate to Introduce Cloud Gaming in Cars](https://refetch.io/threads/68c0313b001b17d64bbf)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/xbox/xbox-and-lg-are-bringing-cloud-gaming-to-cars-133016305.html)
+**🥇 [Apple's Ambitious Health Alert Plan: Notifying 100M People of Hypertension](https://refetch.io/threads/68c085d40024aa16917c)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://appleinsider.com/articles/25/09/09/apple-expects-to-notify-100-million-people-that-they-have-hypertension-in-a-year)
 
-**🥈 [Promoting Mental Peace at Work with GenAI](https://refetch.io/threads/68c03143001d91bbac8f)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/genai-well-being)
+**🥈 [Apple's Latest Hardware Event: iPhone 17, iPhone Air, AirPods Pro 3 and More](https://refetch.io/threads/68c080640003a0b6ebc5)**
+📊 Votes: **0** | ⏰ 30 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
 
-**🥉 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
+**🥉 [iOS 26 Compatibility and Release Date](https://refetch.io/threads/68c0839a00145c760641)**
+📊 Votes: **0** | ⏰ 17 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/ios-26-will-be-available-next-week-find-out-if-your-iphone-is-compatible-with-the-free-update-191854176.html)
 
-**⭐ [Canon's C50 Cinema Camera: A Compact Powerhouse](https://refetch.io/threads/68c02a1a001b0603d60b)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/cameras/canons-tiny-c50-cinema-camera-can-shoot-widescreen-and-vertical-video-simultaneously-130001859.html)
+**⭐ [Apple's iPhone 17 Launch Event: Key Reveals and Innovations](https://refetch.io/threads/68c07e11002b9b43686f)**
+📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-iphone-air-iphone-17-pro-airpods-pro-3-and-more-171028663.html)
 
-**⭐ [Unifying OCaml Modules and Values: X Design Notes](https://refetch.io/threads/68c02a27001363cdc900)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://blog.polybdenum.com/2025/08/19/x-design-notes-unifying-ocaml-modules-and-values.html)
+**⭐ [iPhone 17 Series: The Biggest Design Refresh in Years](https://refetch.io/threads/68c080f0000adc1482bc)**
+📊 Votes: **0** | ⏰ 28 minutes ago | 🔗 [Original](https://wired.com/story/apple-iphone-17-iphone-air-and-iphone-17-pro/)
 
 ---
 
-*Last updated: 2025-09-09T14:01:07.193Z*
+*Last updated: 2025-09-09T20:01:32.690Z*
 
 
 
