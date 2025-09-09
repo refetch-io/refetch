@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Apple's Ambitious Health Alert Plan: Notifying 100M People of Hypertension](https://refetch.io/threads/68c085d40024aa16917c)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://appleinsider.com/articles/25/09/09/apple-expects-to-notify-100-million-people-that-they-have-hypertension-in-a-year)
+**🥇 [Behind SpaceX's $17B Direct-to-Cell Market Gamble](https://refetch.io/threads/68c0a223000c1e73ecb7)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/why-spacex-made-a-17b-bet-on-the-direct-to-cell-market/)
 
-**🥈 [Apple's Latest Hardware Event: iPhone 17, iPhone Air, AirPods Pro 3 and More](https://refetch.io/threads/68c080640003a0b6ebc5)**
-📊 Votes: **0** | ⏰ 30 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
+**🥈 [Ford Teases Major Announcement After Clearing Instagram](https://refetch.io/threads/68c0a22a0011c9cf7a32)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://electrek.co/2025/09/09/ford-hints-something-big-is-coming-after-wiping-its-entire-instagram/)
 
-**🥉 [iOS 26 Compatibility and Release Date](https://refetch.io/threads/68c0839a00145c760641)**
-📊 Votes: **0** | ⏰ 17 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/ios-26-will-be-available-next-week-find-out-if-your-iphone-is-compatible-with-the-free-update-191854176.html)
+**🥉 [iPhone 17 Pro: A Game Changer for Vlogging](https://refetch.io/threads/68c09dd1000d085ecf31)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apples-creator-centric-iphone-17-pro-will-make-the-vlogging-camera-obsolete/)
 
-**⭐ [Apple's iPhone 17 Launch Event: Key Reveals and Innovations](https://refetch.io/threads/68c07e11002b9b43686f)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-iphone-air-iphone-17-pro-airpods-pro-3-and-more-171028663.html)
+**⭐ [Verge Staffers' Reactions to the New iPhone Air: A Balanced Perspective](https://refetch.io/threads/68c09dd6003b9ebca6a9)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/tech/774831/iphone-air-apple-reactions-thin-camera)
 
-**⭐ [iPhone 17 Series: The Biggest Design Refresh in Years](https://refetch.io/threads/68c080f0000adc1482bc)**
-📊 Votes: **0** | ⏰ 28 minutes ago | 🔗 [Original](https://wired.com/story/apple-iphone-17-iphone-air-and-iphone-17-pro/)
+**⭐ [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
 
 ---
 
-*Last updated: 2025-09-09T20:01:32.690Z*
+*Last updated: 2025-09-09T22:01:14.711Z*
 
 
 
