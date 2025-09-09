@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Judge Denies Anthropic's $1.5 Billion AI Copyright Settlement](https://refetch.io/threads/68bfa438001397da25db)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://www.engadget.com/ai/judge-rejects-anthropics-record-breaking-15-billion-settlement-for-ai-copyright-lawsuit-033512498.html)
+**🥇 [Introducing Byte Type in LLVM IR: Enhancing Support for Raw Data Copies](https://refetch.io/threads/68bfc07400222c65fc30)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://blog.llvm.org/posts/2025-08-29-gsoc-byte-type/)
 
-**🥈 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
+**🥈 [Light-powered AI Chip: A Leap Towards Energy Efficiency](https://refetch.io/threads/68bfb971001fcdbb191b)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175458.htm)
 
-**🥉 [Autism Symptoms Vanish in Mice: A Stanford Brain Breakthrough](https://refetch.io/threads/68bfa0dc000224c8581c)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250907172644.htm)
+**🥉 [Massive Supply-Chain Attack Hits Software Packages with 2 Billion Weekly Down...](https://refetch.io/threads/68bf79fa001407f80440)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/software-packages-with-more-than-2-billion-weekly-downloads-hit-in-supply-chain-attack/)
 
 **⭐ [CATL Launches LFP Battery with 470 Miles Range: A Game Changer?](https://refetch.io/threads/68bf7355000be0c5f578)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://electrek.co/2025/09/08/catl-launches-worlds-first-lfp-battery-with-470-miles-range/)
 
-**⭐ [The Global Impact of China's Great Firewall Leak](https://refetch.io/threads/68bf9d2d0038abb0bcca)**
-📊 Votes: **0** | ⏰ 40 minutes ago | 🔗 [Original](https://wired.com/story/geedge-networks-mass-censorship-leak/)
+**⭐ [Quantum Computers Built Like LEGO Bricks: A New Era of Modular Computing](https://refetch.io/threads/68bfab6a00224c11b3e2)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250908175454.htm)
 
 ---
 
-*Last updated: 2025-09-09T04:01:31.593Z*
+*Last updated: 2025-09-09T06:01:28.780Z*
 
 
 
