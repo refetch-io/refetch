@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Understanding the Data Backbone of LLM Systems](https://refetch.io/threads/68c182aa0012d0edc71a)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/llm-data-code-model-prompt)
+**🥇 [Performance Improvements in .NET 10](https://refetch.io/threads/68c19f1500001d6fc760)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-10/)
 
-**🥈 [SpaceX's $17B Gamble on Direct-to-Cell Market](https://refetch.io/threads/68c1828a00109ea82408)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/why-spacex-made-a-17b-bet-on-the-direct-to-cell-market/)
+**🥈 [Comparing the 2025 Apple Watch Models with Their Predecessors](https://refetch.io/threads/68c19ef700068db7ef6f)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/tech/775584/apple-watch-series-11-ultra-3-se-specs-comparison)
 
-**🥉 [AI vs Maga: A Deep Dive into Populist Reactions to Trump's Embrace of AI and ...](https://refetch.io/threads/68c18295000b8e216119)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/ai-vs-maga-populists-alarmed-by-trumps-embrace-of-ai-big-tech/)
+**🥉 [Microsoft Leverages Anthropic's AI for Office, Surpassing OpenAI](https://refetch.io/threads/68c19ef8002918c90ccf)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/report-microsoft-taps-rival-anthropics-ai-for-office-after-it-beats-openai-at-some-tasks/)
 
-**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
+**⭐ [Amazon's Zoox: The Dawn of Autonomous Robotaxi Service](https://refetch.io/threads/68c19f09000dd8980a42)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/amazons-zoox-launches-its-autonomous-robotaxi-service-153750246.html)
 
-**⭐ [Rendezvous Robotics Raises $3M for Reconfigurable Space Infrastructure](https://refetch.io/threads/68c17eed001d81802ba4)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/rendezvous-robotics-exits-stealth-with-3m-to-build-reconfigurable-space-infrastructure/)
+**⭐ [The Myth of 'You Don't Have to Remember Anything'](https://refetch.io/threads/68c19f13001c8317e698)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://zettelkasten.de/posts/the-scam-called-you-dont-have-to-remember-anything/)
 
 ---
 
-*Last updated: 2025-09-10T14:00:43.284Z*
+*Last updated: 2025-09-10T16:01:34.847Z*
 
 
 
