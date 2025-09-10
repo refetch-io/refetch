@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
+**🥇 [Choosing the Best iPad: A Comprehensive Guide](https://refetch.io/threads/68c1d768000489e54056)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://theverge.com/23639378/best-ipad-apple-buy-model-price)
 
-**🥈 [Nikon's First Cinema Camera Co-designed with RED: The ZR](https://refetch.io/threads/68c15f6f003696d6d944)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.engadget.com/cameras/nikons-zr-is-its-first-cinema-camera-co-designed-with-red-110022972.html)
+**🥈 [UGMM-NN: Unveiling the Univariate Gaussian Mixture Model Neural Network](https://refetch.io/threads/68c1d789002bf0157bf9)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://arxiv.org/abs/2509.07569)
 
-**🥉 [Ex-Google X Team Raises $6M for AI 'Second Brain' Project](https://refetch.io/threads/68c1710200348baf5fd3)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/10/ex-google-x-trio-wants-their-ai-to-be-your-second-brain-and-they-just-raised-6m-to-make-it-happen/)
+**🥉 [Senator Criticizes Microsoft for Windows' Kerberoasting Vulnerability](https://refetch.io/threads/68c1d769001af33f06f6)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/09/senator-blasts-microsoft-for-making-default-windows-vulnerable-to-kerberoasting/)
 
-**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
+**⭐ [AirPods Pro 3: ANC, Live Translation, and Heart-Rate Tracking](https://refetch.io/threads/68c1d77d002d3fdca249)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.engadget.com/audio/headphones/a-closer-look-at-the-airpods-pro-3-anc-live-translation-and-heart-rate-tracking-193956229.html)
 
-**⭐ [Anchor's Co-Founders Launch Oboe, an AI-Powered Learning App](https://refetch.io/threads/68c190bf003b6f09f5fc)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/10/after-selling-to-spotify-anchors-co-founders-are-back-with-oboe-an-ai-powered-app-for-learning/)
+**⭐ [Klarna's IPO Success: A Deep Dive into the $1.4B Raise](https://refetch.io/threads/68c1d75a002849155b76)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/klarnas-ipo-pops-raising-1-4b-with-sequoia-as-the-biggest-winner/)
 
 ---
 
-*Last updated: 2025-09-10T18:01:36.646Z*
+*Last updated: 2025-09-10T20:01:20.429Z*
 
 
 
