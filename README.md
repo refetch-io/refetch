@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Hacking GameCube Memory: Replacing Animal Crossing's Dialogue with a Live LLM](https://refetch.io/threads/68c0f5d800293f616a81)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://joshfonseca.com/blogs/animal-crossing-llm)
+**🥇 [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
 
-**🥈 [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
+**🥈 [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
 
-**🥉 [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
-
-**⭐ [Apple's iPhone Air: The Thinnest Yet](https://refetch.io/threads/68c06c4e003e2f70a420)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
+**🥉 [Apple's iPhone Air: The Thinnest Yet](https://refetch.io/threads/68c06c4e003e2f70a420)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
 
 **⭐ [Everything Revealed at the iPhone 17 Launch Event](https://refetch.io/threads/68c06c52000caaf125d0)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-171028231.html)
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-171028231.html)
+
+**⭐ [Apple Unveils Ultra-Thin iPhone Air: A New Era of Design](https://refetch.io/threads/68c0705f001abe60d00a)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-debuts-the-ultra-thin-iphone-air/)
 
 ---
 
-*Last updated: 2025-09-10T04:01:36.282Z*
+*Last updated: 2025-09-10T06:01:48.854Z*
 
 
 
