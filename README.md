@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Supabase's OrioleDB Patent Now Freely Available to the Postgres Community](https://refetch.io/threads/68c166890022b4da87b5)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://supabase.com/blog/orioledb-patent-free)
+**🥇 [Understanding the Data Backbone of LLM Systems](https://refetch.io/threads/68c182aa0012d0edc71a)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://infoq.com/presentations/llm-data-code-model-prompt)
 
-**🥈 [AI Training Startup Mercor Targets $10B Valuation Amidst Robust Growth](https://refetch.io/threads/68c162e20003b1d58493)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/sources-ai-training-startup-mercor-eyes-10b-valuation-on-450-million-run-rate/)
+**🥈 [SpaceX's $17B Gamble on Direct-to-Cell Market](https://refetch.io/threads/68c1828a00109ea82408)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/why-spacex-made-a-17b-bet-on-the-direct-to-cell-market/)
 
-**🥉 [Nikon's First Cinema Camera Co-designed with RED: The ZR](https://refetch.io/threads/68c15f6f003696d6d944)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/cameras/nikons-zr-is-its-first-cinema-camera-co-designed-with-red-110022972.html)
+**🥉 [AI vs Maga: A Deep Dive into Populist Reactions to Trump's Embrace of AI and ...](https://refetch.io/threads/68c18295000b8e216119)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/ai-vs-maga-populists-alarmed-by-trumps-embrace-of-ai-big-tech/)
 
-**⭐ [High-severity SAP Flaw Exploited by Hackers, Company Warns of 3 More](https://refetch.io/threads/68c089070022a3c819ce)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/as-hackers-exploit-one-high-severity-sap-flaw-company-warns-of-3-more/)
+**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
 
-**⭐ [Apple's Latest Announcements: iPhone 17, AirPods Pro 3, and More](https://refetch.io/threads/68c08c55001c7bd413cd)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://wired.com/story/everything-apple-announced-iphone-air-iphone-17-apple-watches-airpods-pro-3/)
+**⭐ [Rendezvous Robotics Raises $3M for Reconfigurable Space Infrastructure](https://refetch.io/threads/68c17eed001d81802ba4)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/rendezvous-robotics-exits-stealth-with-3m-to-build-reconfigurable-space-infrastructure/)
 
 ---
 
-*Last updated: 2025-09-10T12:00:39.854Z*
+*Last updated: 2025-09-10T14:00:43.284Z*
 
 
 
