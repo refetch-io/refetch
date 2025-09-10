@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Choosing the Best iPad: A Comprehensive Guide](https://refetch.io/threads/68c1d768000489e54056)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://theverge.com/23639378/best-ipad-apple-buy-model-price)
+**🥇 [Thinking Machines Lab Aims for Consistent AI Models](https://refetch.io/threads/68c1f2d4003ce6afb4e3)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/thinking-machines-lab-wants-to-make-ai-models-more-consistent/)
 
-**🥈 [UGMM-NN: Unveiling the Univariate Gaussian Mixture Model Neural Network](https://refetch.io/threads/68c1d789002bf0157bf9)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://arxiv.org/abs/2509.07569)
+**🥈 [Drone Detection Radar Doubles Range Post-Ukrainian Testing with Simple Softwa...](https://refetch.io/threads/68c1ef97001ae55e4465)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/culture/2025/09/after-ukrainian-testing-drone-detection-radar-doubles-range-with-simple-software-patch/)
 
-**🥉 [Senator Criticizes Microsoft for Windows' Kerberoasting Vulnerability](https://refetch.io/threads/68c1d769001af33f06f6)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/09/senator-blasts-microsoft-for-making-default-windows-vulnerable-to-kerberoasting/)
+**🥉 [AI Companies Could Set Their Own Rules: A Glimpse into Ted Cruz's New Bill](https://refetch.io/threads/68c1ef95000e4f33d82c)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776130/senator-ted-cruz-ai-sandbox-bill)
 
-**⭐ [AirPods Pro 3: ANC, Live Translation, and Heart-Rate Tracking](https://refetch.io/threads/68c1d77d002d3fdca249)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.engadget.com/audio/headphones/a-closer-look-at-the-airpods-pro-3-anc-live-translation-and-heart-rate-tracking-193956229.html)
+**⭐ [Verizon's Claim on Selling Location Data Without Consent Rejected by Court](https://refetch.io/threads/68c1ef960027b3a02f45)**
+📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/court-rejects-verizon-claim-that-selling-location-data-without-consent-is-legal/)
 
-**⭐ [Klarna's IPO Success: A Deep Dive into the $1.4B Raise](https://refetch.io/threads/68c1d75a002849155b76)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/klarnas-ipo-pops-raising-1-4b-with-sequoia-as-the-biggest-winner/)
+**⭐ [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
 
 ---
 
-*Last updated: 2025-09-10T20:01:20.429Z*
+*Last updated: 2025-09-10T22:01:32.483Z*
 
 
 
