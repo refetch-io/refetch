@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Tuesday, September 9, 2025)
+## 🔥 Top Posts Today (Wednesday, September 10, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Behind SpaceX's $17B Direct-to-Cell Market Gamble](https://refetch.io/threads/68c0a223000c1e73ecb7)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/why-spacex-made-a-17b-bet-on-the-direct-to-cell-market/)
+**🥇 [The Debate: AI Agents Controlling Laptops](https://refetch.io/threads/68c0ba1d002d9024fd25)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://sophiebits.com/2025/09/09/ai-agents-security)
 
-**🥈 [Ford Teases Major Announcement After Clearing Instagram](https://refetch.io/threads/68c0a22a0011c9cf7a32)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://electrek.co/2025/09/09/ford-hints-something-big-is-coming-after-wiping-its-entire-instagram/)
+**🥈 [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
 
-**🥉 [iPhone 17 Pro: A Game Changer for Vlogging](https://refetch.io/threads/68c09dd1000d085ecf31)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apples-creator-centric-iphone-17-pro-will-make-the-vlogging-camera-obsolete/)
+**🥉 [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
 
-**⭐ [Verge Staffers' Reactions to the New iPhone Air: A Balanced Perspective](https://refetch.io/threads/68c09dd6003b9ebca6a9)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/tech/774831/iphone-air-apple-reactions-thin-camera)
+**⭐ [Apple's iPhone Air: The Thinnest Yet](https://refetch.io/threads/68c06c4e003e2f70a420)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
 
-**⭐ [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
+**⭐ [Everything Revealed at the iPhone 17 Launch Event](https://refetch.io/threads/68c06c52000caaf125d0)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-171028231.html)
 
 ---
 
-*Last updated: 2025-09-09T22:01:14.711Z*
+*Last updated: 2025-09-10T00:02:57.794Z*
 
 
 
