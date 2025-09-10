@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Performance Improvements in .NET 10](https://refetch.io/threads/68c19f1500001d6fc760)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-10/)
+**🥇 [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
 
-**🥈 [Comparing the 2025 Apple Watch Models with Their Predecessors](https://refetch.io/threads/68c19ef700068db7ef6f)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/tech/775584/apple-watch-series-11-ultra-3-se-specs-comparison)
+**🥈 [Nikon's First Cinema Camera Co-designed with RED: The ZR](https://refetch.io/threads/68c15f6f003696d6d944)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://www.engadget.com/cameras/nikons-zr-is-its-first-cinema-camera-co-designed-with-red-110022972.html)
 
-**🥉 [Microsoft Leverages Anthropic's AI for Office, Surpassing OpenAI](https://refetch.io/threads/68c19ef8002918c90ccf)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/ai/2025/09/report-microsoft-taps-rival-anthropics-ai-for-office-after-it-beats-openai-at-some-tasks/)
+**🥉 [Ex-Google X Team Raises $6M for AI 'Second Brain' Project](https://refetch.io/threads/68c1710200348baf5fd3)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/10/ex-google-x-trio-wants-their-ai-to-be-your-second-brain-and-they-just-raised-6m-to-make-it-happen/)
 
-**⭐ [Amazon's Zoox: The Dawn of Autonomous Robotaxi Service](https://refetch.io/threads/68c19f09000dd8980a42)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/amazons-zoox-launches-its-autonomous-robotaxi-service-153750246.html)
+**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
 
-**⭐ [The Myth of 'You Don't Have to Remember Anything'](https://refetch.io/threads/68c19f13001c8317e698)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://zettelkasten.de/posts/the-scam-called-you-dont-have-to-remember-anything/)
+**⭐ [Anchor's Co-Founders Launch Oboe, an AI-Powered Learning App](https://refetch.io/threads/68c190bf003b6f09f5fc)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/10/after-selling-to-spotify-anchors-co-founders-are-back-with-oboe-an-ai-powered-app-for-learning/)
 
 ---
 
-*Last updated: 2025-09-10T16:01:34.847Z*
+*Last updated: 2025-09-10T18:01:36.646Z*
 
 
 
