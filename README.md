@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Debate: AI Agents Controlling Laptops](https://refetch.io/threads/68c0ba1d002d9024fd25)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://sophiebits.com/2025/09/09/ai-agents-security)
+**🥇 [AI Startup Mercor Eyeing $10B Valuation](https://refetch.io/threads/68c0d97d00027424e555)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/sources-ai-training-startup-mercor-eyes-10b-valuation-on-450-million-run-rate/)
 
-**🥈 [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
+**🥈 [Ion: A Rust/Tokio Powered JavaScript Runtime for Embedders](https://refetch.io/threads/68c0d99f000a1b44752a)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://github.com/alshdavid/ion)
 
-**🥉 [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
+**🥉 [Apple's Latest Event: Unveiling the iPhone 17](https://refetch.io/threads/68c062de002e42ccdc86)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://wired.com/live/apple-event-iphone-17-iphone-air/)
+
+**⭐ [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
 
 **⭐ [Apple's iPhone Air: The Thinnest Yet](https://refetch.io/threads/68c06c4e003e2f70a420)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
-
-**⭐ [Everything Revealed at the iPhone 17 Launch Event](https://refetch.io/threads/68c06c52000caaf125d0)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/everything-apple-revealed-at-the-iphone-17-launch-event-171028231.html)
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
 
 ---
 
-*Last updated: 2025-09-10T00:02:57.794Z*
+*Last updated: 2025-09-10T02:01:26.864Z*
 
 
 
