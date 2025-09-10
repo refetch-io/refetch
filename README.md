@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Mercor's AI Training Startup Targets $10B+ Valuation](https://refetch.io/threads/68c14a5a0013c316ac37)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/sources-ai-training-startup-mercor-eyes-10b-valuation-on-450-million-run-rate/)
+**🥇 [Supabase's OrioleDB Patent Now Freely Available to the Postgres Community](https://refetch.io/threads/68c166890022b4da87b5)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://supabase.com/blog/orioledb-patent-free)
 
-**🥈 [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
+**🥈 [AI Training Startup Mercor Targets $10B Valuation Amidst Robust Growth](https://refetch.io/threads/68c162e20003b1d58493)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/09/sources-ai-training-startup-mercor-eyes-10b-valuation-on-450-million-run-rate/)
 
-**🥉 [Unveiling Metformin's Hidden Brain Pathway After 60 Years](https://refetch.io/threads/68c146e800294581b97f)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250910000256.htm)
+**🥉 [Nikon's First Cinema Camera Co-designed with RED: The ZR](https://refetch.io/threads/68c15f6f003696d6d944)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.engadget.com/cameras/nikons-zr-is-its-first-cinema-camera-co-designed-with-red-110022972.html)
 
-**⭐ [Apple Introduces iPhone 17 Featuring a 120Hz Display](https://refetch.io/threads/68c06c30001d60b5c157)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/09/apple-launches-iphone-17-with-a-120hz-display/)
+**⭐ [High-severity SAP Flaw Exploited by Hackers, Company Warns of 3 More](https://refetch.io/threads/68c089070022a3c819ce)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://arstechnica.com/security/2025/09/as-hackers-exploit-one-high-severity-sap-flaw-company-warns-of-3-more/)
 
-**⭐ [Apple's iPhone Air: The Thinnest Yet](https://refetch.io/threads/68c06c4e003e2f70a420)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.engadget.com/mobile/smartphones/the-iphone-air-is-apples-thinnest-phone-yet-174342422.html)
+**⭐ [Apple's Latest Announcements: iPhone 17, AirPods Pro 3, and More](https://refetch.io/threads/68c08c55001c7bd413cd)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://wired.com/story/everything-apple-announced-iphone-air-iphone-17-apple-watches-airpods-pro-3/)
 
 ---
 
-*Last updated: 2025-09-10T10:00:26.685Z*
+*Last updated: 2025-09-10T12:00:39.854Z*
 
 
 
