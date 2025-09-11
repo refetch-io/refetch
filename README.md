@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [UK Schoolchildren Hacking Their Own Schools: A New Trend](https://refetch.io/threads/68c2f077003828e10c7b)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/kids-in-the-uk-are-hacking-their-own-schools-for-dares-and-notoriety/)
+**🥇 [Nvidia's GeForce Now Update: A Game Changer for MacBook Users](https://refetch.io/threads/68c30ca000197c4119bb)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://wired.com/review/nvidia-geforce-now-rtx-5080-blackwell/)
 
-**🥈 [Google to Shut Down 'Tables', Its Airtable Competitor](https://refetch.io/threads/68c2ed0f0035f53bac60)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/google-is-shutting-down-tables-its-airtable-rival/)
+**🥈 [Every Keystroke You Make: Analyzing Event Listeners in Tech-Law](https://refetch.io/threads/68c30cb1001e91e0e368)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.19825)
 
-**🥉 [Thin is In: A Comparative Analysis of iPhone Air and Samsung S25 Edge](https://refetch.io/threads/68c2ed48002878f1c7e6)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://zdnet.com/article/iphone-air-vs-samsung-s25-edge-i-compared-both-thin-phones-and-theres-a-clear-winner/)
+**🥉 [Senators Call for ICE to Stop Using Facial Recognition App: Privacy Concerns ...](https://refetch.io/threads/68c30ca60032844ddb6d)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.engadget.com/cybersecurity/senators-demand-ice-cease-use-of-facial-recognition-app-172146833.html)
 
-**⭐ [Box CEO Aaron Levie Discusses the 'Era of Context' in AI](https://refetch.io/threads/68c2e97e001a5717bb22)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/box-ceo-aaron-levie-on-ais-era-of-context/)
+**⭐ [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**⭐ [OpenAI's Vision for Global-Scale Computing: A Deep Dive](https://refetch.io/threads/68c2399b00338651c686)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/09/10/openai-lays-out-the-principles-of-global-scale-computing/)
+**⭐ [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
 ---
 
-*Last updated: 2025-09-11T16:00:09.819Z*
+*Last updated: 2025-09-11T18:00:39.537Z*
 
 
 
