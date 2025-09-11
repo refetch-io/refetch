@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Nvidia's GeForce Now Update: A Game Changer for MacBook Users](https://refetch.io/threads/68c30ca000197c4119bb)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://wired.com/review/nvidia-geforce-now-rtx-5080-blackwell/)
+**🥇 [Claude's Memory Architecture vs ChatGPT's: A Comparative Study](https://refetch.io/threads/68c32578002bf0465e66)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://www.shloked.com/writing/claude-memory)
 
-**🥈 [Every Keystroke You Make: Analyzing Event Listeners in Tech-Law](https://refetch.io/threads/68c30cb1001e91e0e368)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.19825)
+**🥈 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**🥉 [Senators Call for ICE to Stop Using Facial Recognition App: Privacy Concerns ...](https://refetch.io/threads/68c30ca60032844ddb6d)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://www.engadget.com/cybersecurity/senators-demand-ice-cease-use-of-facial-recognition-app-172146833.html)
+**🥉 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
-**⭐ [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
+**⭐ [Melting iPhones for Science: A $10B Validation by Apple](https://refetch.io/threads/68c321ac00025e2b3361)**
+📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://accelerateordie.com/p/we-melted-iphones-for-science)
 
-**⭐ [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
+**⭐ [Helix Text Editor: A Comprehensive Review](https://refetch.io/threads/68c325760026a7106c71)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://jonathan-frere.com/posts/helix/)
 
 ---
 
-*Last updated: 2025-09-11T18:00:39.537Z*
+*Last updated: 2025-09-11T20:00:57.087Z*
 
 
 
