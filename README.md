@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Exploring Nvidia's GeForce Now RTX 5080: A Hands-on Review](https://refetch.io/threads/68c2d10f0031f1273c24)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://www.theverge.com/hands-on/775222/nvidia-geforce-now-rtx-5080-hands-on)
+**🥇 [UK Schoolchildren Hacking Their Own Schools: A New Trend](https://refetch.io/threads/68c2f077003828e10c7b)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/kids-in-the-uk-are-hacking-their-own-schools-for-dares-and-notoriety/)
 
-**🥈 [US Emerges as the Largest Investor in Commercial Spyware](https://refetch.io/threads/68c2d11100062ae29024)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/09/the-us-is-now-the-largest-investor-in-commercial-spyware/)
+**🥈 [Google to Shut Down 'Tables', Its Airtable Competitor](https://refetch.io/threads/68c2ed0f0035f53bac60)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/google-is-shutting-down-tables-its-airtable-rival/)
 
-**🥉 [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
+**🥉 [Thin is In: A Comparative Analysis of iPhone Air and Samsung S25 Edge](https://refetch.io/threads/68c2ed48002878f1c7e6)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://zdnet.com/article/iphone-air-vs-samsung-s25-edge-i-compared-both-thin-phones-and-theres-a-clear-winner/)
 
-**⭐ [Choosing the Best TV for Gaming: A Comprehensive Guide](https://refetch.io/threads/68c2d128002cdad862f4)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/best-gaming-tv-131509986.html)
+**⭐ [Box CEO Aaron Levie Discusses the 'Era of Context' in AI](https://refetch.io/threads/68c2e97e001a5717bb22)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/11/box-ceo-aaron-levie-on-ais-era-of-context/)
 
-**⭐ [A Look at Intel's E2200 'Mount Morgan' IPU](https://refetch.io/threads/68c2013e000b8baaea6d)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://chipsandcheese.com/p/intels-e2200-mount-morgan-ipu-at)
+**⭐ [OpenAI's Vision for Global-Scale Computing: A Deep Dive](https://refetch.io/threads/68c2399b00338651c686)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/09/10/openai-lays-out-the-principles-of-global-scale-computing/)
 
 ---
 
-*Last updated: 2025-09-11T14:00:53.669Z*
+*Last updated: 2025-09-11T16:00:09.819Z*
 
 
 
