@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Claude's Memory Architecture vs ChatGPT's: A Comparative Study](https://refetch.io/threads/68c32578002bf0465e66)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://www.shloked.com/writing/claude-memory)
+**🥇 [Perplexity's Copyright Definition Leads to Lawsuit](https://refetch.io/threads/68c344a100059fa0485b)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/perplexitys-definition-of-copyright-gets-it-sued-by-the-dictionary-213408625.html)
 
-**🥈 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
+**🥈 [NASA Discovers Intriguing Rocks on Mars: What's Next for Mars Sample Return?](https://refetch.io/threads/68c34126001280e628c2)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/space/2025/09/nasa-found-intriguing-rocks-on-mars-so-where-does-that-leave-mars-sample-return/)
 
-**🥉 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
+**🥉 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**⭐ [Melting iPhones for Science: A $10B Validation by Apple](https://refetch.io/threads/68c321ac00025e2b3361)**
-📊 Votes: **0** | ⏰ 37 minutes ago | 🔗 [Original](https://accelerateordie.com/p/we-melted-iphones-for-science)
+**⭐ [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
-**⭐ [Helix Text Editor: A Comprehensive Review](https://refetch.io/threads/68c325760026a7106c71)**
-📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://jonathan-frere.com/posts/helix/)
+**⭐ [Palantir's Data Mapping for the Government: A Deep Dive](https://refetch.io/threads/68c33da20011264f810c)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.techdirt.com/2025/09/11/how-palantir-is-mapping-everyones-data-for-the-government/)
 
 ---
 
-*Last updated: 2025-09-11T20:00:57.087Z*
+*Last updated: 2025-09-11T22:01:11.500Z*
 
 
 
