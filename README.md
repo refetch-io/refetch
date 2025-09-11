@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Top VR Accessories for 2025: Enhancing the Virtual Reality Experience](https://refetch.io/threads/68c29c030028df1535f1)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ar-vr/best-vr-accessories-150021126.html)
+**🥇 [C++20 Modules: An Insightful Look at the Current Status and Future Tasks](https://refetch.io/threads/68c2b88d000fb810865e)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://chuanqixu9.github.io/c++/2025/08/14/C++20-Modules.en.html)
 
-**🥈 [Delphi 13 Florence: A New Release from Embarcadero](https://refetch.io/threads/68c1c220002e75f4c1f1)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://blogs.embarcadero.com/announcing-the-availability-of-rad-studio-13-florence/)
+**🥈 [Reshaped: A New Addition to the Open Source Community](https://refetch.io/threads/68c2b1a2003df5b6b7c7)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://reshaped.so/blog/reshaped-oss)
 
-**🥉 [Preorders Open for AirPods Pro 3: What to Expect from the Third Generation](https://refetch.io/threads/68c1c8de00038b7f755e)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://theverge.com/tech/775719/airpods-pro-3-third-gen-preorder-buy-amazon-best-buy-walmart)
+**🥉 [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
 
-**⭐ [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
+**⭐ [Status Audio's Pro X: A New Contender in Wireless Earbuds](https://refetch.io/threads/68c2b19200162a6799eb)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://wired.com/review/status-audio-pro-x/)
 
-**⭐ [UGMM-NN: Unveiling the Univariate Gaussian Mixture Model Neural Network](https://refetch.io/threads/68c1d789002bf0157bf9)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.07569)
+**⭐ [PgEdge: The Latest Open Source Offering](https://refetch.io/threads/68c2b1a60014afa0b684)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.pgedge.com/blog/pgedge-goes-open-source)
 
 ---
 
-*Last updated: 2025-09-11T10:01:27.240Z*
+*Last updated: 2025-09-11T12:01:35.113Z*
 
 
 
