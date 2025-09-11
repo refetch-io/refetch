@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [C++20 Modules: An Insightful Look at the Current Status and Future Tasks](https://refetch.io/threads/68c2b88d000fb810865e)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://chuanqixu9.github.io/c++/2025/08/14/C++20-Modules.en.html)
+**🥇 [Exploring Nvidia's GeForce Now RTX 5080: A Hands-on Review](https://refetch.io/threads/68c2d10f0031f1273c24)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://www.theverge.com/hands-on/775222/nvidia-geforce-now-rtx-5080-hands-on)
 
-**🥈 [Reshaped: A New Addition to the Open Source Community](https://refetch.io/threads/68c2b1a2003df5b6b7c7)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://reshaped.so/blog/reshaped-oss)
+**🥈 [US Emerges as the Largest Investor in Commercial Spyware](https://refetch.io/threads/68c2d11100062ae29024)**
+📊 Votes: **0** | ⏰ 21 minutes ago | 🔗 [Original](https://arstechnica.com/security/2025/09/the-us-is-now-the-largest-investor-in-commercial-spyware/)
 
 **🥉 [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
 
-**⭐ [Status Audio's Pro X: A New Contender in Wireless Earbuds](https://refetch.io/threads/68c2b19200162a6799eb)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://wired.com/review/status-audio-pro-x/)
+**⭐ [Choosing the Best TV for Gaming: A Comprehensive Guide](https://refetch.io/threads/68c2d128002cdad862f4)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/best-gaming-tv-131509986.html)
 
-**⭐ [PgEdge: The Latest Open Source Offering](https://refetch.io/threads/68c2b1a60014afa0b684)**
-📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.pgedge.com/blog/pgedge-goes-open-source)
+**⭐ [A Look at Intel's E2200 'Mount Morgan' IPU](https://refetch.io/threads/68c2013e000b8baaea6d)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://chipsandcheese.com/p/intels-e2200-mount-morgan-ipu-at)
 
 ---
 
-*Last updated: 2025-09-11T12:01:35.113Z*
+*Last updated: 2025-09-11T14:00:53.669Z*
 
 
 
