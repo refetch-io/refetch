@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Wednesday, September 10, 2025)
+## 🔥 Top Posts Today (Thursday, September 11, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Thinking Machines Lab Aims for Consistent AI Models](https://refetch.io/threads/68c1f2d4003ce6afb4e3)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/thinking-machines-lab-wants-to-make-ai-models-more-consistent/)
+**🥇 [A Polyglot's Guide to Multiple-Dispatch: A Deep Dive](https://refetch.io/threads/68c20f2e0021f6f79270)**
+📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://eli.thegreenplace.net/2016/a-polyglots-guide-to-multiple-dispatch/)
 
-**🥈 [Drone Detection Radar Doubles Range Post-Ukrainian Testing with Simple Softwa...](https://refetch.io/threads/68c1ef97001ae55e4465)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/culture/2025/09/after-ukrainian-testing-drone-detection-radar-doubles-range-with-simple-software-patch/)
+**🥈 [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
 
-**🥉 [AI Companies Could Set Their Own Rules: A Glimpse into Ted Cruz's New Bill](https://refetch.io/threads/68c1ef95000e4f33d82c)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776130/senator-ted-cruz-ai-sandbox-bill)
-
-**⭐ [Verizon's Claim on Selling Location Data Without Consent Rejected by Court](https://refetch.io/threads/68c1ef960027b3a02f45)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/court-rejects-verizon-claim-that-selling-location-data-without-consent-is-legal/)
+**🥉 [Amazon's Dual Approach to AR Glasses: One for Customers, One for Drivers](https://refetch.io/threads/68c20bc4001be092d2b5)**
+📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://www.engadget.com/ar-vr/amazon-is-reportedly-developing-separate-ar-glasses-for-customers-and-its-drivers-230826640.html)
 
 **⭐ [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
+
+**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
 
 ---
 
-*Last updated: 2025-09-10T22:01:32.483Z*
+*Last updated: 2025-09-11T00:02:58.094Z*
 
 
 
