@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [A Polyglot's Guide to Multiple-Dispatch: A Deep Dive](https://refetch.io/threads/68c20f2e0021f6f79270)**
-📊 Votes: **0** | ⏰ 10 minutes ago | 🔗 [Original](https://eli.thegreenplace.net/2016/a-polyglots-guide-to-multiple-dispatch/)
+**🥇 [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
 
-**🥈 [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
+**🥈 [Delphi 13 Florence: A New Release from Embarcadero](https://refetch.io/threads/68c1c220002e75f4c1f1)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://blogs.embarcadero.com/announcing-the-availability-of-rad-studio-13-florence/)
 
-**🥉 [Amazon's Dual Approach to AR Glasses: One for Customers, One for Drivers](https://refetch.io/threads/68c20bc4001be092d2b5)**
-📊 Votes: **0** | ⏰ 25 minutes ago | 🔗 [Original](https://www.engadget.com/ar-vr/amazon-is-reportedly-developing-separate-ar-glasses-for-customers-and-its-drivers-230826640.html)
+**🥉 [Preorders Open for AirPods Pro 3: What to Expect from the Third Generation](https://refetch.io/threads/68c1c8de00038b7f755e)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://theverge.com/tech/775719/airpods-pro-3-third-gen-preorder-buy-amazon-best-buy-walmart)
 
-**⭐ [Rebuilding InfluxDB 3 in Apache Arrow and Rust: An Open Source Journey](https://refetch.io/threads/68c1435c0037141578a5)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://infoq.com/articles/timeseries-db-rust)
+**⭐ [A Look at Intel's E2200 'Mount Morgan' IPU](https://refetch.io/threads/68c2013e000b8baaea6d)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://chipsandcheese.com/p/intels-e2200-mount-morgan-ipu-at)
 
-**⭐ [NVIDIA's GeForce Now with RTX 5080 GPUs: A New Era in Cloud Gaming](https://refetch.io/threads/68c17b79000d169251b3)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.engadget.com/nvidias-geforce-now-with-rtx-5080-gpus-is-a-cloud-gaming-revelation-130000231.html)
+**⭐ [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
 
 ---
 
-*Last updated: 2025-09-11T00:02:58.094Z*
+*Last updated: 2025-09-11T02:01:40.961Z*
 
 
 
