@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [California Bill to Regulate AI Companion Chatbots Nears Legislation](https://refetch.io/threads/68c2639400371a4031dd)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/10/a-california-bill-that-would-regulate-ai-companion-chatbots-is-close-to-becoming-law/)
+**🥇 [iPhone 17 Pro vs. iPhone 16 Pro: A Comparative Analysis](https://refetch.io/threads/68c2803c0035b1fd8491)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://zdnet.com/article/apple-iphone-17-pro-vs-iphone-16-pro-i-compared-both-models-and-heres-how-they-differ/)
 
-**🥈 [Delphi 13 Florence: A New Release from Embarcadero](https://refetch.io/threads/68c1c220002e75f4c1f1)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://blogs.embarcadero.com/announcing-the-availability-of-rad-studio-13-florence/)
+**🥈 [Apple Watch Series 11: Is it Worth the Upgrade?](https://refetch.io/threads/68c2803d0026b92c4e90)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://zdnet.com/article/should-you-upgrade-to-apple-watch-series-11-heres-how-it-compares-to-older-models/)
 
-**🥉 [Preorders Open for AirPods Pro 3: What to Expect from the Third Generation](https://refetch.io/threads/68c1c8de00038b7f755e)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://theverge.com/tech/775719/airpods-pro-3-third-gen-preorder-buy-amazon-best-buy-walmart)
+**🥉 [Delphi 13 Florence: A New Release from Embarcadero](https://refetch.io/threads/68c1c220002e75f4c1f1)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://blogs.embarcadero.com/announcing-the-availability-of-rad-studio-13-florence/)
+
+**⭐ [Preorders Open for AirPods Pro 3: What to Expect from the Third Generation](https://refetch.io/threads/68c1c8de00038b7f755e)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://theverge.com/tech/775719/airpods-pro-3-third-gen-preorder-buy-amazon-best-buy-walmart)
 
 **⭐ [OpenAI and Oracle's $300 Billion Project Stargate: A Massive Cloud Deal](https://refetch.io/threads/68c20854003cff70974e)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
-
-**⭐ [OpenAI's Vision for Global-Scale Computing: A Deep Dive](https://refetch.io/threads/68c2399b00338651c686)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/09/10/openai-lays-out-the-principles-of-global-scale-computing/)
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://theverge.com/ai-artificial-intelligence/776170/oracle-openai-300-billion-contract-project-stargate)
 
 ---
 
-*Last updated: 2025-09-11T06:01:36.102Z*
+*Last updated: 2025-09-11T08:01:19.907Z*
 
 
 
