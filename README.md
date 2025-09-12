@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Thursday, September 11, 2025)
+## 🔥 Top Posts Today (Friday, September 12, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Perplexity's Copyright Definition Leads to Lawsuit](https://refetch.io/threads/68c344a100059fa0485b)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.engadget.com/ai/perplexitys-definition-of-copyright-gets-it-sued-by-the-dictionary-213408625.html)
+**🥇 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
+📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**🥈 [NASA Discovers Intriguing Rocks on Mars: What's Next for Mars Sample Return?](https://refetch.io/threads/68c34126001280e628c2)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://arstechnica.com/space/2025/09/nasa-found-intriguing-rocks-on-mars-so-where-does-that-leave-mars-sample-return/)
+**🥈 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
-**🥉 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
+**🥉 [Apple's New Security Feature: A Tougher Challenge for Spyware Makers](https://refetch.io/threads/68c34bb00037adac5a1c)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://techcrunch.com/2025/09/11/apples-latest-iphone-security-feature-just-made-life-more-difficult-for-spyware-makers/)
 
-**⭐ [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
+**⭐ [Hashed Sorting vs Hash Tables: A Performance Comparison](https://refetch.io/threads/68c28e380015d1323c4d)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://reiner.org/hashed-sorting)
 
-**⭐ [Palantir's Data Mapping for the Government: A Deep Dive](https://refetch.io/threads/68c33da20011264f810c)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.techdirt.com/2025/09/11/how-palantir-is-mapping-everyones-data-for-the-government/)
+**⭐ [Exploring Adjacency Matrix and std:mdspan in C++23](https://refetch.io/threads/68c32c88000d9573d2a9)**
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.cppstories.com/2025/cpp23_mdspan_adj/)
 
 ---
 
-*Last updated: 2025-09-11T22:01:11.500Z*
+*Last updated: 2025-09-12T00:00:52.050Z*
 
 
 
