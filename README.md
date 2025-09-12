@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Microsoft Evades EU Probe by Unbundling Teams](https://refetch.io/threads/68c441f40032d83e5723)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/12/microsoft-slips-unscathed-through-eu-competition-probe-after-promising-to-unbundle-teams/)
+**🥇 [Vectroid: Building a Vector Database to Index 1B Vectors in 48M](https://refetch.io/threads/68c45e6c00067f762098)**
+📊 Votes: **0** | ⏰ 13 minutes ago | 🔗 [Original](https://www.vectroid.com/blog/why-and-how-we-built-Vectroid)
 
-**🥈 [Choosing Between Samsung Galaxy Watch 8 and Classic](https://refetch.io/threads/68c441fe0013af9aa4ed)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://theverge.com/tech/777246/samsung-galaxy-watch-8-classic-anker-soundcore-select-4-go-deal-sale)
+**🥈 [Anthropic's Approach to Copyright: A New Trend in Tech?](https://refetch.io/threads/68c45e550039a44f2aa2)**
+📊 Votes: **0** | ⏰ 13 minutes ago | 🔗 [Original](https://wired.com/story/anthropic-settlement-books-copyright/)
 
-**🥉 [Nissan's New EV: A 300-mile “SUV” Starting at $31K](https://refetch.io/threads/68c43ecc00050f0cc2c8)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://wired.com/review/nissan-leaf-2026/)
+**🥉 [Graphene Challenges a Fundamental Law of Physics](https://refetch.io/threads/68c417b6000b01d5f740)**
+📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
 
-**⭐ [Unveiling the Crates.io Phishing Attempt: A Deep Dive](https://refetch.io/threads/68c43edd000350c6c670)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://fasterthanli.me/articles/crates-io-phishing-attempt)
+**⭐ [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
 
-**⭐ [Graphene Challenges a Fundamental Law of Physics](https://refetch.io/threads/68c417b6000b01d5f740)**
-📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
+**⭐ [Micro1, a Scale AI Competitor, Raises Funds at $500M Valuation](https://refetch.io/threads/68c45ac5000e4fa276fb)**
+📊 Votes: **0** | ⏰ 28 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/12/micro1-a-competitor-to-scale-ai-raises-funds-at-500m-valuation/)
 
 ---
 
-*Last updated: 2025-09-12T16:00:32.407Z*
+*Last updated: 2025-09-12T18:07:57.454Z*
 
 
 
