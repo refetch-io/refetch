@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Vectroid: Building a Vector Database to Index 1B Vectors in 48M](https://refetch.io/threads/68c45e6c00067f762098)**
-📊 Votes: **0** | ⏰ 13 minutes ago | 🔗 [Original](https://www.vectroid.com/blog/why-and-how-we-built-Vectroid)
+**🥇 [Child Safety Concerns in Roblox: A Case Study](https://refetch.io/threads/68c4960a003d6cf3c84d)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.nytimes.com/2025/09/12/technology/roblox-lawsuit-child-safety.html)
 
-**🥈 [Anthropic's Approach to Copyright: A New Trend in Tech?](https://refetch.io/threads/68c45e550039a44f2aa2)**
-📊 Votes: **0** | ⏰ 13 minutes ago | 🔗 [Original](https://wired.com/story/anthropic-settlement-books-copyright/)
+**🥈 [AI Powers Villager Revolt in Animal Crossing Mod](https://refetch.io/threads/68c4960e0000b5399d48)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/gaming/2025/09/animal-crossing-mod-uses-ai-to-orchestrate-anti-tom-nook-villager-revolt/)
 
 **🥉 [Graphene Challenges a Fundamental Law of Physics](https://refetch.io/threads/68c417b6000b01d5f740)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
+📊 Votes: **2** | ⏰ 9 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
 
 **⭐ [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
 
-**⭐ [Micro1, a Scale AI Competitor, Raises Funds at $500M Valuation](https://refetch.io/threads/68c45ac5000e4fa276fb)**
-📊 Votes: **0** | ⏰ 28 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/12/micro1-a-competitor-to-scale-ai-raises-funds-at-500m-valuation/)
+**⭐ [Introducing Lumina-DiMOO: An Open-Source Discrete Multimodal Diffusion Model](https://refetch.io/threads/68c41efc002e59a6ba03)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://synbol.github.io/Lumina-DiMOO/)
 
 ---
 
-*Last updated: 2025-09-12T18:07:57.454Z*
+*Last updated: 2025-09-12T22:00:35.001Z*
 
 
 
