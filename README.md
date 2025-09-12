@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [VPNs and Age-Verification Laws: A Potential Solution?](https://refetch.io/threads/68c40992001cca80840d)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://wired.com/story/vpns-and-age-verification-laws/)
+**🥇 [Microsoft Evades EU Probe by Unbundling Teams](https://refetch.io/threads/68c441f40032d83e5723)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/12/microsoft-slips-unscathed-through-eu-competition-probe-after-promising-to-unbundle-teams/)
 
-**🥈 [Black Hole Explosion: A Potential Game Changer for Universe Understanding](https://refetch.io/threads/68c37d17001c72b037f7)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073145.htm)
+**🥈 [Choosing Between Samsung Galaxy Watch 8 and Classic](https://refetch.io/threads/68c441fe0013af9aa4ed)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://theverge.com/tech/777246/samsung-galaxy-watch-8-classic-anker-soundcore-select-4-go-deal-sale)
 
-**🥉 [Stephen Hawking's Theory Confirmed by Black Holes: A New Perspective](https://refetch.io/threads/68c3bc3b002c49c3736a)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073158.htm)
+**🥉 [Nissan's New EV: A 300-mile “SUV” Starting at $31K](https://refetch.io/threads/68c43ecc00050f0cc2c8)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://wired.com/review/nissan-leaf-2026/)
 
-**⭐ [Exploring Adjacency Matrix and std:mdspan in C++23](https://refetch.io/threads/68c32c88000d9573d2a9)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.cppstories.com/2025/cpp23_mdspan_adj/)
+**⭐ [Unveiling the Crates.io Phishing Attempt: A Deep Dive](https://refetch.io/threads/68c43edd000350c6c670)**
+📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://fasterthanli.me/articles/crates-io-phishing-attempt)
 
-**⭐ [Apple's New Security Feature: A Tougher Challenge for Spyware Makers](https://refetch.io/threads/68c34bb00037adac5a1c)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/11/apples-latest-iphone-security-feature-just-made-life-more-difficult-for-spyware-makers/)
+**⭐ [Graphene Challenges a Fundamental Law of Physics](https://refetch.io/threads/68c417b6000b01d5f740)**
+📊 Votes: **1** | ⏰ 3 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
 
 ---
 
-*Last updated: 2025-09-12T12:00:52.761Z*
+*Last updated: 2025-09-12T16:00:32.407Z*
 
 
 
