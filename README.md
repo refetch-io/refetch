@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Black Hole Explosion: A Potential Game Changer for Universe Understanding](https://refetch.io/threads/68c37d17001c72b037f7)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073145.htm)
+**🥇 [Unraveling the Mysterious Force Shaping the Solar Wind](https://refetch.io/threads/68c39903002971e00eb5)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073154.htm)
 
-**🥈 [Backprompting: A New Method for Leveraging Synthetic Production Data in Healt...](https://refetch.io/threads/68c37d12001784c982e7)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arxiv.org/abs/2508.18384)
+**🥈 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**🥉 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
+**🥉 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **1** | ⏰ 11 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
-**⭐ [Detecting Monkey Patching in JavaScript Native Functions](https://refetch.io/threads/68c3760e0022069f2050)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://mmazzarolo.com/blog/2022-07-30-checking-if-a-javascript-native-function-was-monkey-patched/)
+**⭐ [Apple's New Security Feature: A Tougher Challenge for Spyware Makers](https://refetch.io/threads/68c34bb00037adac5a1c)**
+📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/11/apples-latest-iphone-security-feature-just-made-life-more-difficult-for-spyware-makers/)
 
-**⭐ [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
+**⭐ [Black Hole Explosion: A Potential Game Changer for Universe Understanding](https://refetch.io/threads/68c37d17001c72b037f7)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073145.htm)
 
 ---
 
-*Last updated: 2025-09-12T02:01:30.883Z*
+*Last updated: 2025-09-12T04:01:52.315Z*
 
 
 
