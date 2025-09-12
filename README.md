@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Introducing Spiral: A New Database System](https://refetch.io/threads/68c2fb170013ce9b3ec8)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://spiraldb.com/post/announcing-spiral)
 
-**🥈 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
+**🥈 [Top Gaming Keyboards of 2025: A Comprehensive Review](https://refetch.io/threads/68c3ca8e003bc726231f)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://www.engadget.com/gaming/pc/best-gaming-keyboard-140019954.html)
 
-**🥉 [Black Hole Explosion: A Potential Game Changer for Universe Understanding](https://refetch.io/threads/68c37d17001c72b037f7)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073145.htm)
+**🥉 [Windows KASLR Bypass – Exploring CVE-2025-53136](https://refetch.io/threads/68c2fe730019a0c9061d)**
+📊 Votes: **1** | ⏰ 15 hours ago | 🔗 [Original](https://www.crowdfense.com/nt-os-kernel-information-disclosure-vulnerability-cve-2025-53136/)
 
-**⭐ [Exploring Adjacency Matrix and std:mdspan in C++23](https://refetch.io/threads/68c32c88000d9573d2a9)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://www.cppstories.com/2025/cpp23_mdspan_adj/)
+**⭐ [Black Hole Explosion: A Potential Game Changer for Universe Understanding](https://refetch.io/threads/68c37d17001c72b037f7)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073145.htm)
 
-**⭐ [Apple's New Security Feature: A Tougher Challenge for Spyware Makers](https://refetch.io/threads/68c34bb00037adac5a1c)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/11/apples-latest-iphone-security-feature-just-made-life-more-difficult-for-spyware-makers/)
+**⭐ [Stephen Hawking's Theory Confirmed by Black Holes: A New Perspective](https://refetch.io/threads/68c3bc3b002c49c3736a)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250911073158.htm)
 
 ---
 
-*Last updated: 2025-09-12T06:00:47.151Z*
+*Last updated: 2025-09-12T08:00:57.999Z*
 
 
 
