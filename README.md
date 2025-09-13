@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The End of pthread_cancel: A Deep Dive](https://refetch.io/threads/68c5c2160032ffebc705)**
-📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://eissing.org/icing/posts/rip_pthread_cancel/)
+**🥇 [The Discontinuation of the Safe C++ Proposal: What's Next?](https://refetch.io/threads/68c5c90a0007dee0b9c7)**
+📊 Votes: **0** | ⏰ 18 minutes ago | 🔗 [Original](https://sibellavia.lol/posts/2025/09/safe-c-proposal-is-not-being-continued/)
 
-**🥈 [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
-
-**🥉 [Revolutionizing Teleportation and Computing with Quantum Breakthrough](https://refetch.io/threads/68c509dd002cc9982337)**
+**🥈 [Revolutionizing Teleportation and Computing with Quantum Breakthrough](https://refetch.io/threads/68c509dd002cc9982337)**
 📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195122.htm)
 
-**⭐ [Microchips Revolution: Johns Hopkins Achieves Unprecedented Miniaturization](https://refetch.io/threads/68c51b860034b47d7f0c)**
+**🥉 [Microchips Revolution: Johns Hopkins Achieves Unprecedented Miniaturization](https://refetch.io/threads/68c51b860034b47d7f0c)**
 📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
 
 **⭐ [Unveiling Quantum Secrets: Electrons Mimic Photons](https://refetch.io/threads/68c5145d00157ef0d805)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195124.htm)
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195124.htm)
+
+**⭐ [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
 
 ---
 
-*Last updated: 2025-09-13T19:34:54.651Z*
+*Last updated: 2025-09-13T20:00:33.512Z*
 
 
 
