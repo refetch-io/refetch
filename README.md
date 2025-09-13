@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Analyzing Misinformation Spread in Tech Journalism](https://refetch.io/threads/68c5a8140034ab4fbd10)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://theverge.com/politics/777630/wsj-trans-misinformation-charlie-kirk)
+**🥇 [The End of pthread_cancel: A Deep Dive](https://refetch.io/threads/68c5c2160032ffebc705)**
+📊 Votes: **0** | ⏰ 22 minutes ago | 🔗 [Original](https://eissing.org/icing/posts/rip_pthread_cancel/)
 
-**🥈 [Tesla's Most Affordable Cybertruck Scrapped After Five Months](https://refetch.io/threads/68c5a48e000f3ccf58e4)**
-📊 Votes: **0** | ⏰ 20 minutes ago | 🔗 [Original](https://www.engadget.com/transportation/evs/teslas-most-affordable-cybertruck-gets-scrapped-after-a-whopping-five-months-164322445.html)
+**🥈 [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
 
-**🥉 [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
-
-**⭐ [Revolutionizing Teleportation and Computing with Quantum Breakthrough](https://refetch.io/threads/68c509dd002cc9982337)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195122.htm)
+**🥉 [Revolutionizing Teleportation and Computing with Quantum Breakthrough](https://refetch.io/threads/68c509dd002cc9982337)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195122.htm)
 
 **⭐ [Microchips Revolution: Johns Hopkins Achieves Unprecedented Miniaturization](https://refetch.io/threads/68c51b860034b47d7f0c)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
+
+**⭐ [Unveiling Quantum Secrets: Electrons Mimic Photons](https://refetch.io/threads/68c5145d00157ef0d805)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195124.htm)
 
 ---
 
-*Last updated: 2025-09-13T17:26:32.767Z*
+*Last updated: 2025-09-13T19:34:54.651Z*
 
 
 
