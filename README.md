@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [IDC's Optimistic AI Spending Forecast for the Next Decade](https://refetch.io/threads/68c502dc00277be45d1b)**
-📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.nextplatform.com/2025/09/08/idc-makes-ebullient-ai-spending-forecast-out-to-2029/)
+**🥇 [Legal Victory: A Significant Moment in Tech Law](https://refetch.io/threads/68c522650001d295a66e)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://ma.tt/2025/09/legal-win/)
 
-**🥈 [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
+**🥈 [Microchips Revolution: Johns Hopkins Achieves Unprecedented Miniaturization](https://refetch.io/threads/68c51b860034b47d7f0c)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
 
-**🥉 [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
+**🥉 [Resizing Images in Rust: EXIF Orientation Support](https://refetch.io/threads/68c5226600227b982ec6)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://alexwlchan.net/2025/create-thumbnail-is-exif-aware/)
 
-**⭐ [K2-Think: A Parameter-Efficient Reasoning System](https://refetch.io/threads/68c4731f002bf9461829)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.07604)
+**⭐ [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
 
-**⭐ [Automating compile_flags for C/C++ Projects on the Zig Build System](https://refetch.io/threads/68c4e336001a2b535650)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://simonhartcher.com/posts/2025-09-08-announcing-compile-flagz/)
+**⭐ [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
 
 ---
 
-*Last updated: 2025-09-13T06:00:18.681Z*
+*Last updated: 2025-09-13T08:00:38.349Z*
 
 
 
