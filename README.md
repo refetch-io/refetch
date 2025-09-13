@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Discontinuation of the Safe C++ Proposal: What's Next?](https://refetch.io/threads/68c5c90a0007dee0b9c7)**
-📊 Votes: **0** | ⏰ 18 minutes ago | 🔗 [Original](https://sibellavia.lol/posts/2025/09/safe-c-proposal-is-not-being-continued/)
+**🥇 [Lessons Learned from Disabling RC4 in Active Directory](https://refetch.io/threads/68c5e410001c7f8e4ab2)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://syfuhs.net/lessons-in-disabling-rc4-in-active-directory)
 
 **🥈 [Revolutionizing Teleportation and Computing with Quantum Breakthrough](https://refetch.io/threads/68c509dd002cc9982337)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195122.htm)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195122.htm)
 
 **🥉 [Microchips Revolution: Johns Hopkins Achieves Unprecedented Miniaturization](https://refetch.io/threads/68c51b860034b47d7f0c)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195126.htm)
 
 **⭐ [Unveiling Quantum Secrets: Electrons Mimic Photons](https://refetch.io/threads/68c5145d00157ef0d805)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195124.htm)
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195124.htm)
 
 **⭐ [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
 
 ---
 
-*Last updated: 2025-09-13T20:00:33.512Z*
+*Last updated: 2025-09-13T22:00:43.348Z*
 
 
 
