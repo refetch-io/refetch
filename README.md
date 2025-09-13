@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Friday, September 12, 2025)
+## 🔥 Top Posts Today (Saturday, September 13, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Child Safety Concerns in Roblox: A Case Study](https://refetch.io/threads/68c4960a003d6cf3c84d)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://www.nytimes.com/2025/09/12/technology/roblox-lawsuit-child-safety.html)
+**🥇 [IDC's Optimistic AI Spending Forecast for the Next Decade](https://refetch.io/threads/68c502dc00277be45d1b)**
+📊 Votes: **0** | ⏰ 23 minutes ago | 🔗 [Original](https://www.nextplatform.com/2025/09/08/idc-makes-ebullient-ai-spending-forecast-out-to-2029/)
 
-**🥈 [AI Powers Villager Revolt in Animal Crossing Mod](https://refetch.io/threads/68c4960e0000b5399d48)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://arstechnica.com/gaming/2025/09/animal-crossing-mod-uses-ai-to-orchestrate-anti-tom-nook-villager-revolt/)
+**🥈 [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
 
-**🥉 [Graphene Challenges a Fundamental Law of Physics](https://refetch.io/threads/68c417b6000b01d5f740)**
-📊 Votes: **2** | ⏰ 9 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912081319.htm)
+**🥉 [Google's Quantum Leap: Creating an Exotic State Once Deemed Impossible](https://refetch.io/threads/68c4e68d000f10124dab)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250912195119.htm)
 
-**⭐ [Pre-order Details for iPhone 17 Pro Air](https://refetch.io/threads/68c44601003afaae60f2)**
-📊 Votes: **0** | ⏰ 5 hours ago | 🔗 [Original](https://www.theverge.com/tech/772748/iphone-17-pro-air-preorder-price-how-to-buy-release-date)
+**⭐ [K2-Think: A Parameter-Efficient Reasoning System](https://refetch.io/threads/68c4731f002bf9461829)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://arxiv.org/abs/2509.07604)
 
-**⭐ [Introducing Lumina-DiMOO: An Open-Source Discrete Multimodal Diffusion Model](https://refetch.io/threads/68c41efc002e59a6ba03)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://synbol.github.io/Lumina-DiMOO/)
+**⭐ [Automating compile_flags for C/C++ Projects on the Zig Build System](https://refetch.io/threads/68c4e336001a2b535650)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://simonhartcher.com/posts/2025-09-08-announcing-compile-flagz/)
 
 ---
 
-*Last updated: 2025-09-12T22:00:35.001Z*
+*Last updated: 2025-09-13T06:00:18.681Z*
 
 
 
