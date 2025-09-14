@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [The Unseen Labor Behind AI: Data Annotators](https://refetch.io/threads/68c6e49300320ba3ef3f)**
-📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/features/23764584/ai-artificial-intelligence-data-notation-labor-scale-surge-remotasks-openai-chatbots)
+**🥇 [Apple's Latest Hardware Event: Key Announcements](https://refetch.io/threads/68c6f986000b403133ad)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/14/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
 
-**🥈 [An Introduction to GrapheneOS: A Privacy-Focused Android OS](https://refetch.io/threads/68c6e4ad0007cf9d8833)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://dataswamp.org/~solene/2025-01-12-intro-to-grapheneos.html)
+**🥈 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
+📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
 
-**🥉 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
+**🥉 [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
+📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
 
-**⭐ [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
+**⭐ [Building an OS Kernel from Ground Zero](https://refetch.io/threads/68c6e80c002d7e65da10)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/)
 
-**⭐ [The End of the AI-Scraping Free-for-All](https://refetch.io/threads/68c6dd91000b7002df25)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://nymag.com/intelligencer/article/ai-scraping-free-for-all-by-openai-google-meta-ending.html)
+**⭐ [The Unseen Labor Behind AI: Data Annotators](https://refetch.io/threads/68c6e49300320ba3ef3f)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://theverge.com/features/23764584/ai-artificial-intelligence-data-notation-labor-scale-surge-remotasks-openai-chatbots)
 
 ---
 
-*Last updated: 2025-09-14T16:00:11.593Z*
+*Last updated: 2025-09-14T18:00:32.892Z*
 
 
 
