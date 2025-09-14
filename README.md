@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Microsoft's AI Chief Debunks Machine Consciousness](https://refetch.io/threads/68c5ffd40004ed041ae0)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://wired.com/story/microsofts-ai-chief-says-machine-consciousness-is-an-illusion/)
+**🥇 [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
+📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
 
-**🥈 [Inside the Man vs. Machine Hackathon](https://refetch.io/threads/68c5ffda00302af590f3)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://wired.com/story/san-francisco-hackathon-man-vs-machine/)
+**🥈 [Exploring RFC9460: SVCB and HTTPS DNS Records](https://refetch.io/threads/68c6150c00015b1d6883)**
+📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://datatracker.ietf.org/doc/html/rfc9460)
 
-**🥉 [Exploring the Best E-Ink Tablets on the Market](https://refetch.io/threads/68c5ffe7001b459aa135)**
-📊 Votes: **0** | ⏰ 24 minutes ago | 🔗 [Original](https://engadget.com/mobile/tablets/best-e-ink-tablet-130037939.html)
+**🥉 [xAI's Massive Layoff: 500 AI Tutors Working on Grok Reportedly Dismissed](https://refetch.io/threads/68c56fd60031b529d784)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.engadget.com/ai/xai-reportedly-laid-off-at-least-500-ai-tutors-working-on-grok-130059624.html)
 
-**⭐ [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
-📊 Votes: **1** | ⏰ 5 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
+**⭐ [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
+📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
 
-**⭐ [xAI's Massive Layoff: 500 AI Tutors Working on Grok Reportedly Dismissed](https://refetch.io/threads/68c56fd60031b529d784)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.engadget.com/ai/xai-reportedly-laid-off-at-least-500-ai-tutors-working-on-grok-130059624.html)
+**⭐ [Adding OR Logic: A Deep Dive into User Preference for Raw SQL](https://refetch.io/threads/68c60e190030383bf529)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
 
 ---
 
-*Last updated: 2025-09-14T00:00:12.227Z*
+*Last updated: 2025-09-14T02:00:20.582Z*
 
 
 
