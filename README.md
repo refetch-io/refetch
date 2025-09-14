@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
-📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
+**🥇 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
 
-**🥈 [xAI's Massive Layoff: 500 AI Tutors Working on Grok Reportedly Dismissed](https://refetch.io/threads/68c56fd60031b529d784)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.engadget.com/ai/xai-reportedly-laid-off-at-least-500-ai-tutors-working-on-grok-130059624.html)
+**🥈 [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
+📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
 
-**🥉 [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
-📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
+**🥉 [Geedge and MESA Leak: A Deep Dive into the Great Firewall's Largest Document ...](https://refetch.io/threads/68c6543f00137cb1d1c6)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://gfw.report/blog/geedge_and_mesa_leak/en/)
+
+**⭐ [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
+📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
 
 **⭐ [Adding OR Logic: A Deep Dive into User Preference for Raw SQL](https://refetch.io/threads/68c60e190030383bf529)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
-
-**⭐ [Exploring RFC9460: SVCB and HTTPS DNS Records](https://refetch.io/threads/68c6150c00015b1d6883)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://datatracker.ietf.org/doc/html/rfc9460)
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
 
 ---
 
-*Last updated: 2025-09-14T04:02:28.125Z*
+*Last updated: 2025-09-14T08:00:25.473Z*
 
 
 
