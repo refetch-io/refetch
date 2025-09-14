@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
-📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
+**🥇 [The Unseen Labor Behind AI: Data Annotators](https://refetch.io/threads/68c6e49300320ba3ef3f)**
+📊 Votes: **0** | ⏰ 8 minutes ago | 🔗 [Original](https://theverge.com/features/23764584/ai-artificial-intelligence-data-notation-labor-scale-surge-remotasks-openai-chatbots)
 
-**🥈 [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
-📊 Votes: **1** | ⏰ 13 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
+**🥈 [An Introduction to GrapheneOS: A Privacy-Focused Android OS](https://refetch.io/threads/68c6e4ad0007cf9d8833)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://dataswamp.org/~solene/2025-01-12-intro-to-grapheneos.html)
 
-**🥉 [Geedge and MESA Leak: A Deep Dive into the Great Firewall's Largest Document ...](https://refetch.io/threads/68c6543f00137cb1d1c6)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://gfw.report/blog/geedge_and_mesa_leak/en/)
+**🥉 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
 
-**⭐ [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
-📊 Votes: **0** | ⏰ 15 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
+**⭐ [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
 
-**⭐ [Adding OR Logic: A Deep Dive into User Preference for Raw SQL](https://refetch.io/threads/68c60e190030383bf529)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
+**⭐ [The End of the AI-Scraping Free-for-All](https://refetch.io/threads/68c6dd91000b7002df25)**
+📊 Votes: **0** | ⏰ 38 minutes ago | 🔗 [Original](https://nymag.com/intelligencer/article/ai-scraping-free-for-all-by-openai-google-meta-ending.html)
 
 ---
 
-*Last updated: 2025-09-14T08:00:25.473Z*
+*Last updated: 2025-09-14T16:00:11.593Z*
 
 
 
