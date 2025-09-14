@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Apple's Latest Hardware Event: Key Announcements](https://refetch.io/threads/68c6f986000b403133ad)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/14/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
+**🥇 [Are We in an AI Bubble? OpenAI Board Chair Weighs In](https://refetch.io/threads/68c71d15002a75063223)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/14/openai-board-chair-bret-taylor-says-were-in-an-ai-bubble-but-thats-okay/)
 
-**🥈 [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
-📊 Votes: **0** | ⏰ 10 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
+**🥈 [The Future of Apple Post-iPhone 17: What's Next?](https://refetch.io/threads/68c71d1c000b3c2b4f00)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://theverge.com/apple-rumors/777791/whats-next-for-apple-iphone-17-m5-ipad-pro)
 
-**🥉 [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
-📊 Votes: **0** | ⏰ 4 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
+**🥉 [Revolutionizing Vision Correction: Eye Drops to Replace Glasses?](https://refetch.io/threads/68c71d37003e174b7a7a)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.theguardian.com/society/2025/sep/14/eye-drops-could-replace-glasses-surgery-longsighted-study)
 
-**⭐ [Building an OS Kernel from Ground Zero](https://refetch.io/threads/68c6e80c002d7e65da10)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://popovicu.com/posts/writing-an-operating-system-kernel-from-scratch/)
+**⭐ [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
 
-**⭐ [The Unseen Labor Behind AI: Data Annotators](https://refetch.io/threads/68c6e49300320ba3ef3f)**
-📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://theverge.com/features/23764584/ai-artificial-intelligence-data-notation-labor-scale-surge-remotasks-openai-chatbots)
+**⭐ [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
+📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
 
 ---
 
-*Last updated: 2025-09-14T18:00:32.892Z*
+*Last updated: 2025-09-14T20:00:42.422Z*
 
 
 
