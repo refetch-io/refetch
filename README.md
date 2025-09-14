@@ -29,23 +29,23 @@
 </div>
 
 **🥇 [Ruby and JIT Code Execution: The Hidden Mechanics](https://refetch.io/threads/68c5b9c0000ca506e925)**
-📊 Votes: **1** | ⏰ 7 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
+📊 Votes: **1** | ⏰ 9 hours ago | 🔗 [Original](https://railsatscale.com/2025-09-08-how-ruby-executes-jit-code-the-hidden-mechanics-behind-the-magic/)
 
-**🥈 [Exploring RFC9460: SVCB and HTTPS DNS Records](https://refetch.io/threads/68c6150c00015b1d6883)**
-📊 Votes: **0** | ⏰ 53 minutes ago | 🔗 [Original](https://datatracker.ietf.org/doc/html/rfc9460)
+**🥈 [xAI's Massive Layoff: 500 AI Tutors Working on Grok Reportedly Dismissed](https://refetch.io/threads/68c56fd60031b529d784)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.engadget.com/ai/xai-reportedly-laid-off-at-least-500-ai-tutors-working-on-grok-130059624.html)
 
-**🥉 [xAI's Massive Layoff: 500 AI Tutors Working on Grok Reportedly Dismissed](https://refetch.io/threads/68c56fd60031b529d784)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.engadget.com/ai/xai-reportedly-laid-off-at-least-500-ai-tutors-working-on-grok-130059624.html)
-
-**⭐ [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
-📊 Votes: **0** | ⏰ 9 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
+**🥉 [xAI's Major Layoff: Implications for Data Annotation](https://refetch.io/threads/68c59d6900334f13028a)**
+📊 Votes: **0** | ⏰ 11 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/13/xai-reportedly-lays-off-500-workers-from-data-annotation-team/)
 
 **⭐ [Adding OR Logic: A Deep Dive into User Preference for Raw SQL](https://refetch.io/threads/68c60e190030383bf529)**
-📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
+📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://signoz.io/blog/query-builder-v5/)
+
+**⭐ [Exploring RFC9460: SVCB and HTTPS DNS Records](https://refetch.io/threads/68c6150c00015b1d6883)**
+📊 Votes: **0** | ⏰ 2 hours ago | 🔗 [Original](https://datatracker.ietf.org/doc/html/rfc9460)
 
 ---
 
-*Last updated: 2025-09-14T02:00:20.582Z*
+*Last updated: 2025-09-14T04:02:28.125Z*
 
 
 
