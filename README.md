@@ -28,24 +28,24 @@
 
 </div>
 
-**🥇 [Gentoo's Approach to AI Policy](https://refetch.io/threads/68c770ee001969d06fcd)**
-📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://wiki.gentoo.org/wiki/Project:Council/AI_policy)
+**🥇 [China's Antitrust Laws and Nvidia: A Closer Look](https://refetch.io/threads/68c81a8a001a2b3be12d)**
+📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://arstechnica.com/tech-policy/2025/09/china-rules-that-nvidia-violated-its-antitrust-laws/)
 
-**🥈 [Analyzing AMD Turin PSP Binaries from an Open-Source Firmware Perspective](https://refetch.io/threads/68c769f2001667286ec9)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://blog.3mdeb.com/2025/2025-09-11-gigabyte-mz33-ar1-blob-analysis/)
+**🥈 [AirPods Pro 3 Review: A Deep Dive into Noise Cancellation and Live Translatio...](https://refetch.io/threads/68c80538001cbc78589c)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://theverge.com/headphone-review/777798/airpods-pro-3-review-active-noise-cancelling-live-translation-headphones)
 
-**🥉 [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
+**🥉 [AirPods Pro 3: A Significant Update to Apple's Best Earbuds](https://refetch.io/threads/68c805490033452d7e31)**
+📊 Votes: **0** | ⏰ 1 hour ago | 🔗 [Original](https://www.engadget.com/audio/headphones/airpods-pro-3-review-a-significant-update-to-apples-best-earbuds-120028170.html)
 
-**⭐ [Apple's Latest Hardware Event: Key Announcements](https://refetch.io/threads/68c6f986000b403133ad)**
-📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/14/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
+**⭐ [MarqVision's $48M Funding to Combat Brand Abuse with AI](https://refetch.io/threads/68c8135f001839507ad5)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/15/harvard-law-to-ai-marqvision-lands-48m-to-combat-brand-abuse/)
 
-**⭐ [Demystifying J-Link RTT for ARM Semihosting](https://refetch.io/threads/68c769f1001e0c18651e)**
-📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://bogdanthegeek.github.io/blog/insights/jlink-rtt-for-the-masses/)
+**⭐ [Snap OS 2.0: A Step Towards Wearable AR Glasses](https://refetch.io/threads/68c81365001e87432461)**
+📊 Votes: **0** | ⏰ 36 minutes ago | 🔗 [Original](https://theverge.com/gadgets/777810/snap-os-2-spectacles-software-browser-spotlight-gallery)
 
 ---
 
-*Last updated: 2025-09-15T02:00:08.858Z*
+*Last updated: 2025-09-15T14:00:26.495Z*
 
 
 
