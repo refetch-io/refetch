@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Sunday, September 14, 2025)
+## 🔥 Top Posts Today (Monday, September 15, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Are We in an AI Bubble? OpenAI Board Chair Weighs In](https://refetch.io/threads/68c71d15002a75063223)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://techcrunch.com/2025/09/14/openai-board-chair-bret-taylor-says-were-in-an-ai-bubble-but-thats-okay/)
+**🥇 [Gentoo's Approach to AI Policy](https://refetch.io/threads/68c770ee001969d06fcd)**
+📊 Votes: **0** | ⏰ 9 minutes ago | 🔗 [Original](https://wiki.gentoo.org/wiki/Project:Council/AI_policy)
 
-**🥈 [The Future of Apple Post-iPhone 17: What's Next?](https://refetch.io/threads/68c71d1c000b3c2b4f00)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://theverge.com/apple-rumors/777791/whats-next-for-apple-iphone-17-m5-ipad-pro)
+**🥈 [Analyzing AMD Turin PSP Binaries from an Open-Source Firmware Perspective](https://refetch.io/threads/68c769f2001667286ec9)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://blog.3mdeb.com/2025/2025-09-11-gigabyte-mz33-ar1-blob-analysis/)
 
-**🥉 [Revolutionizing Vision Correction: Eye Drops to Replace Glasses?](https://refetch.io/threads/68c71d37003e174b7a7a)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://www.theguardian.com/society/2025/sep/14/eye-drops-could-replace-glasses-surgery-longsighted-study)
+**🥉 [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
+📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
 
-**⭐ [A Single Black Hole Challenging Theories of the Cosmos](https://refetch.io/threads/68c66d150019680f7fce)**
-📊 Votes: **0** | ⏰ 12 hours ago | 🔗 [Original](https://www.quantamagazine.org/a-single-naked-black-hole-rewrites-the-history-of-the-universe-20250912/)
+**⭐ [Apple's Latest Hardware Event: Key Announcements](https://refetch.io/threads/68c6f986000b403133ad)**
+📊 Votes: **0** | ⏰ 8 hours ago | 🔗 [Original](https://techcrunch.com/2025/09/14/iphone-17-iphone-air-airpods-pro-3-and-everything-else-announced-at-apples-hardware-event/)
 
-**⭐ [Tiny Magnetic Spirals: A New Era for Spintronics](https://refetch.io/threads/68c6c863001dfa899e92)**
-📊 Votes: **0** | ⏰ 6 hours ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250913232933.htm)
+**⭐ [Demystifying J-Link RTT for ARM Semihosting](https://refetch.io/threads/68c769f1001e0c18651e)**
+📊 Votes: **0** | ⏰ 39 minutes ago | 🔗 [Original](https://bogdanthegeek.github.io/blog/insights/jlink-rtt-for-the-masses/)
 
 ---
 
-*Last updated: 2025-09-14T20:00:42.422Z*
+*Last updated: 2025-09-15T02:00:08.858Z*
 
 
 
