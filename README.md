@@ -22,30 +22,30 @@
 
 <div align="center">
 
-## 🔥 Top Posts Today (Monday, September 15, 2025)
+## 🔥 Top Posts Today (Tuesday, September 16, 2025)
 
 *Auto-updated with the highest-scoring community content*
 
 </div>
 
-**🥇 [Daffodil: An Open-Source Ecommerce Framework for Any Platform](https://refetch.io/threads/68c836a3002a93ba1e31)**
-📊 Votes: **0** | ⏰ 6 minutes ago | 🔗 [Original](https://github.com/graycoreio/daffodil)
+**🥇 [Unraveling the Mystery of 'Leopard Spots' on Mars: A New Hint of Life?](https://refetch.io/threads/68c917670014c1882305)**
+📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250916032210.htm)
 
-**🥈 [HPE Surpasses $9 Billion Quarterly Revenue after a Seven-Year Gap](https://refetch.io/threads/68c836b0001f997edfd3)**
-📊 Votes: **0** | ⏰ 5 minutes ago | 🔗 [Original](https://blocksandfiles.com/2025/09/15/hpe-finally-breaks-past-9-billion-quarter-barrier-after-7-year-hiatus/)
+**🥈 [Condor Technology's 'Cuzco' RISC-V CPU to Revolutionize Datacenters](https://refetch.io/threads/68c852bb002bd3d604f5)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/09/15/condor-technology-to-fly-cuzco-risc-v-cpu-into-the-datacenter/)
 
-**🥉 [AirPods Pro 3 Review: A Deep Dive into Noise Cancellation and Live Translatio...](https://refetch.io/threads/68c80538001cbc78589c)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://theverge.com/headphone-review/777798/airpods-pro-3-review-active-noise-cancelling-live-translation-headphones)
+**🥉 [AOMedia's Next-Gen Video Codec AV2 Set for Year-End Launch](https://refetch.io/threads/68c860fe0018b7b0180e)**
+📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://aomedia.org/press%20releases/AOMedia-Announces-Year-End-Launch-of-Next-Generation-Video-Codec-AV2-on-10th-Anniversary/)
 
-**⭐ [AirPods Pro 3: A Significant Update to Apple's Best Earbuds](https://refetch.io/threads/68c805490033452d7e31)**
-📊 Votes: **0** | ⏰ 3 hours ago | 🔗 [Original](https://www.engadget.com/audio/headphones/airpods-pro-3-review-a-significant-update-to-apples-best-earbuds-120028170.html)
+**⭐ [Active NPM Supply Chain Attack: Tinycolor and 40 Packages Compromised](https://refetch.io/threads/68c8ae020039b1701666)**
+📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages)
 
-**⭐ [Samsung's 2TB 990 Evo Plus SSD: A Limited-Time Deal](https://refetch.io/threads/68c82fa400242611fcfb)**
-📊 Votes: **0** | ⏰ 35 minutes ago | 🔗 [Original](https://theverge.com/tech/778029/samsung-2tb-ssd-pcssd-fire-tv-4k-deal-sale)
+**⭐ [In-Depth Review: macOS 26 Tahoe](https://refetch.io/threads/68c84c5a0009ff3aa8eb)**
+📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/macos-26-tahoe-the-ars-technica-review/)
 
 ---
 
-*Last updated: 2025-09-15T16:00:20.280Z*
+*Last updated: 2025-09-16T08:00:21.416Z*
 
 
 
