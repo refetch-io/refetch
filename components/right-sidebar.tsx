@@ -113,10 +113,10 @@ function ChartCard() {
         fetchChartData("30d"),
         fetchChartData("1y")
       ])
-      
-      setChartData24h(data24h)
-      setChartData30d(data30d)
-      setChartData1y(data1y)
+
+      setChartData24h(Array.isArray(data24h) ? data24h : [])
+      setChartData30d(Array.isArray(data30d) ? data30d : [])
+      setChartData1y(Array.isArray(data1y) ? data1y : [])
       setError(null)
     } catch (err) {
       console.error('Failed to fetch chart data:', err)
@@ -133,22 +133,27 @@ function ChartCard() {
 
   // Transform data for chart display based on selected tab
   const transformedChartData = useMemo(() => {
+    const data =
+      selectedTab === "24h"
+        ? chartData24h
+        : selectedTab === "30d"
+          ? chartData30d
+          : selectedTab === "1y"
+            ? chartData1y
+            : null
+    if (!Array.isArray(data)) return []
+
     if (selectedTab === "24h") {
-      const data = chartData24h
-      
-      // Just return the data as-is, let the chart handle the labels
       return data.map((d: any) => ({
         hour: d.hour !== undefined ? d.hour : parseInt(d.date?.split(':')[0]) || 0,
         visitors: d.visitors
       }))
     } else if (selectedTab === "30d") {
-      const data = chartData30d
       return data.map((d: any) => ({
         day: d.day !== undefined ? d.day : parseInt(d.date) || 0,
         visitors: d.visitors
       }))
     } else if (selectedTab === "1y") {
-      const data = chartData1y
       return data.map((d: any) => ({
         month: d.month,
         visitors: d.visitors
@@ -159,15 +164,18 @@ function ChartCard() {
 
   // Calculate total visitors for each time period using the actual data
   const totalVisitors24h = useMemo(() => {
-    return chartData24h.reduce((sum, d) => sum + d.visitors, 0)
+    if (!Array.isArray(chartData24h)) return 0
+    return chartData24h.reduce((sum, d) => sum + (d?.visitors ?? 0), 0)
   }, [chartData24h])
 
   const totalVisitors30d = useMemo(() => {
-    return chartData30d.reduce((sum, d) => sum + d.visitors, 0)
+    if (!Array.isArray(chartData30d)) return 0
+    return chartData30d.reduce((sum, d) => sum + (d?.visitors ?? 0), 0)
   }, [chartData30d])
 
   const totalVisitors1y = useMemo(() => {
-    return chartData1y.reduce((sum, d) => sum + d.visitors, 0)
+    if (!Array.isArray(chartData1y)) return 0
+    return chartData1y.reduce((sum, d) => sum + (d?.visitors ?? 0), 0)
   }, [chartData1y])
 
   // Format visitor count for display
