@@ -26,7 +26,7 @@
  * Total Weight: 100% (1.0)
  */
 
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, TablesDB, Query } from 'node-appwrite';
 
 // ============================================================================
 // CONFIGURATION
@@ -89,7 +89,7 @@ export default async function ({ req, res, log, error }) {
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || '');
     
-    const databases = new Databases(client);
+    const tablesDB = new TablesDB(client);
     
     // Database and collection IDs
     const DATABASE_ID = process.env.APPWRITE_DATABASE_ID || '';
@@ -208,13 +208,13 @@ async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
         queries.push(Query.cursorAfter(cursor));
       }
       
-      postsResponse = await databases.listDocuments(
+      postsResponse = await tablesDB.listRows(
         databaseId,
         collectionId,
         queries
       );
       
-      posts = postsResponse.documents;
+      posts = postsResponse.rows;
       allPosts.push(...posts);
       totalFetched += posts.length;
       
@@ -340,7 +340,7 @@ async function calculateDiversityScores(databases, databaseId, collectionId, log
     log('🌐 Calculating diversity scores for top 100 articles...');
     
     // Fetch top 100 articles by current score
-    const topPosts = await databases.listDocuments(
+    const topPosts = await tablesDB.listRows(
       databaseId,
       collectionId,
       [
@@ -354,7 +354,7 @@ async function calculateDiversityScores(databases, databaseId, collectionId, log
     const diversityScores = new Map(); // post ID -> diversity score
     
     // Group posts by domain
-    topPosts.documents.forEach(post => {
+    topPosts.rows.forEach(post => {
       if (post.link) {
         try {
           const domain = new URL(post.link).hostname;
@@ -506,11 +506,11 @@ async function processPostsInBatches(posts, databases, databaseId, collectionId,
       
       // Update batch using Appwrite's bulk operations
       // Use individual document updates for reliability
-      // Process each document update individually using updateDocument
+      // Process each row update individually using updateRow
       let successfulUpdates = 0;
       for (const update of batchUpdates) {
         try {
-          await databases.updateDocument(
+          await tablesDB.updateRow(
             databaseId,
             collectionId,
             update.$id,

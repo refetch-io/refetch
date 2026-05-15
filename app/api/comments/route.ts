@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, ID, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, ID, Query } from 'node-appwrite'
 
 // Initialize Appwrite clients for server-side operations
 // First client for API key operations (database operations)
@@ -13,7 +13,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 // Database and collection IDs
@@ -34,7 +34,7 @@ async function checkUserCommentLimit(userId: string): Promise<{ allowed: boolean
     const oneHourAgo = new Date(Date.now() - (COMMENT_WINDOW_HOURS * 60 * 60 * 1000))
     
     // Query for comments created by this user in the last hour
-    const recentComments = await databases.listDocuments(
+    const recentComments = await tablesDB.listRows(
       DATABASE_ID,
       COMMENTS_COLLECTION_ID,
       [
@@ -44,7 +44,7 @@ async function checkUserCommentLimit(userId: string): Promise<{ allowed: boolean
       ]
     )
     
-    const commentCount = recentComments.documents.length
+    const commentCount = recentComments.rows.length
     const allowed = commentCount < MAX_COMMENTS_PER_HOUR
     
     return {
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch all comments for the specific post (up to 500 comments)
-    const comments = await databases.listDocuments(
+    const comments = await tablesDB.listRows(
       DATABASE_ID,
       COMMENTS_COLLECTION_ID,
       [
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
     )
 
     // Transform the comments to match the Comment interface
-    const flatComments = comments.documents.map(doc => ({
+    const flatComments = comments.rows.map(doc => ({
       id: doc.$id,
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 4: Create the comment in the database using the server-side client
-    const comment = await databases.createDocument(
+    const comment = await tablesDB.createRow(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_COMMENTS_COLLECTION_ID!,
       ID.unique(),
@@ -237,7 +237,7 @@ export async function POST(request: NextRequest) {
 
     // Atomically increase the comment count on the post
     try {
-      await databases.incrementDocumentAttribute(
+      await tablesDB.incrementRowColumn(
         process.env.APPWRITE_DATABASE_ID!,
         process.env.APPWRITE_POSTS_COLLECTION_ID!,
         postId,

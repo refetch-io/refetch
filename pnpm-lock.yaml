@@ -99,8 +99,8 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5
       appwrite:
-        specifier: ^18.2.0
-        version: 18.2.0
+        specifier: ^25.0.0
+        version: 25.0.0
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.21(postcss@8.5.6)
@@ -141,8 +141,8 @@ importers:
         specifier: ^0.4.4
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       node-appwrite:
-        specifier: ^17.2.0
-        version: 17.2.0
+        specifier: ^24.1.0
+        version: 24.1.0
       openai:
         specifier: ^5.12.2
         version: 5.12.2(ws@8.18.3)(zod@3.25.76)
@@ -1469,8 +1469,9 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  appwrite@18.2.0:
-    resolution: {integrity: sha512-g7pQpsxqR7+amEIaQLXMN4XzdQKenTHnGdA4s7UUJdZufhlHdJby8895h8z893+S0XipeHZhi0wpxYA2An95Rg==}
+  appwrite@25.0.0:
+    resolution: {integrity: sha512-ZoNhS02x4Bfcur8MQCnZvskrSciSKwKlL+FZOmGtLr6g+1FyEyZufEgOaynStOsqHSlmyUywvluWYH5eLda9Pw==}
+    engines: {node: '>=18.0.0'}
 
   arg@5.0.2:
     resolution: {integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==}
@@ -1550,6 +1551,9 @@ packages:
   base64-js@0.0.8:
     resolution: {integrity: sha512-3XSA2cR/h/73EzlXXdU6YNycmYI7+kicTxks4eJg2g39biHR84slg2+des+p7iHYhbRg/udIS4TD53WabcOUkw==}
     engines: {node: '>= 0.4'}
+
+  bignumber.js@9.3.1:
+    resolution: {integrity: sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -2362,6 +2366,9 @@ packages:
       canvas:
         optional: true
 
+  json-bigint@1.0.0:
+    resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
+
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
 
@@ -2497,8 +2504,8 @@ packages:
       sass:
         optional: true
 
-  node-appwrite@17.2.0:
-    resolution: {integrity: sha512-naYUsVZEdF6YKF/q/s0DBQkAHJj2RhEWwmcXrkbfAAPc3Bn+D3CCftBqyNWeo17JBCoYWqQEgT2Od9xOVQR26A==}
+  node-appwrite@24.1.0:
+    resolution: {integrity: sha512-Kv3ftw2C3Hue2QBjqsqsPG9SOuTh+Dz3WJ4xnuVNl/KiE314eIIeJj5TgKXiCUbXBEeJkz51xsFzxkMBdY/tqg==}
 
   node-fetch-native-with-agent@1.7.2:
     resolution: {integrity: sha512-5MaOOCuJEvcckoz7/tjdx1M6OusOY6Xc5f459IaruGStWnKzlI1qpNgaAwmn4LmFYcsSlj+jBMk84wmmRxfk5g==}
@@ -4474,7 +4481,9 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  appwrite@18.2.0: {}
+  appwrite@25.0.0:
+    dependencies:
+      json-bigint: 1.0.0
 
   arg@5.0.2: {}
 
@@ -4578,6 +4587,8 @@ snapshots:
   balanced-match@1.0.2: {}
 
   base64-js@0.0.8: {}
+
+  bignumber.js@9.3.1: {}
 
   binary-extensions@2.3.0: {}
 
@@ -5558,6 +5569,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  json-bigint@1.0.0:
+    dependencies:
+      bignumber.js: 9.3.1
+
   json-buffer@3.0.1: {}
 
   json-schema-traverse@0.4.1: {}
@@ -5682,8 +5697,9 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  node-appwrite@17.2.0:
+  node-appwrite@24.1.0:
     dependencies:
+      json-bigint: 1.0.0
       node-fetch-native-with-agent: 1.7.2
 
   node-fetch-native-with-agent@1.7.2: {}

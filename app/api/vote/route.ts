@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, ID, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, ID, Query } from 'node-appwrite'
 import type { VoteRequest } from '@/lib/types'
 
 // Initialize Appwrite clients for server-side operations
@@ -14,7 +14,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 // Database and collection IDs
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user has already voted on this resource
-    const existingVote = await databases.listDocuments(
+    const existingVote = await tablesDB.listRows(
       DATABASE_ID,
       VOTES_COLLECTION_ID,
       [
@@ -95,44 +95,44 @@ export async function POST(request: Request) {
     )
 
     console.log(`Vote check for user ${user.$id} on ${resourceType} ${resourceId}:`, {
-      existingVotes: existingVote.documents.length,
+      existingVotes: existingVote.rows.length,
       requestedVoteType: voteType,
-      existingVoteType: existingVote.documents.length > 0 ? (existingVote.documents[0].count === 1 ? 'up' : 'down') : 'none'
+      existingVoteType: existingVote.rows.length > 0 ? (existingVote.rows[0].count === 1 ? 'up' : 'down') : 'none'
     })
 
     // Get the current resource to see existing counts
     const collectionId = resourceType === 'post' ? POSTS_COLLECTION_ID : COMMENTS_COLLECTION_ID
-    const resource = await databases.getDocument(DATABASE_ID, collectionId, resourceId)
+    const resource = await tablesDB.getRow(DATABASE_ID, collectionId, resourceId)
     
     let newScore = resource.count || 0
     let newCountUp = resource.countUp || 0
     let newCountDown = resource.countDown || 0
 
-    if (existingVote.documents.length > 0) {
+    if (existingVote.rows.length > 0) {
       // User has an existing vote
-      const existingVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+      const existingVoteType = existingVote.rows[0].count === 1 ? 'up' : 'down'
       
       if (existingVoteType === voteType) {
         // Same vote type clicked again - REMOVE the vote
         console.log(`Removing ${existingVoteType} vote for ${resourceType} ${resourceId}`)
         
         // Delete the vote document
-        await databases.deleteDocument(
+        await tablesDB.deleteRow(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
-          existingVote.documents[0].$id
+          existingVote.rows[0].$id
         )
         
         // Update counters using atomic operations
         if (existingVoteType === 'up') {
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'count',
             1
           )
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
@@ -140,14 +140,14 @@ export async function POST(request: Request) {
             1
           )
         } else {
-          await databases.incrementDocumentAttribute(
+          await tablesDB.incrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'count',
             1
           )
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
@@ -161,10 +161,10 @@ export async function POST(request: Request) {
         console.log(`Changing vote from ${existingVoteType} to ${voteType} for ${resourceType} ${resourceId}`)
         
         // Update the vote document
-        await databases.updateDocument(
+        await tablesDB.updateRow(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
-          existingVote.documents[0].$id,
+          existingVote.rows[0].$id,
           {
             count: voteType === 'up' ? 1 : -1
           }
@@ -173,21 +173,21 @@ export async function POST(request: Request) {
         // Update counters using atomic operations
         if (existingVoteType === 'up' && voteType === 'down') {
           // From up to down: -1 for up, +1 for down, total change = -2
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'count',
             2
           )
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'countUp',
             1
           )
-          await databases.incrementDocumentAttribute(
+          await tablesDB.incrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
@@ -196,21 +196,21 @@ export async function POST(request: Request) {
           )
         } else {
           // From down to up: +1 for down, +1 for up, total change = +2
-          await databases.incrementDocumentAttribute(
+          await tablesDB.incrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'count',
             2
           )
-          await databases.decrementDocumentAttribute(
+          await tablesDB.decrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
             'countDown',
             1
           )
-          await databases.incrementDocumentAttribute(
+          await tablesDB.incrementRowColumn(
             DATABASE_ID,
             collectionId,
             resourceId,
@@ -226,7 +226,7 @@ export async function POST(request: Request) {
       
       // Create the vote document
       const { ID } = await import('node-appwrite')
-      await databases.createDocument(
+      await tablesDB.createRow(
         DATABASE_ID,
         VOTES_COLLECTION_ID,
         ID.unique(),
@@ -240,14 +240,14 @@ export async function POST(request: Request) {
       
       // Update counters using atomic operations
       if (voteType === 'up') {
-        await databases.incrementDocumentAttribute(
+        await tablesDB.incrementRowColumn(
           DATABASE_ID,
           collectionId,
           resourceId,
           'count',
           1
         )
-        await databases.incrementDocumentAttribute(
+        await tablesDB.incrementRowColumn(
           DATABASE_ID,
           collectionId,
           resourceId,
@@ -255,14 +255,14 @@ export async function POST(request: Request) {
           1
         )
       } else {
-        await databases.decrementDocumentAttribute(
+        await tablesDB.decrementRowColumn(
           DATABASE_ID,
           collectionId,
           resourceId,
           'count',
           1
         )
-        await databases.incrementDocumentAttribute(
+        await tablesDB.incrementRowColumn(
           DATABASE_ID,
           collectionId,
           resourceId,
@@ -274,7 +274,7 @@ export async function POST(request: Request) {
 
     // Get the final resource state to verify counters
     try {
-      const finalResource = await databases.getDocument(DATABASE_ID, collectionId, resourceId)
+      const finalResource = await tablesDB.getRow(DATABASE_ID, collectionId, resourceId)
       console.log(`Final state for ${resourceType} ${resourceId}:`, {
         score: finalResource.count,
         countUp: finalResource.countUp,
@@ -288,8 +288,8 @@ export async function POST(request: Request) {
     let operationType = 'created'
     let finalVoteType = voteType
     
-    if (existingVote.documents.length > 0) {
-      const existingVoteType = existingVote.documents[0].count === 1 ? 'up' : 'down'
+    if (existingVote.rows.length > 0) {
+      const existingVoteType = existingVote.rows[0].count === 1 ? 'up' : 'down'
       if (existingVoteType === voteType) {
         operationType = 'removed'
         finalVoteType = null

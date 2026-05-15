@@ -352,7 +352,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     // Environment variables validated
     
@@ -361,7 +361,7 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     let queries = []
     
@@ -413,13 +413,13 @@ export async function fetchPostsFromAppwriteWithSort(sortType: 'score' | 'new' |
       '$updatedAt'
     ]))
     
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
-    const appwritePosts = posts.documents.map((post: any) => ({
+    const appwritePosts = posts.rows.map((post: any) => ({
       $id: post.$id,
       title: post.title,
       description: post.description,
@@ -476,16 +476,16 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
-    const comments = await databases.listDocuments(
+    const comments = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
       [
@@ -506,7 +506,7 @@ export async function fetchCommentsForPost(postId: string): Promise<Comment[]> {
     )
 
     // Transform the comments to match the Comment interface
-    const flatComments = comments.documents.map(doc => ({
+    const flatComments = comments.rows.map(doc => ({
       id: doc.$id,
       author: doc.userName || 'Anonymous',
       text: doc.content || '',
@@ -577,16 +577,16 @@ export async function fetchPostById(id: string): Promise<NewsItem | null> {
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
-    const post = await databases.getDocument(
+    const post = await tablesDB.getRow(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       id
@@ -626,16 +626,16 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
@@ -662,7 +662,7 @@ export async function fetchUserSubmissionsFromAppwrite(userId: string): Promise<
       ]
     )
 
-    const appwritePosts = posts.documents.map((post: any, index: number) => 
+    const appwritePosts = posts.rows.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post as AppwritePost, index)
     )
 
@@ -688,14 +688,14 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     // Create a map of postId -> vote type
     const voteMap = new Map<string, 'up' | 'down' | null>()
@@ -711,7 +711,7 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
 
     // Fetch all votes for the user in a single query instead of individual queries
     try {
-      const votes = await databases.listDocuments(
+      const votes = await tablesDB.listRows(
         process.env.APPWRITE_DATABASE_ID || '', // Database ID
         process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
         [
@@ -727,7 +727,7 @@ export async function fetchVotesForPosts(postIds: string[], userId: string): Pro
       )
 
       // Filter votes by the requested post IDs and set the vote types
-      votes.documents.forEach((vote: any) => {
+      votes.rows.forEach((vote: any) => {
         const postId = vote.resourceId
         if (postIds.includes(postId)) {
           const voteType = vote.count === 1 ? 'up' : 'down'
@@ -772,7 +772,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     // Environment variables validated
     
@@ -781,7 +781,7 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     let queries = []
     
@@ -837,13 +837,13 @@ export async function fetchPostsFromAppwriteWithSortAndVotes(
       '$updatedAt'
     ]))
     
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
-    const appwritePosts = posts.documents.map((post: any) => ({
+    const appwritePosts = posts.rows.map((post: any) => ({
       $id: post.$id,
       title: post.title,
       description: post.description,
@@ -905,16 +905,16 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       [
@@ -943,7 +943,7 @@ export async function fetchUserSubmissionsFromAppwriteWithVotes(
       ]
     )
 
-    const appwritePosts = posts.documents.map((post: any) => ({
+    const appwritePosts = posts.rows.map((post: any) => ({
       $id: post.$id,
       title: post.title,
       description: post.description,
@@ -1000,17 +1000,17 @@ export async function fetchCommentsForPostsBatchServer(postIds: string[]): Promi
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     // Fetch comments for all posts in a single query
-    const comments = await databases.listDocuments(
+    const comments = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
       [
@@ -1036,7 +1036,7 @@ export async function fetchCommentsForPostsBatchServer(postIds: string[]): Promi
     })
 
     // Transform and group the comments
-    comments.documents.forEach(doc => {
+    comments.rows.forEach(doc => {
       const postId = doc.postId
       if (commentsByPost[postId]) {
         const transformedComment = {
@@ -1127,14 +1127,14 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     // Create a map of postId -> vote type
     const voteMap = new Map<string, 'up' | 'down' | null>()
@@ -1150,7 +1150,7 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
 
     // Fetch all votes for the user in a single query instead of individual queries
     try {
-      const votes = await databases.listDocuments(
+      const votes = await tablesDB.listRows(
         process.env.APPWRITE_DATABASE_ID || '', // Database ID
         process.env.APPWRITE_VOTES_COLLECTION_ID || '', // Votes Collection ID
         [
@@ -1166,7 +1166,7 @@ export async function fetchVotesForPostsBatchServer(postIds: string[], userId: s
       )
 
       // Filter votes by the requested post IDs and set the vote types
-      votes.documents.forEach((vote: any) => {
+      votes.rows.forEach((vote: any) => {
         const postId = vote.resourceId
         if (postIds.includes(postId)) {
           const voteType = vote.count === 1 ? 'up' : 'down'
@@ -1206,7 +1206,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
   }
 
   try {
-    const { Client, Databases, Query } = await import('node-appwrite')
+    const { Client, TablesDB, Query } = await import('node-appwrite')
     
     // Environment variables validated
     
@@ -1215,7 +1215,7 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || 'dummy-api-key-replace-me')
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     
     let queries = []
     
@@ -1271,13 +1271,13 @@ export async function fetchPostsFromAppwriteWithCommentsAndVotes(
       '$updatedAt'
     ]))
     
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '', // Database ID
       process.env.APPWRITE_POSTS_COLLECTION_ID || '', // Collection ID
       queries
     )
 
-    const appwritePosts = posts.documents.map((post: any) => ({
+    const appwritePosts = posts.rows.map((post: any) => ({
       $id: post.$id,
       title: post.title,
       description: post.description,

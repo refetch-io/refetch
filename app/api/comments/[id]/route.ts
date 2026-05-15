@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account } from 'node-appwrite'
+import { Client, TablesDB, Account } from 'node-appwrite'
 
 // Initialize Appwrite clients for server-side operations
 const apiKeyClient = new Client()
@@ -11,7 +11,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 // Database and collection IDs
@@ -21,10 +21,10 @@ const POSTS_COLLECTION_ID = process.env.APPWRITE_POSTS_COLLECTION_ID || ''
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const commentId = params.id
+    const { id: commentId } = await params
 
     if (!commentId) {
       return NextResponse.json(
@@ -66,7 +66,7 @@ export async function DELETE(
     // Get the comment to check ownership and get postId
     let comment
     try {
-      comment = await databases.getDocument(
+      comment = await tablesDB.getRow(
         DATABASE_ID,
         COMMENTS_COLLECTION_ID,
         commentId
@@ -88,7 +88,7 @@ export async function DELETE(
 
     // Delete the comment
     try {
-      await databases.deleteDocument(
+      await tablesDB.deleteRow(
         DATABASE_ID,
         COMMENTS_COLLECTION_ID,
         commentId
@@ -103,13 +103,13 @@ export async function DELETE(
 
     // Decrease the comment count on the post
     try {
-      await databases.incrementDocumentAttribute(
+      await tablesDB.decrementRowColumn(
         DATABASE_ID,
         POSTS_COLLECTION_ID,
         comment.postId,
         'countComments',
-        -1, // decrement by 1
-        0 // minimum limit of 0
+        1,
+        0
       )
     } catch (updateError) {
       console.error('Error updating comment count for post:', comment.postId, updateError)

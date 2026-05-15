@@ -5,7 +5,7 @@
  * using the same system prompt as the post submission script, and updates them back to the database.
  */
 
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, TablesDB, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 
 // System prompt for AI content analysis
@@ -132,7 +132,7 @@ export default async function ({ req, res, log, error }) {
             .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
             .setKey(process.env.APPWRITE_API_KEY || '');
         
-        const databases = new Databases(client);
+        const tablesDB = new TablesDB(client);
         
         // Initialize OpenAI client
         const openai = new OpenAI({
@@ -150,7 +150,7 @@ export default async function ({ req, res, log, error }) {
         log('Fetching posts from Appwrite...');
         
         // Fetch only posts that haven't been enhanced yet
-        const postsResponse = await databases.listDocuments(
+        const postsResponse = await tablesDB.listRows(
             DATABASE_ID,
             COLLECTION_ID,
             [
@@ -159,7 +159,7 @@ export default async function ({ req, res, log, error }) {
             ]
         );
         
-        const posts = postsResponse.documents;
+        const posts = postsResponse.rows;
         log(`Found ${posts.length} posts to enhance`);
         
         let processedCount = 0;
@@ -261,7 +261,7 @@ export default async function ({ req, res, log, error }) {
                     log(`⚠️  LOW TECH RELEVANCY - Post ID: ${post.$id}, Title: "${post.title}", Relevancy Score: ${metadata.relevancyScore}`);
                 }
                 
-                await databases.updateDocument(
+                await tablesDB.updateRow(
                     DATABASE_ID,
                     COLLECTION_ID,
                     post.$id,

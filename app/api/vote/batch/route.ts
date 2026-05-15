@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, Query } from 'node-appwrite'
 
 // Initialize Appwrite clients for server-side operations
 const apiKeyClient = new Client()
@@ -11,7 +11,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 // Environment variables
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       // Fetch all votes for posts and comments in parallel
       const [postVotesResult, commentVotesResult] = await Promise.all([
         // Fetch post votes
-        postIds.length > 0 ? databases.listDocuments(
+        postIds.length > 0 ? tablesDB.listRows(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
           [
@@ -96,11 +96,11 @@ export async function POST(request: NextRequest) {
           ]
         ).catch(error => {
           console.error('Error fetching post votes:', error)
-          return { documents: [] }
-        }) : Promise.resolve({ documents: [] }),
+          return { rows: [] }
+        }) : Promise.resolve({ rows: [] }),
         
         // Fetch comment votes
-        commentIds.length > 0 ? databases.listDocuments(
+        commentIds.length > 0 ? tablesDB.listRows(
           DATABASE_ID,
           VOTES_COLLECTION_ID,
           [
@@ -110,14 +110,14 @@ export async function POST(request: NextRequest) {
           ]
         ).catch(error => {
           console.error('Error fetching comment votes:', error)
-          return { documents: [] }
-        }) : Promise.resolve({ documents: [] })
+          return { rows: [] }
+        }) : Promise.resolve({ rows: [] })
       ])
       
       // Update vote map with post votes
-      if (postVotesResult.documents.length > 0) {
-        console.log(`🔍 Found ${postVotesResult.documents.length} post votes`)
-        postVotesResult.documents.forEach((vote: any) => {
+      if (postVotesResult.rows.length > 0) {
+        console.log(`🔍 Found ${postVotesResult.rows.length} post votes`)
+        postVotesResult.rows.forEach((vote: any) => {
           const voteType = vote.count === 1 ? 'up' : 'down'
           voteMap[vote.resourceId].currentVote = voteType
           console.log(`✅ Set post vote for ${vote.resourceId}: ${voteType}`)
@@ -125,9 +125,9 @@ export async function POST(request: NextRequest) {
       }
       
       // Update vote map with comment votes
-      if (commentVotesResult.documents.length > 0) {
-        console.log(`🔍 Found ${commentVotesResult.documents.length} comment votes`)
-        commentVotesResult.documents.forEach((vote: any) => {
+      if (commentVotesResult.rows.length > 0) {
+        console.log(`🔍 Found ${commentVotesResult.rows.length} comment votes`)
+        commentVotesResult.rows.forEach((vote: any) => {
           const voteType = vote.count === 1 ? 'up' : 'down'
           voteMap[vote.resourceId].currentVote = voteType
           console.log(`✅ Set comment vote for ${vote.resourceId}: ${voteType}`)
@@ -147,16 +147,16 @@ export async function POST(request: NextRequest) {
       // Fetch all posts in a single query
       if (postIds.length > 0) {
         try {
-          const posts = await databases.listDocuments(
+          const posts = await tablesDB.listRows(
             DATABASE_ID,
             POSTS_COLLECTION_ID,
             [Query.equal('$id', postIds)]
           )
           
-          console.log('📊 Fetched posts:', posts.documents.length)
+          console.log('📊 Fetched posts:', posts.rows.length)
           
           // Update vote map with post data
-          posts.documents.forEach((post: any) => {
+          posts.rows.forEach((post: any) => {
             voteMap[post.$id].countUp = post.countUp || 0
             voteMap[post.$id].countDown = post.countDown || 0
             voteMap[post.$id].count = post.count || 0
@@ -169,16 +169,16 @@ export async function POST(request: NextRequest) {
       // Fetch all comments in a single query
       if (commentIds.length > 0) {
         try {
-          const comments = await databases.listDocuments(
+          const comments = await tablesDB.listRows(
             DATABASE_ID,
             COMMENTS_COLLECTION_ID,
             [Query.equal('$id', commentIds)]
           )
           
-          console.log('📊 Fetched comments:', comments.documents.length)
+          console.log('📊 Fetched comments:', comments.rows.length)
           
           // Update vote map with comment data
-          comments.documents.forEach((comment: any) => {
+          comments.rows.forEach((comment: any) => {
             voteMap[comment.$id].countUp = comment.countUp || 0
             voteMap[comment.$id].countDown = comment.countDown || 0
             voteMap[comment.$id].count = comment.count || 0

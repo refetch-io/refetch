@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, Query } from 'node-appwrite'
 import { fetchVotesForPosts, convertAppwritePostToNewsItem } from '@/lib/data'
 
 // Initialize Appwrite clients for server-side operations
@@ -12,7 +12,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 export async function GET(request: NextRequest) {
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch posts by the current user with pagination (no time limit)
-    const posts = await databases.listDocuments(
+    const posts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     )
 
     // Convert posts to NewsItem format and add vote information
-    const appwritePosts = posts.documents.map((post: any, index: number) => 
+    const appwritePosts = posts.rows.map((post: any, index: number) => 
       convertAppwritePostToNewsItem(post, index)
     )
 

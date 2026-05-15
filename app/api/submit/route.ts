@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, Users, ID, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, Users, ID, Query } from 'node-appwrite'
 import { cleanUrl } from '@/lib/utils'
 
 // Initialize Appwrite clients for server-side operations
@@ -14,7 +14,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 const users = new Users(apiKeyClient)
 
@@ -34,7 +34,7 @@ async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: bool
     const sixteenHoursAgo = new Date(Date.now() - (SUBMISSION_WINDOW_HOURS * 60 * 60 * 1000))
     
     // Query for posts created by this user in the last 16 hours
-    const recentPosts = await databases.listDocuments(
+    const recentPosts = await tablesDB.listRows(
       DATABASE_ID,
       COLLECTION_ID,
       [
@@ -43,7 +43,7 @@ async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: bool
       ]
     )
     
-    const submissionCount = recentPosts.documents.length
+    const submissionCount = recentPosts.rows.length
     const allowed = submissionCount < MAX_SUBMISSIONS_PER_16_HOURS
     
     return {
@@ -62,12 +62,12 @@ async function checkUserSubmissionLimit(userId: string): Promise<{ allowed: bool
 async function checkDuplicateUrl(url: string): Promise<boolean> {
   try {
     const cleanUrlString = cleanUrl(url)
-    const existingPosts = await databases.listDocuments(
+    const existingPosts = await tablesDB.listRows(
       DATABASE_ID,
       COLLECTION_ID,
       [Query.equal('link', cleanUrlString)]
     )
-    return existingPosts.documents.length > 0
+    return existingPosts.rows.length > 0
   } catch (error) {
     console.error('Error checking for duplicate URL:', error)
     return false
@@ -90,7 +90,7 @@ async function createDescriptionComment(postId: string, userId: string, userName
     }
 
     // Create the comment
-    const comment = await databases.createDocument(
+    const comment = await tablesDB.createRow(
       DATABASE_ID,
       COMMENTS_COLLECTION_ID,
       ID.unique(),
@@ -239,7 +239,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the document in Appwrite using the server-side client
-    const createdDocument = await databases.createDocument(
+    const createdDocument = await tablesDB.createRow(
       DATABASE_ID,
       COLLECTION_ID,
       ID.unique(),
@@ -258,7 +258,7 @@ export async function POST(request: NextRequest) {
         
         if (commentId) {
           // Update the post with the comment count
-          await databases.updateDocument(
+          await tablesDB.updateRow(
             DATABASE_ID,
             COLLECTION_ID,
             createdDocument.$id,

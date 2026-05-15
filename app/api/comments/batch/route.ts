@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Query } from 'node-appwrite'
+import { Client, TablesDB, Query } from 'node-appwrite'
 
 // Initialize Appwrite client for server-side operations
 const apiKeyClient = new Client()
@@ -7,7 +7,7 @@ const apiKeyClient = new Client()
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
   .setKey(process.env.APPWRITE_API_KEY || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 
 // Helper function to calculate time ago
 function getTimeAgo(createdAt: string): string {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch comments for all posts in a single query
-    const comments = await databases.listDocuments(
+    const comments = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_COMMENTS_COLLECTION_ID!,
       [
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Transform and group the comments
-    comments.documents.forEach(doc => {
+    comments.rows.forEach(doc => {
       const postId = doc.postId
       if (commentsByPost[postId]) {
         const transformedComment = {

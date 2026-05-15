@@ -5,7 +5,7 @@
  * analyzes them using AI, and adds the best ones to your refetch database.
  */
 
-import { Client, Databases, ID, Query } from 'node-appwrite';
+import { Client, TablesDB, ID, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
@@ -87,7 +87,7 @@ function initializeClients() {
       .setProject(projectId)
       .setKey(apiKey);
     
-    databases = new Databases(appwriteClient);
+    databases = new TablesDB(appwriteClient);
   }
   
   if (!openai) {
@@ -871,7 +871,7 @@ async function checkDuplicateUrlsBulk(urls) {
     
     // Use Appwrite's array query to find existing posts with matching links
     // This is much more efficient than fetching all documents
-    const existingPosts = await databases.listDocuments(
+    const existingPosts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [
@@ -881,7 +881,7 @@ async function checkDuplicateUrlsBulk(urls) {
     
     // Extract the duplicate URLs from the results
     const duplicateUrls = new Set(
-      existingPosts.documents.map(post => post.link)
+      existingPosts.rows.map(post => post.link)
     );
     
     console.log(`  ✅ Found ${duplicateUrls.size} duplicate URLs out of ${cleanUrls.length} total URLs`);
@@ -898,13 +898,13 @@ async function checkDuplicateUrlsBulk(urls) {
 async function checkDuplicateUrl(url) {
   try {
     const cleanUrlString = cleanUrl(url);
-    const existingPosts = await databases.listDocuments(
+    const existingPosts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       [Query.equal('link', cleanUrlString)]
     );
     
-    return existingPosts.documents.length > 0;
+    return existingPosts.rows.length > 0;
   } catch (error) {
     console.error(`❌ Duplicate check failed: ${error.message}`);
     return false;
@@ -936,7 +936,7 @@ async function addArticleToDatabase(article) {
     };
     
     // Create the document
-    const createdDocument = await databases.createDocument(
+    const createdDocument = await tablesDB.createRow(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
       ID.unique(),
@@ -946,7 +946,7 @@ async function addArticleToDatabase(article) {
     // Create the discussion starter comment
     if (article.discussionStarter && article.discussionStarter.trim().length > 0) {
       try {
-        const commentDocument = await databases.createDocument(
+        const commentDocument = await tablesDB.createRow(
           process.env.APPWRITE_DATABASE_ID || '',
           process.env.APPWRITE_COMMENTS_COLLECTION_ID || '',
           ID.unique(),
@@ -960,7 +960,7 @@ async function addArticleToDatabase(article) {
         );
         
         // Update the post with the comment count
-        await databases.updateDocument(
+        await tablesDB.updateRow(
           process.env.APPWRITE_DATABASE_ID || '',
           process.env.APPWRITE_POSTS_COLLECTION_ID || '',
           createdDocument.$id,

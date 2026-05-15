@@ -5,7 +5,7 @@
  */
 
 import crypto from 'crypto';
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, TablesDB, Query } from 'node-appwrite';
 
 const TOP_POSTS_LIMIT = 1000;
 const FULL_SCAN_BATCH = 500;
@@ -48,7 +48,7 @@ function normalizeTopicKey(raw) {
 }
 
 /**
- * @param {import('node-appwrite').Models.Document[]} documents
+ * @param {import('node-appwrite').Models.Row[]} documents
  * @returns {Map<string, { topicKey: string, topicLabel: string, totalScore: number, articleCount: number }>}
  */
 function aggregateTopicsFromPosts(documents) {
@@ -96,9 +96,9 @@ async function fetchTopDailyPosts(databases, databaseId, postsCollectionId, log)
     Query.limit(TOP_POSTS_LIMIT),
     Query.select(['$id', 'topics', 'score']),
   ];
-  const res = await databases.listDocuments(databaseId, postsCollectionId, queries);
-  log(`Fetched ${res.documents.length} posts for daily topic snapshot (limit ${TOP_POSTS_LIMIT})`);
-  return res.documents;
+  const res = await tablesDB.listRows(databaseId, postsCollectionId, queries);
+  log(`Fetched ${res.rows.length} posts for daily topic snapshot (limit ${TOP_POSTS_LIMIT})`);
+  return res.rows;
 }
 
 async function deleteDailyTopicsForDate(databases, databaseId, dailyCollectionId, date, log) {
@@ -111,14 +111,14 @@ async function deleteDailyTopicsForDate(databases, databaseId, dailyCollectionId
       Query.limit(LIST_PAGE),
     ];
     if (cursor) queries.push(Query.cursorAfter(cursor));
-    const res = await databases.listDocuments(databaseId, dailyCollectionId, queries);
-    if (!res.documents.length) break;
-    for (const doc of res.documents) {
-      await databases.deleteDocument(databaseId, dailyCollectionId, doc.$id);
+    const res = await tablesDB.listRows(databaseId, dailyCollectionId, queries);
+    if (!res.rows.length) break;
+    for (const doc of res.rows) {
+      await tablesDB.deleteRow(databaseId, dailyCollectionId, doc.$id);
       removed++;
     }
-    if (res.documents.length < LIST_PAGE) break;
-    cursor = res.documents[res.documents.length - 1].$id;
+    if (res.rows.length < LIST_PAGE) break;
+    cursor = res.rows[res.rows.length - 1].$id;
   }
   if (removed) log(`Removed ${removed} previous daily_topics rows for ${date}`);
 }
@@ -138,7 +138,7 @@ async function writeDailyTopics(
     await Promise.all(
       slice.map((row) => {
         const documentId = stableDocId(['daily_topic', date, row.topicKey]);
-        return databases.createDocument(databaseId, dailyCollectionId, documentId, {
+        return tablesDB.createRow(databaseId, dailyCollectionId, documentId, {
           date,
           topicKey: row.topicKey,
           topicLabel: row.topicLabel,
@@ -171,13 +171,13 @@ async function scanAllPostsForTopics(databases, databaseId, postsCollectionId, l
     if (cursor) queries.push(Query.cursorAfter(cursor));
     let res;
     try {
-      res = await databases.listDocuments(databaseId, postsCollectionId, queries);
+      res = await tablesDB.listRows(databaseId, postsCollectionId, queries);
     } catch (e) {
-      error(`Full-scan listDocuments failed: ${e.message}`);
+      error(`Full-scan listRows failed: ${e.message}`);
       throw e;
     }
-    if (!res.documents.length) break;
-    const batchMap = aggregateTopicsFromPosts(res.documents);
+    if (!res.rows.length) break;
+    const batchMap = aggregateTopicsFromPosts(res.rows);
     for (const [k, v] of batchMap) {
       const cur = map.get(k);
       if (!cur) map.set(k, { ...v });
@@ -186,9 +186,9 @@ async function scanAllPostsForTopics(databases, databaseId, postsCollectionId, l
         cur.articleCount += v.articleCount;
       }
     }
-    total += res.documents.length;
-    if (res.documents.length < FULL_SCAN_BATCH) break;
-    cursor = res.documents[res.documents.length - 1].$id;
+    total += res.rows.length;
+    if (res.rows.length < FULL_SCAN_BATCH) break;
+    cursor = res.rows[res.rows.length - 1].$id;
     await new Promise((r) => setTimeout(r, 40));
   }
   log(`All-time topic scan processed ${total} enhanced posts`);
@@ -218,13 +218,13 @@ async function upsertTopicDocuments(
           lastComputedAt: now,
         };
         try {
-          await databases.updateDocument(databaseId, topicsCollectionId, documentId, payload);
+          await tablesDB.updateRow(databaseId, topicsCollectionId, documentId, payload);
           return 'u';
         } catch (e) {
           const code = e?.code ?? e?.response?.status;
           const type = e?.type;
           if (code === 404 || type === 'document_not_found') {
-            await databases.createDocument(databaseId, topicsCollectionId, documentId, payload);
+            await tablesDB.createRow(databaseId, topicsCollectionId, documentId, payload);
             return 'c';
           }
           throw e;
@@ -260,7 +260,7 @@ export default async function ({ req, res, log, error }) {
     }
 
     const client = new Client().setEndpoint(endpoint).setProject(projectId).setKey(apiKey);
-    const databases = new Databases(client);
+    const tablesDB = new TablesDB(client);
 
     const utcDate = new Date().toISOString().slice(0, 10);
     log(`Topic stats run for UTC date ${utcDate}`);

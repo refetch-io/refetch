@@ -5,7 +5,7 @@
  * It fetches posts from Appwrite, formats them, and updates the GitHub repository using the GitHub API.
  */
 
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, TablesDB, Query } from 'node-appwrite';
 import { Octokit } from 'octokit';
 
 export default async function ({ req, res, log, error }) {
@@ -44,7 +44,7 @@ export default async function ({ req, res, log, error }) {
             .setProject(appwriteProjectId)
             .setKey(appwriteApiKey);
         
-        const databases = new Databases(client);
+        const tablesDB = new TablesDB(client);
         
         // Fetch top 5 posts from the last 16 hours by score field
         log('Fetching top 5 posts from the last 16 hours from Appwrite...');
@@ -55,7 +55,7 @@ export default async function ({ req, res, log, error }) {
         const sixteenHoursAgo = new Date(Date.now() - (16 * 60 * 60 * 1000));
         log(`Filtering posts created after: ${sixteenHoursAgo.toISOString()}`);
         
-        const postsResponse = await databases.listDocuments(
+        const postsResponse = await tablesDB.listRows(
             appwriteDatabaseId,
             appwritePostsCollectionId,
             [
@@ -66,7 +66,7 @@ export default async function ({ req, res, log, error }) {
             ]
         );
         
-        if (!postsResponse.documents || postsResponse.documents.length === 0) {
+        if (!postsResponse.rows || postsResponse.rows.length === 0) {
             log('No posts found, skipping README update');
             return res.json({
                 message: 'No posts found, README update skipped',
@@ -74,11 +74,11 @@ export default async function ({ req, res, log, error }) {
             });
         }
         
-        log(`Found ${postsResponse.documents.length} posts from the last 16 hours`);
+        log(`Found ${postsResponse.rows.length} posts from the last 16 hours`);
         
         // Log first post structure for debugging
-        if (postsResponse.documents.length > 0) {
-            const firstPost = postsResponse.documents[0];
+        if (postsResponse.rows.length > 0) {
+            const firstPost = postsResponse.rows[0];
             log(`Sample post structure: ${JSON.stringify({
                 title: firstPost.title,
                 link: firstPost.link,
@@ -89,7 +89,7 @@ export default async function ({ req, res, log, error }) {
         }
         
         // Format posts for README
-        const formattedPosts = formatPostsForReadme(postsResponse.documents, appBaseUrl);
+        const formattedPosts = formatPostsForReadme(postsResponse.rows, appBaseUrl);
         
         // Initialize GitHub client
         const octokit = new Octokit({
@@ -270,7 +270,7 @@ export default async function ({ req, res, log, error }) {
         
         return res.json({
             message: 'README updated successfully',
-            postsUpdated: postsResponse.documents.length,
+            postsUpdated: postsResponse.rows.length,
             commitSha: commitResponse.data.commit.sha,
             status: 'success'
         });

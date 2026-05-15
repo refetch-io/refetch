@@ -1,5 +1,5 @@
 /**
- * Refetch Appwrite bootstrap (collections, attributes, indexes, optional functions & buckets).
+ * Refetch Appwrite bootstrap (tables, columns, indexes, optional functions & buckets).
  *
  * Required (any one name per row is enough):
  *   API endpoint: APPWRITE_ENDPOINT, NEXT_PUBLIC_APPWRITE_ENDPOINT, or APPWRITE_SITE_API_ENDPOINT (Sites)
@@ -7,7 +7,8 @@
  *   APPWRITE_API_KEY
  *   APPWRITE_DATABASE_ID
  *
- * Collection IDs default to human-readable slugs; override with env to attach to an existing project:
+ * Table IDs default to human-readable slugs; override with env to attach to an existing project
+ * (env vars still use *_COLLECTION_ID for backward compatibility):
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
  *   APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID
  *
@@ -17,7 +18,7 @@
  *   APPWRITE_SETUP_DEPLOY_FUNCTIONS=1 — upload tar.gz deployments for functions that have none
  *   APPWRITE_SETUP_FORCE_DEPLOY=1 — create a new deployment even if one exists (implies DEPLOY)
  *
- * Index note: UTF-8 index byte limit (~767). Full-text on long string attributes uses lengths: [191, …].
+ * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
 import { execFileSync } from 'node:child_process';
@@ -29,12 +30,12 @@ import { fileURLToPath } from 'node:url';
 import {
   Client,
   Compression,
-  Databases,
   Functions,
   Permission,
   Role,
   Runtime,
   Storage,
+  TablesDB,
 } from 'node-appwrite';
 import { InputFile } from 'node-appwrite/file';
 
@@ -86,30 +87,30 @@ function undef(v) {
   return v === null || v === undefined ? undefined : v;
 }
 
-async function waitForAttribute(databases, databaseId, collectionId, key, timeoutMs = 120000) {
+async function waitForColumn(tablesDB, databaseId, tableId, key, timeoutMs = 120000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    const attr = await databases.getAttribute(databaseId, collectionId, key);
-    if (attr.status === 'available') return;
-    if (attr.status === 'failed') {
-      throw new Error(`Attribute "${key}" failed provisioning in ${collectionId}`);
+    const col = await tablesDB.getColumn(databaseId, tableId, key);
+    if (col.status === 'available') return;
+    if (col.status === 'failed') {
+      throw new Error(`Column "${key}" failed provisioning in ${tableId}`);
     }
     await sleep(400);
   }
-  throw new Error(`Timeout waiting for attribute "${key}" in ${collectionId}`);
+  throw new Error(`Timeout waiting for column "${key}" in ${tableId}`);
 }
 
-async function waitForIndex(databases, databaseId, collectionId, key, timeoutMs = 180000) {
+async function waitForIndex(tablesDB, databaseId, tableId, key, timeoutMs = 180000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    const idx = await databases.getIndex(databaseId, collectionId, key);
+    const idx = await tablesDB.getIndex(databaseId, tableId, key);
     if (idx.status === 'available') return;
     if (idx.status === 'failed') {
-      throw new Error(`Index "${key}" failed in ${collectionId}`);
+      throw new Error(`Index "${key}" failed in ${tableId}`);
     }
     await sleep(600);
   }
-  throw new Error(`Timeout waiting for index "${key}" in ${collectionId}`);
+  throw new Error(`Timeout waiting for index "${key}" in ${tableId}`);
 }
 
 function buildCollectionDefinitions() {
@@ -118,7 +119,7 @@ function buildCollectionDefinitions() {
       id: COLLECTION_IDS.posts,
       name: 'Posts',
       permissions: DEFAULT_PERMS,
-      documentSecurity: false,
+      rowSecurity: false,
       // Mirrors Appwrite console: title/userId/userName required; topics = string[] with 256 chars per element;
       // translations stored as JSON strings (see enhancement function).
       attributes: [
@@ -157,24 +158,24 @@ function buildCollectionDefinitions() {
         { key: 'relevancyScore', type: 'integer', required: false, array: false, default: null },
       ],
       indexes: [
-        { key: 'index_1', type: 'key', attributes: ['userId'], orders: ['ASC'] },
-        { key: 'index_2', type: 'key', attributes: ['enhanced'], orders: ['ASC'] },
-        { key: 'index_3', type: 'key', attributes: ['score'], orders: ['DESC'] },
+        { key: 'index_1', type: 'key', columns: ['userId'], orders: ['ASC'] },
+        { key: 'index_2', type: 'key', columns: ['enhanced'], orders: ['ASC'] },
+        { key: 'index_3', type: 'key', columns: ['score'], orders: ['DESC'] },
         {
           key: 'search',
           type: 'fulltext',
-          attributes: ['title', 'description'],
+          columns: ['title', 'description'],
           orders: undefined,
           lengths: [191, 191],
         },
-        { key: 'index_title', type: 'fulltext', attributes: ['title'], orders: undefined, lengths: [191] },
+        { key: 'index_title', type: 'fulltext', columns: ['title'], orders: undefined, lengths: [191] },
       ],
     },
     {
       id: COLLECTION_IDS.comments,
       name: 'Comments',
       permissions: DEFAULT_PERMS,
-      documentSecurity: false,
+      rowSecurity: false,
       attributes: [
         { key: 'postId', type: 'string', size: 512, required: true, array: false, default: null },
         { key: 'userId', type: 'string', size: 512, required: true, array: false, default: null },
@@ -187,16 +188,16 @@ function buildCollectionDefinitions() {
         { key: 'countDown', type: 'integer', required: false, array: false, default: null },
       ],
       indexes: [
-        { key: 'index_1', type: 'key', attributes: ['postId'], orders: ['ASC'] },
-        { key: 'index_2', type: 'key', attributes: ['userId'], orders: ['ASC'] },
-        { key: 'index_3', type: 'key', attributes: ['count'], orders: ['ASC'] },
+        { key: 'index_1', type: 'key', columns: ['postId'], orders: ['ASC'] },
+        { key: 'index_2', type: 'key', columns: ['userId'], orders: ['ASC'] },
+        { key: 'index_3', type: 'key', columns: ['count'], orders: ['ASC'] },
       ],
     },
     {
       id: COLLECTION_IDS.votes,
       name: 'Votes',
       permissions: DEFAULT_PERMS,
-      documentSecurity: false,
+      rowSecurity: false,
       attributes: [
         { key: 'count', type: 'integer', required: false, array: false, default: null },
         { key: 'resourceId', type: 'string', size: 512, required: true, array: false, default: null },
@@ -204,15 +205,15 @@ function buildCollectionDefinitions() {
         { key: 'resourceType', type: 'string', size: 512, required: true, array: false, default: null },
       ],
       indexes: [
-        { key: 'index_1', type: 'key', attributes: ['resourceId'], orders: ['ASC'] },
-        { key: 'index_2', type: 'key', attributes: ['userId'], orders: ['ASC'] },
+        { key: 'index_1', type: 'key', columns: ['resourceId'], orders: ['ASC'] },
+        { key: 'index_2', type: 'key', columns: ['userId'], orders: ['ASC'] },
       ],
     },
     {
       id: COLLECTION_IDS.daily_topics,
       name: 'Daily topics',
       permissions: STATS_PERMS,
-      documentSecurity: false,
+      rowSecurity: false,
       attributes: [
         { key: 'date', type: 'string', size: 32, required: true, array: false, default: null },
         { key: 'topicKey', type: 'string', size: 128, required: true, array: false, default: null },
@@ -223,15 +224,15 @@ function buildCollectionDefinitions() {
         { key: 'computedAt', type: 'datetime', required: true, array: false, default: null },
       ],
       indexes: [
-        { key: 'index_date', type: 'key', attributes: ['date'], orders: ['ASC'] },
-        { key: 'index_date_rank', type: 'key', attributes: ['date', 'rank'], orders: ['ASC', 'ASC'] },
+        { key: 'index_date', type: 'key', columns: ['date'], orders: ['ASC'] },
+        { key: 'index_date_rank', type: 'key', columns: ['date', 'rank'], orders: ['ASC', 'ASC'] },
       ],
     },
     {
       id: COLLECTION_IDS.topics,
       name: 'Topics',
       permissions: STATS_PERMS,
-      documentSecurity: false,
+      rowSecurity: false,
       attributes: [
         { key: 'topicKey', type: 'string', size: 128, required: true, array: false, default: null },
         { key: 'topicLabel', type: 'string', size: 512, required: true, array: false, default: null },
@@ -239,7 +240,7 @@ function buildCollectionDefinitions() {
         { key: 'articleCount', type: 'integer', required: true, array: false, default: null },
         { key: 'lastComputedAt', type: 'datetime', required: true, array: false, default: null },
       ],
-      indexes: [{ key: 'uniq_topicKey', type: 'unique', attributes: ['topicKey'], orders: ['ASC'] }],
+      indexes: [{ key: 'uniq_topicKey', type: 'unique', columns: ['topicKey'], orders: ['ASC'] }],
     },
   ];
 }
@@ -247,7 +248,19 @@ function buildCollectionDefinitions() {
 /** Optional storage buckets (extend as needed). */
 const STORAGE_BUCKETS = {};
 
-const DB_SCOPES = ['databases.read', 'databases.write', 'users.read', 'collections.read', 'documents.read', 'documents.write'];
+const DB_SCOPES = [
+  'databases.read',
+  'databases.write',
+  'tables.read',
+  'tables.write',
+  'columns.read',
+  'columns.write',
+  'indexes.read',
+  'indexes.write',
+  'rows.read',
+  'rows.write',
+  'users.read',
+];
 
 function refetchFunctionDefinitions() {
   const endpoint = APPWRITE_ENDPOINT;
@@ -324,7 +337,7 @@ function refetchFunctionDefinitions() {
       timeout: 300,
       entrypoint: 'index.js',
       commands: 'npm install',
-      scopes: ['databases.read', 'collections.read', 'documents.read'],
+      scopes: ['databases.read', 'tables.read', 'rows.read'],
       variables: {
         APPWRITE_ENDPOINT: endpoint,
         APPWRITE_PROJECT_ID: project,
@@ -358,14 +371,14 @@ function refetchFunctionDefinitions() {
   ];
 }
 
-async function ensureDatabase(databases) {
+async function ensureDatabase(tablesDB) {
   try {
-    await databases.get(APPWRITE_DATABASE_ID);
+    await tablesDB.get(APPWRITE_DATABASE_ID);
     log(`Database "${DATABASE_NAME}" (${APPWRITE_DATABASE_ID}) exists`, 'success');
   } catch (error) {
     if (error.code === 404) {
       log(`Creating database "${DATABASE_NAME}"…`, 'info');
-      await databases.create(APPWRITE_DATABASE_ID, DATABASE_NAME, true);
+      await tablesDB.create(APPWRITE_DATABASE_ID, DATABASE_NAME, true);
       log('Database created', 'success');
     } else {
       throw error;
@@ -373,20 +386,20 @@ async function ensureDatabase(databases) {
   }
 }
 
-async function ensureCollection(databases, collectionId, config) {
+async function ensureTable(tablesDB, tableId, config) {
   try {
-    const col = await databases.getCollection(APPWRITE_DATABASE_ID, collectionId);
-    log(`Collection "${config.name}" (${collectionId}) exists`, 'success');
-    return col;
+    const table = await tablesDB.getTable(APPWRITE_DATABASE_ID, tableId);
+    log(`Table "${config.name}" (${tableId}) exists`, 'success');
+    return table;
   } catch (error) {
     if (error.code === 404) {
-      log(`Creating collection "${config.name}" (${collectionId})…`, 'info');
-      return databases.createCollection(
+      log(`Creating table "${config.name}" (${tableId})…`, 'info');
+      return tablesDB.createTable(
         APPWRITE_DATABASE_ID,
-        collectionId,
+        tableId,
         config.name,
         config.permissions,
-        config.documentSecurity ?? false,
+        config.rowSecurity ?? false,
         true
       );
     }
@@ -394,22 +407,22 @@ async function ensureCollection(databases, collectionId, config) {
   }
 }
 
-async function ensureAttribute(databases, collectionId, attribute) {
+async function ensureColumn(tablesDB, tableId, attribute) {
   try {
-    await databases.getAttribute(APPWRITE_DATABASE_ID, collectionId, attribute.key);
-    log(`  Attribute "${attribute.key}" ok`, 'success');
+    await tablesDB.getColumn(APPWRITE_DATABASE_ID, tableId, attribute.key);
+    log(`  Column "${attribute.key}" ok`, 'success');
   } catch (error) {
     if (error.code !== 404) throw error;
-    log(`  Creating attribute "${attribute.key}"…`, 'info');
+    log(`  Creating column "${attribute.key}"…`, 'info');
     const { key, type, required, array } = attribute;
     const def = undef(attribute.default);
     const encrypt = attribute.encrypt === true;
 
     switch (type) {
       case 'string':
-        await databases.createStringAttribute(
+        await tablesDB.createStringColumn(
           APPWRITE_DATABASE_ID,
-          collectionId,
+          tableId,
           key,
           attribute.size,
           required,
@@ -419,9 +432,9 @@ async function ensureAttribute(databases, collectionId, attribute) {
         );
         break;
       case 'integer':
-        await databases.createIntegerAttribute(
+        await tablesDB.createIntegerColumn(
           APPWRITE_DATABASE_ID,
-          collectionId,
+          tableId,
           key,
           required,
           undef(attribute.min),
@@ -431,15 +444,15 @@ async function ensureAttribute(databases, collectionId, attribute) {
         );
         break;
       case 'boolean':
-        await databases.createBooleanAttribute(APPWRITE_DATABASE_ID, collectionId, key, required, def, array ?? false);
+        await tablesDB.createBooleanColumn(APPWRITE_DATABASE_ID, tableId, key, required, def, array ?? false);
         break;
       case 'datetime':
-        await databases.createDatetimeAttribute(APPWRITE_DATABASE_ID, collectionId, key, required, def, array ?? false);
+        await tablesDB.createDatetimeColumn(APPWRITE_DATABASE_ID, tableId, key, required, def, array ?? false);
         break;
       case 'float':
-        await databases.createFloatAttribute(
+        await tablesDB.createFloatColumn(
           APPWRITE_DATABASE_ID,
-          collectionId,
+          tableId,
           key,
           required,
           undef(attribute.min),
@@ -449,30 +462,30 @@ async function ensureAttribute(databases, collectionId, attribute) {
         );
         break;
       default:
-        throw new Error(`Unsupported attribute type: ${type}`);
+        throw new Error(`Unsupported column type: ${type}`);
     }
-    await waitForAttribute(databases, APPWRITE_DATABASE_ID, collectionId, key);
-    log(`  Attribute "${attribute.key}" ready`, 'success');
+    await waitForColumn(tablesDB, APPWRITE_DATABASE_ID, tableId, key);
+    log(`  Column "${attribute.key}" ready`, 'success');
   }
 }
 
-async function ensureIndex(databases, collectionId, index) {
+async function ensureIndex(tablesDB, tableId, index) {
   try {
-    await databases.getIndex(APPWRITE_DATABASE_ID, collectionId, index.key);
+    await tablesDB.getIndex(APPWRITE_DATABASE_ID, tableId, index.key);
     log(`  Index "${index.key}" ok`, 'success');
   } catch (error) {
     if (error.code !== 404) throw error;
     log(`  Creating index "${index.key}"…`, 'info');
-    await databases.createIndex(
+    await tablesDB.createIndex(
       APPWRITE_DATABASE_ID,
-      collectionId,
+      tableId,
       index.key,
       index.type,
-      index.attributes,
+      index.columns,
       index.orders,
       index.lengths
     );
-    await waitForIndex(databases, APPWRITE_DATABASE_ID, collectionId, index.key);
+    await waitForIndex(tablesDB, APPWRITE_DATABASE_ID, tableId, index.key);
     log(`  Index "${index.key}" ready`, 'success');
   }
 }
@@ -613,23 +626,23 @@ export async function setupAppwrite() {
     .setProject(APPWRITE_PROJECT_ID)
     .setKey(APPWRITE_API_KEY);
 
-  const databases = new Databases(client);
+  const tablesDB = new TablesDB(client);
   const storage = new Storage(client);
   const functions = new Functions(client);
 
   log('Starting Refetch Appwrite setup…', 'info');
 
-  await ensureDatabase(databases);
+  await ensureDatabase(tablesDB);
 
   const collections = buildCollectionDefinitions();
   for (const col of collections) {
-    log(`\nCollection ${col.name} (${col.id})`, 'info');
-    await ensureCollection(databases, col.id, col);
+    log(`\nTable ${col.name} (${col.id})`, 'info');
+    await ensureTable(tablesDB, col.id, col);
     for (const attr of col.attributes) {
-      await ensureAttribute(databases, col.id, attr);
+      await ensureColumn(tablesDB, col.id, attr);
     }
     for (const idx of col.indexes) {
-      await ensureIndex(databases, col.id, idx);
+      await ensureIndex(tablesDB, col.id, idx);
     }
   }
 
@@ -648,7 +661,7 @@ export async function setupAppwrite() {
     await maybeDeployFunction(functions, fnDef);
   }
 
-  log('\nDone. Collection IDs for .env:', 'success');
+  log('\nDone. Table IDs for .env (APPWRITE_*_COLLECTION_ID):', 'success');
   log(`  APPWRITE_POSTS_COLLECTION_ID=${COLLECTION_IDS.posts}`, 'info');
   log(`  APPWRITE_COMMENTS_COLLECTION_ID=${COLLECTION_IDS.comments}`, 'info');
   log(`  APPWRITE_VOTES_COLLECTION_ID=${COLLECTION_IDS.votes}`, 'info');

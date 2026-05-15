@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Query, Account } from 'node-appwrite'
+import { Client, TablesDB, Query, Account } from 'node-appwrite'
 import { convertAppwritePostToNewsItem, Comment as AppComment } from '@/lib/data'
 
 export async function GET(
@@ -25,17 +25,17 @@ export async function GET(
     }
 
     // Initialize Appwrite client
-    const { Client, Databases } = await import('node-appwrite')
+    const { Client, TablesDB } = await import('node-appwrite')
     
     const client = new Client()
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
       .setKey(process.env.APPWRITE_API_KEY!)
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
 
     // Fetch the post from the database
-    const post = await databases.getDocument(
+    const post = await tablesDB.getRow(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_POSTS_COLLECTION_ID!,
       id
@@ -48,7 +48,7 @@ export async function GET(
     let comments: AppComment[] = []
     if (process.env.APPWRITE_COMMENTS_COLLECTION_ID) {
       try {
-        const commentsResult = await databases.listDocuments(
+        const commentsResult = await tablesDB.listRows(
           process.env.APPWRITE_DATABASE_ID!,
           process.env.APPWRITE_COMMENTS_COLLECTION_ID!,
           [
@@ -59,7 +59,7 @@ export async function GET(
         )
 
                  // Transform the comments to match the Comment interface
-         comments = commentsResult.documents.map((comment: any) => ({
+         comments = commentsResult.rows.map((comment: any) => ({
            id: comment.$id,
            text: comment.text,
            author: comment.author || 'Anonymous',
@@ -122,7 +122,7 @@ export async function DELETE(
       .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
 
-    const databases = new Databases(client)
+    const tablesDB = new TablesDB(client)
     const account = new Account(jwtClient)
 
     // Get user from JWT token
@@ -157,7 +157,7 @@ export async function DELETE(
     }
 
     // Get the post to check ownership
-    const post = await databases.getDocument(
+    const post = await tablesDB.getRow(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_POSTS_COLLECTION_ID!,
       id
@@ -172,7 +172,7 @@ export async function DELETE(
     }
 
     // Delete the post
-    await databases.deleteDocument(
+    await tablesDB.deleteRow(
       process.env.APPWRITE_DATABASE_ID!,
       process.env.APPWRITE_POSTS_COLLECTION_ID!,
       id

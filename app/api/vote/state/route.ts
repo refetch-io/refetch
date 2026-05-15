@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Client, Databases, Account, Query } from 'node-appwrite'
+import { Client, TablesDB, Account, Query } from 'node-appwrite'
 
 // Initialize Appwrite clients for server-side operations
 const apiKeyClient = new Client()
@@ -11,7 +11,7 @@ const jwtClient = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '')
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '')
 
-const databases = new Databases(apiKeyClient)
+const tablesDB = new TablesDB(apiKeyClient)
 const account = new Account(jwtClient)
 
 // Database and collection IDs
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     let countUp = 0
     let countDown = 0
     try {
-      const resource = await databases.getDocument(
+      const resource = await tablesDB.getRow(
         DATABASE_ID,
         targetCollectionId,
         resourceId
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has already voted on this resource
-    const existingVote = await databases.listDocuments(
+    const existingVote = await tablesDB.listRows(
       DATABASE_ID,
       VOTES_COLLECTION_ID,
       [
@@ -97,8 +97,8 @@ export async function GET(request: NextRequest) {
       ]
     )
 
-    if (existingVote.documents.length > 0) {
-      const vote = existingVote.documents[0]
+    if (existingVote.rows.length > 0) {
+      const vote = existingVote.rows[0]
       const currentVote = vote.count === 1 ? 'up' : 'down'
       
       return NextResponse.json({
