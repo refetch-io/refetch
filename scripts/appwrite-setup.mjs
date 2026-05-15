@@ -1,8 +1,11 @@
 /**
  * Refetch Appwrite bootstrap (collections, attributes, indexes, optional functions & buckets).
  *
- * Required env:
- *   APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID, APPWRITE_API_KEY, APPWRITE_DATABASE_ID
+ * Required (any one name per row is enough):
+ *   API endpoint: APPWRITE_ENDPOINT, NEXT_PUBLIC_APPWRITE_ENDPOINT, or APPWRITE_SITE_API_ENDPOINT (Sites)
+ *   Project ID: APPWRITE_PROJECT_ID, NEXT_PUBLIC_APPWRITE_PROJECT_ID, or APPWRITE_SITE_PROJECT_ID (Sites)
+ *   APPWRITE_API_KEY
+ *   APPWRITE_DATABASE_ID
  *
  * Collection IDs default to human-readable slugs; override with env to attach to an existing project:
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
@@ -39,10 +42,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
 const FUNCTIONS_ROOT = join(REPO_ROOT, 'functions');
 
-const APPWRITE_ENDPOINT = process.env.APPWRITE_ENDPOINT;
-const APPWRITE_PROJECT_ID = process.env.APPWRITE_PROJECT_ID;
-const APPWRITE_API_KEY = process.env.APPWRITE_API_KEY;
-const APPWRITE_DATABASE_ID = process.env.APPWRITE_DATABASE_ID;
+const APPWRITE_ENDPOINT =
+  process.env.APPWRITE_ENDPOINT ||
+  process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
+  process.env.APPWRITE_SITE_API_ENDPOINT ||
+  '';
+const APPWRITE_PROJECT_ID =
+  process.env.APPWRITE_PROJECT_ID ||
+  process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ||
+  process.env.APPWRITE_SITE_PROJECT_ID ||
+  '';
+const APPWRITE_API_KEY = process.env.APPWRITE_API_KEY || '';
+const APPWRITE_DATABASE_ID = process.env.APPWRITE_DATABASE_ID || '';
 const DATABASE_NAME = process.env.APPWRITE_DATABASE_NAME || 'Refetch';
 
 const COLLECTION_IDS = {
@@ -239,9 +250,8 @@ const STORAGE_BUCKETS = {};
 const DB_SCOPES = ['databases.read', 'databases.write', 'users.read', 'collections.read', 'documents.read', 'documents.write'];
 
 function refetchFunctionDefinitions() {
-  const endpoint = process.env.APPWRITE_ENDPOINT || process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || '';
-  const project =
-    process.env.APPWRITE_PROJECT_ID || process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || APPWRITE_PROJECT_ID;
+  const endpoint = APPWRITE_ENDPOINT;
+  const project = APPWRITE_PROJECT_ID;
   const posts = COLLECTION_IDS.posts;
   const comments = COLLECTION_IDS.comments;
   const votes = COLLECTION_IDS.votes;
@@ -589,7 +599,12 @@ export async function setupAppwrite() {
   }
 
   if (!APPWRITE_ENDPOINT || !APPWRITE_PROJECT_ID || !APPWRITE_API_KEY || !APPWRITE_DATABASE_ID) {
-    log('Missing APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID, APPWRITE_API_KEY, or APPWRITE_DATABASE_ID', 'error');
+    log(
+      'Missing Appwrite config. Set endpoint (APPWRITE_ENDPOINT | NEXT_PUBLIC_APPWRITE_ENDPOINT | APPWRITE_SITE_API_ENDPOINT), ' +
+        'project (APPWRITE_PROJECT_ID | NEXT_PUBLIC_APPWRITE_PROJECT_ID | APPWRITE_SITE_PROJECT_ID), ' +
+        'APPWRITE_API_KEY, and APPWRITE_DATABASE_ID',
+      'error'
+    );
     process.exit(1);
   }
 
