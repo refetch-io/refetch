@@ -29,10 +29,7 @@ export interface PostSubmissionData {
   title: string;
   url?: string;
   description?: string;
-  company?: string;
-  location?: string;
-  salary?: string;
-  type: 'link' | 'show' | 'job';
+  type: 'link' | 'show';
 }
 
 export interface EnhancedPostData extends PostSubmissionData {
@@ -51,12 +48,12 @@ export interface PostDocument {
   count: number;
   countUp: number;
   countDown: number;
-  type: 'link' | 'show' | 'job';
+  type: 'link' | 'show';
   enhanced: boolean;
+  /** Algorithm ranking score (0–100 scale in functions/algorithm). */
+  score?: number;
   timeScore?: number; // Time-based score for ranking algorithm
-  company?: string;
-  location?: string;
-  salary?: string;
+  countComments?: number;
   // Metadata fields (populated when enhanced = true)
   language?: string;
   spellingScore?: number;
@@ -65,6 +62,7 @@ export interface PostDocument {
   optimizedDescription?: string;
   originalTitle?: string;
   originalDescription?: string;
+  /** Enhancement labels; each string must fit Appwrite attribute size (256). */
   topics?: string[];
   spamScore?: number;
   spamIssues?: string[];
@@ -73,10 +71,15 @@ export interface PostDocument {
   readingLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
   readingTime?: number;
   tldr?: string;
-  titleTranslations?: Record<string, string>;
-  descriptionTranslations?: Record<string, string>;
+  /** Stored as JSON string in Appwrite; parse when needed. */
+  titleTranslations?: Record<string, string> | string;
+  /** Stored as JSON string in Appwrite; parse when needed. */
+  descriptionTranslations?: Record<string, string> | string;
   qualityScore?: number;
   qualityIssues?: string[];
+  sensationScore?: number;
+  diversityScore?: number;
+  relevancyScore?: number;
 }
 
 export interface VoteDocument {

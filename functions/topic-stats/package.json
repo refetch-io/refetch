@@ -1,0 +1,19 @@
+{
+  "name": "topic-stats-function",
+  "version": "1.0.0",
+  "description": "Aggregates topic scores from top daily posts and maintains all-time topic stats",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["appwrite", "function", "topics", "ranking"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-appwrite": "^17.2.0"
+  }
+}

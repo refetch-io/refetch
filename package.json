@@ -4,7 +4,8 @@
   "private": true,
   "description": "Refetch is an open-source alternative to Hacker News, featuring curated tech news, discussions, and community-driven content. Built with Next.js and Appwrite.",
   "scripts": {
-    "build": "next build",
+    "appwrite:setup": "node scripts/appwrite-setup.mjs",
+    "build": "npm run appwrite:setup && next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"

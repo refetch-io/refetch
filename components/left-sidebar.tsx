@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp, Clock, BarChart3, Heart, Monitor, Briefcase, User, ArrowLeft } from "lucide-react"
+import { TrendingUp, Clock, Monitor, User, ArrowLeft } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -36,16 +36,6 @@ const navigationItems: NavigationItem[] = [
     label: "New",
     icon: Clock
   },
-  // {
-  //   href: "/jobs",
-  //   label: "Jobs",
-  //   icon: Briefcase
-  // },
-  // {
-  //   href: "/rising",
-  //   label: "Rising",
-  //   icon: BarChart3
-  // },
   {
     href: "/mines",
     label: "Mines",

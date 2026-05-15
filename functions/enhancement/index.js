@@ -61,7 +61,7 @@ const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platfor
 }
 
 CRITICAL GUIDELINES:
-- The "type" field MUST be either "link" or "show" - NEVER "main", "job", or any other value
+- The "type" field MUST be either "link" or "show" - NEVER "main" or any other value
 - Enhanced types are:
   * "show" = Product launches, company announcements, new features, showcases, demos, "announcing", "launching", "introducing", "new release", "now available", "beta", "alpha", "preview", "open source alternative", "competitor to", "replacement for"
   * "link" = General tech news, industry updates, analysis, reviews, tutorials, guides, discussions, controversies, research findings, acquisitions, mergers, business deals, company sales, investment rounds, funding announcements
@@ -181,10 +181,7 @@ export default async function ({ req, res, log, error }) {
                     title: post.title || '',
                     description: post.description || '',
                     url: post.link || '',
-                    type: post.type || 'link',
-                    company: post.company || '',
-                    location: post.location || '',
-                    salary: post.salary || ''
+                    type: post.type || 'link'
                 };
                 
                 // Fetch URL content if available
@@ -530,7 +527,7 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError) {
  * Build the analysis prompt for OpenAI
  */
 function buildAnalysisPrompt(postData, urlContent, urlError) {
-    const { title, description, url, type, company, location, salary } = postData;
+    const { title, description, url, type } = postData;
     
     let prompt = `Analyze this ${type} post submission:\n\n`;
     prompt += `Title: "${title}"\n`;
@@ -541,12 +538,6 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
     
     if (url) {
         prompt += `URL: ${url}\n`;
-    }
-    
-    if (type === 'job') {
-        if (company) prompt += `Company: ${company}\n`;
-        if (location) prompt += `Location: ${location}\n`;
-        if (salary) prompt += `Salary: ${salary}\n`;
     }
     
     // Add URL content context if available

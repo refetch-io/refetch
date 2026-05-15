@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Client, Databases, Account, Users, ID, Query } from 'node-appwrite'
-import { PostSubmissionData, PostDocument } from '@/lib/types'
 import { cleanUrl } from '@/lib/utils'
 
 // Initialize Appwrite clients for server-side operations
@@ -118,7 +117,7 @@ export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse the request body first (can only be done once)
     const body = await request.json()
-    const { title, url, description, company, location, salary, type } = body
+    const { title, url, description, type } = body
 
     // Step 2: Get and validate JWT token from Authorization header
     const authHeader = request.headers.get('authorization')
@@ -168,18 +167,17 @@ export async function POST(request: NextRequest) {
     }
 
     if (type === 'job') {
-      if (!url || url.trim().length === 0) {
-        return NextResponse.json(
-          { message: 'Application URL is required for job submissions' },
-          { status: 400 }
+      return NextResponse.json(
+        { message: 'Job postings are not supported' },
+        { status: 400 }
       )
-      }
-      if (!company || company.trim().length === 0) {
-        return NextResponse.json(
-          { message: 'Company is required for job submissions' },
-          { status: 400 }
-        )
-      }
+    }
+
+    if (type !== 'link' && type !== 'show') {
+      return NextResponse.json(
+        { message: 'Invalid post type' },
+        { status: 400 }
+      )
     }
 
     // Step 3: Check user submission limit (abuse protection)
@@ -221,9 +219,6 @@ export async function POST(request: NextRequest) {
       enhanced: boolean;
       timeScore: number;
       link?: string;
-      company?: string;
-      location?: string;
-      salary?: string;
     } = {
       title: title.trim(),
       description: description?.trim() || '',
@@ -241,12 +236,6 @@ export async function POST(request: NextRequest) {
     if (url && url.trim().length > 0) {
       // Store the cleaned URL (without query strings)
       documentData.link = cleanUrl(url.trim())
-    }
-
-    if (type === 'job') {
-      documentData.company = company?.trim()
-      if (location) documentData.location = location.trim()
-      if (salary) documentData.salary = salary.trim()
     }
 
     // Create the document in Appwrite using the server-side client
