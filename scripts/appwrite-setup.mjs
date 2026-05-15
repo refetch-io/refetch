@@ -18,6 +18,12 @@
  *   APPWRITE_SETUP_DEPLOY_FUNCTIONS=1 — upload tar.gz deployments for functions that have none
  *   APPWRITE_SETUP_FORCE_DEPLOY=1 — create a new deployment even if one exists (implies DEPLOY)
  *
+ * Functions: matched by display name (must match the Appwrite Console function name exactly).
+ *   On first run a new function id is generated; no APPWRITE_FUNCTION_*_ID list is required.
+ *
+ * Function env sync: each variable value is capped at 8192 characters (Appwrite limit). Long values
+ * (e.g. TARGET_WEBSITES) are skipped with a warning — configure those in the Appwrite Console.
+ *
  * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
@@ -31,7 +37,9 @@ import {
   Client,
   Compression,
   Functions,
+  ID,
   Permission,
+  Query,
   Role,
   Runtime,
   Storage,
@@ -285,7 +293,6 @@ function refetchFunctionDefinitions() {
 
   return [
     {
-      id: process.env.APPWRITE_FUNCTION_SCOUT_ID || 'scout',
       folder: 'scout',
       name: 'Scout',
       runtime: Runtime.Node180,
@@ -303,7 +310,6 @@ function refetchFunctionDefinitions() {
       variableSecrets: ['OPENAI_API_KEY', 'APPWRITE_API_KEY'],
     },
     {
-      id: process.env.APPWRITE_FUNCTION_ENHANCEMENT_ID || 'enhancement',
       folder: 'enhancement',
       name: 'Enhancement',
       runtime: Runtime.Node180,
@@ -318,7 +324,6 @@ function refetchFunctionDefinitions() {
       variableSecrets: ['OPENAI_API_KEY', 'APPWRITE_API_KEY'],
     },
     {
-      id: process.env.APPWRITE_FUNCTION_ALGORITHM_ID || 'algorithm',
       folder: 'algorithm',
       name: 'Algorithm',
       runtime: Runtime.Node180,
@@ -330,7 +335,6 @@ function refetchFunctionDefinitions() {
       variableSecrets: ['APPWRITE_API_KEY'],
     },
     {
-      id: process.env.APPWRITE_FUNCTION_README_ID || 'readme',
       folder: 'readme',
       name: 'Readme',
       runtime: Runtime.Node180,
@@ -353,7 +357,6 @@ function refetchFunctionDefinitions() {
       variableSecrets: ['APPWRITE_API_KEY', 'GITHUB_TOKEN'],
     },
     {
-      id: process.env.APPWRITE_FUNCTION_TOPIC_STATS_ID || 'topic-stats',
       folder: 'topic-stats',
       name: 'Topic stats',
       runtime: Runtime.Node180,
@@ -513,16 +516,37 @@ async function ensureStorageBucket(storage, bucketId, config) {
   }
 }
 
+/** Appwrite function / site variable value limit (chars). */
+const MAX_FUNCTION_VAR_VALUE_LENGTH = 8192;
+
+/** Resolve by Appwrite function display name (server-side filter: Query.equal on `name`). */
+async function findFunctionByExactName(functions, displayName) {
+  const res = await functions.list([
+    Query.equal('name', displayName),
+    Query.limit(2),
+  ]);
+  const items = res.functions ?? [];
+  if (items.length > 1) {
+    log(
+      `Multiple functions named "${displayName}" (${items.length}); using ${items[0].$id}`,
+      'warning'
+    );
+  }
+  return items[0] ?? null;
+}
+
 async function ensureFunction(functions, def) {
+  const existing = await findFunctionByExactName(functions, def.name);
+  if (existing) {
+    log(`Function "${def.name}" (${existing.$id}) exists`, 'success');
+    return existing;
+  }
+
+  const functionId = ID.unique();
+  log(`Creating function "${def.name}" (${functionId})…`, 'info');
   try {
-    const fn = await functions.get(def.id);
-    log(`Function "${def.name}" (${def.id}) exists`, 'success');
-    return fn;
-  } catch (error) {
-    if (error.code !== 404) throw error;
-    log(`Creating function "${def.name}" (${def.id})…`, 'info');
-    return functions.create(
-      def.id,
+    return await functions.create(
+      functionId,
       def.name,
       def.runtime,
       ['any'],
@@ -541,23 +565,40 @@ async function ensureFunction(functions, def) {
       undefined,
       undefined
     );
+  } catch (createErr) {
+    if (createErr.code === 409) {
+      const again = await findFunctionByExactName(functions, def.name);
+      if (again) {
+        log(`Function "${def.name}" already exists (409). Using ${again.$id}.`, 'success');
+        return again;
+      }
+    }
+    throw createErr;
   }
 }
 
-async function ensureFunctionVariables(functions, def) {
+async function ensureFunctionVariables(functions, def, functionId) {
   const { variables, variableSecrets = [] } = def;
-  const list = await functions.listVariables(def.id);
+  const list = await functions.listVariables(functionId);
   const existing = new Map((list.variables || []).map((v) => [v.key, v]));
 
   for (const [key, value] of Object.entries(variables)) {
     const secret = variableSecrets.includes(key);
     const strVal = value === undefined || value === null ? '' : String(value);
+    if (strVal.length > MAX_FUNCTION_VAR_VALUE_LENGTH) {
+      log(
+        `    Variable "${key}" skipped (length ${strVal.length} > ${MAX_FUNCTION_VAR_VALUE_LENGTH}). ` +
+          `Appwrite allows at most ${MAX_FUNCTION_VAR_VALUE_LENGTH} chars — set this key in the Appwrite Console if needed.`,
+        'warning'
+      );
+      continue;
+    }
     const prev = existing.get(key);
     if (prev) {
-      await functions.updateVariable(def.id, prev.$id, key, strVal, secret);
+      await functions.updateVariable(functionId, prev.$id, key, strVal, secret);
       log(`    Variable "${key}" updated${secret ? ' (secret)' : ''}`, 'success');
     } else {
-      await functions.createVariable(def.id, key, strVal, secret);
+      await functions.createVariable(functionId, key, strVal, secret);
       log(`    Variable "${key}" created${secret ? ' (secret)' : ''}`, 'success');
     }
   }
@@ -567,18 +608,21 @@ function packFunctionFolder(folderPath, outTarGz) {
   execFileSync('tar', ['-czf', outTarGz, '-C', folderPath, '.'], { stdio: 'inherit' });
 }
 
-async function maybeDeployFunction(functions, def) {
+async function maybeDeployFunction(functions, def, functionId) {
   const deploy = process.env.APPWRITE_SETUP_DEPLOY_FUNCTIONS === '1';
   const force = process.env.APPWRITE_SETUP_FORCE_DEPLOY === '1';
   if (!deploy && !force) {
-    log(`  Skipping deployment for "${def.id}" (set APPWRITE_SETUP_DEPLOY_FUNCTIONS=1)`, 'info');
+    log(`  Skipping deployment for "${def.name}" (${functionId}) (set APPWRITE_SETUP_DEPLOY_FUNCTIONS=1)`, 'info');
     return;
   }
 
-  const list = await functions.listDeployments(def.id);
+  const list = await functions.listDeployments(functionId);
   const has = (list.deployments || []).length > 0;
   if (has && !force) {
-    log(`  "${def.id}" already has deployments; skip (APPWRITE_SETUP_FORCE_DEPLOY=1 to redeploy)`, 'success');
+    log(
+      `  "${def.name}" (${functionId}) already has deployments; skip (APPWRITE_SETUP_FORCE_DEPLOY=1 to redeploy)`,
+      'success'
+    );
     return;
   }
 
@@ -588,14 +632,14 @@ async function maybeDeployFunction(functions, def) {
     return;
   }
 
-  const tmp = mkdtempSync(join(tmpdir(), `refetch-fn-${def.id}-`));
+  const tmp = mkdtempSync(join(tmpdir(), `refetch-fn-${def.folder}-`));
   const tarGz = join(tmp, 'code.tar.gz');
   try {
-    log(`  Packing & deploying "${def.id}"…`, 'info');
+    log(`  Packing & deploying "${def.name}" (${functionId})…`, 'info');
     packFunctionFolder(folderPath, tarGz);
     const input = InputFile.fromPath(tarGz, 'code.tar.gz');
-    await functions.createDeployment(def.id, input, true, def.entrypoint, def.commands);
-    log(`  Deployment submitted for "${def.id}"`, 'success');
+    await functions.createDeployment(functionId, input, true, def.entrypoint, def.commands);
+    log(`  Deployment submitted for "${def.name}" (${functionId})`, 'success');
   } finally {
     try {
       rmSync(tmp, { recursive: true, force: true });
@@ -655,10 +699,10 @@ export async function setupAppwrite() {
 
   log('\nFunctions', 'info');
   for (const fnDef of refetchFunctionDefinitions()) {
-    log(`\n${fnDef.name} (${fnDef.id})`, 'info');
-    await ensureFunction(functions, fnDef);
-    await ensureFunctionVariables(functions, fnDef);
-    await maybeDeployFunction(functions, fnDef);
+    log(`\n${fnDef.name}`, 'info');
+    const fn = await ensureFunction(functions, fnDef);
+    await ensureFunctionVariables(functions, fnDef, fn.$id);
+    await maybeDeployFunction(functions, fnDef, fn.$id);
   }
 
   log('\nDone. Table IDs for .env (APPWRITE_*_COLLECTION_ID):', 'success');
