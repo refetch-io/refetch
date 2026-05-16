@@ -2,8 +2,8 @@
  * Refetch Appwrite bootstrap (tables, columns, indexes, optional functions & buckets).
  *
  * Required (any one name per row is enough):
- *   API endpoint: APPWRITE_ENDPOINT, NEXT_PUBLIC_APPWRITE_ENDPOINT, or APPWRITE_SITE_API_ENDPOINT (Sites)
- *   Project ID: APPWRITE_PROJECT_ID, NEXT_PUBLIC_APPWRITE_PROJECT_ID, or APPWRITE_SITE_PROJECT_ID (Sites)
+ *   API endpoint: APPWRITE_ENDPOINT or NEXT_PUBLIC_APPWRITE_ENDPOINT
+ *   Project ID: APPWRITE_PROJECT_ID or NEXT_PUBLIC_APPWRITE_PROJECT_ID
  *   APPWRITE_API_KEY
  *   APPWRITE_DATABASE_ID
  *
@@ -12,23 +12,15 @@
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
  *   APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID
  *
- * Optional:
- *   APPWRITE_DATABASE_NAME (default: Refetch)
- *   SKIP_APPWRITE_SETUP=1 — no-op (use for CI/build when Appwrite bootstrap should not run)
- *   APPWRITE_SETUP_DEPLOY_FUNCTIONS=1 — upload tar.gz deployments for functions that have none
- *   APPWRITE_SETUP_FORCE_DEPLOY=1 — create a new deployment even if one exists (implies DEPLOY)
- *
  * Functions: matched by display name (must match the Appwrite Console function name exactly).
  *   On first run a new function id is generated. Function **variables** are not managed here — set
- *   them (and secrets) manually in the Appwrite Console for each function.
+ *   them (and secrets) manually in the Appwrite Console for each function. **Deployments** are not
+ *   uploaded by this script — deploy function code from the Appwrite Console or CLI.
  *
  * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
-import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -43,25 +35,17 @@ import {
   Storage,
   TablesDB,
 } from 'node-appwrite';
-import { InputFile } from 'node-appwrite/file';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(__dirname, '..');
-const FUNCTIONS_ROOT = join(REPO_ROOT, 'functions');
 
 const APPWRITE_ENDPOINT =
   process.env.APPWRITE_ENDPOINT ||
   process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
-  process.env.APPWRITE_SITE_API_ENDPOINT ||
   '';
 const APPWRITE_PROJECT_ID =
   process.env.APPWRITE_PROJECT_ID ||
   process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ||
-  process.env.APPWRITE_SITE_PROJECT_ID ||
   '';
 const APPWRITE_API_KEY = process.env.APPWRITE_API_KEY || '';
 const APPWRITE_DATABASE_ID = process.env.APPWRITE_DATABASE_ID || '';
-const DATABASE_NAME = process.env.APPWRITE_DATABASE_NAME || 'Refetch';
 
 const COLLECTION_IDS = {
   posts: process.env.APPWRITE_POSTS_COLLECTION_ID || 'posts',
@@ -321,11 +305,11 @@ function refetchFunctionDefinitions() {
 async function ensureDatabase(tablesDB) {
   try {
     await tablesDB.get(APPWRITE_DATABASE_ID);
-    log(`Database "${DATABASE_NAME}" (${APPWRITE_DATABASE_ID}) exists`, 'success');
+    log(`Database ${APPWRITE_DATABASE_ID} exists`, 'success');
   } catch (error) {
     if (error.code === 404) {
-      log(`Creating database "${DATABASE_NAME}"…`, 'info');
-      await tablesDB.create(APPWRITE_DATABASE_ID, DATABASE_NAME, true);
+      log(`Creating database ${APPWRITE_DATABASE_ID}…`, 'info');
+      await tablesDB.create(APPWRITE_DATABASE_ID, APPWRITE_DATABASE_ID, true);
       log('Database created', 'success');
     } else {
       throw error;
@@ -518,61 +502,11 @@ async function ensureFunction(functions, def) {
   }
 }
 
-function packFunctionFolder(folderPath, outTarGz) {
-  execFileSync('tar', ['-czf', outTarGz, '-C', folderPath, '.'], { stdio: 'inherit' });
-}
-
-async function maybeDeployFunction(functions, def, functionId) {
-  const deploy = process.env.APPWRITE_SETUP_DEPLOY_FUNCTIONS === '1';
-  const force = process.env.APPWRITE_SETUP_FORCE_DEPLOY === '1';
-  if (!deploy && !force) {
-    log(`  Skipping deployment for "${def.name}" (${functionId}) (set APPWRITE_SETUP_DEPLOY_FUNCTIONS=1)`, 'info');
-    return;
-  }
-
-  const list = await functions.listDeployments(functionId);
-  const has = (list.deployments || []).length > 0;
-  if (has && !force) {
-    log(
-      `  "${def.name}" (${functionId}) already has deployments; skip (APPWRITE_SETUP_FORCE_DEPLOY=1 to redeploy)`,
-      'success'
-    );
-    return;
-  }
-
-  const folderPath = join(FUNCTIONS_ROOT, def.folder);
-  if (!existsSync(join(folderPath, 'index.js'))) {
-    log(`  No index.js in ${folderPath}, skip deploy`, 'warning');
-    return;
-  }
-
-  const tmp = mkdtempSync(join(tmpdir(), `refetch-fn-${def.folder}-`));
-  const tarGz = join(tmp, 'code.tar.gz');
-  try {
-    log(`  Packing & deploying "${def.name}" (${functionId})…`, 'info');
-    packFunctionFolder(folderPath, tarGz);
-    const input = InputFile.fromPath(tarGz, 'code.tar.gz');
-    await functions.createDeployment(functionId, input, true, def.entrypoint, def.commands);
-    log(`  Deployment submitted for "${def.name}" (${functionId})`, 'success');
-  } finally {
-    try {
-      rmSync(tmp, { recursive: true, force: true });
-    } catch {
-      /* ignore */
-    }
-  }
-}
-
 export async function setupAppwrite() {
-  if (process.env.SKIP_APPWRITE_SETUP === '1' || process.env.SKIP_APPWRITE_SETUP === 'true') {
-    log('Skipping Appwrite setup (SKIP_APPWRITE_SETUP is set)', 'warning');
-    return;
-  }
-
   if (!APPWRITE_ENDPOINT || !APPWRITE_PROJECT_ID || !APPWRITE_API_KEY || !APPWRITE_DATABASE_ID) {
     log(
-      'Missing Appwrite config. Set endpoint (APPWRITE_ENDPOINT | NEXT_PUBLIC_APPWRITE_ENDPOINT | APPWRITE_SITE_API_ENDPOINT), ' +
-        'project (APPWRITE_PROJECT_ID | NEXT_PUBLIC_APPWRITE_PROJECT_ID | APPWRITE_SITE_PROJECT_ID), ' +
+      'Missing Appwrite config. Set endpoint (APPWRITE_ENDPOINT | NEXT_PUBLIC_APPWRITE_ENDPOINT), ' +
+        'project (APPWRITE_PROJECT_ID | NEXT_PUBLIC_APPWRITE_PROJECT_ID), ' +
         'APPWRITE_API_KEY, and APPWRITE_DATABASE_ID',
       'error'
     );
@@ -614,8 +548,7 @@ export async function setupAppwrite() {
   log('\nFunctions', 'info');
   for (const fnDef of refetchFunctionDefinitions()) {
     log(`\n${fnDef.name}`, 'info');
-    const fn = await ensureFunction(functions, fnDef);
-    await maybeDeployFunction(functions, fnDef, fn.$id);
+    await ensureFunction(functions, fnDef);
   }
 
   log('\nDone. Table IDs for .env (APPWRITE_*_COLLECTION_ID):', 'success');

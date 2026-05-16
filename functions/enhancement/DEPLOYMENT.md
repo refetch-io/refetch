@@ -33,12 +33,14 @@ Ensure your posts collection has the `tldr` attribute:
 
 ### 1. Update Environment Variables
 
-Ensure these are set in your Appwrite Function:
+Set `OPENAI_API_KEY` (and optionally `OPENAI_MODEL`) as **global** project environment variables in Appwrite so Enhancement inherits them; you do not need to duplicate them on the function unless you want an override.
+
+Ensure these are available to the function (via globals or per-function env):
 
 ```bash
 # Required for TL;DR functionality
 OPENAI_API_KEY=your-openai-api-key
-OPENAI_MODEL=gpt-4o-mini  # Recommended for best TL;DR quality
+OPENAI_MODEL=gpt-4o-mini  # Optional; global default recommended
 
 # Appwrite configuration
 NEXT_PUBLIC_APPWRITE_ENDPOINT=https://your-endpoint.cloud.appwrite.io/v1

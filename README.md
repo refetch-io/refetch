@@ -199,87 +199,47 @@ Use the same endpoint and project everywhere; some paths read `APPWRITE_*`, othe
 | `APPWRITE_DAILY_TOPICS_COLLECTION_ID` | `daily_topics` table (topic stats). |
 | `APPWRITE_TOPICS_COLLECTION_ID` | `topics` table (topic stats). |
 
-### 3. Site URLs (global)
-
-| Variable | Description |
-| --- | --- |
-| `NEXT_PUBLIC_BASE_URL` | Canonical public origin (metadata, OG); default `https://refetch.io`. |
-| `APP_BASE_URL` | Same idea for server-generated links (e.g. Readme function); default `https://refetch.io`. |
-
-### 4. OpenAI (global for AI functions)
+### 3. OpenAI (global for AI functions)
 
 | Variable | Description |
 | --- | --- |
 | `OPENAI_API_KEY` | Scout and Enhancement. |
-| `OPENAI_MODEL` | Enhancement only; default `gpt-4o-mini`. |
+| `OPENAI_MODEL` | OpenAI chat model for Enhancement; set as a **global** project variable (optional; default `gpt-4o-mini`). |
 
-### 5. Scout-only (sources + actor + tuning)
+### 4. Scout-only (sources)
 
 Set at project level if you only run Scout, or override on the Scout function.
 
+Actor identity, LLM batching, scraping delays, and per-run limits are **constants** in `functions/scout/index.js` (not environment variables).
+
 | Variable | Description |
 | --- | --- |
-| `TARGET_WEBSITES` | Comma-separated site roots to crawl (can be very long). |
-| `SCOUT_USER_ID` | Appwrite user ID for automated posts/comments. |
-| `SCOUT_USER_NAME` | Label for that user (default `Scout`). |
-| `LLM_MAX_TOKENS` | Default `6000`. |
-| `LLM_MAX_BATCH_SIZE` | Default `20`. |
-| `LLM_MIN_BATCH_SIZE` | Default `5`. |
-| `DEBUG_BATCHING` | `true` for extra logs. |
-| `SCRAPING_DELAY_MS` | Default `3000`. |
-| `MAX_URLS_PER_SOURCE` | Default `25`. |
-| `MAX_ARTICLES_PER_RUN` | Default `1000`. |
-| `DEBUG_URL_EXTRACTION` | Optional; see `env.example`. |
+| `SCOUT_TARGET_WEBSITES` | Comma-separated site roots to crawl (can be very long). |
 
-### 6. GitHub (Readme function only)
+### 5. Readme function only
 
 Safe to set globally if unused elsewhere.
 
 | Variable | Description |
 | --- | --- |
-| `GITHUB_TOKEN` | PAT with `contents: write` (or equivalent) to update `README.md`. |
-| `GITHUB_OWNER` | Owner (user or org). |
-| `GITHUB_REPO` | Repository name. |
-| `GITHUB_BRANCH` | Branch to commit on (default `main`). |
+| `README_ORIGIN` | Public origin for links in generated `README.md` (default `https://refetch.io`). |
+| `README_GITHUB_TOKEN` | PAT with `contents: write` (or equivalent) to update `README.md`. |
+| `README_GITHUB_OWNER` | Owner (user or org). |
+| `README_GITHUB_REPO` | Repository name. |
+| `README_GITHUB_BRANCH` | Branch to commit on (default `main`). |
 
-### 7. Plausible (Next API only)
-
-| Variable | Description |
-| --- | --- |
-| `PLAUSIBLE_API_KEY` | Stats API key (`app/api/plausible/realtime`). |
-| `PLAUSIBLE_SITE_ID` | Site / domain id in Plausible. |
-
-### 8. SEO verification (Next only)
-
-| Variable | Description |
-| --- | --- |
-| `GOOGLE_SITE_VERIFICATION` | Meta verification string. |
-| `YANDEX_VERIFICATION` | Yandex. |
-| `YAHOO_VERIFICATION` | Yahoo. |
-
-### 9. Bootstrap & CI (`scripts/appwrite-setup.mjs`, runs before `next build` unless skipped)
-
-Uses the same **Appwrite connection** and **data IDs** as above, plus:
-
-| Variable | Description |
-| --- | --- |
-| `APPWRITE_SITE_API_ENDPOINT` | Injected on **Appwrite Sites** builds; used if `APPWRITE_ENDPOINT` / `NEXT_PUBLIC_APPWRITE_ENDPOINT` are unset. |
-| `APPWRITE_SITE_PROJECT_ID` | Same for project ID. |
-| `APPWRITE_DATABASE_NAME` | Optional DB display name when creating DB (default `Refetch`). |
-| `SKIP_APPWRITE_SETUP` | `1` or `true` to skip bootstrap. |
-| `APPWRITE_SETUP_DEPLOY_FUNCTIONS` | `1` to upload function code when a function has no deployment. |
-| `APPWRITE_SETUP_FORCE_DEPLOY` | `1` to force a new deployment. |
+**Bootstrap (`scripts/appwrite-setup.mjs`):** `npm run build` runs this first (`package.json`); it uses the same **Appwrite connection** and **data IDs** as §1–2 to create or update the database, tables, indexes, and function shells (not deployments or function env).
 
 ### Which functions need which groups
 
 | Function | Groups |
 | --- | --- |
-| **Scout** | 1, 2, 4, 5 |
-| **Enhancement** | 1, 2, 4 (`OPENAI_MODEL` optional) |
+| **Scout** | 1, 2, 3, 4 |
+| **Enhancement** | 1, 2, 3 (`OPENAI_MODEL` optional; set globally) |
 | **Algorithm** | 1, 2 (posts only) |
 | **Topic stats** | 1, 2 (incl. daily_topics + topics) |
-| **Readme** | 1, 2 (posts only), 3 (`APP_BASE_URL`), 6 |
-| **Next.js app + `app/api`** | 1 (`NEXT_PUBLIC_*` + `APPWRITE_API_KEY`), 2, 3 (optional), 7–8 (optional) |
+| **Readme** | 1, 2 (posts only), 5 |
+| **Next.js app + `app/api`** | 1 (`NEXT_PUBLIC_*` + `APPWRITE_API_KEY`), 2 |
 
 ---
 

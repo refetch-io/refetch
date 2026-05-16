@@ -35,10 +35,11 @@ APPWRITE_POSTS_COLLECTION_ID=your_posts_collection_id
 
 #### GitHub Configuration
 ```env
-GITHUB_TOKEN=your_github_personal_access_token
-GITHUB_OWNER=your_github_username_or_org
-GITHUB_REPO=your_repository_name
-GITHUB_BRANCH=main  # Optional, defaults to 'main'
+README_GITHUB_TOKEN=your_github_personal_access_token
+README_GITHUB_OWNER=your_github_username_or_org
+README_GITHUB_REPO=your_repository_name
+README_GITHUB_BRANCH=main  # Optional, defaults to 'main'
+README_ORIGIN=https://refetch.io
 ```
 
 ### 2. GitHub Token Setup

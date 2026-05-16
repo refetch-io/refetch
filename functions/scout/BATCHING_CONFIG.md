@@ -1,28 +1,32 @@
 # Scout Function Batching Configuration
 
-The scout function now uses intelligent batching to avoid exceeding LLM token limits. Here are the configurable environment variables:
+The scout function uses intelligent batching to avoid exceeding LLM token limits. Batch sizes and related tuning are **constants** at the top of `index.js` (not environment variables).
 
-## Environment Variables
+## Constants (in `index.js`)
 
 ### `LLM_MAX_TOKENS`
+
 - **Default**: `6000`
 - **Description**: Maximum tokens to use for each batch (conservative limit to stay well under the 8192 token limit)
-- **Usage**: Set this lower if you're still hitting token limits, or higher if you want larger batches
+- **Usage**: Lower if you still hit token limits; higher allows larger batches (within `LLM_MAX_BATCH_SIZE`)
 
 ### `LLM_MAX_BATCH_SIZE`
+
 - **Default**: `20`
 - **Description**: Maximum number of URLs to process in a single batch
-- **Usage**: Increase this if you want larger batches (but be careful not to exceed token limits)
+- **Usage**: Increase for larger batches (watch token limits)
 
 ### `LLM_MIN_BATCH_SIZE`
+
 - **Default**: `5`
 - **Description**: Minimum number of URLs to process in a single batch
-- **Usage**: Decrease this if you want smaller batches for better reliability
+- **Usage**: Decrease for smaller batches when you want more reliability
 
 ### `DEBUG_BATCHING`
+
 - **Default**: `false`
-- **Description**: Enable debug logging for batch size calculations
-- **Usage**: Set to `true` to see detailed batch size calculations
+- **Description**: Log batch size calculation details
+- **Usage**: Set to `true` while debugging batching
 
 ## How Batching Works
 
@@ -32,34 +36,33 @@ The scout function now uses intelligent batching to avoid exceeding LLM token li
 4. **Retry Logic**: Failed batches are retried up to 2 times with exponential backoff
 5. **Rate Limiting**: Delays are added between batches to avoid API rate limits
 
-## Example Configuration
+## Example tweaks (edit `index.js`)
 
-```bash
-# Conservative settings (smaller batches, more reliable)
-LLM_MAX_TOKENS=5000
-LLM_MAX_BATCH_SIZE=15
-LLM_MIN_BATCH_SIZE=3
+```javascript
+// Conservative settings (smaller batches, more reliable)
+const LLM_MAX_TOKENS = 5000;
+const LLM_MAX_BATCH_SIZE = 15;
+const LLM_MIN_BATCH_SIZE = 3;
 
-# Aggressive settings (larger batches, faster processing)
-LLM_MAX_TOKENS=7000
-LLM_MAX_BATCH_SIZE=25
-LLM_MIN_BATCH_SIZE=8
+// Aggressive settings (larger batches, faster processing)
+const LLM_MAX_TOKENS = 7000;
+const LLM_MAX_BATCH_SIZE = 25;
+const LLM_MIN_BATCH_SIZE = 8;
 
-# Debug mode
-DEBUG_BATCHING=true
+const DEBUG_BATCHING = true;
 ```
 
 ## Benefits
 
-- ✅ **No More Token Limit Errors**: URLs are processed in small batches that fit within limits
-- ✅ **Better Reliability**: Failed batches can be retried automatically
-- ✅ **Configurable**: Adjust batch sizes based on your needs and API limits
-- ✅ **Progress Tracking**: Clear visibility into batch processing progress
-- ✅ **Rate Limiting**: Built-in delays to avoid overwhelming the API
+- **No More Token Limit Errors**: URLs are processed in small batches that fit within limits
+- **Better Reliability**: Failed batches can be retried automatically
+- **Configurable**: Adjust constants based on your needs and API limits
+- **Progress Tracking**: Clear visibility into batch processing progress
+- **Rate Limiting**: Built-in delays to avoid overwhelming the API
 
 ## Monitoring
 
-The function now provides detailed logging for the batching process:
+The function provides detailed logging for the batching process:
 
 ```
 📦 Processing 46 URLs in 4 batches of ~12

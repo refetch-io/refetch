@@ -29,8 +29,8 @@ appwrite functions create \
 # Set environment variables
 appwrite functions createVariable \
   --functionId <FUNCTION_ID> \
-  --key "GITHUB_TOKEN" \
-  --value "<YOUR_GITHUB_TOKEN>"
+  --key "README_GITHUB_TOKEN" \
+  --value "<YOUR_GITHUB_PERSONAL_ACCESS_TOKEN>"
 
 # ... repeat for other variables
 ```
@@ -131,10 +131,11 @@ appwrite functions createVariable \
 
    **GitHub Configuration:**
    ```
-   GITHUB_TOKEN=your_github_personal_access_token
-   GITHUB_OWNER=your_github_username_or_org
-   GITHUB_REPO=your_repository_name
-   GITHUB_BRANCH=main
+   README_ORIGIN=https://refetch.io
+   README_GITHUB_TOKEN=your_github_personal_access_token
+   README_GITHUB_OWNER=your_github_username_or_org
+   README_GITHUB_REPO=your_repository_name
+   README_GITHUB_BRANCH=main
    ```
 
 4. **Set Function Scopes**

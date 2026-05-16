@@ -10,13 +10,35 @@ import OpenAI from 'openai';
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 
+/** Appwrite user ID used for automated posts and comments (set per deployment). */
+const SCOUT_USER_ID = '';
+
+const SCOUT_USER_NAME = 'Scout';
+
+const LLM_MAX_TOKENS = 6000;
+
+const LLM_MAX_BATCH_SIZE = 20;
+
+const LLM_MIN_BATCH_SIZE = 5;
+
+const DEBUG_BATCHING = false;
+
+const SCRAPING_DELAY_MS = 3000;
+
+const MAX_URLS_PER_SOURCE = 25;
+
+const MAX_ARTICLES_PER_RUN = 1000;
+
+/** Verbose HTML / anchor logging during URL extraction. */
+const DEBUG_URL_EXTRACTION = false;
+
 // Target websites to scout
 function getTargetWebsites() {
   // Get from environment variable
-  const envWebsites = process.env.TARGET_WEBSITES;
+  const envWebsites = process.env.SCOUT_TARGET_WEBSITES;
   
   if (!envWebsites) {
-    throw new Error('TARGET_WEBSITES environment variable is required. Please set it with a comma-separated list of URLs.');
+    throw new Error('SCOUT_TARGET_WEBSITES environment variable is required. Please set it with a comma-separated list of URLs.');
   }
   
   try {
@@ -27,14 +49,14 @@ function getTargetWebsites() {
       .filter(url => url.length > 0);
     
     if (websites.length === 0) {
-      throw new Error('TARGET_WEBSITES environment variable contains no valid URLs');
+      throw new Error('SCOUT_TARGET_WEBSITES environment variable contains no valid URLs');
     }
     
-    console.log(`📋 Using ${websites.length} target websites from TARGET_WEBSITES environment variable`);
+    console.log(`📋 Using ${websites.length} target websites from SCOUT_TARGET_WEBSITES environment variable`);
     return websites;
     
   } catch (parseError) {
-    throw new Error(`Failed to parse TARGET_WEBSITES environment variable: ${parseError.message}. Expected format: "url1,url2,url3"`);
+    throw new Error(`Failed to parse SCOUT_TARGET_WEBSITES environment variable: ${parseError.message}. Expected format: "url1,url2,url3"`);
   }
 }
 
@@ -206,71 +228,66 @@ async function scrapeWebsiteForArticles(url) {
     
     if (response.status === 200) {
       let html = response.data;
-      
-      // Debug: Check HTML before cleaning
-      const beforeAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
-      const beforeSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
-      
-      // Debug: Check for empty href attributes in raw HTML
-      const emptyHrefMatches = html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || [];
-      if (emptyHrefMatches.length > 0) {
-        console.log(`  ⚠️ Found ${emptyHrefMatches.length} anchor tags with empty href in raw HTML`);
-        console.log(`  📍 Sample empty href: ${emptyHrefMatches[0]}`);
+
+      if (DEBUG_URL_EXTRACTION) {
+        const beforeAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+        const beforeSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
+
+        const emptyHrefMatches = html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || [];
+        if (emptyHrefMatches.length > 0) {
+          console.log(`  ⚠️ Found ${emptyHrefMatches.length} anchor tags with empty href in raw HTML`);
+          console.log(`  📍 Sample empty href: ${emptyHrefMatches[0]}`);
+        }
+
+        const anchorPatterns = {
+          noHref: (html.match(/<a[^>]*>(?!.*href)/gi) || []).length,
+          emptyHref: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
+          hashHref: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
+          javascriptHref: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
+          relativeHref: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
+          absoluteHref: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
+          otherHref: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
+        };
+
+        console.log(`  📊 Raw HTML anchor patterns: noHref=${anchorPatterns.noHref}, emptyHref=${anchorPatterns.emptyHref}, hashHref=${anchorPatterns.hashHref}, jsHref=${anchorPatterns.javascriptHref}, relativeHref=${anchorPatterns.relativeHref}, absoluteHref=${anchorPatterns.absoluteHref}, otherHref=${anchorPatterns.otherHref}`);
+
+        const rawAnchors = html.match(/<a[^>]*>[^<]*<\/a>/gi)?.slice(0, 5) || [];
+        if (rawAnchors.length > 0) {
+          console.log(`  🔍 Raw anchor tags (first 5):`);
+          rawAnchors.forEach((anchor, i) => {
+            console.log(`    ${i + 1}. ${anchor}`);
+          });
+        }
+
+        const alternativePatterns = {
+          buttons: (html.match(/<button[^>]*onclick[^>]*>/gi) || []).length,
+          divsWithOnclick: (html.match(/<div[^>]*onclick[^>]*>/gi) || []).length,
+          spansWithOnclick: (html.match(/<span[^>]*onclick[^>]*>/gi) || []).length,
+          dataAttributes: (html.match(/<[^>]*data-[^=]*=[^>]*>/gi) || []).length,
+          ariaButtons: (html.match(/<[^>]*role=["']button["'][^>]*>/gi) || []).length,
+          tabIndexElements: (html.match(/<[^>]*tabindex[^>]*>/gi) || []).length,
+          dataUrlAttributes: (html.match(/<[^>]*data-url[^>]*>/gi) || []).length,
+          dataHrefAttributes: (html.match(/<[^>]*data-href[^>]*>/gi) || []).length
+        };
+
+        console.log(`  📊 Alternative link patterns: buttons=${alternativePatterns.buttons}, divsWithOnclick=${alternativePatterns.divsWithOnclick}, spansWithOnclick=${alternativePatterns.spansWithOnclick}, dataAttributes=${alternativePatterns.dataAttributes}, ariaButtons=${alternativePatterns.ariaButtons}, tabIndexElements=${alternativePatterns.tabIndexElements}, dataUrlAttributes=${alternativePatterns.dataUrlAttributes}, dataHrefAttributes=${alternativePatterns.dataHrefAttributes}`);
+
+        const htmlLength = html.length;
+        const nonAsciiChars = html.match(/[^\x00-\x7F]/g)?.length || 0;
+        const hiddenChars = html.match(/[\u200B-\u200D\uFEFF]/g)?.length || 0;
+
+        console.log(`  📊 HTML stats: length=${htmlLength}, nonAscii=${nonAsciiChars}, hiddenChars=${hiddenChars}`);
+
+        const jsHrefPatterns = {
+          setAttribute: (html.match(/setAttribute\(["']href["'][^)]*\)/gi) || []).length,
+          hrefAssignment: (html.match(/\.href\s*=/gi) || []).length,
+          innerHTML: (html.match(/innerHTML\s*=/gi) || []).length,
+          outerHTML: (html.match(/outerHTML\s*=/gi) || []).length
+        };
+
+        console.log(`  📊 JavaScript href patterns: setAttribute=${jsHrefPatterns.setAttribute}, hrefAssignment=${jsHrefPatterns.hrefAssignment}, innerHTML=${jsHrefPatterns.innerHTML}, outerHTML=${jsHrefPatterns.outerHTML}`);
       }
-      
-      // Debug: Check for different anchor tag patterns
-      const anchorPatterns = {
-        noHref: (html.match(/<a[^>]*>(?!.*href)/gi) || []).length,
-        emptyHref: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
-        hashHref: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
-        javascriptHref: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
-        relativeHref: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
-        absoluteHref: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
-        otherHref: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
-      };
-      
-      console.log(`  📊 Raw HTML anchor patterns: noHref=${anchorPatterns.noHref}, emptyHref=${anchorPatterns.emptyHref}, hashHref=${anchorPatterns.hashHref}, jsHref=${anchorPatterns.javascriptHref}, relativeHref=${anchorPatterns.relativeHref}, absoluteHref=${anchorPatterns.absoluteHref}, otherHref=${anchorPatterns.otherHref}`);
-      
-      // Debug: Show a few raw anchor tags to understand the structure
-      const rawAnchors = html.match(/<a[^>]*>[^<]*<\/a>/gi)?.slice(0, 5) || [];
-      if (rawAnchors.length > 0) {
-        console.log(`  🔍 Raw anchor tags (first 5):`);
-        rawAnchors.forEach((anchor, i) => {
-          console.log(`    ${i + 1}. ${anchor}`);
-        });
-      }
-      
-      // Debug: Check for alternative link patterns (buttons, divs with onclick, etc.)
-      const alternativePatterns = {
-        buttons: (html.match(/<button[^>]*onclick[^>]*>/gi) || []).length,
-        divsWithOnclick: (html.match(/<div[^>]*onclick[^>]*>/gi) || []).length,
-        spansWithOnclick: (html.match(/<span[^>]*onclick[^>]*>/gi) || []).length,
-        dataAttributes: (html.match(/<[^>]*data-[^=]*=[^>]*>/gi) || []).length,
-        ariaButtons: (html.match(/<[^>]*role=["']button["'][^>]*>/gi) || []).length,
-        tabIndexElements: (html.match(/<[^>]*tabindex[^>]*>/gi) || []).length,
-        dataUrlAttributes: (html.match(/<[^>]*data-url[^>]*>/gi) || []).length,
-        dataHrefAttributes: (html.match(/<[^>]*data-href[^>]*>/gi) || []).length
-      };
-      
-      console.log(`  📊 Alternative link patterns: buttons=${alternativePatterns.buttons}, divsWithOnclick=${alternativePatterns.divsWithOnclick}, spansWithOnclick=${alternativePatterns.spansWithOnclick}, dataAttributes=${alternativePatterns.dataAttributes}, ariaButtons=${alternativePatterns.ariaButtons}, tabIndexElements=${alternativePatterns.tabIndexElements}, dataUrlAttributes=${alternativePatterns.dataUrlAttributes}, dataHrefAttributes=${alternativePatterns.dataHrefAttributes}`);
-      
-      // Debug: Check HTML encoding and hidden characters
-      const htmlLength = html.length;
-      const nonAsciiChars = html.match(/[^\x00-\x7F]/g)?.length || 0;
-      const hiddenChars = html.match(/[\u200B-\u200D\uFEFF]/g)?.length || 0;
-      
-      console.log(`  📊 HTML stats: length=${htmlLength}, nonAscii=${nonAsciiChars}, hiddenChars=${hiddenChars}`);
-      
-      // Debug: Check for JavaScript that sets href attributes
-      const jsHrefPatterns = {
-        setAttribute: (html.match(/setAttribute\(["']href["'][^)]*\)/gi) || []).length,
-        hrefAssignment: (html.match(/\.href\s*=/gi) || []).length,
-        innerHTML: (html.match(/innerHTML\s*=/gi) || []).length,
-        outerHTML: (html.match(/outerHTML\s*=/gi) || []).length
-      };
-      
-      console.log(`  📊 JavaScript href patterns: setAttribute=${jsHrefPatterns.setAttribute}, hrefAssignment=${jsHrefPatterns.hrefAssignment}, innerHTML=${jsHrefPatterns.innerHTML}, outerHTML=${jsHrefPatterns.outerHTML}`);
-      
+
       // Post-process HTML to remove iframes, scripts, and external resources
       html = html
         // Remove iframe tags completely
@@ -291,31 +308,33 @@ async function scrapeWebsiteForArticles(url) {
         .replace(/<link[^>]*href=["'](?!data:)[^"']*["'][^>]*>/gi, '<link>')
         // Remove any remaining external resource patterns
         .replace(/url\([^)]*\)/gi, 'url()');
-      
-      // Debug: Check HTML after cleaning
-      const afterAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
-      const afterSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
-      
-      console.log(`  🔍 HTML cleaning debug: ${beforeAnchorCount} → ${afterAnchorCount} anchor tags with href`);
-      if (beforeSampleAnchors.length > 0) {
-        console.log(`  📍 Before cleaning sample: ${beforeSampleAnchors[0]}`);
+
+      if (DEBUG_URL_EXTRACTION) {
+        const beforeAnchorCount = (response.data.match(/<a[^>]*href=/gi) || []).length;
+        const beforeSampleAnchors = response.data.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
+        const afterAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+        const afterSampleAnchors = html.match(/<a[^>]*href=["'][^"']*["'][^>]*>[^<]*<\/a>/gi)?.slice(0, 3) || [];
+
+        console.log(`  🔍 HTML cleaning debug: ${beforeAnchorCount} → ${afterAnchorCount} anchor tags with href`);
+        if (beforeSampleAnchors.length > 0) {
+          console.log(`  📍 Before cleaning sample: ${beforeSampleAnchors[0]}`);
+        }
+        if (afterSampleAnchors.length > 0) {
+          console.log(`  📍 After cleaning sample: ${afterSampleAnchors[0]}`);
+        }
+
+        const hrefPatterns = {
+          empty: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
+          hash: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
+          javascript: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
+          relative: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
+          absolute: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
+          other: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
+        };
+
+        console.log(`  📊 Href patterns: empty=${hrefPatterns.empty}, hash=${hrefPatterns.hash}, js=${hrefPatterns.javascript}, relative=${hrefPatterns.relative}, absolute=${hrefPatterns.absolute}, other=${hrefPatterns.other}`);
       }
-      if (afterSampleAnchors.length > 0) {
-        console.log(`  📍 After cleaning sample: ${afterSampleAnchors[0]}`);
-      }
-      
-      // Debug: Check for different href patterns
-      const hrefPatterns = {
-        empty: (html.match(/<a[^>]*href=["']{2}[^>]*>/gi) || []).length,
-        hash: (html.match(/<a[^>]*href=["']#[^"']*["'][^>]*>/gi) || []).length,
-        javascript: (html.match(/<a[^>]*href=["']javascript:[^"']*["'][^>]*>/gi) || []).length,
-        relative: (html.match(/<a[^>]*href=["']\/[^"']*["'][^>]*>/gi) || []).length,
-        absolute: (html.match(/<a[^>]*href=["']https?:\/\/[^"']*["'][^>]*>/gi) || []).length,
-        other: (html.match(/<a[^>]*href=["'][^"']*["'][^>]*>/gi) || []).length
-      };
-      
-      console.log(`  📊 Href patterns: empty=${hrefPatterns.empty}, hash=${hrefPatterns.hash}, js=${hrefPatterns.javascript}, relative=${hrefPatterns.relative}, absolute=${hrefPatterns.absolute}, other=${hrefPatterns.other}`);
-      
+
       return html;
     } else {
       console.error(`❌ ${url}: HTTP ${response.status}`);
@@ -338,12 +357,13 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '') // Remove <style> tags
       .replace(/<link[^>]*rel=["']stylesheet["'][^>]*>/gi, '') // Remove stylesheet links
       .replace(/<!--[\s\S]*?-->/g, ''); // Remove HTML comments
-    
-    // Debug: Check if HTML cleaning is affecting anchor tags
-    const originalAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
-    const cleanedAnchorCount = (cleanedHtml.match(/<a[^>]*href=/gi) || []).length;
-    console.log(`  📊 HTML cleaning: ${originalAnchorCount} → ${cleanedAnchorCount} anchor tags with href`);
-    
+
+    if (DEBUG_URL_EXTRACTION) {
+      const originalAnchorCount = (html.match(/<a[^>]*href=/gi) || []).length;
+      const cleanedAnchorCount = (cleanedHtml.match(/<a[^>]*href=/gi) || []).length;
+      console.log(`  📊 HTML cleaning: ${originalAnchorCount} → ${cleanedAnchorCount} anchor tags with href`);
+    }
+
     // Try to create JSDOM with all external resources completely disabled
     let dom;
     try {
@@ -407,7 +427,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       console.log(`  - Found ${anchorTags.length} anchor tags with href attributes`);
       
       // Debug: Show first few anchor tags to understand HTML structure
-      if (anchorTags.length > 0) {
+      if (DEBUG_URL_EXTRACTION && anchorTags.length > 0) {
         console.log(`  🔍 Sample anchor tags:`);
         for (let i = 0; i < Math.min(3, anchorTags.length); i++) {
           const anchor = anchorTags[i];
@@ -443,7 +463,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
       const linkText = anchor.textContent.trim();
       
       // Debug: Show first few URLs to understand what's being extracted
-      if (processedUrls === 0 && skippedUrls < 5) {
+      if (DEBUG_URL_EXTRACTION && processedUrls === 0 && skippedUrls < 5) {
         console.log(`    Sample URL: href="${articleUrl}" text="${linkText.substring(0, 30)}..."`);
       }
       
@@ -654,7 +674,7 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
     }
     
     // Show some sample URLs that were processed (for debugging)
-    if (finalArticles.length > 0) {
+    if (DEBUG_URL_EXTRACTION && finalArticles.length > 0) {
       console.log(`  📝 Sample URLs found:`);
       finalArticles.slice(0, 3).forEach((article, index) => {
         console.log(`    ${index + 1}. ${article.url.substring(0, 80)}...`);
@@ -694,28 +714,22 @@ function estimateTokenCount(urlsWithLabels) {
 
 // Helper function to calculate optimal batch size
 function calculateOptimalBatchSize(urlsWithLabels) {
-  // Allow configuration through environment variables
-  const MAX_TOKENS = parseInt(process.env.LLM_MAX_TOKENS || '6000'); // Conservative limit to stay well under 8192
+  const MAX_TOKENS = LLM_MAX_TOKENS;
   const baseTokens = 300;
   const perUrlTokens = 75;
-  
-  // Calculate how many URLs we can fit
+
   const availableTokens = MAX_TOKENS - baseTokens;
   const maxUrls = Math.floor(availableTokens / perUrlTokens);
-  
-  // Use a conservative batch size, minimum 5, maximum 20
-  // Allow override through environment variable
-  const maxBatchSize = parseInt(process.env.LLM_MAX_BATCH_SIZE || '20');
-  const minBatchSize = parseInt(process.env.LLM_MIN_BATCH_SIZE || '5');
-  
-  // Ensure we don't exceed the calculated maximum
+
+  const maxBatchSize = LLM_MAX_BATCH_SIZE;
+  const minBatchSize = LLM_MIN_BATCH_SIZE;
+
   const optimalSize = Math.max(minBatchSize, Math.min(maxUrls, maxBatchSize));
-  
-  // Log the batch size calculation for debugging
-  if (process.env.DEBUG_BATCHING === 'true') {
+
+  if (DEBUG_BATCHING) {
     console.log(`  🔧 Batch size calculation: MAX_TOKENS=${MAX_TOKENS}, available=${availableTokens}, maxUrls=${maxUrls}, optimal=${optimalSize}`);
   }
-  
+
   return optimalSize;
 }
 
@@ -924,8 +938,8 @@ async function addArticleToDatabase(article) {
     const documentData = {
       title: article.refetchTitle || 'Untitled Article',
       description: '', // Will be enhanced by the enhancement function later
-      userId: process.env.SCOUT_USER_ID || '',
-      userName: process.env.SCOUT_USER_NAME || 'Scout',
+      userId: SCOUT_USER_ID,
+      userName: SCOUT_USER_NAME,
       count: 0,
       countUp: 0,
       countDown: 0,
@@ -952,8 +966,8 @@ async function addArticleToDatabase(article) {
           ID.unique(),
           {
             postId: createdDocument.$id,
-            userId: process.env.SCOUT_USER_ID || '',
-            userName: process.env.SCOUT_USER_NAME || 'Scout',
+            userId: SCOUT_USER_ID,
+            userName: SCOUT_USER_NAME,
             content: article.discussionStarter.trim(),
             count: 0
           }
@@ -1030,21 +1044,26 @@ async function scoutArticles() {
     initializeClients();
     
     // Validate environment variables
-    const requiredEnvVars = ['OPENAI_API_KEY', 'SCOUT_USER_ID'];
-    const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    const requiredEnvVars = ['OPENAI_API_KEY'];
+    const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
     if (missingVars.length > 0) {
       throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    }
+    if (!String(SCOUT_USER_ID).trim()) {
+      throw new Error(
+        'SCOUT_USER_ID is empty — set it in functions/scout/index.js (Appwrite user ID for automated posts and comments).'
+      );
     }
     
     // Step 1: Scrape main pages and extract article URLs
     console.log('\n📋 Step 1: Scraping websites for article URLs...');
     const allArticlesData = [];
     
-    const TARGET_WEBSITES = getTargetWebsites();
+    const targetWebsites = getTargetWebsites();
     
-    for (let i = 0; i < TARGET_WEBSITES.length; i++) {
-      const url = TARGET_WEBSITES[i];
-      console.log(`[${i + 1}/${TARGET_WEBSITES.length}] ${url}`);
+    for (let i = 0; i < targetWebsites.length; i++) {
+      const url = targetWebsites[i];
+      console.log(`[${i + 1}/${targetWebsites.length}] ${url}`);
       
       const mainPageHtml = await scrapeWebsiteForArticles(url);
       if (mainPageHtml) {
@@ -1054,7 +1073,7 @@ async function scoutArticles() {
         results.urlBreakdown.totalUrlsFound += articlesData.length;
       }
       
-      await delay(parseInt(process.env.SCRAPING_DELAY_MS || '3000'));
+      await delay(SCRAPING_DELAY_MS);
     }
     
     console.log(`✅ Found ${allArticlesData.length} total URLs from ${results.websitesScraped} websites`);
@@ -1108,8 +1127,8 @@ async function scoutArticles() {
     let totalBatchesFailed = 0;
     
     // Process each website's URLs separately for better context
-    for (let i = 0; i < TARGET_WEBSITES.length; i++) {
-      const sourceUrl = TARGET_WEBSITES[i];
+    for (let i = 0; i < targetWebsites.length; i++) {
+      const sourceUrl = targetWebsites[i];
       
       const sourceArticles = uniqueArticlesData.filter(article => {
         // Use the source field we tracked during extraction
@@ -1122,9 +1141,8 @@ async function scoutArticles() {
       }
       
       // Limit URLs per source to ensure balanced coverage
-      const MAX_URLS_PER_SOURCE = parseInt(process.env.MAX_URLS_PER_SOURCE || '25');
       const limitedSourceArticles = sourceArticles.slice(0, MAX_URLS_PER_SOURCE);
-      
+
       if (sourceArticles.length > MAX_URLS_PER_SOURCE) {
         console.log(`  📊 Limiting ${sourceArticles.length} URLs to ${MAX_URLS_PER_SOURCE} for balanced coverage`);
       }
@@ -1154,7 +1172,7 @@ async function scoutArticles() {
       }
       
       // Add delay between websites to avoid overwhelming the API
-      if (i < TARGET_WEBSITES.length - 1) {
+      if (i < targetWebsites.length - 1) {
         console.log(`  ⏳ Waiting 3 seconds before processing next website...`);
         await delay(3000);
       }
@@ -1170,7 +1188,7 @@ async function scoutArticles() {
     // Step 3: Add articles to database
     console.log('\n💾 Step 3: Adding articles to database...');
     
-    const maxArticles = parseInt(process.env.MAX_ARTICLES_PER_RUN || '1000');
+    const maxArticles = MAX_ARTICLES_PER_RUN;
     const articlesToProcess = analyzedArticles.slice(0, maxArticles);
     
     console.log(`Processing ${articlesToProcess.length} articles (max: ${maxArticles})`);

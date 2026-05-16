@@ -19,11 +19,11 @@ export default async function ({ req, res, log, error }) {
         const appwriteDatabaseId = process.env.APPWRITE_DATABASE_ID;
         const appwritePostsCollectionId = process.env.APPWRITE_POSTS_COLLECTION_ID;
         
-        const githubToken = process.env.GITHUB_TOKEN;
-        const githubOwner = process.env.GITHUB_OWNER;
-        const githubRepo = process.env.GITHUB_REPO;
-        const githubBranch = process.env.GITHUB_BRANCH || 'main';
-        const appBaseUrl = process.env.APP_BASE_URL || 'https://refetch.io';
+        const githubToken = process.env.README_GITHUB_TOKEN;
+        const githubOwner = process.env.README_GITHUB_OWNER;
+        const githubRepo = process.env.README_GITHUB_REPO;
+        const githubBranch = process.env.README_GITHUB_BRANCH || 'main';
+        const appBaseUrl = process.env.README_ORIGIN || 'https://refetch.io';
         
         // Validate required environment variables
         if (!appwriteEndpoint || !appwriteProjectId || !appwriteApiKey || !appwriteDatabaseId || !appwritePostsCollectionId) {
@@ -31,7 +31,7 @@ export default async function ({ req, res, log, error }) {
         }
         
         if (!githubToken || !githubOwner || !githubRepo) {
-            throw new Error('Missing required GitHub environment variables');
+            throw new Error('Missing required GitHub environment variables (README_GITHUB_TOKEN, README_GITHUB_OWNER, README_GITHUB_REPO)');
         }
         
         log(`App base URL: ${appBaseUrl}`);

@@ -74,25 +74,15 @@ First, create a dedicated user account that will be the author of all auto-disco
 # OpenAI Configuration (Required)
 OPENAI_API_KEY=your_openai_api_key_here
 
-# Scout Configuration (Required)
-SCOUT_USER_ID=scout-user
-
-# Optional Configuration
-SCOUT_USER_NAME=Scout
-MAX_ARTICLES_PER_RUN=10
-SCRAPING_DELAY_MS=3000
-MAX_ARTICLES_TO_SCRAPE=30
-ARTICLE_SCRAPING_DELAY_MS=2000
+# Target websites (comma-separated); required for scraping
+SCOUT_TARGET_WEBSITES=https://example.com,https://another.com
 ```
 
 **Important Notes:**
-- **Required**: `OPENAI_API_KEY` and `SCOUT_USER_ID` must be set
+- **Required in environment**: `OPENAI_API_KEY` and `SCOUT_TARGET_WEBSITES`
 - **Automatic**: Appwrite automatically provides `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT_ID`, `APPWRITE_API_KEY`, `APPWRITE_DATABASE_ID`, `APPWRITE_POSTS_COLLECTION_ID`, and `APPWRITE_COMMENTS_COLLECTION_ID`
-- The `SCOUT_USER_ID` should match the user ID you created in Step 1
-- `SCRAPING_DELAY_MS` controls the delay between main page requests (3000ms = 3 seconds recommended)
-- `MAX_ARTICLES_PER_RUN` limits how many articles are added to database per execution
-- `MAX_ARTICLES_TO_SCRAPE` limits how many individual articles to scrape (30 recommended)
-- `ARTICLE_SCRAPING_DELAY_MS` controls delay between individual article requests (2000ms = 2 seconds recommended)
+- **Scout user**: Set `SCOUT_USER_ID` (and optionally `SCOUT_USER_NAME`) at the top of `functions/scout/index.js` to match the user you created in Step 1
+- **Delays and limits**: Edit `SCRAPING_DELAY_MS`, `MAX_ARTICLES_PER_RUN`, `MAX_URLS_PER_SOURCE`, and LLM batching constants in `index.js` as needed
 
 ### 3.3 Get Your Appwrite Configuration
 
@@ -108,7 +98,8 @@ ARTICLE_SCRAPING_DELAY_MS=2000
 
 **You only need to set:**
 1. **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. **Scout User ID**: The user ID you created in Step 1
+2. **Target websites**: `SCOUT_TARGET_WEBSITES` (comma-separated roots to crawl)
+3. **Scout user ID**: In `functions/scout/index.js`, set `SCOUT_USER_ID` to the user ID from Step 1
 
 ## Step 4: Test the Function
 
@@ -231,13 +222,13 @@ Error: Invalid API key
 ```
 Error: Too many requests
 ```
-**Solution**: Increase `SCRAPING_DELAY_MS` to 5000 or higher
+**Solution**: Increase `SCRAPING_DELAY_MS` in `index.js` to 5000 or higher
 
 ### Performance Optimization
 
 #### 1. Reduce Execution Time
-- Decrease `MAX_ARTICLES_PER_RUN` to 5-8
-- Increase `SCRAPING_DELAY_MS` to reduce rate limiting
+- Decrease `MAX_ARTICLES_PER_RUN` in `index.js` to 5–8
+- Increase `SCRAPING_DELAY_MS` in `index.js` to reduce rate limiting
 - Use fewer target websites initially
 
 #### 2. Improve Success Rate

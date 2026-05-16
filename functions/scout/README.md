@@ -13,11 +13,11 @@ The Scout Function:
 
 ## Target Websites
 
-The function is configured to scan tech news sources. You must configure the target websites using the `TARGET_WEBSITES` environment variable.
+The function is configured to scan tech news sources. You must configure the target websites using the `SCOUT_TARGET_WEBSITES` environment variable.
 
 ### Required Configuration
 
-The `TARGET_WEBSITES` environment variable is required and must contain a comma-separated list of URLs to scout.
+The `SCOUT_TARGET_WEBSITES` environment variable is required and must contain a comma-separated list of URLs to scout.
 
 ### Tech News & Startups
 - **TechCrunch** — Startups, funding, product launches
@@ -80,23 +80,12 @@ APPWRITE_COMMENTS_COLLECTION_ID=your_comments_collection_id
 # OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key
 
-# Scout Configuration
-SCOUT_USER_ID=your_scout_user_id
-SCOUT_USER_NAME=Refetch Scout
-MAX_ARTICLES_PER_RUN=10
-SCRAPING_DELAY_MS=2000
-MAX_URLS_PER_SOURCE=25
-
 # Target Websites (comma-separated URLs)
 # This should be a comma-separated list of URLs
-TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm
-
-# Batching Configuration (Optional)
-LLM_MAX_TOKENS=6000
-LLM_MAX_BATCH_SIZE=20
-LLM_MIN_BATCH_SIZE=5
-DEBUG_BATCHING=false
+SCOUT_TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm
 ```
+
+Scout user ID, display name, LLM batch sizes, scraping delay, per-run limits, and debug flags are **constants** at the top of `index.js` (edit there per deployment).
 
 ### Scout User Setup
 
@@ -104,6 +93,7 @@ Create a dedicated user account for the scout function:
 - Username: "Refetch Scout" (or your preferred name)
 - This user will be the author of all auto-discovered articles
 - Ensure this user has proper permissions
+- Copy that user's ID into `SCOUT_USER_ID` at the top of `index.js` (and adjust `SCOUT_USER_NAME` if you like)
 
 ## Deduplication
 
@@ -140,31 +130,16 @@ The scout function now uses intelligent batching to avoid exceeding LLM token li
 
 ### How Batching Works
 
-1. **Per-Source Limiting**: Each source is limited to 25 URLs maximum for balanced coverage
+1. **Per-Source Limiting**: Each source is limited by `MAX_URLS_PER_SOURCE` in `index.js` (default 25) for balanced coverage
 2. **Token Estimation**: Each URL + label is estimated to use ~75 tokens
 3. **Batch Calculation**: Optimal batch size is calculated based on available tokens
 4. **Processing**: URLs are split into batches and processed sequentially
 5. **Retry Logic**: Failed batches are retried up to 2 times with exponential backoff
 6. **Rate Limiting**: Delays are added between batches to avoid overwhelming the API
 
-### Batching Environment Variables
+### Batching constants
 
-```bash
-# Maximum URLs per source (default: 25)
-MAX_URLS_PER_SOURCE=25
-
-# Maximum tokens per batch (default: 6000)
-LLM_MAX_TOKENS=6000
-
-# Maximum URLs per batch (default: 20)
-LLM_MAX_BATCH_SIZE=20
-
-# Minimum URLs per batch (default: 5)
-LLM_MIN_BATCH_SIZE=5
-
-# Enable debug logging for batch calculations (default: false)
-DEBUG_BATCHING=false
-```
+Edit `MAX_URLS_PER_SOURCE`, `LLM_MAX_TOKENS`, `LLM_MAX_BATCH_SIZE`, `LLM_MIN_BATCH_SIZE`, and `DEBUG_BATCHING` at the top of `index.js`. See [BATCHING_CONFIG.md](./BATCHING_CONFIG.md) for defaults and tuning notes.
 
 ### Example Batching Output
 
@@ -262,11 +237,11 @@ The function returns a JSON response with:
 
 ### Adding New Websites
 
-To add new websites to scout, set the `TARGET_WEBSITES` environment variable with a comma-separated list of URLs:
+To add new websites to scout, set the `SCOUT_TARGET_WEBSITES` environment variable with a comma-separated list of URLs:
 
 ```bash
 # Add new websites to your environment variables
-TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://newtechsite.com,https://anothertechblog.com
+SCOUT_TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://newtechsite.com,https://anothertechblog.com
 ```
 
 **Important Notes:**
@@ -278,7 +253,7 @@ TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://newtechsite.
 **Example of adding a new site:**
 ```bash
 # Start with existing list and add your new site
-TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm,https://yournewtechsite.com
+SCOUT_TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm,https://yournewtechsite.com
 ```
 
 ### Adjusting Quality Thresholds
@@ -290,7 +265,7 @@ Modify the AI analysis prompts and scoring thresholds to match your content stan
 ### Common Issues
 
 1. **Rate Limiting**: Some websites may block rapid requests
-   - Solution: Increase `SCRAPING_DELAY_MS` between requests
+   - Solution: Increase `SCRAPING_DELAY_MS` in `index.js` between requests
 
 2. **Content Blocking**: Some sites may block automated access
    - Solution: Use different user agents or implement proxy rotation
@@ -300,7 +275,7 @@ Modify the AI analysis prompts and scoring thresholds to match your content stan
 
 4. **Token Limit Errors**: LLM requests exceeding token limits
    - Solution: The function now automatically batches URLs to avoid this issue
-   - If still occurring, reduce `LLM_MAX_TOKENS` or `LLM_MAX_BATCH_SIZE`
+   - If still occurring, reduce `LLM_MAX_TOKENS` or `LLM_MAX_BATCH_SIZE` in `index.js`
 
 5. **Database Errors**: Appwrite connection issues
    - Solution: Verify database IDs and API key permissions
