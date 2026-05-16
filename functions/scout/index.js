@@ -11,7 +11,7 @@ import axios from 'axios';
 import { JSDOM } from 'jsdom';
 
 /** Appwrite user ID used for automated posts and comments (set per deployment). */
-const SCOUT_USER_ID = '';
+const SCOUT_USER_ID = '0';
 
 const SCOUT_USER_NAME = 'Scout';
 
