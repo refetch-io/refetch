@@ -112,7 +112,9 @@ refetch/
 ├── functions/              # Appwrite serverless functions
 │   ├── scout/             # Content discovery automation
 │   ├── enhancement/       # AI content analysis
-│   └── algorithm/         # Ranking algorithm
+│   ├── algorithm/         # Ranking algorithm
+│   ├── topic-stats/       # Topic ranking (scheduled)
+│   └── readme/            # Syncs top posts into GitHub README
 ├── hooks/                  # Custom React hooks
 ├── lib/                    # Utility libraries and configurations
 ├── extensions/             # Browser extensions
@@ -153,8 +155,8 @@ refetch/
 3. **Set up environment variables**
    ```bash
    cp env.example .env.local
-   # Edit .env.local with your Appwrite credentials
    ```
+   Edit `.env.local` using [Environment variables](#environment-variables) as a checklist. A starter template also lives in [`env.example`](env.example).
 
 4. **Run the development server**
    ```bash
@@ -164,22 +166,120 @@ refetch/
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-### Environment Configuration
+## Environment variables
 
-Create a `.env.local` file with your Appwrite configuration:
+**Where to set them**
 
-```env
-# Appwrite Configuration
-NEXT_PUBLIC_APPWRITE_ENDPOINT=your_appwrite_endpoint
-NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_APPWRITE_DATABASE_ID=your_database_id
+- **Next.js (local / hosting):** `.env.local` or `.env`. Only `NEXT_PUBLIC_*` values are exposed to the browser; keep secrets without that prefix.
+- **Appwrite Functions:** set variables in the Console (this repo’s `appwrite:setup` creates functions but does not push env). Define shared keys once as **[global (project) variables](https://appwrite.io/docs/products/functions/environment-variables)** so every function inherits them; use per-function variables only to override or add keys.
+- **Mirror the same values** for web vs functions where two names exist (`APPWRITE_ENDPOINT` and `NEXT_PUBLIC_APPWRITE_ENDPOINT`, same for project ID) so nothing drifts.
 
-# OpenAI API Key (for AI features)
-OPENAI_API_KEY=your_openai_api_key
+Table IDs use the legacy name `*_COLLECTION_ID` but refer to **Appwrite Tables** table IDs.
 
-# Appwrite API Keys
-APPWRITE_API_KEY=your_api_key
-```
+### 1. Appwrite connection (global)
+
+Use the same endpoint and project everywhere; some paths read `APPWRITE_*`, others `NEXT_PUBLIC_APPWRITE_*`.
+
+| Variable | Description |
+| --- | --- |
+| `APPWRITE_ENDPOINT` | REST API base (e.g. `https://cloud.appwrite.io/v1`). Used by Functions and the Readme function. |
+| `NEXT_PUBLIC_APPWRITE_ENDPOINT` | Same URL; required for the Next app and several functions. |
+| `APPWRITE_PROJECT_ID` | Project ID (Functions / Readme). |
+| `NEXT_PUBLIC_APPWRITE_PROJECT_ID` | Same ID; required for the Next app and several functions. |
+| `APPWRITE_API_KEY` | Server API key (never `NEXT_PUBLIC_*`). Needs table access for the site and appropriate scopes per function. |
+
+### 2. Appwrite data IDs (global)
+
+| Variable | Description |
+| --- | --- |
+| `APPWRITE_DATABASE_ID` | Tables DB database ID. |
+| `APPWRITE_POSTS_COLLECTION_ID` | `posts` table. |
+| `APPWRITE_COMMENTS_COLLECTION_ID` | `comments` table. |
+| `APPWRITE_VOTES_COLLECTION_ID` | `votes` table. |
+| `APPWRITE_DAILY_TOPICS_COLLECTION_ID` | `daily_topics` table (topic stats). |
+| `APPWRITE_TOPICS_COLLECTION_ID` | `topics` table (topic stats). |
+
+### 3. Site URLs (global)
+
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_BASE_URL` | Canonical public origin (metadata, OG); default `https://refetch.io`. |
+| `APP_BASE_URL` | Same idea for server-generated links (e.g. Readme function); default `https://refetch.io`. |
+
+### 4. OpenAI (global for AI functions)
+
+| Variable | Description |
+| --- | --- |
+| `OPENAI_API_KEY` | Scout and Enhancement. |
+| `OPENAI_MODEL` | Enhancement only; default `gpt-4o-mini`. |
+
+### 5. Scout-only (sources + actor + tuning)
+
+Set at project level if you only run Scout, or override on the Scout function.
+
+| Variable | Description |
+| --- | --- |
+| `TARGET_WEBSITES` | Comma-separated site roots to crawl (can be very long). |
+| `SCOUT_USER_ID` | Appwrite user ID for automated posts/comments. |
+| `SCOUT_USER_NAME` | Label for that user (default `Scout`). |
+| `LLM_MAX_TOKENS` | Default `6000`. |
+| `LLM_MAX_BATCH_SIZE` | Default `20`. |
+| `LLM_MIN_BATCH_SIZE` | Default `5`. |
+| `DEBUG_BATCHING` | `true` for extra logs. |
+| `SCRAPING_DELAY_MS` | Default `3000`. |
+| `MAX_URLS_PER_SOURCE` | Default `25`. |
+| `MAX_ARTICLES_PER_RUN` | Default `1000`. |
+| `DEBUG_URL_EXTRACTION` | Optional; see `env.example`. |
+
+### 6. GitHub (Readme function only)
+
+Safe to set globally if unused elsewhere.
+
+| Variable | Description |
+| --- | --- |
+| `GITHUB_TOKEN` | PAT with `contents: write` (or equivalent) to update `README.md`. |
+| `GITHUB_OWNER` | Owner (user or org). |
+| `GITHUB_REPO` | Repository name. |
+| `GITHUB_BRANCH` | Branch to commit on (default `main`). |
+
+### 7. Plausible (Next API only)
+
+| Variable | Description |
+| --- | --- |
+| `PLAUSIBLE_API_KEY` | Stats API key (`app/api/plausible/realtime`). |
+| `PLAUSIBLE_SITE_ID` | Site / domain id in Plausible. |
+
+### 8. SEO verification (Next only)
+
+| Variable | Description |
+| --- | --- |
+| `GOOGLE_SITE_VERIFICATION` | Meta verification string. |
+| `YANDEX_VERIFICATION` | Yandex. |
+| `YAHOO_VERIFICATION` | Yahoo. |
+
+### 9. Bootstrap & CI (`scripts/appwrite-setup.mjs`, runs before `next build` unless skipped)
+
+Uses the same **Appwrite connection** and **data IDs** as above, plus:
+
+| Variable | Description |
+| --- | --- |
+| `APPWRITE_SITE_API_ENDPOINT` | Injected on **Appwrite Sites** builds; used if `APPWRITE_ENDPOINT` / `NEXT_PUBLIC_APPWRITE_ENDPOINT` are unset. |
+| `APPWRITE_SITE_PROJECT_ID` | Same for project ID. |
+| `APPWRITE_DATABASE_NAME` | Optional DB display name when creating DB (default `Refetch`). |
+| `SKIP_APPWRITE_SETUP` | `1` or `true` to skip bootstrap. |
+| `APPWRITE_SETUP_DEPLOY_FUNCTIONS` | `1` to upload function code when a function has no deployment. |
+| `APPWRITE_SETUP_FORCE_DEPLOY` | `1` to force a new deployment. |
+
+### Which functions need which groups
+
+| Function | Groups |
+| --- | --- |
+| **Scout** | 1, 2, 4, 5 |
+| **Enhancement** | 1, 2, 4 (`OPENAI_MODEL` optional) |
+| **Algorithm** | 1, 2 (posts only) |
+| **Topic stats** | 1, 2 (incl. daily_topics + topics) |
+| **Readme** | 1, 2 (posts only), 3 (`APP_BASE_URL`), 6 |
+| **Next.js app + `app/api`** | 1 (`NEXT_PUBLIC_*` + `APPWRITE_API_KEY`), 2, 3 (optional), 7–8 (optional) |
 
 ---
 
@@ -214,6 +314,12 @@ AI-powered content analysis that generates metadata, quality scores, and multili
 
 ### Algorithm Function
 Sophisticated ranking algorithm that considers time decay, quality metrics, and community engagement.
+
+### Topic stats function
+Scheduled job that aggregates post data into `daily_topics` and `topics` tables (see [Environment variables](#environment-variables)).
+
+### Readme function
+Commits an auto-generated “top posts” section into this repository’s `README.md` using the GitHub API.
 
 ---
 

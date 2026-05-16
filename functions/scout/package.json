@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "preinstall": "node ./print-build-env.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["appwrite", "function", "nodejs", "openai", "scraping", "scout"],

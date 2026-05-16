@@ -19,17 +19,13 @@
  *   APPWRITE_SETUP_FORCE_DEPLOY=1 — create a new deployment even if one exists (implies DEPLOY)
  *
  * Functions: matched by display name (must match the Appwrite Console function name exactly).
- *   On first run a new function id is generated; no APPWRITE_FUNCTION_*_ID list is required.
- *
- * Function env sync: each variable value is capped at 8192 **UTF-8 bytes** (Appwrite limit; JS
- * `string.length` is not the same). Oversized or API-rejected values are skipped with a warning —
- * configure those in the Appwrite Console.
+ *   On first run a new function id is generated. Function **variables** are not managed here — set
+ *   them (and secrets) manually in the Appwrite Console for each function.
  *
  * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
 import { execFileSync } from 'node:child_process';
-import { Buffer } from 'node:buffer';
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -273,26 +269,6 @@ const DB_SCOPES = [
 ];
 
 function refetchFunctionDefinitions() {
-  const endpoint = APPWRITE_ENDPOINT;
-  const project = APPWRITE_PROJECT_ID;
-  const posts = COLLECTION_IDS.posts;
-  const comments = COLLECTION_IDS.comments;
-  const votes = COLLECTION_IDS.votes;
-  const dailyTopics = COLLECTION_IDS.daily_topics;
-  const topics = COLLECTION_IDS.topics;
-
-  const common = {
-    APPWRITE_ENDPOINT: endpoint,
-    APPWRITE_PROJECT_ID: project,
-    NEXT_PUBLIC_APPWRITE_ENDPOINT: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || endpoint,
-    NEXT_PUBLIC_APPWRITE_PROJECT_ID: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || project,
-    APPWRITE_API_KEY: process.env.APPWRITE_API_KEY || '',
-    APPWRITE_DATABASE_ID: APPWRITE_DATABASE_ID,
-    APPWRITE_POSTS_COLLECTION_ID: posts,
-    APPWRITE_COMMENTS_COLLECTION_ID: comments,
-    APPWRITE_VOTES_COLLECTION_ID: votes,
-  };
-
   return [
     {
       folder: 'scout',
@@ -302,14 +278,6 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: DB_SCOPES,
-      variables: {
-        ...common,
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
-        SCOUT_USER_ID: process.env.SCOUT_USER_ID || '',
-        SCOUT_USER_NAME: process.env.SCOUT_USER_NAME || 'Scout',
-        TARGET_WEBSITES: process.env.TARGET_WEBSITES || '',
-      },
-      variableSecrets: ['OPENAI_API_KEY', 'APPWRITE_API_KEY'],
     },
     {
       folder: 'enhancement',
@@ -319,11 +287,6 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: DB_SCOPES,
-      variables: {
-        ...common,
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
-      },
-      variableSecrets: ['OPENAI_API_KEY', 'APPWRITE_API_KEY'],
     },
     {
       folder: 'algorithm',
@@ -333,8 +296,6 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: DB_SCOPES,
-      variables: { ...common },
-      variableSecrets: ['APPWRITE_API_KEY'],
     },
     {
       folder: 'readme',
@@ -344,19 +305,6 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: ['databases.read', 'tables.read', 'rows.read'],
-      variables: {
-        APPWRITE_ENDPOINT: endpoint,
-        APPWRITE_PROJECT_ID: project,
-        APPWRITE_API_KEY: process.env.APPWRITE_API_KEY || '',
-        APPWRITE_DATABASE_ID: APPWRITE_DATABASE_ID,
-        APPWRITE_POSTS_COLLECTION_ID: posts,
-        GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-        GITHUB_OWNER: process.env.GITHUB_OWNER || '',
-        GITHUB_REPO: process.env.GITHUB_REPO || '',
-        GITHUB_BRANCH: process.env.GITHUB_BRANCH || 'main',
-        APP_BASE_URL: process.env.APP_BASE_URL || 'https://refetch.io',
-      },
-      variableSecrets: ['APPWRITE_API_KEY', 'GITHUB_TOKEN'],
     },
     {
       folder: 'topic-stats',
@@ -366,12 +314,6 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: DB_SCOPES,
-      variables: {
-        ...common,
-        APPWRITE_DAILY_TOPICS_COLLECTION_ID: dailyTopics,
-        APPWRITE_TOPICS_COLLECTION_ID: topics,
-      },
-      variableSecrets: ['APPWRITE_API_KEY'],
     },
   ];
 }
@@ -518,13 +460,6 @@ async function ensureStorageBucket(storage, bucketId, config) {
   }
 }
 
-/** Appwrite function / site variable value limit (UTF-8 bytes per API). */
-const MAX_FUNCTION_VAR_VALUE_LENGTH = 8192;
-
-function functionVarUtf8ByteLength(str) {
-  return Buffer.byteLength(str, 'utf8');
-}
-
 /** Resolve by Appwrite function display name (server-side filter: Query.equal on `name`). */
 async function findFunctionByExactName(functions, displayName) {
   const res = await functions.list([
@@ -580,49 +515,6 @@ async function ensureFunction(functions, def) {
       }
     }
     throw createErr;
-  }
-}
-
-async function ensureFunctionVariables(functions, def, functionId) {
-  const { variables, variableSecrets = [] } = def;
-  const list = await functions.listVariables(functionId);
-  const existing = new Map((list.variables || []).map((v) => [v.key, v]));
-
-  for (const [key, value] of Object.entries(variables)) {
-    const secret = variableSecrets.includes(key);
-    const strVal = value === undefined || value === null ? '' : String(value);
-    const bytes = functionVarUtf8ByteLength(strVal);
-    if (bytes > MAX_FUNCTION_VAR_VALUE_LENGTH) {
-      log(
-        `    Variable "${key}" skipped (UTF-8 size ${bytes} bytes > ${MAX_FUNCTION_VAR_VALUE_LENGTH}). ` +
-          `Appwrite allows at most ${MAX_FUNCTION_VAR_VALUE_LENGTH} bytes — set this key in the Appwrite Console if needed.`,
-        'warning'
-      );
-      continue;
-    }
-    const prev = existing.get(key);
-    try {
-      if (prev) {
-        await functions.updateVariable(functionId, prev.$id, key, strVal, secret);
-        log(`    Variable "${key}" updated${secret ? ' (secret)' : ''}`, 'success');
-      } else {
-        await functions.createVariable(functionId, key, strVal, secret);
-        log(`    Variable "${key}" created${secret ? ' (secret)' : ''}`, 'success');
-      }
-    } catch (err) {
-      const msg = err?.message != null ? String(err.message) : '';
-      if (
-        err?.code === 400 &&
-        (msg.includes('8192') || /Invalid [`']value[`'] param/i.test(msg) || /no longer than 8192/i.test(msg))
-      ) {
-        log(
-          `    Variable "${key}" skipped (API rejected value: ${msg}). Set this key in the Appwrite Console if needed.`,
-          'warning'
-        );
-        continue;
-      }
-      throw err;
-    }
   }
 }
 
@@ -723,7 +615,6 @@ export async function setupAppwrite() {
   for (const fnDef of refetchFunctionDefinitions()) {
     log(`\n${fnDef.name}`, 'info');
     const fn = await ensureFunction(functions, fnDef);
-    await ensureFunctionVariables(functions, fnDef, fn.$id);
     await maybeDeployFunction(functions, fnDef, fn.$id);
   }
 
