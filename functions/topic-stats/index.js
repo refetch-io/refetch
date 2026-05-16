@@ -85,7 +85,7 @@ function rankAggregates(map) {
   return rows.map((row, i) => ({ ...row, rank: i + 1 }));
 }
 
-async function fetchTopDailyPosts(databases, databaseId, postsCollectionId, log) {
+async function fetchTopDailyPosts(tablesDB, databaseId, postsCollectionId, log) {
   const queries = [
     Query.greaterThan('$createdAt', twentyFourHoursAgoIso()),
     Query.lessThan('spamScore', 70),
@@ -101,7 +101,7 @@ async function fetchTopDailyPosts(databases, databaseId, postsCollectionId, log)
   return res.rows;
 }
 
-async function deleteDailyTopicsForDate(databases, databaseId, dailyCollectionId, date, log) {
+async function deleteDailyTopicsForDate(tablesDB, databaseId, dailyCollectionId, date, log) {
   let removed = 0;
   let cursor = null;
   for (;;) {
@@ -124,14 +124,14 @@ async function deleteDailyTopicsForDate(databases, databaseId, dailyCollectionId
 }
 
 async function writeDailyTopics(
-  databases,
+  tablesDB,
   databaseId,
   dailyCollectionId,
   date,
   ranked,
   log
 ) {
-  await deleteDailyTopicsForDate(databases, databaseId, dailyCollectionId, date, log);
+  await deleteDailyTopicsForDate(tablesDB, databaseId, dailyCollectionId, date, log);
   const now = new Date().toISOString();
   for (let i = 0; i < ranked.length; i += WRITE_CHUNK) {
     const slice = ranked.slice(i, i + WRITE_CHUNK);
@@ -153,7 +153,7 @@ async function writeDailyTopics(
   log(`Wrote ${ranked.length} daily_topics documents for ${date}`);
 }
 
-async function scanAllPostsForTopics(databases, databaseId, postsCollectionId, log, error) {
+async function scanAllPostsForTopics(tablesDB, databaseId, postsCollectionId, log, error) {
   const map = new Map();
   let cursor = null;
   let total = 0;
@@ -196,7 +196,7 @@ async function scanAllPostsForTopics(databases, databaseId, postsCollectionId, l
 }
 
 async function upsertTopicDocuments(
-  databases,
+  tablesDB,
   databaseId,
   topicsCollectionId,
   ranked,
@@ -265,12 +265,12 @@ export default async function ({ req, res, log, error }) {
     const utcDate = new Date().toISOString().slice(0, 10);
     log(`Topic stats run for UTC date ${utcDate}`);
 
-    const topPosts = await fetchTopDailyPosts(databases, databaseId, postsCollectionId, log);
+    const topPosts = await fetchTopDailyPosts(tablesDB, databaseId, postsCollectionId, log);
     const dailyMap = aggregateTopicsFromPosts(topPosts);
     const dailyRanked = rankAggregates(dailyMap);
 
     await writeDailyTopics(
-      databases,
+      tablesDB,
       databaseId,
       dailyTopicsCollectionId,
       utcDate,
@@ -279,7 +279,7 @@ export default async function ({ req, res, log, error }) {
     );
 
     const allTimeMap = await scanAllPostsForTopics(
-      databases,
+      tablesDB,
       databaseId,
       postsCollectionId,
       log,
@@ -287,7 +287,7 @@ export default async function ({ req, res, log, error }) {
     );
     const allTimeRanked = rankAggregates(allTimeMap);
     await upsertTopicDocuments(
-      databases,
+      tablesDB,
       databaseId,
       topicsCollectionId,
       allTimeRanked,

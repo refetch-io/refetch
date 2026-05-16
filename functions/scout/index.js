@@ -89,7 +89,7 @@ CRITICAL GUIDELINES:
 - Skip URLs that are clearly not articles (about, contact, privacy, terms, etc.)`;
 
 // Initialize clients
-let appwriteClient, databases, openai;
+let appwriteClient, tablesDB, openai;
 
 // Helper function to initialize clients
 function initializeClients() {
@@ -109,7 +109,7 @@ function initializeClients() {
       .setProject(projectId)
       .setKey(apiKey);
     
-    databases = new TablesDB(appwriteClient);
+    tablesDB = new TablesDB(appwriteClient);
   }
   
   if (!openai) {

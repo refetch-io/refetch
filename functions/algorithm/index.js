@@ -100,7 +100,7 @@ export default async function ({ req, res, log, error }) {
     }
     
     // Get posts to process
-    const posts = await fetchPostsToProcess(databases, DATABASE_ID, COLLECTION_ID, log);
+    const posts = await fetchPostsToProcess(tablesDB, DATABASE_ID, COLLECTION_ID, log);
     
     if (posts.length === 0) {
       log('ℹ️ No posts found to process. All posts may already be processed or outside the 16-hour window.');
@@ -118,7 +118,7 @@ export default async function ({ req, res, log, error }) {
     let diversityScores;
     try {
       log('🌐 Starting diversity score calculation...');
-      diversityScores = await calculateDiversityScores(databases, DATABASE_ID, COLLECTION_ID, log);
+      diversityScores = await calculateDiversityScores(tablesDB, DATABASE_ID, COLLECTION_ID, log);
       log(`✅ Diversity scores calculated successfully for ${diversityScores.size} articles`);
       
       // Log some sample diversity scores for debugging
@@ -148,7 +148,7 @@ export default async function ({ req, res, log, error }) {
     // Process posts and calculate scores with diversity scores
     const processingResults = await processPostsInBatches(
       posts, 
-      databases, 
+      tablesDB, 
       DATABASE_ID, 
       COLLECTION_ID, 
       log,
@@ -180,7 +180,7 @@ export default async function ({ req, res, log, error }) {
  * Fetch posts that need to be processed by the algorithm using cursor pagination
  * This handles large datasets efficiently by processing in batches of 1000
  */
-async function fetchPostsToProcess(databases, databaseId, collectionId, log) {
+async function fetchPostsToProcess(tablesDB, databaseId, collectionId, log) {
   try {
     log('🔍 Fetching posts for algorithm processing using cursor pagination...');
     
@@ -335,7 +335,7 @@ function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
  * Calculate diversity score based on domain uniqueness
  * This function analyzes the top 100 articles and assigns diversity scores
  */
-async function calculateDiversityScores(databases, databaseId, collectionId, log) {
+async function calculateDiversityScores(tablesDB, databaseId, collectionId, log) {
   try {
     log('🌐 Calculating diversity scores for top 100 articles...');
     
@@ -447,7 +447,7 @@ function applyScoringAlgorithm(post, diversityScore = 0) {
  * Process posts in batches for efficient database updates
  * Uses Appwrite's batch update with 1000 posts per batch
  */
-async function processPostsInBatches(posts, databases, databaseId, collectionId, log, error, diversityScores) {
+async function processPostsInBatches(posts, tablesDB, databaseId, collectionId, log, error, diversityScores) {
   // Ensure diversityScores is properly initialized
   if (!diversityScores || !(diversityScores instanceof Map)) {
     log(`⚠️ Warning: diversityScores is not a valid Map in processPostsInBatches, creating empty Map`);
