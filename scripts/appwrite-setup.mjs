@@ -21,13 +21,15 @@
  * Functions: matched by display name (must match the Appwrite Console function name exactly).
  *   On first run a new function id is generated; no APPWRITE_FUNCTION_*_ID list is required.
  *
- * Function env sync: each variable value is capped at 8192 characters (Appwrite limit). Long values
- * (e.g. TARGET_WEBSITES) are skipped with a warning — configure those in the Appwrite Console.
+ * Function env sync: each variable value is capped at 8192 **UTF-8 bytes** (Appwrite limit; JS
+ * `string.length` is not the same). Oversized or API-rejected values are skipped with a warning —
+ * configure those in the Appwrite Console.
  *
  * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
 import { execFileSync } from 'node:child_process';
+import { Buffer } from 'node:buffer';
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -516,8 +518,12 @@ async function ensureStorageBucket(storage, bucketId, config) {
   }
 }
 
-/** Appwrite function / site variable value limit (chars). */
+/** Appwrite function / site variable value limit (UTF-8 bytes per API). */
 const MAX_FUNCTION_VAR_VALUE_LENGTH = 8192;
+
+function functionVarUtf8ByteLength(str) {
+  return Buffer.byteLength(str, 'utf8');
+}
 
 /** Resolve by Appwrite function display name (server-side filter: Query.equal on `name`). */
 async function findFunctionByExactName(functions, displayName) {
@@ -585,21 +591,37 @@ async function ensureFunctionVariables(functions, def, functionId) {
   for (const [key, value] of Object.entries(variables)) {
     const secret = variableSecrets.includes(key);
     const strVal = value === undefined || value === null ? '' : String(value);
-    if (strVal.length > MAX_FUNCTION_VAR_VALUE_LENGTH) {
+    const bytes = functionVarUtf8ByteLength(strVal);
+    if (bytes > MAX_FUNCTION_VAR_VALUE_LENGTH) {
       log(
-        `    Variable "${key}" skipped (length ${strVal.length} > ${MAX_FUNCTION_VAR_VALUE_LENGTH}). ` +
-          `Appwrite allows at most ${MAX_FUNCTION_VAR_VALUE_LENGTH} chars — set this key in the Appwrite Console if needed.`,
+        `    Variable "${key}" skipped (UTF-8 size ${bytes} bytes > ${MAX_FUNCTION_VAR_VALUE_LENGTH}). ` +
+          `Appwrite allows at most ${MAX_FUNCTION_VAR_VALUE_LENGTH} bytes — set this key in the Appwrite Console if needed.`,
         'warning'
       );
       continue;
     }
     const prev = existing.get(key);
-    if (prev) {
-      await functions.updateVariable(functionId, prev.$id, key, strVal, secret);
-      log(`    Variable "${key}" updated${secret ? ' (secret)' : ''}`, 'success');
-    } else {
-      await functions.createVariable(functionId, key, strVal, secret);
-      log(`    Variable "${key}" created${secret ? ' (secret)' : ''}`, 'success');
+    try {
+      if (prev) {
+        await functions.updateVariable(functionId, prev.$id, key, strVal, secret);
+        log(`    Variable "${key}" updated${secret ? ' (secret)' : ''}`, 'success');
+      } else {
+        await functions.createVariable(functionId, key, strVal, secret);
+        log(`    Variable "${key}" created${secret ? ' (secret)' : ''}`, 'success');
+      }
+    } catch (err) {
+      const msg = err?.message != null ? String(err.message) : '';
+      if (
+        err?.code === 400 &&
+        (msg.includes('8192') || /Invalid [`']value[`'] param/i.test(msg) || /no longer than 8192/i.test(msg))
+      ) {
+        log(
+          `    Variable "${key}" skipped (API rejected value: ${msg}). Set this key in the Appwrite Console if needed.`,
+          'warning'
+        );
+        continue;
+      }
+      throw err;
     }
   }
 }
