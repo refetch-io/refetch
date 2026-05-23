@@ -15,6 +15,7 @@ import {
   UsersIcon,
 } from "lucide-react"
 
+import { SiteLogo } from "@/components/site/site-logo"
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -66,12 +67,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link to="/feed" className="flex min-w-0 items-center gap-2">
-                <img
-                  src="/logo-dark.png"
-                  alt="Refetch"
-                  width={102}
-                  height={23}
-                  className="h-6 w-auto max-w-32 object-contain object-left group-data-[collapsible=icon]/sidebar-wrapper:hidden"
+                <SiteLogo
+                  heightClass="h-6 max-w-32 group-data-[collapsible=icon]/sidebar-wrapper:hidden"
+                  className="object-left"
                 />
                 <img
                   src="/favicon.png"

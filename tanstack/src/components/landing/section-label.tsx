@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils"
 
+export const sectionPaddingX = "px-4 md:px-10"
+
+export const sectionHeadingIndent = "pl-8 md:pl-10"
+
+export const sectionBodySpacing = "mt-10 md:mt-12"
+
 export function SectionLabel({
   number,
   className,
@@ -10,7 +16,7 @@ export function SectionLabel({
   return (
     <span
       className={cn(
-        "text-muted-foreground/70 absolute top-6 left-4 font-mono text-[11px] tracking-widest md:left-6",
+        "text-muted-foreground/70 block pt-2.5 font-mono text-[13px] leading-none tracking-widest",
         className,
       )}
     >

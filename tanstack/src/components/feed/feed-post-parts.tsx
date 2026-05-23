@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { ExternalLink, MessageSquare } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getAvatarAppearance } from "@/lib/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { FeedPost } from "@/lib/feed/types"
@@ -34,6 +35,10 @@ export function FeedFavicon({
   className?: string
   wrapperClassName?: string
 }) {
+  const { initials, backgroundColor, color } = getAvatarAppearance(domain, {
+    maxInitials: 1,
+  })
+
   return (
     <span
       className={cn(
@@ -43,8 +48,11 @@ export function FeedFavicon({
     >
       <Avatar size="sm" className={cn("size-4 rounded-sm after:rounded-sm", className)}>
         <AvatarImage src={faviconUrl(domain)} alt="" className="object-contain p-px" />
-        <AvatarFallback className="rounded-sm text-[9px] font-medium">
-          {domainInitial(domain)}
+        <AvatarFallback
+          className="rounded-sm text-[9px] font-semibold"
+          style={{ backgroundColor, color }}
+        >
+          {initials}
         </AvatarFallback>
       </Avatar>
     </span>

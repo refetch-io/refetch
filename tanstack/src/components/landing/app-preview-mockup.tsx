@@ -24,7 +24,7 @@ function SidebarItem({
   return (
     <li
       className={`flex items-center gap-2.5 rounded-md px-2 py-1.5 text-[11px] ${
-        active ? "bg-white/[0.06] text-foreground" : "text-muted-foreground"
+        active ? "bg-muted text-foreground" : "text-muted-foreground"
       }`}
     >
       <Icon className="size-3.5" />
@@ -70,12 +70,12 @@ export function AppPreviewMockup() {
   return (
     <div className="bg-card/80 ring-border w-full overflow-hidden rounded-2xl ring-1 backdrop-blur-sm shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)]">
       {/* Top bar */}
-      <div className="flex items-center gap-3 border-b border-white/[0.06] px-3 py-2">
+      <div className="flex items-center gap-3 border-b border-border px-3 py-2">
         <div className="flex items-center gap-1.5">
           <RefetchLogo size={18} />
           <span className="text-foreground text-[11px] font-semibold tracking-tight">refetch</span>
         </div>
-        <div className="bg-white/[0.04] ml-auto flex h-6 max-w-xs flex-1 items-center gap-1.5 rounded-full px-2.5 ring-1 ring-white/[0.06]">
+        <div className="bg-muted ml-auto flex h-6 max-w-xs flex-1 items-center gap-1.5 rounded-full px-2.5 ring-1 ring-border">
           <Search className="text-muted-foreground size-3" />
           <span className="text-muted-foreground text-[10px]">Search Refetch</span>
         </div>
@@ -83,13 +83,13 @@ export function AppPreviewMockup() {
 
       <div className="grid grid-cols-[140px_minmax(0,1fr)_150px]">
         {/* Sidebar */}
-        <aside className="space-y-3 border-r border-white/[0.06] p-2">
+        <aside className="space-y-3 border-r border-border p-2">
           <ul className="space-y-0.5">
             <SidebarItem icon={Home} label="Home" active />
             <SidebarItem icon={TrendingUp} label="Popular" />
             <SidebarItem icon={Compass} label="All" />
           </ul>
-          <div className="border-t border-white/[0.06] pt-2">
+          <div className="border-t border-border pt-2">
             <p className="text-muted-foreground/70 mb-1 px-2 text-[9px] tracking-widest">
               YOUR COMMUNITIES
             </p>
@@ -99,7 +99,7 @@ export function AppPreviewMockup() {
               <CommunityRow letter="s" name="r/sports" color="bg-emerald-500/80" />
             </ul>
           </div>
-          <div className="border-t border-white/[0.06] pt-2">
+          <div className="border-t border-border pt-2">
             <p className="text-muted-foreground/70 mb-1 px-2 text-[9px] tracking-widest">
               COMMUNITIES
             </p>
@@ -115,7 +115,7 @@ export function AppPreviewMockup() {
         {/* Feed */}
         <main className="space-y-2 p-3">
           <div className="text-muted-foreground flex items-center gap-2 text-[10px]">
-            <span className="text-foreground bg-white/[0.06] rounded-full px-1.5 py-0.5">Best</span>
+            <span className="text-foreground bg-muted rounded-full px-1.5 py-0.5">Best</span>
             <span>Hot</span>
             <span>New</span>
             <span>Top</span>
@@ -134,7 +134,7 @@ export function AppPreviewMockup() {
               The future of computing is here.
             </p>
             <div
-              className="aspect-[16/8] w-full rounded-md ring-1 ring-white/[0.06]"
+              className="aspect-[16/8] w-full rounded-md ring-1 ring-border"
               style={{
                 backgroundImage:
                   "radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.4), transparent 55%), radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08), transparent 60%), linear-gradient(135deg, #1f2937 0%, #0f172a 100%)",
@@ -155,7 +155,7 @@ export function AppPreviewMockup() {
         </main>
 
         {/* Right rail */}
-        <aside className="space-y-2 border-l border-white/[0.06] p-2">
+        <aside className="space-y-2 border-l border-border p-2">
           <p className="text-foreground px-1 text-[10px] font-semibold">Trending Today</p>
           <ul className="space-y-0">
             <TrendingItem rank={1} title="AI breakthroughs" subtitle="r/science · 24.1k upvotes" />

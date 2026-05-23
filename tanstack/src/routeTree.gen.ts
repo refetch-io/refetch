@@ -9,13 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as FeedRouteImport } from './routes/feed'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
 import { Route as DashboardThreadsRouteImport } from './routes/_dashboard/threads'
-import { Route as DashboardFeedRouteImport } from './routes/_dashboard/feed'
 import { Route as DashboardThreadsThreadIdRouteImport } from './routes/_dashboard/threads.$threadId'
 
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/_dashboard',
   getParentRoute: () => rootRouteImport,
@@ -35,11 +46,6 @@ const DashboardThreadsRoute = DashboardThreadsRouteImport.update({
   path: '/threads',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardFeedRoute = DashboardFeedRouteImport.update({
-  id: '/feed',
-  path: '/feed',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const DashboardThreadsThreadIdRoute =
   DashboardThreadsThreadIdRouteImport.update({
     id: '/$threadId',
@@ -49,14 +55,16 @@ const DashboardThreadsThreadIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/feed': typeof DashboardFeedRoute
+  '/about': typeof AboutRoute
+  '/feed': typeof FeedRoute
   '/threads': typeof DashboardThreadsRouteWithChildren
   '/topics': typeof DashboardTopicsRoute
   '/threads/$threadId': typeof DashboardThreadsThreadIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/feed': typeof DashboardFeedRoute
+  '/about': typeof AboutRoute
+  '/feed': typeof FeedRoute
   '/threads': typeof DashboardThreadsRouteWithChildren
   '/topics': typeof DashboardTopicsRoute
   '/threads/$threadId': typeof DashboardThreadsThreadIdRoute
@@ -65,21 +73,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_dashboard': typeof DashboardRouteWithChildren
-  '/_dashboard/feed': typeof DashboardFeedRoute
+  '/about': typeof AboutRoute
+  '/feed': typeof FeedRoute
   '/_dashboard/threads': typeof DashboardThreadsRouteWithChildren
   '/_dashboard/topics': typeof DashboardTopicsRoute
   '/_dashboard/threads/$threadId': typeof DashboardThreadsThreadIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/feed' | '/threads' | '/topics' | '/threads/$threadId'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/feed'
+    | '/threads'
+    | '/topics'
+    | '/threads/$threadId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/feed' | '/threads' | '/topics' | '/threads/$threadId'
+  to: '/' | '/about' | '/feed' | '/threads' | '/topics' | '/threads/$threadId'
   id:
     | '__root__'
     | '/'
     | '/_dashboard'
-    | '/_dashboard/feed'
+    | '/about'
+    | '/feed'
     | '/_dashboard/threads'
     | '/_dashboard/topics'
     | '/_dashboard/threads/$threadId'
@@ -88,10 +104,26 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  FeedRoute: typeof FeedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_dashboard': {
       id: '/_dashboard'
       path: ''
@@ -120,13 +152,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardThreadsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/_dashboard/feed': {
-      id: '/_dashboard/feed'
-      path: '/feed'
-      fullPath: '/feed'
-      preLoaderRoute: typeof DashboardFeedRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/_dashboard/threads/$threadId': {
       id: '/_dashboard/threads/$threadId'
       path: '/$threadId'
@@ -149,13 +174,11 @@ const DashboardThreadsRouteWithChildren =
   DashboardThreadsRoute._addFileChildren(DashboardThreadsRouteChildren)
 
 interface DashboardRouteChildren {
-  DashboardFeedRoute: typeof DashboardFeedRoute
   DashboardThreadsRoute: typeof DashboardThreadsRouteWithChildren
   DashboardTopicsRoute: typeof DashboardTopicsRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardFeedRoute: DashboardFeedRoute,
   DashboardThreadsRoute: DashboardThreadsRouteWithChildren,
   DashboardTopicsRoute: DashboardTopicsRoute,
 }
@@ -167,6 +190,8 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  AboutRoute: AboutRoute,
+  FeedRoute: FeedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -12,7 +12,7 @@ export function RefetchLogo({ size = 32, className, variant = "filled" }: Refetc
     <span
       className={cn(
         "relative inline-flex shrink-0 items-center justify-center rounded-[28%]",
-        isFilled ? "bg-[var(--brand)]" : "bg-white/[0.06] ring-1 ring-white/10",
+        isFilled ? "bg-[var(--brand)]" : "bg-muted ring-1 ring-white/10",
         className,
       )}
       style={{ width: size, height: size }}

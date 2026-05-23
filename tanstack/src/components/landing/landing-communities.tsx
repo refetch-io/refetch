@@ -1,6 +1,11 @@
 import { ArrowRight, Gamepad2, Keyboard, Mountain, UtensilsCrossed } from "lucide-react"
 
-import { SectionLabel } from "@/components/landing/section-label"
+import {
+  SectionLabel,
+  sectionBodySpacing,
+  sectionHeadingIndent,
+  sectionPaddingX,
+} from "@/components/landing/section-label"
 import { cn } from "@/lib/utils"
 
 type Community = {
@@ -46,7 +51,7 @@ function CommunityCard({ community, large }: { community: Community; large?: boo
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl ring-1 ring-white/[0.06]",
+        "group relative overflow-hidden rounded-2xl ring-1 ring-border",
         large ? "aspect-[16/9]" : "aspect-[16/9]",
         community.background,
       )}
@@ -71,17 +76,22 @@ function CommunityCard({ community, large }: { community: Community; large?: boo
 
 export function LandingCommunities() {
   return (
-    <section className="landing-section-rule relative pt-12 pb-12 md:pt-16 md:pb-16">
-      <SectionLabel number="02" />
-      <div className="px-4 md:px-10">
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12">
+    <section className="landing-section-inset relative pb-12 md:pb-16">
+      <div className={sectionPaddingX}>
+        <SectionLabel number="02" />
+        <div
+          className={cn(
+            "grid items-center gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-12",
+            sectionBodySpacing,
+          )}
+        >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {COMMUNITIES.map((c) => (
               <CommunityCard key={c.name} community={c} />
             ))}
           </div>
 
-          <div className="max-w-md lg:pl-4">
+          <div className={cn("max-w-md lg:pl-4", sectionHeadingIndent)}>
             <h2 className="text-foreground text-3xl font-semibold leading-[1.1] tracking-tight md:text-4xl">
               A community for
               <br />

@@ -8,31 +8,20 @@ import {
   Zap,
 } from "lucide-react"
 
-import { SectionLabel } from "@/components/landing/section-label"
+import {
+  SectionLabel,
+  sectionBodySpacing,
+  sectionHeadingIndent,
+  sectionPaddingX,
+} from "@/components/landing/section-label"
 import { cn } from "@/lib/utils"
 
-function CardShell({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div
-      className={cn(
-        "bg-card/60 ring-border relative flex flex-col gap-5 overflow-hidden rounded-2xl p-5 ring-1 backdrop-blur-sm",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  )
-}
+const featureColumnSeparator =
+  "sm:before:bg-border sm:before:absolute sm:before:left-0 sm:before:top-0 sm:before:bottom-0 sm:before:w-px"
 
 function IconBadge({ icon: Icon }: { icon: React.ElementType }) {
   return (
-    <span className="bg-white/[0.06] ring-border inline-flex size-9 items-center justify-center rounded-xl ring-1">
+    <span className="bg-muted ring-border inline-flex size-9 items-center justify-center rounded-xl ring-1">
       <Icon className="text-foreground size-4.5" strokeWidth={2} />
     </span>
   )
@@ -53,7 +42,7 @@ function DiscoverPreview() {
             key={item.name}
             className={cn(
               "flex items-center gap-2 rounded-md px-2 py-1.5 text-xs",
-              item.active && "bg-white/[0.06]",
+              item.active && "bg-muted",
             )}
           >
             <span
@@ -124,7 +113,7 @@ function ContributePreview() {
           Share
         </span>
       </div>
-      <div className="bg-white/[0.04] flex items-center justify-between rounded-md px-2 py-1.5 text-[11px]">
+      <div className="bg-muted flex items-center justify-between rounded-md px-2 py-1.5 text-[11px]">
         <span className="text-muted-foreground">Best Comments</span>
         <ChevronDown className="text-muted-foreground size-3" />
       </div>
@@ -155,11 +144,16 @@ const FEATURES = [
 
 export function LandingFeatures() {
   return (
-    <section className="landing-section-rule relative pt-12 pb-12 md:pt-16 md:pb-16">
-      <SectionLabel number="01" />
-      <div className="px-4 md:px-10">
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
-          <div className="max-w-md">
+    <section className="landing-section-inset relative pb-12 md:pb-16">
+      <div className={sectionPaddingX}>
+        <SectionLabel number="01" />
+        <div
+          className={cn(
+            "grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12",
+            sectionBodySpacing,
+          )}
+        >
+          <div className={cn("max-w-md", sectionHeadingIndent)}>
             <h2 className="text-foreground text-3xl font-semibold leading-[1.1] tracking-tight md:text-4xl">
               Refetch is built for curiosity.
             </h2>
@@ -176,9 +170,16 @@ export function LandingFeatures() {
             </a>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {FEATURES.map((f) => (
-              <CardShell key={f.title}>
+          <div className="grid grid-cols-1 sm:grid-cols-3">
+            {FEATURES.map((f, i) => (
+              <div
+                key={f.title}
+                className={cn(
+                  "relative flex flex-col gap-5 py-2 sm:px-8",
+                  i > 0 && "border-border border-t pt-8 sm:border-t-0 sm:pt-2",
+                  i > 0 && featureColumnSeparator,
+                )}
+              >
                 <IconBadge icon={f.icon} />
                 <div>
                   <h3 className="text-foreground text-sm font-semibold">{f.title}</h3>
@@ -187,7 +188,7 @@ export function LandingFeatures() {
                   </p>
                 </div>
                 {f.preview}
-              </CardShell>
+              </div>
             ))}
           </div>
         </div>

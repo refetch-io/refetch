@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react"
+import { ThemeToggle } from "@/components/theme/theme-toggle"
 
 const COLUMNS: Array<{ heading: string; links: string[] }> = [
   {
@@ -53,26 +53,11 @@ export function LandingFooter() {
           ))}
         </div>
 
-        <div className="mt-10 flex items-center justify-between border-t border-white/[0.06] pt-5">
+        <div className="mt-10 flex items-center justify-between border-t border-border pt-5">
           <p className="text-muted-foreground text-xs">
-            © 2025 Refetch, Inc. All rights reserved.
+            © {new Date().getFullYear()} Refetch, Inc. All rights reserved.
           </p>
-          <div className="text-muted-foreground inline-flex items-center gap-2">
-            <button
-              type="button"
-              aria-label="Light theme"
-              className="hover:text-foreground inline-flex size-7 items-center justify-center rounded-md transition-colors"
-            >
-              <Sun className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              aria-label="Dark theme"
-              className="text-foreground inline-flex size-7 items-center justify-center rounded-md bg-white/[0.06] transition-colors"
-            >
-              <Moon className="size-3.5" />
-            </button>
-          </div>
+          <ThemeToggle />
         </div>
       </div>
     </footer>

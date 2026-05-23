@@ -6,6 +6,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    --container-page: 1350px;
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -53,7 +54,7 @@
 :root {
     --feed-up: oklch(0.62 0.19 45);
     --feed-down: oklch(0.52 0.14 264);
-    --brand: oklch(0.62 0.23 296);
+    --brand: #6134d8;
     --brand-foreground: oklch(0.985 0 0);
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -92,7 +93,7 @@
 .dark {
     --feed-up: oklch(0.72 0.18 55);
     --feed-down: oklch(0.62 0.16 264);
-    --brand: oklch(0.62 0.23 296);
+    --brand: #6134d8;
     --brand-foreground: oklch(0.985 0 0);
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
@@ -146,6 +147,30 @@
   }
 
   .landing-root {
+    max-width: 100%;
+    color-scheme: light;
+    --background: oklch(0.965 0.006 296);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.52 0.22 296);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.96 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.96 0 0);
+    --muted-foreground: oklch(0.48 0 0);
+    --accent: oklch(0.94 0.01 296);
+    --accent-foreground: oklch(0.205 0 0);
+    --border: oklch(0 0 0 / 12%);
+    --input: oklch(0 0 0 / 8%);
+    --ring: oklch(0.52 0.22 296);
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  .dark .landing-root {
     color-scheme: dark;
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
@@ -177,7 +202,7 @@
   }
 
   .feed-panel {
-    @apply bg-card/90 backdrop-blur-sm;
+    @apply border border-border bg-card dark:border-transparent dark:bg-card/60 dark:ring-1 dark:ring-border dark:backdrop-blur-sm;
   }
 
   .feed-post:focus-within {
@@ -185,11 +210,34 @@
   }
 
   .landing-hero-bg {
+    background: oklch(0.97 0.005 296);
+  }
+
+  .dark .landing-hero-bg {
     background: #000000;
   }
 
   .landing-section-rule {
-    @apply border-t border-white/[0.06];
+    @apply border-t border-border;
+  }
+
+  /* Separator inset matches section content padding (px-4 / md:px-10). */
+  .landing-section-inset {
+    position: relative;
+  }
+  .landing-section-inset::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    right: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  @media (min-width: 768px) {
+    .landing-section-inset::before {
+      left: 2.5rem;
+      right: 2.5rem;
+    }
   }
 
   .landing-grain {
@@ -200,7 +248,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-image: radial-gradient(color-mix(in oklch, var(--foreground) 8%, transparent) 1px, transparent 1px);
     background-size: 3px 3px;
     opacity: 0.4;
     mix-blend-mode: overlay;
