@@ -70,7 +70,7 @@ export function Header({ onMobileMenuClick, showMobileMenuButton = false }: Head
             rel="noopener noreferrer"
             className="text-white/80 hover:text-white transition-colors text-sm font-thin hidden lg:block"
           >
-            Open-source alternative to YC-controlled HN
+            Open-source alternative to YC-controlled HN~!
           </a>
         </div>
 
