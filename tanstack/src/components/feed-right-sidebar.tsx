@@ -119,7 +119,6 @@ function LiveViewSection() {
   const { users, count, loading, error, statusLabel, statusTone } =
     useOnlinePresences()
   const [isDark, setIsDark] = useState(false)
-  const [entered, setEntered] = useState(false)
   const [sharePresence, setSharePresence] = useState(true)
   const [savingPresence, setSavingPresence] = useState(false)
 
@@ -135,15 +134,6 @@ function LiveViewSection() {
   useEffect(() => {
     if (user) setSharePresence(isPresenceSharingEnabled(user.prefs))
   }, [user])
-
-  useEffect(() => {
-    if (loading) {
-      setEntered(false)
-      return
-    }
-    const id = window.requestAnimationFrame(() => setEntered(true))
-    return () => window.cancelAnimationFrame(id)
-  }, [loading, users.length])
 
   const togglePresenceSharing = async (enabled: boolean) => {
     const previous = sharePresence
@@ -169,30 +159,21 @@ function LiveViewSection() {
 
   const displayCount = error && count === 0 ? '—' : count
   const countLabel = count === 1 ? 'refetcher online' : 'refetchers online'
+  const showSkeleton = loading && users.length === 0
 
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <div className="flex h-8 items-baseline gap-1.5">
-          <p
-            className={cn(
-              'font-heading text-2xl font-semibold tracking-tight tabular-nums transition-opacity duration-300',
-              loading ? 'opacity-40' : 'opacity-100',
-            )}
-          >
-            {loading ? '0' : displayCount}
+          <p className="font-heading text-2xl font-semibold tracking-tight tabular-nums">
+            {showSkeleton ? '0' : displayCount}
           </p>
-          <span
-            className={cn(
-              'text-sm text-muted-foreground transition-opacity duration-300',
-              loading ? 'opacity-40' : 'opacity-100',
-            )}
-          >
-            {loading ? 'refetchers online' : countLabel}
+          <span className="text-sm text-muted-foreground">
+            {showSkeleton ? 'refetchers online' : countLabel}
           </span>
         </div>
-        <p className="h-4 text-xs text-muted-foreground transition-opacity duration-300">
-          {loading
+        <p className="h-4 text-xs text-muted-foreground">
+          {showSkeleton
             ? 'Connecting…'
             : error && count === 0
               ? 'Presence offline'
@@ -203,23 +184,14 @@ function LiveViewSection() {
       </div>
 
       <div className="relative min-h-[9.75rem]">
-        {loading ? (
+        {showSkeleton ? (
           <PresenceListSkeleton />
         ) : users.length > 0 ? (
-          <ul
-            className={cn(
-              'flex max-h-56 flex-col divide-y divide-border/40 overflow-y-auto overscroll-none transition-opacity duration-300',
-              entered ? 'opacity-100' : 'opacity-0',
-            )}
-          >
-            {users.map((presenceUser, index) => {
+          <ul className="flex max-h-56 flex-col divide-y divide-border/40 overflow-y-auto overscroll-none">
+            {users.map((presenceUser) => {
               const tone = statusTone(presenceUser.status)
               return (
-                <li
-                  key={presenceUser.userId}
-                  className="animate-in fade-in-0 slide-in-from-bottom-1 duration-300 fill-mode-both"
-                  style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
-                >
+                <li key={presenceUser.userId}>
                   <div className={PRESENCE_ROW_CLASS}>
                     <div className="relative shrink-0">
                       <Avatar size="sm">

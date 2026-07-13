@@ -32,26 +32,28 @@ function presencePermissions(userId: string) {
 export function PresenceSync() {
   const { user, isAuthenticated } = useAuth()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const presenceIdRef = useRef<string | null>(null)
+  const pathnameRef = useRef(pathname)
+  const userRef = useRef(user)
   const activityOverrideRef = useRef<string | null>(null)
   const idleRef = useRef(false)
+  const publishRef = useRef<() => void>(() => {})
+
+  pathnameRef.current = pathname
+  userRef.current = user
+
+  const userId = user?.$id ?? null
+  const sharing = isPresenceSharingEnabled(user?.prefs)
 
   useEffect(() => {
-    if (!isAuthenticated || !user) {
-      presenceIdRef.current = null
-      return
-    }
+    if (!isAuthenticated || !userId) return
 
-    const presenceId = user.$id
-    presenceIdRef.current = presenceId
-    const sharing = isPresenceSharingEnabled(user.prefs)
     let cancelled = false
     let activityClearId = 0
     let idleTimerId = 0
-    const permissions = presencePermissions(presenceId)
+    const permissions = presencePermissions(userId)
 
     const clearPresence = async () => {
-      await clearOwnPresence(presenceId)
+      await clearOwnPresence(userId)
     }
 
     if (!sharing) {
@@ -63,6 +65,8 @@ export function PresenceSync() {
 
     const publish = async () => {
       if (cancelled) return
+      const currentUser = userRef.current
+      if (!currentUser || currentUser.$id !== userId) return
 
       const status = idleRef.current
         ? 'away'
@@ -71,18 +75,19 @@ export function PresenceSync() {
           ? 'away'
           : 'online'
 
+      const currentPath = pathnameRef.current
       const activity =
-        activityOverrideRef.current || resolvePresenceActivity(pathname)
+        activityOverrideRef.current || resolvePresenceActivity(currentPath)
 
       try {
         const presence = await presences.upsert({
-          presenceId,
+          presenceId: userId,
           status,
           expiresAt: presenceExpiresAt(),
           permissions,
           metadata: {
-            name: presenceDisplayName(user),
-            page: pathname,
+            name: presenceDisplayName(currentUser),
+            page: currentPath,
             activity,
           },
         })
@@ -96,6 +101,10 @@ export function PresenceSync() {
       } catch {
         // Presence is best-effort; ignore transient failures.
       }
+    }
+
+    publishRef.current = () => {
+      void publish()
     }
 
     const markActive = () => {
@@ -163,7 +172,13 @@ export function PresenceSync() {
       window.removeEventListener('pointerdown', markActive)
       window.removeEventListener('keydown', markActive)
     }
-  }, [isAuthenticated, pathname, user])
+  }, [isAuthenticated, sharing, userId])
+
+  // Republish page/activity when the route changes without resetting the session.
+  useEffect(() => {
+    if (!isAuthenticated || !userId || !sharing) return
+    publishRef.current()
+  }, [isAuthenticated, pathname, sharing, userId])
 
   return null
 }

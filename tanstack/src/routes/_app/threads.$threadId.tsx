@@ -9,6 +9,7 @@ import {
   Reply,
 } from 'lucide-react'
 import { Favicon } from '@/components/favicon'
+import { FeedRightSidebar } from '@/components/feed-right-sidebar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -165,7 +166,7 @@ type ReplyTarget = { id: string; author: string }
 
 function ThreadPage() {
   const { post, comments: initialComments } = Route.useLoaderData()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading: authLoading } = useAuth()
   const [comments, setComments] = useState(initialComments)
   const [voteState, setVoteState] = useState<VoteState>({
     currentVote: null,
@@ -307,174 +308,200 @@ function ThreadPage() {
 
   return (
     <main className="flex min-w-0 flex-col">
-      <div className="mx-auto w-full max-w-5xl px-4 pt-1 pb-3 sm:px-6">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="-ml-2 h-8 gap-1.5 px-2 text-muted-foreground hover:text-foreground"
-          asChild
-        >
-          <Link to="/">
-            <ArrowLeft className="size-3.5" />
-            Back to feed
-          </Link>
-        </Button>
-      </div>
+      <div className="flex w-full gap-0 px-8 sm:px-12 lg:gap-10 lg:px-16">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="pt-1 pb-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-ml-2 h-8 gap-1.5 px-2 text-muted-foreground hover:text-foreground"
+              asChild
+            >
+              <Link to="/">
+                <ArrowLeft className="size-3.5" />
+                Back to feed
+              </Link>
+            </Button>
+          </div>
 
-      <article
-        className={cn(
-          'border-y border-border/40 transition-colors',
-          voteState.currentVote === 'up' &&
-            'bg-emerald-50 dark:bg-emerald-500/[0.06]',
-          voteState.currentVote === 'down' &&
-            'bg-rose-50 dark:bg-rose-500/[0.06]',
-        )}
-      >
-        <div className="mx-auto flex w-full max-w-5xl items-start gap-3 px-4 py-5 sm:px-6">
-          <VoteControls
-            voteState={voteState}
-            isVoting={isVoting}
-            onVote={handleVote}
-          />
+          <article className="border-y border-border/40">
+            <div className="flex items-start gap-3 py-5">
+              <VoteControls
+                voteState={voteState}
+                isVoting={isVoting}
+                onVote={handleVote}
+              />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-              {post.type === 'show' && (
-                <Badge
-                  variant="brand"
-                  className="h-[1.125rem] px-1.5 text-[10px] tracking-wide uppercase"
-                >
-                  Show
-                </Badge>
-              )}
-              <h1 className="font-sans text-lg leading-snug font-normal tracking-tight sm:text-xl">
-                {post.title}
-              </h1>
-              {sourceHref ? (
-                <a
-                  href={sourceHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-                >
-                  source
-                  <ExternalLink className="size-3" />
-                </a>
-              ) : null}
-            </div>
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                  {post.type === 'show' && (
+                    <Badge
+                      variant="brand"
+                      className="h-[1.125rem] px-1.5 text-[10px] tracking-wide uppercase"
+                    >
+                      Show
+                    </Badge>
+                  )}
+                  <h1 className="font-sans text-lg leading-snug font-normal tracking-tight sm:text-xl">
+                    {post.title}
+                  </h1>
+                  {sourceHref ? (
+                    <a
+                      href={sourceHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      source
+                      <ExternalLink className="size-3" />
+                    </a>
+                  ) : null}
+                </div>
 
-            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <Favicon domain={post.domain} size={14} />
-              <span>{post.domain.replace(/^www\./, '')}</span>
-              {post.timeAgo ? (
-                <>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <Favicon domain={post.domain} size={14} />
+                  <span>{post.domain.replace(/^www\./, '')}</span>
+                  {post.timeAgo ? (
+                    <>
+                      <span aria-hidden>•</span>
+                      <span>{post.timeAgo}</span>
+                    </>
+                  ) : null}
                   <span aria-hidden>•</span>
-                  <span>{post.timeAgo}</span>
-                </>
-              ) : null}
-              <span aria-hidden>•</span>
-              <span>{post.author}</span>
-              <span aria-hidden>•</span>
-              <span className="inline-flex items-center gap-1">
-                <MessageSquare className="size-3" />
-                {commentCountLabel}
-              </span>
-            </div>
+                  <span>{post.author}</span>
+                  <span aria-hidden>•</span>
+                  <span className="inline-flex items-center gap-1">
+                    <MessageSquare className="size-3" />
+                    {commentCountLabel}
+                  </span>
+                </div>
 
-            {post.description || post.tldr ? (
-              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                {post.tldr || post.description}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </article>
-
-      <section className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
-        <div className="mb-5 flex items-baseline justify-between gap-3">
-          <h2 className="font-heading text-base font-semibold tracking-tight">
-            Discussion
-          </h2>
-          <p className="text-xs text-muted-foreground">{commentCountLabel}</p>
-        </div>
-
-        <div className="mb-6 rounded-xl border border-border/50 bg-muted/20 p-3 sm:p-4">
-          {error ? (
-            <Alert variant="destructive" className="mb-3">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          ) : null}
-
-          {isAuthenticated ? (
-            <form onSubmit={handleComment} className="flex flex-col gap-3">
-              <Textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                onFocus={() => reportPresenceActivity('Typing…')}
-                onBlur={() => clearPresenceActivity()}
-                onKeyDown={submitOnModEnter}
-                placeholder="Share your thoughts…"
-                rows={3}
-                required
-                className="min-h-20 resize-y bg-background"
-              />
-              <div className="flex items-center justify-between gap-3">
-                <KeyboardSubmitHint action="comment" />
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={submitting || !text.trim()}
-                >
-                  Comment
-                </Button>
+                {post.description || post.tldr ? (
+                  <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                    {post.tldr || post.description}
+                  </p>
+                ) : null}
               </div>
-            </form>
-          ) : (
-            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-muted-foreground">
-                Sign in to join the discussion.
-              </p>
-              <Button size="sm" asChild>
-                <Link to="/signin">Sign in</Link>
-              </Button>
             </div>
-          )}
+          </article>
+
+          <section className="py-6">
+            <div className="mb-5 flex items-baseline justify-between gap-3">
+              <h2 className="font-heading text-base font-semibold tracking-tight">
+                Discussion
+              </h2>
+              <p className="text-xs text-muted-foreground">{commentCountLabel}</p>
+            </div>
+
+            <div className="mb-6 rounded-xl border border-border/50 bg-muted/20 p-3 sm:p-4">
+              {error ? (
+                <Alert variant="destructive" className="mb-3">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              ) : null}
+
+              <form
+                onSubmit={
+                  isAuthenticated
+                    ? handleComment
+                    : (event) => {
+                        event.preventDefault()
+                      }
+                }
+                className="flex flex-col gap-3"
+              >
+                <Textarea
+                  value={isAuthenticated ? text : ''}
+                  onChange={(e) => setText(e.target.value)}
+                  onFocus={() => {
+                    if (isAuthenticated) reportPresenceActivity('Typing…')
+                  }}
+                  onBlur={() => {
+                    if (isAuthenticated) clearPresenceActivity()
+                  }}
+                  onKeyDown={isAuthenticated ? submitOnModEnter : undefined}
+                  placeholder={
+                    authLoading
+                      ? ''
+                      : isAuthenticated
+                        ? 'Share your thoughts…'
+                        : 'Sign in to join the discussion…'
+                  }
+                  rows={3}
+                  required={isAuthenticated}
+                  disabled={authLoading || !isAuthenticated}
+                  className="min-h-20 resize-y bg-background disabled:cursor-not-allowed disabled:opacity-70"
+                />
+                <div className="flex min-h-8 items-center justify-between gap-3">
+                  {authLoading ? null : isAuthenticated ? (
+                    <>
+                      <KeyboardSubmitHint action="comment" />
+                      <Button
+                        type="submit"
+                        size="sm"
+                        disabled={submitting || !text.trim()}
+                      >
+                        Comment
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted-foreground">
+                        Sign in to join the discussion.
+                      </p>
+                      <Button type="button" size="sm" asChild>
+                        <Link to="/signin">Sign in</Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            {comments.length === 0 ? (
+              <Empty className="border border-dashed border-border/50 py-10">
+                <EmptyHeader>
+                  <EmptyTitle>No comments yet</EmptyTitle>
+                  <EmptyDescription>
+                    Be the first to share a take on this story.
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            ) : (
+              <div className="divide-y divide-border/40 border-y border-border/40">
+                {comments.map((comment) => (
+                  <CommentNode
+                    key={comment.id}
+                    comment={comment}
+                    depth={0}
+                    postAuthorId={post.userId}
+                    replyTo={replyTo}
+                    replyText={replyText}
+                    replyError={replyError}
+                    replySubmitting={replySubmitting}
+                    onReplyTextChange={setReplyText}
+                    onStartReply={startReply}
+                    onCancelReply={() => {
+                      setReplyTo(null)
+                      setReplyText('')
+                      setReplyError('')
+                    }}
+                    onSubmitReply={handleReply}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
         </div>
 
-        {comments.length === 0 ? (
-          <Empty className="border border-dashed border-border/50 py-10">
-            <EmptyHeader>
-              <EmptyTitle>No comments yet</EmptyTitle>
-              <EmptyDescription>
-                Be the first to share a take on this story.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : (
-          <div className="divide-y divide-border/40 border-y border-border/40">
-            {comments.map((comment) => (
-              <CommentNode
-                key={comment.id}
-                comment={comment}
-                depth={0}
-                postAuthorId={post.userId}
-                replyTo={replyTo}
-                replyText={replyText}
-                replyError={replyError}
-                replySubmitting={replySubmitting}
-                onReplyTextChange={setReplyText}
-                onStartReply={startReply}
-                onCancelReply={() => {
-                  setReplyTo(null)
-                  setReplyText('')
-                  setReplyError('')
-                }}
-                onSubmitReply={handleReply}
-              />
-            ))}
+        <aside className="hidden w-72 shrink-0 border-l border-border/60 pl-8 lg:block">
+          <div className="sticky top-6 z-10">
+            <div className="max-h-[calc(100svh-3.5rem-1.5rem)] overflow-y-auto overscroll-contain">
+              <FeedRightSidebar />
+            </div>
           </div>
-        )}
-      </section>
+        </aside>
+      </div>
     </main>
   )
 }

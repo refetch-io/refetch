@@ -70,9 +70,9 @@ export function AppSidebar() {
         <Link
           to="/"
           aria-label="Refetch home"
-          className="flex h-8 items-center overflow-hidden rounded-md px-2 outline-none ring-sidebar-ring transition-colors hover:bg-sidebar-accent focus-visible:ring-2"
+          className="flex h-8 items-center overflow-hidden rounded-md px-2 outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent focus-visible:ring-2 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0!"
         >
-          <RefetchMark className="hidden size-6 shrink-0 group-data-[collapsible=icon]:block" />
+          <RefetchMark className="hidden size-5 shrink-0 group-data-[collapsible=icon]:block" />
           <RefetchWordmark className="h-5 w-[90px] shrink-0 group-data-[collapsible=icon]:hidden" />
         </Link>
       </SidebarHeader>
