@@ -9,189 +9,434 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as FeedRouteImport } from './routes/feed'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as DashboardRouteImport } from './routes/_dashboard'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
-import { Route as DashboardThreadsRouteImport } from './routes/_dashboard/threads'
-import { Route as DashboardThreadsThreadIdRouteImport } from './routes/_dashboard/threads.$threadId'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppSubmitRouteImport } from './routes/_app/submit'
+import { Route as AppSignupRouteImport } from './routes/_app/signup'
+import { Route as AppSigninRouteImport } from './routes/_app/signin'
+import { Route as AppShowRouteImport } from './routes/_app/show'
+import { Route as AppNewRouteImport } from './routes/_app/new'
+import { Route as AppMinesRouteImport } from './routes/_app/mines'
+import { Route as AppAccountRouteImport } from './routes/_app/account'
+import { Route as ApiV1VotesRouteImport } from './routes/api/v1/votes'
+import { Route as ApiV1PostsRouteImport } from './routes/api/v1/posts'
+import { Route as ApiV1AnalyticsRouteImport } from './routes/api/v1/analytics'
+import { Route as ApiV1AccountRouteImport } from './routes/api/v1/account'
+import { Route as AppThreadsThreadIdRouteImport } from './routes/_app/threads.$threadId'
+import { Route as ApiV1PostsSearchRouteImport } from './routes/api/v1/posts.search'
+import { Route as ApiV1PostsPostIdRouteImport } from './routes/api/v1/posts.$postId'
+import { Route as ApiV1CommentsCommentIdRouteImport } from './routes/api/v1/comments.$commentId'
+import { Route as ApiV1PostsPostIdCommentsRouteImport } from './routes/api/v1/posts.$postId.comments'
 
-const FeedRoute = FeedRouteImport.update({
-  id: '/feed',
-  path: '/feed',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/_dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSubmitRoute = AppSubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSignupRoute = AppSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSigninRoute = AppSigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppShowRoute = AppShowRouteImport.update({
+  id: '/show',
+  path: '/show',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNewRoute = AppNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMinesRoute = AppMinesRouteImport.update({
+  id: '/mines',
+  path: '/mines',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAccountRoute = AppAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApiV1VotesRoute = ApiV1VotesRouteImport.update({
+  id: '/api/v1/votes',
+  path: '/api/v1/votes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardTopicsRoute = DashboardTopicsRouteImport.update({
-  id: '/topics',
-  path: '/topics',
-  getParentRoute: () => DashboardRoute,
+const ApiV1PostsRoute = ApiV1PostsRouteImport.update({
+  id: '/api/v1/posts',
+  path: '/api/v1/posts',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardThreadsRoute = DashboardThreadsRouteImport.update({
-  id: '/threads',
-  path: '/threads',
-  getParentRoute: () => DashboardRoute,
+const ApiV1AnalyticsRoute = ApiV1AnalyticsRouteImport.update({
+  id: '/api/v1/analytics',
+  path: '/api/v1/analytics',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardThreadsThreadIdRoute =
-  DashboardThreadsThreadIdRouteImport.update({
-    id: '/$threadId',
-    path: '/$threadId',
-    getParentRoute: () => DashboardThreadsRoute,
+const ApiV1AccountRoute = ApiV1AccountRouteImport.update({
+  id: '/api/v1/account',
+  path: '/api/v1/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppThreadsThreadIdRoute = AppThreadsThreadIdRouteImport.update({
+  id: '/threads/$threadId',
+  path: '/threads/$threadId',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApiV1PostsSearchRoute = ApiV1PostsSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => ApiV1PostsRoute,
+} as any)
+const ApiV1PostsPostIdRoute = ApiV1PostsPostIdRouteImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => ApiV1PostsRoute,
+} as any)
+const ApiV1CommentsCommentIdRoute = ApiV1CommentsCommentIdRouteImport.update({
+  id: '/api/v1/comments/$commentId',
+  path: '/api/v1/comments/$commentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1PostsPostIdCommentsRoute =
+  ApiV1PostsPostIdCommentsRouteImport.update({
+    id: '/comments',
+    path: '/comments',
+    getParentRoute: () => ApiV1PostsPostIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/feed': typeof FeedRoute
-  '/threads': typeof DashboardThreadsRouteWithChildren
-  '/topics': typeof DashboardTopicsRoute
-  '/threads/$threadId': typeof DashboardThreadsThreadIdRoute
+  '/': typeof AppIndexRoute
+  '/account': typeof AppAccountRoute
+  '/mines': typeof AppMinesRoute
+  '/new': typeof AppNewRoute
+  '/show': typeof AppShowRoute
+  '/signin': typeof AppSigninRoute
+  '/signup': typeof AppSignupRoute
+  '/submit': typeof AppSubmitRoute
+  '/threads/$threadId': typeof AppThreadsThreadIdRoute
+  '/api/v1/account': typeof ApiV1AccountRoute
+  '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
+  '/api/v1/votes': typeof ApiV1VotesRoute
+  '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
+  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
+  '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/feed': typeof FeedRoute
-  '/threads': typeof DashboardThreadsRouteWithChildren
-  '/topics': typeof DashboardTopicsRoute
-  '/threads/$threadId': typeof DashboardThreadsThreadIdRoute
+  '/account': typeof AppAccountRoute
+  '/mines': typeof AppMinesRoute
+  '/new': typeof AppNewRoute
+  '/show': typeof AppShowRoute
+  '/signin': typeof AppSigninRoute
+  '/signup': typeof AppSignupRoute
+  '/submit': typeof AppSubmitRoute
+  '/': typeof AppIndexRoute
+  '/threads/$threadId': typeof AppThreadsThreadIdRoute
+  '/api/v1/account': typeof ApiV1AccountRoute
+  '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
+  '/api/v1/votes': typeof ApiV1VotesRoute
+  '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
+  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
+  '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/_dashboard': typeof DashboardRouteWithChildren
-  '/about': typeof AboutRoute
-  '/feed': typeof FeedRoute
-  '/_dashboard/threads': typeof DashboardThreadsRouteWithChildren
-  '/_dashboard/topics': typeof DashboardTopicsRoute
-  '/_dashboard/threads/$threadId': typeof DashboardThreadsThreadIdRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_app/account': typeof AppAccountRoute
+  '/_app/mines': typeof AppMinesRoute
+  '/_app/new': typeof AppNewRoute
+  '/_app/show': typeof AppShowRoute
+  '/_app/signin': typeof AppSigninRoute
+  '/_app/signup': typeof AppSignupRoute
+  '/_app/submit': typeof AppSubmitRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/threads/$threadId': typeof AppThreadsThreadIdRoute
+  '/api/v1/account': typeof ApiV1AccountRoute
+  '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
+  '/api/v1/votes': typeof ApiV1VotesRoute
+  '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
+  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
+  '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
-    | '/feed'
-    | '/threads'
-    | '/topics'
+    | '/account'
+    | '/mines'
+    | '/new'
+    | '/show'
+    | '/signin'
+    | '/signup'
+    | '/submit'
     | '/threads/$threadId'
+    | '/api/v1/account'
+    | '/api/v1/analytics'
+    | '/api/v1/posts'
+    | '/api/v1/votes'
+    | '/api/v1/comments/$commentId'
+    | '/api/v1/posts/$postId'
+    | '/api/v1/posts/search'
+    | '/api/v1/posts/$postId/comments'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/feed' | '/threads' | '/topics' | '/threads/$threadId'
+  to:
+    | '/account'
+    | '/mines'
+    | '/new'
+    | '/show'
+    | '/signin'
+    | '/signup'
+    | '/submit'
+    | '/'
+    | '/threads/$threadId'
+    | '/api/v1/account'
+    | '/api/v1/analytics'
+    | '/api/v1/posts'
+    | '/api/v1/votes'
+    | '/api/v1/comments/$commentId'
+    | '/api/v1/posts/$postId'
+    | '/api/v1/posts/search'
+    | '/api/v1/posts/$postId/comments'
   id:
     | '__root__'
-    | '/'
-    | '/_dashboard'
-    | '/about'
-    | '/feed'
-    | '/_dashboard/threads'
-    | '/_dashboard/topics'
-    | '/_dashboard/threads/$threadId'
+    | '/_app'
+    | '/_app/account'
+    | '/_app/mines'
+    | '/_app/new'
+    | '/_app/show'
+    | '/_app/signin'
+    | '/_app/signup'
+    | '/_app/submit'
+    | '/_app/'
+    | '/_app/threads/$threadId'
+    | '/api/v1/account'
+    | '/api/v1/analytics'
+    | '/api/v1/posts'
+    | '/api/v1/votes'
+    | '/api/v1/comments/$commentId'
+    | '/api/v1/posts/$postId'
+    | '/api/v1/posts/search'
+    | '/api/v1/posts/$postId/comments'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
-  AboutRoute: typeof AboutRoute
-  FeedRoute: typeof FeedRoute
+  AppRoute: typeof AppRouteWithChildren
+  ApiV1AccountRoute: typeof ApiV1AccountRoute
+  ApiV1AnalyticsRoute: typeof ApiV1AnalyticsRoute
+  ApiV1PostsRoute: typeof ApiV1PostsRouteWithChildren
+  ApiV1VotesRoute: typeof ApiV1VotesRoute
+  ApiV1CommentsCommentIdRoute: typeof ApiV1CommentsCommentIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/feed': {
-      id: '/feed'
-      path: '/feed'
-      fullPath: '/feed'
-      preLoaderRoute: typeof FeedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_dashboard': {
-      id: '/_dashboard'
+    '/_app': {
+      id: '/_app'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/submit': {
+      id: '/_app/submit'
+      path: '/submit'
+      fullPath: '/submit'
+      preLoaderRoute: typeof AppSubmitRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/signup': {
+      id: '/_app/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof AppSignupRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/signin': {
+      id: '/_app/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof AppSigninRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/show': {
+      id: '/_app/show'
+      path: '/show'
+      fullPath: '/show'
+      preLoaderRoute: typeof AppShowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/new': {
+      id: '/_app/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AppNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/mines': {
+      id: '/_app/mines'
+      path: '/mines'
+      fullPath: '/mines'
+      preLoaderRoute: typeof AppMinesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/account': {
+      id: '/_app/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AppAccountRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/api/v1/votes': {
+      id: '/api/v1/votes'
+      path: '/api/v1/votes'
+      fullPath: '/api/v1/votes'
+      preLoaderRoute: typeof ApiV1VotesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_dashboard/topics': {
-      id: '/_dashboard/topics'
-      path: '/topics'
-      fullPath: '/topics'
-      preLoaderRoute: typeof DashboardTopicsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/api/v1/posts': {
+      id: '/api/v1/posts'
+      path: '/api/v1/posts'
+      fullPath: '/api/v1/posts'
+      preLoaderRoute: typeof ApiV1PostsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_dashboard/threads': {
-      id: '/_dashboard/threads'
-      path: '/threads'
-      fullPath: '/threads'
-      preLoaderRoute: typeof DashboardThreadsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/api/v1/analytics': {
+      id: '/api/v1/analytics'
+      path: '/api/v1/analytics'
+      fullPath: '/api/v1/analytics'
+      preLoaderRoute: typeof ApiV1AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_dashboard/threads/$threadId': {
-      id: '/_dashboard/threads/$threadId'
-      path: '/$threadId'
+    '/api/v1/account': {
+      id: '/api/v1/account'
+      path: '/api/v1/account'
+      fullPath: '/api/v1/account'
+      preLoaderRoute: typeof ApiV1AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/threads/$threadId': {
+      id: '/_app/threads/$threadId'
+      path: '/threads/$threadId'
       fullPath: '/threads/$threadId'
-      preLoaderRoute: typeof DashboardThreadsThreadIdRouteImport
-      parentRoute: typeof DashboardThreadsRoute
+      preLoaderRoute: typeof AppThreadsThreadIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/api/v1/posts/search': {
+      id: '/api/v1/posts/search'
+      path: '/search'
+      fullPath: '/api/v1/posts/search'
+      preLoaderRoute: typeof ApiV1PostsSearchRouteImport
+      parentRoute: typeof ApiV1PostsRoute
+    }
+    '/api/v1/posts/$postId': {
+      id: '/api/v1/posts/$postId'
+      path: '/$postId'
+      fullPath: '/api/v1/posts/$postId'
+      preLoaderRoute: typeof ApiV1PostsPostIdRouteImport
+      parentRoute: typeof ApiV1PostsRoute
+    }
+    '/api/v1/comments/$commentId': {
+      id: '/api/v1/comments/$commentId'
+      path: '/api/v1/comments/$commentId'
+      fullPath: '/api/v1/comments/$commentId'
+      preLoaderRoute: typeof ApiV1CommentsCommentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/posts/$postId/comments': {
+      id: '/api/v1/posts/$postId/comments'
+      path: '/comments'
+      fullPath: '/api/v1/posts/$postId/comments'
+      preLoaderRoute: typeof ApiV1PostsPostIdCommentsRouteImport
+      parentRoute: typeof ApiV1PostsPostIdRoute
     }
   }
 }
 
-interface DashboardThreadsRouteChildren {
-  DashboardThreadsThreadIdRoute: typeof DashboardThreadsThreadIdRoute
+interface AppRouteChildren {
+  AppAccountRoute: typeof AppAccountRoute
+  AppMinesRoute: typeof AppMinesRoute
+  AppNewRoute: typeof AppNewRoute
+  AppShowRoute: typeof AppShowRoute
+  AppSigninRoute: typeof AppSigninRoute
+  AppSignupRoute: typeof AppSignupRoute
+  AppSubmitRoute: typeof AppSubmitRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppThreadsThreadIdRoute: typeof AppThreadsThreadIdRoute
 }
 
-const DashboardThreadsRouteChildren: DashboardThreadsRouteChildren = {
-  DashboardThreadsThreadIdRoute: DashboardThreadsThreadIdRoute,
+const AppRouteChildren: AppRouteChildren = {
+  AppAccountRoute: AppAccountRoute,
+  AppMinesRoute: AppMinesRoute,
+  AppNewRoute: AppNewRoute,
+  AppShowRoute: AppShowRoute,
+  AppSigninRoute: AppSigninRoute,
+  AppSignupRoute: AppSignupRoute,
+  AppSubmitRoute: AppSubmitRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppThreadsThreadIdRoute: AppThreadsThreadIdRoute,
 }
 
-const DashboardThreadsRouteWithChildren =
-  DashboardThreadsRoute._addFileChildren(DashboardThreadsRouteChildren)
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
-interface DashboardRouteChildren {
-  DashboardThreadsRoute: typeof DashboardThreadsRouteWithChildren
-  DashboardTopicsRoute: typeof DashboardTopicsRoute
+interface ApiV1PostsPostIdRouteChildren {
+  ApiV1PostsPostIdCommentsRoute: typeof ApiV1PostsPostIdCommentsRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardThreadsRoute: DashboardThreadsRouteWithChildren,
-  DashboardTopicsRoute: DashboardTopicsRoute,
+const ApiV1PostsPostIdRouteChildren: ApiV1PostsPostIdRouteChildren = {
+  ApiV1PostsPostIdCommentsRoute: ApiV1PostsPostIdCommentsRoute,
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const ApiV1PostsPostIdRouteWithChildren =
+  ApiV1PostsPostIdRoute._addFileChildren(ApiV1PostsPostIdRouteChildren)
+
+interface ApiV1PostsRouteChildren {
+  ApiV1PostsPostIdRoute: typeof ApiV1PostsPostIdRouteWithChildren
+  ApiV1PostsSearchRoute: typeof ApiV1PostsSearchRoute
+}
+
+const ApiV1PostsRouteChildren: ApiV1PostsRouteChildren = {
+  ApiV1PostsPostIdRoute: ApiV1PostsPostIdRouteWithChildren,
+  ApiV1PostsSearchRoute: ApiV1PostsSearchRoute,
+}
+
+const ApiV1PostsRouteWithChildren = ApiV1PostsRoute._addFileChildren(
+  ApiV1PostsRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRouteWithChildren,
-  AboutRoute: AboutRoute,
-  FeedRoute: FeedRoute,
+  AppRoute: AppRouteWithChildren,
+  ApiV1AccountRoute: ApiV1AccountRoute,
+  ApiV1AnalyticsRoute: ApiV1AnalyticsRoute,
+  ApiV1PostsRoute: ApiV1PostsRouteWithChildren,
+  ApiV1VotesRoute: ApiV1VotesRoute,
+  ApiV1CommentsCommentIdRoute: ApiV1CommentsCommentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
