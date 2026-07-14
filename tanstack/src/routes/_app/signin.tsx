@@ -1,44 +1,50 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { AppwriteOAuthButton } from '@/components/auth/appwrite-oauth-button'
+import { AuthSplitLayout } from '@/components/auth/auth-split-layout'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldSeparator,
 } from '@/components/ui/field'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { account, ID } from '@/lib/appwrite-web'
+import { Spinner } from '@/components/ui/spinner'
 import { useAuth } from '@/contexts/auth-context'
+import { account } from '@/lib/appwrite-web'
+import { pickAuthQuote } from '@/lib/auth-quotes'
 
 export const Route = createFileRoute('/_app/signin')({
+  validateSearch: (search: Record<string, unknown>) => ({
+    error: typeof search.error === 'string' ? search.error : undefined,
+  }),
+  loader: () => ({ quote: pickAuthQuote() }),
   component: SignInPage,
   head: () => ({
-    meta: [{ title: 'Sign in — Refetch' }],
+    meta: [{ title: 'Sign in - Refetch' }],
   }),
 })
 
 function SignInPage() {
-  const [activeTab, setActiveTab] = useState('signin')
+  const { quote } = Route.useLoaderData()
+  const { error: searchError } = Route.useSearch()
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [signInData, setSignInData] = useState({ email: '', password: '' })
-  const [signUpData, setSignUpData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
+  const [error, setError] = useState(
+    searchError === 'oauth'
+      ? 'Appwrite sign-in was cancelled or failed. Try again.'
+      : '',
+  )
+  const [showPassword, setShowPassword] = useState(false)
+  const [form, setForm] = useState({ email: '', password: '' })
   const { isAuthenticated, refreshUser, loading } = useAuth()
   const navigate = useNavigate()
 
@@ -46,14 +52,14 @@ function SignInPage() {
     if (!loading && isAuthenticated) navigate({ to: '/' })
   }, [isAuthenticated, loading, navigate])
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
     try {
       await account.createEmailPasswordSession({
-        email: signInData.email,
-        password: signInData.password,
+        email: form.email,
+        password: form.password,
       })
       await refreshUser()
       navigate({ to: '/' })
@@ -64,180 +70,98 @@ function SignInPage() {
     }
   }
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (signUpData.password !== signUpData.confirmPassword) {
-      setError('Passwords do not match')
-      return
-    }
-    if (signUpData.password.length < 8) {
-      setError('Password must be at least 8 characters long')
-      return
-    }
-    setIsLoading(true)
-    setError('')
-    try {
-      await account.create({
-        userId: ID.unique(),
-        email: signUpData.email,
-        password: signUpData.password,
-        name: signUpData.name,
-      })
-      await account.createEmailPasswordSession({
-        email: signUpData.email,
-        password: signUpData.password,
-      })
-      await refreshUser()
-      navigate({ to: '/' })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create account')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
-    <div className="mx-auto w-full max-w-md px-4 sm:px-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Welcome to Refetch</CardTitle>
-          <CardDescription>
-            Sign in to vote, comment, and submit stories.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-4 grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign in</TabsTrigger>
-              <TabsTrigger value="signup">Sign up</TabsTrigger>
-            </TabsList>
+    <AuthSplitLayout quote={quote}>
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <h1 className="font-heading text-2xl font-semibold tracking-tight">
+            Sign in
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Vote, comment, and submit stories on Refetch.
+          </p>
+        </div>
 
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+        {error ? (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        ) : null}
 
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn}>
-                <FieldGroup>
-                  <Field>
-                    <FieldLabel htmlFor="signin-email">Email</FieldLabel>
-                    <Input
-                      id="signin-email"
-                      type="email"
-                      required
-                      value={signInData.email}
-                      onChange={(e) =>
-                        setSignInData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="signin-password">Password</FieldLabel>
-                    <Input
-                      id="signin-password"
-                      type="password"
-                      required
-                      value={signInData.password}
-                      onChange={(e) =>
-                        setSignInData((prev) => ({
-                          ...prev,
-                          password: e.target.value,
-                        }))
-                      }
-                    />
-                  </Field>
-                  <Button type="submit" disabled={isLoading} className="w-full">
-                    Sign in
-                  </Button>
-                </FieldGroup>
-              </form>
-            </TabsContent>
+        <div className="flex flex-col gap-6">
+          <AppwriteOAuthButton mode="signin" />
 
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp}>
-                <FieldGroup>
-                  <Field>
-                    <FieldLabel htmlFor="signup-name">Name</FieldLabel>
-                    <Input
-                      id="signup-name"
-                      required
-                      value={signUpData.name}
-                      onChange={(e) =>
-                        setSignUpData((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
+          <FieldSeparator>Or</FieldSeparator>
+
+          <form onSubmit={handleSubmit}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="signin-email">Email</FieldLabel>
+                <Input
+                  id="signin-email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Email"
+                  required
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="signin-password">Password</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    id="signin-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    placeholder="Password"
+                    required
+                    value={form.password}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      size="icon-xs"
+                      aria-label={
+                        showPassword ? 'Hide password' : 'Show password'
                       }
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="signup-email">Email</FieldLabel>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      required
-                      value={signUpData.email}
-                      onChange={(e) =>
-                        setSignUpData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="signup-password">Password</FieldLabel>
-                    <Input
-                      id="signup-password"
-                      type="password"
-                      required
-                      value={signUpData.password}
-                      onChange={(e) =>
-                        setSignUpData((prev) => ({
-                          ...prev,
-                          password: e.target.value,
-                        }))
-                      }
-                    />
-                    <FieldDescription>At least 8 characters.</FieldDescription>
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="signup-confirm">
-                      Confirm password
-                    </FieldLabel>
-                    <Input
-                      id="signup-confirm"
-                      type="password"
-                      required
-                      value={signUpData.confirmPassword}
-                      onChange={(e) =>
-                        setSignUpData((prev) => ({
-                          ...prev,
-                          confirmPassword: e.target.value,
-                        }))
-                      }
-                    />
-                  </Field>
-                  <Button type="submit" disabled={isLoading} className="w-full">
-                    Create account
-                  </Button>
-                </FieldGroup>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-        <CardFooter className="justify-center text-sm text-muted-foreground">
-          Prefer a dedicated page?{' '}
-          <Link to="/signup" className="ml-1 text-foreground underline-offset-4 hover:underline">
+                      onClick={() => setShowPassword((v) => !v)}
+                    >
+                      {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+              </Field>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full"
+                size="lg"
+              >
+                {isLoading ? <Spinner data-icon="inline-start" /> : null}
+                Sign in
+              </Button>
+            </FieldGroup>
+          </form>
+        </div>
+
+        <p className="text-center text-sm text-muted-foreground">
+          Don&apos;t have an account?{' '}
+          <Link
+            to="/signup"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
             Sign up
           </Link>
-        </CardFooter>
-      </Card>
-    </div>
+        </p>
+      </div>
+    </AuthSplitLayout>
   )
 }

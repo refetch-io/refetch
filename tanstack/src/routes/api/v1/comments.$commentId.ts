@@ -12,8 +12,8 @@ export const Route = createFileRoute('/api/v1/comments/$commentId')({
       DELETE: async ({ request, params }) => {
         try {
           const user = await requireUser(request)
-          await deleteComment(params.commentId, user.$id)
-          return new Response(null, { status: 204 })
+          const result = await deleteComment(params.commentId, user.$id)
+          return Response.json(result)
         } catch (error) {
           if (error && typeof error === 'object' && 'status' in error) {
             return apiError(

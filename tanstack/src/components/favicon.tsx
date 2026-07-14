@@ -1,6 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getFaviconUrl } from '@/lib/appwrite-web'
 import { cn } from '@/lib/utils'
+
+/** 1×1 transparent GIF - safe fallback that never paints a broken-image icon. */
+const EMPTY_PIXEL =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
 interface FaviconProps {
   domain: string
@@ -9,17 +13,12 @@ interface FaviconProps {
 }
 
 export function Favicon({ domain, size = 16, className }: FaviconProps) {
-  const [failed, setFailed] = useState(false)
-  const src = failed ? '' : getFaviconUrl(domain)
+  const remoteSrc = domain?.trim() ? getFaviconUrl(domain.trim()) : ''
+  const [src, setSrc] = useState(remoteSrc || EMPTY_PIXEL)
 
-  if (!src) {
-    return (
-      <div
-        className={cn('rounded bg-gray-200', className)}
-        style={{ width: size, height: size }}
-      />
-    )
-  }
+  useEffect(() => {
+    setSrc(remoteSrc || EMPTY_PIXEL)
+  }, [remoteSrc])
 
   return (
     <img
@@ -27,8 +26,14 @@ export function Favicon({ domain, size = 16, className }: FaviconProps) {
       alt=""
       width={size}
       height={size}
-      className={cn('rounded', className)}
-      onError={() => setFailed(true)}
+      decoding="async"
+      className={cn(
+        'shrink-0 rounded-[3px] bg-muted object-contain ring-1 ring-border/60',
+        className,
+      )}
+      onError={() => {
+        setSrc((current) => (current === EMPTY_PIXEL ? current : EMPTY_PIXEL))
+      }}
     />
   )
 }

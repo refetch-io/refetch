@@ -31,16 +31,16 @@ import { useAuth } from '@/contexts/auth-context'
 import { getInitialsAvatarUrl } from '@/lib/appwrite-web'
 import {
   PRESENCE_STATUS_DOT,
-  isPresenceSharingEnabled,
+  getPresenceSharingEnabled,
   ownPresenceTone,
 } from '@/lib/presence'
 import type { ThemePreference } from '@/lib/theme'
 import { cn, getInitials } from '@/lib/utils'
 
 function formatMemberSince(createdAt?: string) {
-  if (!createdAt) return '—'
+  if (!createdAt) return '-'
   const date = new Date(createdAt)
-  if (Number.isNaN(date.getTime())) return '—'
+  if (Number.isNaN(date.getTime())) return '-'
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
@@ -153,7 +153,7 @@ export function UserMenu() {
     isDark ? 'ffffff' : '000000',
   )
   const initials = getInitials(displayName, 2)
-  const sharing = isPresenceSharingEnabled(user.prefs)
+  const sharing = getPresenceSharingEnabled(user.prefs)
   const presenceTone = ownPresenceTone({
     sharing,
     visible: pageVisible,

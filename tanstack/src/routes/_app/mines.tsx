@@ -9,7 +9,7 @@ import { Spinner } from '@/components/ui/spinner'
 export const Route = createFileRoute('/_app/mines')({
   component: MinesPage,
   head: () => ({
-    meta: [{ title: 'Refetch — Mines' }],
+    meta: [{ title: 'Refetch - Mines' }],
   }),
 })
 

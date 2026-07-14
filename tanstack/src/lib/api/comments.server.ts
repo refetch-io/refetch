@@ -134,6 +134,27 @@ export async function deleteComment(commentId: string, userId: string) {
   if (row.userId !== userId) {
     throw Object.assign(new Error('Forbidden'), { status: 403 })
   }
+
+  const replies = await db.listRows({
+    databaseId: tables.databaseId(),
+    tableId: tables.comments(),
+    queries: [Query.equal('replyId', commentId), Query.limit(1)],
+  })
+  const hasReplies = replies.rows.length > 0
+
+  // Keep thread structure when others already replied.
+  if (hasReplies) {
+    await db.updateRow({
+      databaseId: tables.databaseId(),
+      tableId: tables.comments(),
+      rowId: commentId,
+      data: {
+        content: '[deleted]',
+      },
+    })
+    return { soft: true as const }
+  }
+
   await db.deleteRow({
     databaseId: tables.databaseId(),
     tableId: tables.comments(),
@@ -152,4 +173,5 @@ export async function deleteComment(commentId: string, userId: string) {
       // post may already be gone
     }
   }
+  return { soft: false as const }
 }

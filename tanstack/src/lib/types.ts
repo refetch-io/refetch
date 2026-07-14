@@ -78,3 +78,16 @@ export interface ApiErrorBody {
   message?: string
   details?: unknown
 }
+
+export interface ApiKey {
+  id: string
+  name: string
+  prefix: string
+  createdAt: string
+  lastUsedAt: string | null
+}
+
+export interface CreatedApiKey extends ApiKey {
+  /** Full secret - returned only once when the key is created. */
+  secret: string
+}

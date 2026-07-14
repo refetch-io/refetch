@@ -1,4 +1,4 @@
-// Plausible Stats API v2 — https://plausible.io/docs/stats-api
+// Plausible Stats API v2 - https://plausible.io/docs/stats-api
 
 export interface PlausibleQuery {
   site_id: string

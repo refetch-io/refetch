@@ -1051,7 +1051,7 @@ async function scoutArticles() {
     }
     if (!String(SCOUT_USER_ID).trim()) {
       throw new Error(
-        'SCOUT_USER_ID is empty — set it in functions/scout/index.js (Appwrite user ID for automated posts and comments).'
+        'SCOUT_USER_ID is empty - set it in functions/scout/index.js (Appwrite user ID for automated posts and comments).'
       );
     }
     

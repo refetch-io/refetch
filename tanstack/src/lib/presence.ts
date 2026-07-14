@@ -1,13 +1,20 @@
 import type { Models } from 'appwrite'
+import { updateAccountPrefs } from '@/lib/account-prefs'
 import { account, presences } from '@/lib/appwrite-web'
 
-export const PRESENCE_HEARTBEAT_MS = 30_000
-export const PRESENCE_TTL_MS = 90_000
-export const PRESENCE_IDLE_MS = 2 * 60_000
+export const PRESENCE_HEARTBEAT_MS = 45_000
+/** Must stay well above heartbeat × throttle delay in background tabs. */
+export const PRESENCE_TTL_MS = 5 * 60_000
+/**
+ * Only mark Away after the tab has been hidden this long.
+ * Brief focus blips (devtools, IDE panes) should not flip status.
+ */
+export const PRESENCE_HIDDEN_AWAY_MS = 60_000
 export const PRESENCE_ACTIVITY_TTL_MS = 20_000
 export const PRESENCE_UPDATED_EVENT = 'refetch:presence-updated'
 export const PRESENCE_REMOVED_EVENT = 'refetch:presence-removed'
 export const PRESENCE_ACTIVITY_EVENT = 'refetch:presence-activity'
+export const PRESENCE_SHARING_CHANGED_EVENT = 'refetch:presence-sharing-changed'
 export const PRESENCE_SHARE_PREF_KEY = 'sharePresence'
 
 export type PresenceMetadata = {
@@ -34,11 +41,47 @@ export type PresenceRemovedDetail = {
   userId: string
 }
 
+export type PresenceSharingDetail = {
+  enabled: boolean
+}
+
+/** Session override - set immediately on Invisible/Online so publishers stop before prefs refresh. */
+let presenceSharingOverride: boolean | null = null
+
 /** Default on when the pref is unset. */
 export function isPresenceSharingEnabled(
   prefs?: Record<string, unknown> | null,
 ): boolean {
   return prefs?.[PRESENCE_SHARE_PREF_KEY] !== false
+}
+
+/** Central gate for every presence publish / activity report. */
+export function getPresenceSharingEnabled(
+  prefs?: Record<string, unknown> | null,
+): boolean {
+  if (presenceSharingOverride !== null) return presenceSharingOverride
+  return isPresenceSharingEnabled(prefs)
+}
+
+export function setPresenceSharingEnabled(enabled: boolean) {
+  presenceSharingOverride = enabled
+  if (typeof window === 'undefined') return
+  window.dispatchEvent(
+    new CustomEvent<PresenceSharingDetail>(PRESENCE_SHARING_CHANGED_EVENT, {
+      detail: { enabled },
+    }),
+  )
+}
+
+export function seedPresenceSharingFromPrefs(
+  prefs?: Record<string, unknown> | null,
+) {
+  if (presenceSharingOverride !== null) return
+  presenceSharingOverride = isPresenceSharingEnabled(prefs)
+}
+
+export function resetPresenceSharingSession() {
+  presenceSharingOverride = null
 }
 
 export function notifyPresenceRemoved(userId: string) {
@@ -62,13 +105,10 @@ export async function clearOwnPresence(userId?: string) {
 }
 
 export async function persistPresenceSharing(enabled: boolean) {
-  const prefs = await account.getPrefs<Record<string, unknown>>()
-  await account.updatePrefs({
-    prefs: {
-      ...prefs,
-      [PRESENCE_SHARE_PREF_KEY]: enabled,
-    },
-  })
+  // Stop / resume publishers immediately - don't wait for prefs round-trip.
+  setPresenceSharingEnabled(enabled)
+
+  await updateAccountPrefs({ [PRESENCE_SHARE_PREF_KEY]: enabled })
 
   if (!enabled) {
     await clearOwnPresence()
@@ -78,6 +118,7 @@ export async function persistPresenceSharing(enabled: boolean) {
 /** Temporary activity override (voting, commenting, searching, …). */
 export function reportPresenceActivity(activity: string) {
   if (typeof window === 'undefined') return
+  if (!getPresenceSharingEnabled()) return
   window.dispatchEvent(
     new CustomEvent<PresenceActivityDetail>(PRESENCE_ACTIVITY_EVENT, {
       detail: { activity },

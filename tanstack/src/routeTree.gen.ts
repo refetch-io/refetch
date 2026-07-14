@@ -17,14 +17,25 @@ import { Route as AppSigninRouteImport } from './routes/_app/signin'
 import { Route as AppShowRouteImport } from './routes/_app/show'
 import { Route as AppNewRouteImport } from './routes/_app/new'
 import { Route as AppMinesRouteImport } from './routes/_app/mines'
+import { Route as AppDocsRouteImport } from './routes/_app/docs'
+import { Route as AppApiRouteImport } from './routes/_app/api'
 import { Route as AppAccountRouteImport } from './routes/_app/account'
+import { Route as AppDocsIndexRouteImport } from './routes/_app/docs.index'
+import { Route as AppAccountIndexRouteImport } from './routes/_app/account.index'
 import { Route as ApiV1VotesRouteImport } from './routes/api/v1/votes'
 import { Route as ApiV1PostsRouteImport } from './routes/api/v1/posts'
+import { Route as ApiV1KeysRouteImport } from './routes/api/v1/keys'
 import { Route as ApiV1AnalyticsRouteImport } from './routes/api/v1/analytics'
 import { Route as ApiV1AccountRouteImport } from './routes/api/v1/account'
 import { Route as AppThreadsThreadIdRouteImport } from './routes/_app/threads.$threadId'
-import { Route as ApiV1PostsSearchRouteImport } from './routes/api/v1/posts.search'
+import { Route as AppDocsErrorsRouteImport } from './routes/_app/docs.errors'
+import { Route as AppDocsAuthenticationRouteImport } from './routes/_app/docs.authentication'
+import { Route as AppDocsApiRouteImport } from './routes/_app/docs.api'
+import { Route as AppAccountSecurityRouteImport } from './routes/_app/account.security'
+import { Route as AppAccountPrivacyRouteImport } from './routes/_app/account.privacy'
+import { Route as AppAccountKeysRouteImport } from './routes/_app/account.keys'
 import { Route as ApiV1PostsPostIdRouteImport } from './routes/api/v1/posts.$postId'
+import { Route as ApiV1KeysKeyIdRouteImport } from './routes/api/v1/keys.$keyId'
 import { Route as ApiV1CommentsCommentIdRouteImport } from './routes/api/v1/comments.$commentId'
 import { Route as ApiV1PostsPostIdCommentsRouteImport } from './routes/api/v1/posts.$postId.comments'
 
@@ -67,10 +78,30 @@ const AppMinesRoute = AppMinesRouteImport.update({
   path: '/mines',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDocsRoute = AppDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppApiRoute = AppApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAccountRoute = AppAccountRouteImport.update({
   id: '/account',
   path: '/account',
   getParentRoute: () => AppRoute,
+} as any)
+const AppDocsIndexRoute = AppDocsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppDocsRoute,
+} as any)
+const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAccountRoute,
 } as any)
 const ApiV1VotesRoute = ApiV1VotesRouteImport.update({
   id: '/api/v1/votes',
@@ -80,6 +111,11 @@ const ApiV1VotesRoute = ApiV1VotesRouteImport.update({
 const ApiV1PostsRoute = ApiV1PostsRouteImport.update({
   id: '/api/v1/posts',
   path: '/api/v1/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1KeysRoute = ApiV1KeysRouteImport.update({
+  id: '/api/v1/keys',
+  path: '/api/v1/keys',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiV1AnalyticsRoute = ApiV1AnalyticsRouteImport.update({
@@ -97,15 +133,45 @@ const AppThreadsThreadIdRoute = AppThreadsThreadIdRouteImport.update({
   path: '/threads/$threadId',
   getParentRoute: () => AppRoute,
 } as any)
-const ApiV1PostsSearchRoute = ApiV1PostsSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => ApiV1PostsRoute,
+const AppDocsErrorsRoute = AppDocsErrorsRouteImport.update({
+  id: '/errors',
+  path: '/errors',
+  getParentRoute: () => AppDocsRoute,
+} as any)
+const AppDocsAuthenticationRoute = AppDocsAuthenticationRouteImport.update({
+  id: '/authentication',
+  path: '/authentication',
+  getParentRoute: () => AppDocsRoute,
+} as any)
+const AppDocsApiRoute = AppDocsApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => AppDocsRoute,
+} as any)
+const AppAccountSecurityRoute = AppAccountSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AppAccountRoute,
+} as any)
+const AppAccountPrivacyRoute = AppAccountPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => AppAccountRoute,
+} as any)
+const AppAccountKeysRoute = AppAccountKeysRouteImport.update({
+  id: '/keys',
+  path: '/keys',
+  getParentRoute: () => AppAccountRoute,
 } as any)
 const ApiV1PostsPostIdRoute = ApiV1PostsPostIdRouteImport.update({
   id: '/$postId',
   path: '/$postId',
   getParentRoute: () => ApiV1PostsRoute,
+} as any)
+const ApiV1KeysKeyIdRoute = ApiV1KeysKeyIdRouteImport.update({
+  id: '/$keyId',
+  path: '/$keyId',
+  getParentRoute: () => ApiV1KeysRoute,
 } as any)
 const ApiV1CommentsCommentIdRoute = ApiV1CommentsCommentIdRouteImport.update({
   id: '/api/v1/comments/$commentId',
@@ -121,25 +187,36 @@ const ApiV1PostsPostIdCommentsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
-  '/account': typeof AppAccountRoute
+  '/account': typeof AppAccountRouteWithChildren
+  '/api': typeof AppApiRoute
+  '/docs': typeof AppDocsRouteWithChildren
   '/mines': typeof AppMinesRoute
   '/new': typeof AppNewRoute
   '/show': typeof AppShowRoute
   '/signin': typeof AppSigninRoute
   '/signup': typeof AppSignupRoute
   '/submit': typeof AppSubmitRoute
+  '/account/keys': typeof AppAccountKeysRoute
+  '/account/privacy': typeof AppAccountPrivacyRoute
+  '/account/security': typeof AppAccountSecurityRoute
+  '/docs/api': typeof AppDocsApiRoute
+  '/docs/authentication': typeof AppDocsAuthenticationRoute
+  '/docs/errors': typeof AppDocsErrorsRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/api/v1/account': typeof ApiV1AccountRoute
   '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/keys': typeof ApiV1KeysRouteWithChildren
   '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
   '/api/v1/votes': typeof ApiV1VotesRoute
+  '/account/': typeof AppAccountIndexRoute
+  '/docs/': typeof AppDocsIndexRoute
   '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/keys/$keyId': typeof ApiV1KeysKeyIdRoute
   '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
-  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
   '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRoutesByTo {
-  '/account': typeof AppAccountRoute
+  '/api': typeof AppApiRoute
   '/mines': typeof AppMinesRoute
   '/new': typeof AppNewRoute
   '/show': typeof AppShowRoute
@@ -147,20 +224,31 @@ export interface FileRoutesByTo {
   '/signup': typeof AppSignupRoute
   '/submit': typeof AppSubmitRoute
   '/': typeof AppIndexRoute
+  '/account/keys': typeof AppAccountKeysRoute
+  '/account/privacy': typeof AppAccountPrivacyRoute
+  '/account/security': typeof AppAccountSecurityRoute
+  '/docs/api': typeof AppDocsApiRoute
+  '/docs/authentication': typeof AppDocsAuthenticationRoute
+  '/docs/errors': typeof AppDocsErrorsRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/api/v1/account': typeof ApiV1AccountRoute
   '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/keys': typeof ApiV1KeysRouteWithChildren
   '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
   '/api/v1/votes': typeof ApiV1VotesRoute
+  '/account': typeof AppAccountIndexRoute
+  '/docs': typeof AppDocsIndexRoute
   '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/keys/$keyId': typeof ApiV1KeysKeyIdRoute
   '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
-  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
   '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
-  '/_app/account': typeof AppAccountRoute
+  '/_app/account': typeof AppAccountRouteWithChildren
+  '/_app/api': typeof AppApiRoute
+  '/_app/docs': typeof AppDocsRouteWithChildren
   '/_app/mines': typeof AppMinesRoute
   '/_app/new': typeof AppNewRoute
   '/_app/show': typeof AppShowRoute
@@ -168,14 +256,23 @@ export interface FileRoutesById {
   '/_app/signup': typeof AppSignupRoute
   '/_app/submit': typeof AppSubmitRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/account/keys': typeof AppAccountKeysRoute
+  '/_app/account/privacy': typeof AppAccountPrivacyRoute
+  '/_app/account/security': typeof AppAccountSecurityRoute
+  '/_app/docs/api': typeof AppDocsApiRoute
+  '/_app/docs/authentication': typeof AppDocsAuthenticationRoute
+  '/_app/docs/errors': typeof AppDocsErrorsRoute
   '/_app/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/api/v1/account': typeof ApiV1AccountRoute
   '/api/v1/analytics': typeof ApiV1AnalyticsRoute
+  '/api/v1/keys': typeof ApiV1KeysRouteWithChildren
   '/api/v1/posts': typeof ApiV1PostsRouteWithChildren
   '/api/v1/votes': typeof ApiV1VotesRoute
+  '/_app/account/': typeof AppAccountIndexRoute
+  '/_app/docs/': typeof AppDocsIndexRoute
   '/api/v1/comments/$commentId': typeof ApiV1CommentsCommentIdRoute
+  '/api/v1/keys/$keyId': typeof ApiV1KeysKeyIdRoute
   '/api/v1/posts/$postId': typeof ApiV1PostsPostIdRouteWithChildren
-  '/api/v1/posts/search': typeof ApiV1PostsSearchRoute
   '/api/v1/posts/$postId/comments': typeof ApiV1PostsPostIdCommentsRoute
 }
 export interface FileRouteTypes {
@@ -183,24 +280,35 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/api'
+    | '/docs'
     | '/mines'
     | '/new'
     | '/show'
     | '/signin'
     | '/signup'
     | '/submit'
+    | '/account/keys'
+    | '/account/privacy'
+    | '/account/security'
+    | '/docs/api'
+    | '/docs/authentication'
+    | '/docs/errors'
     | '/threads/$threadId'
     | '/api/v1/account'
     | '/api/v1/analytics'
+    | '/api/v1/keys'
     | '/api/v1/posts'
     | '/api/v1/votes'
+    | '/account/'
+    | '/docs/'
     | '/api/v1/comments/$commentId'
+    | '/api/v1/keys/$keyId'
     | '/api/v1/posts/$postId'
-    | '/api/v1/posts/search'
     | '/api/v1/posts/$postId/comments'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/account'
+    | '/api'
     | '/mines'
     | '/new'
     | '/show'
@@ -208,19 +316,30 @@ export interface FileRouteTypes {
     | '/signup'
     | '/submit'
     | '/'
+    | '/account/keys'
+    | '/account/privacy'
+    | '/account/security'
+    | '/docs/api'
+    | '/docs/authentication'
+    | '/docs/errors'
     | '/threads/$threadId'
     | '/api/v1/account'
     | '/api/v1/analytics'
+    | '/api/v1/keys'
     | '/api/v1/posts'
     | '/api/v1/votes'
+    | '/account'
+    | '/docs'
     | '/api/v1/comments/$commentId'
+    | '/api/v1/keys/$keyId'
     | '/api/v1/posts/$postId'
-    | '/api/v1/posts/search'
     | '/api/v1/posts/$postId/comments'
   id:
     | '__root__'
     | '/_app'
     | '/_app/account'
+    | '/_app/api'
+    | '/_app/docs'
     | '/_app/mines'
     | '/_app/new'
     | '/_app/show'
@@ -228,14 +347,23 @@ export interface FileRouteTypes {
     | '/_app/signup'
     | '/_app/submit'
     | '/_app/'
+    | '/_app/account/keys'
+    | '/_app/account/privacy'
+    | '/_app/account/security'
+    | '/_app/docs/api'
+    | '/_app/docs/authentication'
+    | '/_app/docs/errors'
     | '/_app/threads/$threadId'
     | '/api/v1/account'
     | '/api/v1/analytics'
+    | '/api/v1/keys'
     | '/api/v1/posts'
     | '/api/v1/votes'
+    | '/_app/account/'
+    | '/_app/docs/'
     | '/api/v1/comments/$commentId'
+    | '/api/v1/keys/$keyId'
     | '/api/v1/posts/$postId'
-    | '/api/v1/posts/search'
     | '/api/v1/posts/$postId/comments'
   fileRoutesById: FileRoutesById
 }
@@ -243,6 +371,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   ApiV1AccountRoute: typeof ApiV1AccountRoute
   ApiV1AnalyticsRoute: typeof ApiV1AnalyticsRoute
+  ApiV1KeysRoute: typeof ApiV1KeysRouteWithChildren
   ApiV1PostsRoute: typeof ApiV1PostsRouteWithChildren
   ApiV1VotesRoute: typeof ApiV1VotesRoute
   ApiV1CommentsCommentIdRoute: typeof ApiV1CommentsCommentIdRoute
@@ -306,12 +435,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMinesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/docs': {
+      id: '/_app/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof AppDocsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/api': {
+      id: '/_app/api'
+      path: '/api'
+      fullPath: '/api'
+      preLoaderRoute: typeof AppApiRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/account': {
       id: '/_app/account'
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AppAccountRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/docs/': {
+      id: '/_app/docs/'
+      path: '/'
+      fullPath: '/docs/'
+      preLoaderRoute: typeof AppDocsIndexRouteImport
+      parentRoute: typeof AppDocsRoute
+    }
+    '/_app/account/': {
+      id: '/_app/account/'
+      path: '/'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AppAccountIndexRouteImport
+      parentRoute: typeof AppAccountRoute
     }
     '/api/v1/votes': {
       id: '/api/v1/votes'
@@ -325,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/api/v1/posts'
       fullPath: '/api/v1/posts'
       preLoaderRoute: typeof ApiV1PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/keys': {
+      id: '/api/v1/keys'
+      path: '/api/v1/keys'
+      fullPath: '/api/v1/keys'
+      preLoaderRoute: typeof ApiV1KeysRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/v1/analytics': {
@@ -348,12 +512,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppThreadsThreadIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/api/v1/posts/search': {
-      id: '/api/v1/posts/search'
-      path: '/search'
-      fullPath: '/api/v1/posts/search'
-      preLoaderRoute: typeof ApiV1PostsSearchRouteImport
-      parentRoute: typeof ApiV1PostsRoute
+    '/_app/docs/errors': {
+      id: '/_app/docs/errors'
+      path: '/errors'
+      fullPath: '/docs/errors'
+      preLoaderRoute: typeof AppDocsErrorsRouteImport
+      parentRoute: typeof AppDocsRoute
+    }
+    '/_app/docs/authentication': {
+      id: '/_app/docs/authentication'
+      path: '/authentication'
+      fullPath: '/docs/authentication'
+      preLoaderRoute: typeof AppDocsAuthenticationRouteImport
+      parentRoute: typeof AppDocsRoute
+    }
+    '/_app/docs/api': {
+      id: '/_app/docs/api'
+      path: '/api'
+      fullPath: '/docs/api'
+      preLoaderRoute: typeof AppDocsApiRouteImport
+      parentRoute: typeof AppDocsRoute
+    }
+    '/_app/account/security': {
+      id: '/_app/account/security'
+      path: '/security'
+      fullPath: '/account/security'
+      preLoaderRoute: typeof AppAccountSecurityRouteImport
+      parentRoute: typeof AppAccountRoute
+    }
+    '/_app/account/privacy': {
+      id: '/_app/account/privacy'
+      path: '/privacy'
+      fullPath: '/account/privacy'
+      preLoaderRoute: typeof AppAccountPrivacyRouteImport
+      parentRoute: typeof AppAccountRoute
+    }
+    '/_app/account/keys': {
+      id: '/_app/account/keys'
+      path: '/keys'
+      fullPath: '/account/keys'
+      preLoaderRoute: typeof AppAccountKeysRouteImport
+      parentRoute: typeof AppAccountRoute
     }
     '/api/v1/posts/$postId': {
       id: '/api/v1/posts/$postId'
@@ -361,6 +560,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/v1/posts/$postId'
       preLoaderRoute: typeof ApiV1PostsPostIdRouteImport
       parentRoute: typeof ApiV1PostsRoute
+    }
+    '/api/v1/keys/$keyId': {
+      id: '/api/v1/keys/$keyId'
+      path: '/$keyId'
+      fullPath: '/api/v1/keys/$keyId'
+      preLoaderRoute: typeof ApiV1KeysKeyIdRouteImport
+      parentRoute: typeof ApiV1KeysRoute
     }
     '/api/v1/comments/$commentId': {
       id: '/api/v1/comments/$commentId'
@@ -379,8 +585,45 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppAccountRouteChildren {
+  AppAccountKeysRoute: typeof AppAccountKeysRoute
+  AppAccountPrivacyRoute: typeof AppAccountPrivacyRoute
+  AppAccountSecurityRoute: typeof AppAccountSecurityRoute
+  AppAccountIndexRoute: typeof AppAccountIndexRoute
+}
+
+const AppAccountRouteChildren: AppAccountRouteChildren = {
+  AppAccountKeysRoute: AppAccountKeysRoute,
+  AppAccountPrivacyRoute: AppAccountPrivacyRoute,
+  AppAccountSecurityRoute: AppAccountSecurityRoute,
+  AppAccountIndexRoute: AppAccountIndexRoute,
+}
+
+const AppAccountRouteWithChildren = AppAccountRoute._addFileChildren(
+  AppAccountRouteChildren,
+)
+
+interface AppDocsRouteChildren {
+  AppDocsApiRoute: typeof AppDocsApiRoute
+  AppDocsAuthenticationRoute: typeof AppDocsAuthenticationRoute
+  AppDocsErrorsRoute: typeof AppDocsErrorsRoute
+  AppDocsIndexRoute: typeof AppDocsIndexRoute
+}
+
+const AppDocsRouteChildren: AppDocsRouteChildren = {
+  AppDocsApiRoute: AppDocsApiRoute,
+  AppDocsAuthenticationRoute: AppDocsAuthenticationRoute,
+  AppDocsErrorsRoute: AppDocsErrorsRoute,
+  AppDocsIndexRoute: AppDocsIndexRoute,
+}
+
+const AppDocsRouteWithChildren =
+  AppDocsRoute._addFileChildren(AppDocsRouteChildren)
+
 interface AppRouteChildren {
-  AppAccountRoute: typeof AppAccountRoute
+  AppAccountRoute: typeof AppAccountRouteWithChildren
+  AppApiRoute: typeof AppApiRoute
+  AppDocsRoute: typeof AppDocsRouteWithChildren
   AppMinesRoute: typeof AppMinesRoute
   AppNewRoute: typeof AppNewRoute
   AppShowRoute: typeof AppShowRoute
@@ -392,7 +635,9 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppAccountRoute: AppAccountRoute,
+  AppAccountRoute: AppAccountRouteWithChildren,
+  AppApiRoute: AppApiRoute,
+  AppDocsRoute: AppDocsRouteWithChildren,
   AppMinesRoute: AppMinesRoute,
   AppNewRoute: AppNewRoute,
   AppShowRoute: AppShowRoute,
@@ -404,6 +649,18 @@ const AppRouteChildren: AppRouteChildren = {
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface ApiV1KeysRouteChildren {
+  ApiV1KeysKeyIdRoute: typeof ApiV1KeysKeyIdRoute
+}
+
+const ApiV1KeysRouteChildren: ApiV1KeysRouteChildren = {
+  ApiV1KeysKeyIdRoute: ApiV1KeysKeyIdRoute,
+}
+
+const ApiV1KeysRouteWithChildren = ApiV1KeysRoute._addFileChildren(
+  ApiV1KeysRouteChildren,
+)
 
 interface ApiV1PostsPostIdRouteChildren {
   ApiV1PostsPostIdCommentsRoute: typeof ApiV1PostsPostIdCommentsRoute
@@ -418,12 +675,10 @@ const ApiV1PostsPostIdRouteWithChildren =
 
 interface ApiV1PostsRouteChildren {
   ApiV1PostsPostIdRoute: typeof ApiV1PostsPostIdRouteWithChildren
-  ApiV1PostsSearchRoute: typeof ApiV1PostsSearchRoute
 }
 
 const ApiV1PostsRouteChildren: ApiV1PostsRouteChildren = {
   ApiV1PostsPostIdRoute: ApiV1PostsPostIdRouteWithChildren,
-  ApiV1PostsSearchRoute: ApiV1PostsSearchRoute,
 }
 
 const ApiV1PostsRouteWithChildren = ApiV1PostsRoute._addFileChildren(
@@ -434,6 +689,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   ApiV1AccountRoute: ApiV1AccountRoute,
   ApiV1AnalyticsRoute: ApiV1AnalyticsRoute,
+  ApiV1KeysRoute: ApiV1KeysRouteWithChildren,
   ApiV1PostsRoute: ApiV1PostsRouteWithChildren,
   ApiV1VotesRoute: ApiV1VotesRoute,
   ApiV1CommentsCommentIdRoute: ApiV1CommentsCommentIdRoute,

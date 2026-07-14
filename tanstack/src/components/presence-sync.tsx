@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 import { useAuth } from '@/contexts/auth-context'
 import { Permission, Role, presences } from '@/lib/appwrite-web'
@@ -6,15 +6,19 @@ import {
   PRESENCE_ACTIVITY_EVENT,
   PRESENCE_ACTIVITY_TTL_MS,
   PRESENCE_HEARTBEAT_MS,
-  PRESENCE_IDLE_MS,
+  PRESENCE_HIDDEN_AWAY_MS,
+  PRESENCE_SHARING_CHANGED_EVENT,
   PRESENCE_UPDATED_EVENT,
   clearOwnPresence,
-  isPresenceSharingEnabled,
+  getPresenceSharingEnabled,
   mapPresence,
   presenceDisplayName,
   presenceExpiresAt,
   resolvePresenceActivity,
+  resetPresenceSharingSession,
+  seedPresenceSharingFromPrefs,
   type PresenceActivityDetail,
+  type PresenceSharingDetail,
 } from '@/lib/presence'
 
 function presencePermissions(userId: string) {
@@ -27,7 +31,8 @@ function presencePermissions(userId: string) {
 
 /**
  * Publishes the signed-in user's Appwrite presence while they are in the app.
- * Respects the `sharePresence` user preference (default: true).
+ * Opt-out (Invisible) is gated centrally via getPresenceSharingEnabled - publishers
+ * stop immediately when that flips, without waiting for prefs refresh.
  */
 export function PresenceSync() {
   const { user, isAuthenticated } = useAuth()
@@ -35,29 +40,52 @@ export function PresenceSync() {
   const pathnameRef = useRef(pathname)
   const userRef = useRef(user)
   const activityOverrideRef = useRef<string | null>(null)
-  const idleRef = useRef(false)
+  const awayRef = useRef(false)
   const publishRef = useRef<() => void>(() => {})
+  const [, setSharingEpoch] = useState(0)
 
   pathnameRef.current = pathname
   userRef.current = user
 
   const userId = user?.$id ?? null
-  const sharing = isPresenceSharingEnabled(user?.prefs)
+  const sharing = getPresenceSharingEnabled(user?.prefs)
+
+  useEffect(() => {
+    if (!user) {
+      resetPresenceSharingSession()
+      return
+    }
+    seedPresenceSharingFromPrefs(user.prefs)
+  }, [user])
+
+  useEffect(() => {
+    const onSharingChanged = () => {
+      setSharingEpoch((value) => value + 1)
+    }
+    window.addEventListener(PRESENCE_SHARING_CHANGED_EVENT, onSharingChanged)
+    return () => {
+      window.removeEventListener(
+        PRESENCE_SHARING_CHANGED_EVENT,
+        onSharingChanged,
+      )
+    }
+  }, [])
 
   useEffect(() => {
     if (!isAuthenticated || !userId) return
 
     let cancelled = false
     let activityClearId = 0
-    let idleTimerId = 0
+    let hiddenAwayId = 0
     const permissions = presencePermissions(userId)
 
     const clearPresence = async () => {
       await clearOwnPresence(userId)
     }
 
-    if (!sharing) {
+    if (!getPresenceSharingEnabled(userRef.current?.prefs)) {
       void clearPresence()
+      publishRef.current = () => {}
       return () => {
         cancelled = true
       }
@@ -65,16 +93,12 @@ export function PresenceSync() {
 
     const publish = async () => {
       if (cancelled) return
+      if (!getPresenceSharingEnabled(userRef.current?.prefs)) return
+
       const currentUser = userRef.current
       if (!currentUser || currentUser.$id !== userId) return
 
-      const status = idleRef.current
-        ? 'away'
-        : typeof document !== 'undefined' &&
-            document.visibilityState !== 'visible'
-          ? 'away'
-          : 'online'
-
+      const status = awayRef.current ? 'away' : 'online'
       const currentPath = pathnameRef.current
       const activity =
         activityOverrideRef.current || resolvePresenceActivity(currentPath)
@@ -91,13 +115,18 @@ export function PresenceSync() {
             activity,
           },
         })
-        if (!cancelled && typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent(PRESENCE_UPDATED_EVENT, {
-              detail: mapPresence(presence),
-            }),
-          )
+        if (
+          cancelled ||
+          !getPresenceSharingEnabled(userRef.current?.prefs) ||
+          typeof window === 'undefined'
+        ) {
+          return
         }
+        window.dispatchEvent(
+          new CustomEvent(PRESENCE_UPDATED_EVENT, {
+            detail: mapPresence(presence),
+          }),
+        )
       } catch {
         // Presence is best-effort; ignore transient failures.
       }
@@ -107,21 +136,18 @@ export function PresenceSync() {
       void publish()
     }
 
-    const markActive = () => {
-      const wasIdle = idleRef.current
-      idleRef.current = false
-      window.clearTimeout(idleTimerId)
-      idleTimerId = window.setTimeout(() => {
-        idleRef.current = true
-        void publish()
-      }, PRESENCE_IDLE_MS)
-      if (wasIdle) void publish()
+    const setOnline = () => {
+      window.clearTimeout(hiddenAwayId)
+      const wasAway = awayRef.current
+      awayRef.current = false
+      if (wasAway) void publish()
     }
 
     const onActivityEvent = (event: Event) => {
+      if (!getPresenceSharingEnabled(userRef.current?.prefs)) return
       const detail = (event as CustomEvent<PresenceActivityDetail>).detail
       const next = detail?.activity?.trim() ?? ''
-      idleRef.current = false
+      setOnline()
       window.clearTimeout(activityClearId)
 
       if (!next) {
@@ -139,42 +165,69 @@ export function PresenceSync() {
     }
 
     const onVisibility = () => {
-      if (document.visibilityState === 'visible') markActive()
-      void publish()
+      if (!getPresenceSharingEnabled(userRef.current?.prefs)) return
+      if (document.visibilityState === 'visible') {
+        setOnline()
+        void publish()
+        return
+      }
+
+      window.clearTimeout(hiddenAwayId)
+      hiddenAwayId = window.setTimeout(() => {
+        if (document.visibilityState !== 'visible') {
+          awayRef.current = true
+          void publish()
+        }
+      }, PRESENCE_HIDDEN_AWAY_MS)
     }
 
-    const onPageHide = () => {
+    const onPageHide = (event: PageTransitionEvent) => {
+      if (event.persisted) return
       void clearPresence()
     }
 
-    void publish()
-    markActive()
+    const onSharingChanged = (event: Event) => {
+      const enabled = (event as CustomEvent<PresenceSharingDetail>).detail
+        ?.enabled
+      if (enabled === false) {
+        cancelled = true
+        activityOverrideRef.current = null
+        window.clearInterval(heartbeatId)
+        window.clearTimeout(activityClearId)
+        window.clearTimeout(hiddenAwayId)
+        void clearPresence()
+      }
+    }
 
-    const heartbeatId = window.setInterval(() => {
+    awayRef.current = false
+    void publish()
+    if (document.visibilityState !== 'visible') onVisibility()
+
+    let heartbeatId = window.setInterval(() => {
       void publish()
     }, PRESENCE_HEARTBEAT_MS)
 
     window.addEventListener(PRESENCE_ACTIVITY_EVENT, onActivityEvent)
+    window.addEventListener(PRESENCE_SHARING_CHANGED_EVENT, onSharingChanged)
     document.addEventListener('visibilitychange', onVisibility)
     window.addEventListener('pagehide', onPageHide)
-    window.addEventListener('pointerdown', markActive)
-    window.addEventListener('keydown', markActive)
 
     return () => {
       cancelled = true
       activityOverrideRef.current = null
       window.clearInterval(heartbeatId)
       window.clearTimeout(activityClearId)
-      window.clearTimeout(idleTimerId)
+      window.clearTimeout(hiddenAwayId)
       window.removeEventListener(PRESENCE_ACTIVITY_EVENT, onActivityEvent)
+      window.removeEventListener(
+        PRESENCE_SHARING_CHANGED_EVENT,
+        onSharingChanged,
+      )
       document.removeEventListener('visibilitychange', onVisibility)
       window.removeEventListener('pagehide', onPageHide)
-      window.removeEventListener('pointerdown', markActive)
-      window.removeEventListener('keydown', markActive)
     }
   }, [isAuthenticated, sharing, userId])
 
-  // Republish page/activity when the route changes without resetting the session.
   useEffect(() => {
     if (!isAuthenticated || !userId || !sharing) return
     publishRef.current()

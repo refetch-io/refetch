@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_app/new')({
   loader: () => fetchFeed({ data: { sort: 'new', limit: 25, offset: 0 } }),
   component: NewFeed,
   head: () => ({
-    meta: [{ title: 'Refetch — New' }],
+    meta: [{ title: 'Refetch - New' }],
   }),
 })
 

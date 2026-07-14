@@ -1,25 +1,36 @@
+import { Link } from '@tanstack/react-router'
 import { RefetchWordmark } from '@/components/refetch-logo'
 
 const FOOTER_LINKS = [
   {
     href: 'https://github.com/refetch-io/refetch',
     label: 'About',
+    external: true,
+  },
+  {
+    href: '/docs',
+    label: 'Docs',
+    external: false,
   },
   {
     href: 'https://github.com/refetch-io/refetch/tree/main/functions/algorithm',
     label: 'Algorithm',
+    external: true,
   },
   {
     href: 'https://appwrite.io/terms',
     label: 'Terms',
+    external: true,
   },
   {
     href: 'https://appwrite.io/privacy',
     label: 'Privacy',
+    external: true,
   },
   {
     href: 'https://appwrite.io/docs/advanced/security',
     label: 'Security',
+    external: true,
   },
 ] as const
 
@@ -43,12 +54,12 @@ export function SiteFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-10 border-t border-border pt-8 pb-10">
+    <footer className="mt-2 border-t border-border pt-8 pb-6">
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-3">
           <RefetchWordmark className="h-5 w-[90px]" />
           <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
-            Your daily drop of curated tech news — signal over noise. Transparent.
+            Your daily drop of curated tech news - signal over noise. Transparent.
             Community-driven.
           </p>
         </div>
@@ -61,14 +72,23 @@ export function SiteFooter() {
                   ·
                 </span>
               ) : null}
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </a>
+              {link.external ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  to={link.href as '/docs'}
+                  className="transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              )}
             </span>
           ))}
 

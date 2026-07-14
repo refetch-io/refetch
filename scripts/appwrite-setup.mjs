@@ -10,7 +10,7 @@
  * Table IDs default to human-readable slugs; override with env to attach to an existing project
  * (env vars still use *_COLLECTION_ID for backward compatibility):
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
- *   APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID
+ *   APPWRITE_KEYS_COLLECTION_ID, APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID
  *
  * Functions: matched by display name (must match the Appwrite Console function name exactly).
  *   On first run a new function id is generated. Function **variables** are not managed here — set
@@ -51,6 +51,7 @@ const COLLECTION_IDS = {
   posts: process.env.APPWRITE_POSTS_COLLECTION_ID || 'posts',
   comments: process.env.APPWRITE_COMMENTS_COLLECTION_ID || 'comments',
   votes: process.env.APPWRITE_VOTES_COLLECTION_ID || 'votes',
+  keys: process.env.APPWRITE_KEYS_COLLECTION_ID || 'keys',
   daily_topics: process.env.APPWRITE_DAILY_TOPICS_COLLECTION_ID || 'daily_topics',
   topics: process.env.APPWRITE_TOPICS_COLLECTION_ID || 'topics',
 };
@@ -63,6 +64,9 @@ const DEFAULT_PERMS = [
 ];
 
 const STATS_PERMS = [Permission.read(Role.any())];
+
+/** Server SDK only (API key). Never expose secrets via client permissions. */
+const SERVER_ONLY_PERMS = [];
 
 function log(message, type = 'info') {
   const icons = { info: 'ℹ️', success: '✅', warning: '⚠️', error: '❌' };
@@ -197,6 +201,33 @@ function buildCollectionDefinitions() {
       indexes: [
         { key: 'index_1', type: 'key', columns: ['resourceId'], orders: ['ASC'] },
         { key: 'index_2', type: 'key', columns: ['userId'], orders: ['ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.keys,
+      name: 'Keys',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 512, required: true, array: false, default: null },
+        { key: 'userName', type: 'string', size: 512, required: true, array: false, default: null },
+        { key: 'name', type: 'string', size: 128, required: true, array: false, default: null },
+        // Public lookup prefix (e.g. rfk_a1b2c3d4). Full secret stored encrypted below.
+        { key: 'prefix', type: 'string', size: 64, required: true, array: false, default: null },
+        {
+          key: 'secret',
+          type: 'string',
+          size: 255,
+          required: true,
+          array: false,
+          default: null,
+          encrypt: true,
+        },
+        { key: 'lastUsedAt', type: 'datetime', required: false, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'index_userId', type: 'key', columns: ['userId'], orders: ['ASC'] },
+        { key: 'uniq_prefix', type: 'unique', columns: ['prefix'], orders: ['ASC'] },
       ],
     },
     {
@@ -555,6 +586,7 @@ export async function setupAppwrite() {
   log(`  APPWRITE_POSTS_COLLECTION_ID=${COLLECTION_IDS.posts}`, 'info');
   log(`  APPWRITE_COMMENTS_COLLECTION_ID=${COLLECTION_IDS.comments}`, 'info');
   log(`  APPWRITE_VOTES_COLLECTION_ID=${COLLECTION_IDS.votes}`, 'info');
+  log(`  APPWRITE_KEYS_COLLECTION_ID=${COLLECTION_IDS.keys}`, 'info');
   log(`  APPWRITE_DAILY_TOPICS_COLLECTION_ID=${COLLECTION_IDS.daily_topics}`, 'info');
   log(`  APPWRITE_TOPICS_COLLECTION_ID=${COLLECTION_IDS.topics}`, 'info');
 }

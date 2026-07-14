@@ -1,6 +1,8 @@
 import { getCachedJWT, clearCachedJWT } from '../jwt-cache'
 import type {
   AccountUser,
+  ApiKey,
+  CreatedApiKey,
   Paginated,
   Post,
   ResourceType,
@@ -43,6 +45,7 @@ export const api = {
     offset?: number
     userId?: string
     since?: string
+    q?: string
   }): Promise<Paginated<Post>> {
     const search = new URLSearchParams()
     if (params.sort) search.set('sort', params.sort)
@@ -50,18 +53,8 @@ export const api = {
     if (params.offset != null) search.set('offset', String(params.offset))
     if (params.userId) search.set('userId', params.userId)
     if (params.since) search.set('since', params.since)
+    if (params.q) search.set('q', params.q)
     const res = await fetch(`/api/v1/posts?${search}`)
-    return parseJson(res)
-  },
-
-  async searchPosts(params: {
-    q: string
-    limit?: number
-  }): Promise<Paginated<Post>> {
-    const search = new URLSearchParams()
-    search.set('q', params.q)
-    if (params.limit != null) search.set('limit', String(params.limit))
-    const res = await fetch(`/api/v1/posts/search?${search}`)
     return parseJson(res)
   },
 
@@ -109,12 +102,12 @@ export const api = {
     return parseJson(res)
   },
 
-  async deleteComment(commentId: string): Promise<void> {
+  async deleteComment(commentId: string): Promise<{ soft: boolean }> {
     const res = await fetch(`/api/v1/comments/${commentId}`, {
       method: 'DELETE',
       headers: await authHeaders(),
     })
-    await parseJson(res)
+    return parseJson(res)
   },
 
   async getVote(params: {
@@ -173,6 +166,38 @@ export const api = {
       method: 'PATCH',
       headers: await authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(body),
+    })
+    return parseJson(res)
+  },
+
+  async deleteAccount(): Promise<{ ok: boolean }> {
+    const res = await fetch('/api/v1/account', {
+      method: 'DELETE',
+      headers: await authHeaders(),
+    })
+    return parseJson(res)
+  },
+
+  async listApiKeys(): Promise<{ data: ApiKey[] }> {
+    const res = await fetch('/api/v1/keys', {
+      headers: await authHeaders(),
+    })
+    return parseJson(res)
+  },
+
+  async createApiKey(name: string): Promise<CreatedApiKey> {
+    const res = await fetch('/api/v1/keys', {
+      method: 'POST',
+      headers: await authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ name }),
+    })
+    return parseJson(res)
+  },
+
+  async deleteApiKey(keyId: string): Promise<{ ok: boolean }> {
+    const res = await fetch(`/api/v1/keys/${keyId}`, {
+      method: 'DELETE',
+      headers: await authHeaders(),
     })
     return parseJson(res)
   },

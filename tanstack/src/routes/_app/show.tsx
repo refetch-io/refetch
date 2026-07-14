@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_app/show')({
   loader: () => fetchFeed({ data: { sort: 'show', limit: 25, offset: 0 } }),
   component: ShowFeed,
   head: () => ({
-    meta: [{ title: 'Refetch — Show' }],
+    meta: [{ title: 'Refetch - Show' }],
   }),
 })
 
@@ -18,7 +18,7 @@ function ShowFeed() {
       initialTotal={data.total}
       sort="show"
       title="Show"
-      description="Show RF — projects and launches from the community."
+      description="Show RF - projects and launches from the community."
     />
   )
 }

@@ -10,7 +10,9 @@
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\"",
     "check": "prettier --check \"**/*.{ts,tsx,js,jsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "openapi": "node scripts/generate-openapi.mjs",
+    "prebuild": "npm run openapi"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",

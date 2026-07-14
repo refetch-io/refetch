@@ -1,7 +1,8 @@
 import { QUALITY_THRESHOLDS } from '../env'
 import { getDomain, getTimeAgo } from '../utils'
-import { getTablesDB, Query, tables } from '../appwrite.server'
+import { getTablesDB, ID, Query, tables } from '../appwrite.server'
 import type { Paginated, Post, SortType } from '../types'
+import { castVote } from './votes.server'
 
 function mapPost(row: Record<string, unknown>): Post {
   const link = typeof row.link === 'string' ? row.link : undefined
@@ -55,104 +56,91 @@ export async function listPosts(options: {
   offset?: number
   userId?: string
   feedWindow?: boolean
-  /** ISO timestamp — only return posts created after this time. */
+  /** ISO timestamp - only return posts created after this time. */
   since?: string
+  /** Full-text search on title. When set, feed quality window is skipped. */
+  q?: string
 }): Promise<Paginated<Post>> {
   const sort = options.sort ?? 'score'
-  const limit = Math.min(Math.max(options.limit ?? 25, 1), 100)
-  const offset = Math.max(options.offset ?? 0, 0)
-  const feedWindow = options.feedWindow ?? sort !== 'mines'
+  const rawQuery = options.q?.trim() ?? ''
+  const isSearch = rawQuery.length > 0
+  const limit = Math.min(
+    Math.max(options.limit ?? (isSearch ? 20 : 25), 1),
+    isSearch ? 50 : 100,
+  )
+  const offset = isSearch ? 0 : Math.max(options.offset ?? 0, 0)
+  const feedWindow =
+    !isSearch && (options.feedWindow ?? sort !== 'mines')
 
-  const queries = [Query.limit(limit), Query.offset(offset), Query.select(POST_SELECT)]
-
-  if (options.since) {
-    queries.push(Query.greaterThan('$createdAt', options.since))
-  }
-
-  if (feedWindow) {
-    const twentyFourHoursAgo = new Date(
-      Date.now() - 24 * 60 * 60 * 1000,
-    ).toISOString()
-    queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
-    queries.push(Query.lessThan('spamScore', QUALITY_THRESHOLDS.MAX_SPAM_SCORE))
-    queries.push(
-      Query.greaterThan(
-        'relevancyScore',
-        QUALITY_THRESHOLDS.MIN_RELEVANCY_SCORE,
-      ),
-    )
-    queries.push(Query.equal('enhanced', QUALITY_THRESHOLDS.REQUIRE_ENHANCED))
-  }
-
-  if (options.userId) {
-    queries.push(Query.equal('userId', options.userId))
-  }
-
-  // When checking for newer posts, always order by creation time.
-  if (options.since) {
-    queries.push(Query.orderDesc('$createdAt'))
-  } else {
-    switch (sort) {
-      case 'new':
-        queries.push(Query.orderDesc('$createdAt'))
-        break
-      case 'show':
-        queries.push(Query.equal('type', 'show'))
-        queries.push(Query.orderDesc('score'))
-        queries.push(Query.orderDesc('$createdAt'))
-        break
-      case 'mines':
-        queries.push(Query.orderDesc('$createdAt'))
-        break
-      case 'score':
-      default:
-        queries.push(Query.orderDesc('score'))
-        queries.push(Query.orderDesc('$createdAt'))
-        break
-    }
-  }
-
-  // Keep show-type filter when polling the Show feed.
-  if (options.since && sort === 'show') {
-    queries.push(Query.equal('type', 'show'))
-  }
-
-  const db = getTablesDB()
-  const result = await db.listRows({
-    databaseId: tables.databaseId(),
-    tableId: tables.posts(),
-    queries,
-  })
-
-  return {
-    data: result.rows.map((row) => mapPost(row as unknown as Record<string, unknown>)),
-    total: result.total,
-    limit,
-    offset,
-  }
-}
-
-/** Full-text search posts via Appwrite (requires a fulltext index on `title`). */
-export async function searchPosts(options: {
-  q: string
-  limit?: number
-}): Promise<Paginated<Post>> {
-  const raw = options.q.trim()
-  const limit = Math.min(Math.max(options.limit ?? 20, 1), 50)
-
-  if (raw.length < 3) {
+  if (isSearch && rawQuery.length < 3) {
     return { data: [], total: 0, limit, offset: 0 }
   }
 
-  // Hyphens are stop characters — quote the term for exact-ish matches.
-  const searchValue = /[-+]/.test(raw) ? `"${raw}"` : raw
+  const queries = [Query.limit(limit), Query.select(POST_SELECT)]
+  if (!isSearch) {
+    queries.push(Query.offset(offset))
+  }
 
-  const queries = [
-    Query.search('title', searchValue),
-    Query.limit(limit),
-    Query.orderDesc('$createdAt'),
-    Query.select(POST_SELECT),
-  ]
+  if (isSearch) {
+    // Hyphens are stop characters - quote the term for exact-ish matches.
+    const searchValue = /[-+]/.test(rawQuery) ? `"${rawQuery}"` : rawQuery
+    queries.push(Query.search('title', searchValue))
+    queries.push(Query.orderDesc('$createdAt'))
+  } else {
+    if (options.since) {
+      queries.push(Query.greaterThan('$createdAt', options.since))
+    }
+
+    if (feedWindow) {
+      const twentyFourHoursAgo = new Date(
+        Date.now() - 24 * 60 * 60 * 1000,
+      ).toISOString()
+      queries.push(Query.greaterThan('$createdAt', twentyFourHoursAgo))
+      queries.push(
+        Query.lessThan('spamScore', QUALITY_THRESHOLDS.MAX_SPAM_SCORE),
+      )
+      queries.push(
+        Query.greaterThan(
+          'relevancyScore',
+          QUALITY_THRESHOLDS.MIN_RELEVANCY_SCORE,
+        ),
+      )
+      queries.push(Query.equal('enhanced', QUALITY_THRESHOLDS.REQUIRE_ENHANCED))
+    }
+
+    if (options.userId) {
+      queries.push(Query.equal('userId', options.userId))
+    }
+
+    // When checking for newer posts, always order by creation time.
+    if (options.since) {
+      queries.push(Query.orderDesc('$createdAt'))
+    } else {
+      switch (sort) {
+        case 'new':
+          queries.push(Query.orderDesc('$createdAt'))
+          break
+        case 'show':
+          queries.push(Query.equal('type', 'show'))
+          queries.push(Query.orderDesc('score'))
+          queries.push(Query.orderDesc('$createdAt'))
+          break
+        case 'mines':
+          queries.push(Query.orderDesc('$createdAt'))
+          break
+        case 'score':
+        default:
+          queries.push(Query.orderDesc('score'))
+          queries.push(Query.orderDesc('$createdAt'))
+          break
+      }
+    }
+
+    // Keep show-type filter when polling the Show feed.
+    if (options.since && sort === 'show') {
+      queries.push(Query.equal('type', 'show'))
+    }
+  }
 
   const db = getTablesDB()
   const result = await db.listRows({
@@ -167,7 +155,7 @@ export async function searchPosts(options: {
     ),
     total: result.total,
     limit,
-    offset: 0,
+    offset,
   }
 }
 
@@ -273,7 +261,28 @@ export async function createPost(input: {
     })
   }
 
-  return mapPost(row as unknown as Record<string, unknown>)
+  // Authors start with their own upvote.
+  let currentVote: Post['currentVote'] = null
+  try {
+    await castVote({
+      userId: input.userId,
+      resourceId: String(row.$id),
+      resourceType: 'post',
+      voteType: 'up',
+    })
+    currentVote = 'up'
+  } catch {
+    // Keep the post even if the auto-upvote fails.
+  }
+
+  const fresh = await db.getRow({
+    databaseId: tables.databaseId(),
+    tableId: tables.posts(),
+    rowId: String(row.$id),
+  })
+  const post = mapPost(fresh as unknown as Record<string, unknown>)
+  post.currentVote = currentVote
+  return post
 }
 
 export async function deletePost(postId: string, userId: string) {

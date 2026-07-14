@@ -196,6 +196,7 @@ Use the same endpoint and project everywhere; some paths read `APPWRITE_*`, othe
 | `APPWRITE_POSTS_COLLECTION_ID` | `posts` table. |
 | `APPWRITE_COMMENTS_COLLECTION_ID` | `comments` table. |
 | `APPWRITE_VOTES_COLLECTION_ID` | `votes` table. |
+| `APPWRITE_KEYS_COLLECTION_ID` | `keys` table (personal API keys; secrets encrypted). |
 | `APPWRITE_DAILY_TOPICS_COLLECTION_ID` | `daily_topics` table (topic stats). |
 | `APPWRITE_TOPICS_COLLECTION_ID` | `topics` table (topic stats). |
 

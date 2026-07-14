@@ -3,13 +3,17 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from 'react'
+import type { Models } from 'appwrite'
 import { useAuth } from '@/contexts/auth-context'
-import { presences } from '@/lib/appwrite-web'
+import { Channel, presences, realtime } from '@/lib/appwrite-web'
 import {
   PRESENCE_REMOVED_EVENT,
   PRESENCE_UPDATED_EVENT,
@@ -20,7 +24,6 @@ import {
   type PresenceRemovedDetail,
 } from '@/lib/presence'
 
-const PRESENCE_POLL_MS = 15_000
 const PRESENCE_CACHE_KEY = 'refetch:online-presences'
 const PRESENCE_CACHE_TTL_MS = 60_000
 
@@ -106,6 +109,29 @@ function clearCachedPresences() {
   }
 }
 
+function removePresenceUser(
+  userId: string,
+  setByUserId: Dispatch<SetStateAction<Map<string, OnlinePresence>>>,
+) {
+  if (!userId) return
+  setByUserId((prev) => {
+    if (!prev.has(userId)) return prev
+    const next = new Map(prev)
+    next.delete(userId)
+    writeCachedPresences(next)
+    return next
+  })
+}
+
+function isPresenceDeleteEvent(events: string[]) {
+  return events.some(
+    (event) =>
+      event === 'presences.*.delete' ||
+      event.endsWith('.delete') ||
+      event.includes('.delete'),
+  )
+}
+
 export function OnlinePresenceProvider({ children }: { children: ReactNode }) {
   const { isAuthenticated, loading: authLoading } = useAuth()
   const [byUserId, setByUserId] = useState<Map<string, OnlinePresence>>(
@@ -125,8 +151,8 @@ export function OnlinePresenceProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  // Restore last snapshot across hard reloads before the first network round-trip.
-  useEffect(() => {
+  // Restore last snapshot before paint so the sidebar doesn’t jump empty → filled.
+  useLayoutEffect(() => {
     const cached = readCachedPresences()
     if (!cached) return
     setByUserId(cached)
@@ -136,6 +162,7 @@ export function OnlinePresenceProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let cancelled = false
+    let unsubscribe: (() => void) | undefined
 
     const load = async (opts?: { quiet?: boolean }) => {
       if (authLoading) return
@@ -185,14 +212,7 @@ export function OnlinePresenceProvider({ children }: { children: ReactNode }) {
     const onPresenceRemoved = (event: Event) => {
       const userId = (event as CustomEvent<PresenceRemovedDetail>).detail
         ?.userId
-      if (!userId) return
-      setByUserId((prev) => {
-        if (!prev.has(userId)) return prev
-        const next = new Map(prev)
-        next.delete(userId)
-        writeCachedPresences(next)
-        return next
-      })
+      if (userId) removePresenceUser(userId, setByUserId)
     }
 
     const onVisibility = () => {
@@ -201,18 +221,55 @@ export function OnlinePresenceProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    void load({ quiet: hasLoadedRef.current })
+    const startRealtime = async () => {
+      try {
+        const subscription = await realtime.subscribe(
+          Channel.presences(),
+          (response) => {
+            const payload = response.payload as Models.Presence | undefined
+            if (!payload) return
+
+            if (isPresenceDeleteEvent(response.events)) {
+              removePresenceUser(
+                payload.userId || payload.$id,
+                setByUserId,
+              )
+              return
+            }
+
+            const mapped = mapPresence(payload)
+            if (mapped.userId) applyPresence(mapped)
+          },
+        )
+
+        if (cancelled) {
+          void subscription.unsubscribe()
+          return
+        }
+
+        unsubscribe = () => {
+          void subscription.unsubscribe()
+        }
+      } catch {
+        // Realtime is best-effort; snapshot + visibility refresh still work.
+        if (!cancelled) setError(true)
+      }
+    }
+
+    void (async () => {
+      await load({ quiet: hasLoadedRef.current })
+      if (!cancelled && isAuthenticated) {
+        await startRealtime()
+      }
+    })()
+
     window.addEventListener(PRESENCE_UPDATED_EVENT, onLocalPresence)
     window.addEventListener(PRESENCE_REMOVED_EVENT, onPresenceRemoved)
     document.addEventListener('visibilitychange', onVisibility)
 
-    const pollId = window.setInterval(() => {
-      void load({ quiet: true })
-    }, PRESENCE_POLL_MS)
-
     return () => {
       cancelled = true
-      window.clearInterval(pollId)
+      unsubscribe?.()
       window.removeEventListener(PRESENCE_UPDATED_EVENT, onLocalPresence)
       window.removeEventListener(PRESENCE_REMOVED_EVENT, onPresenceRemoved)
       document.removeEventListener('visibilitychange', onVisibility)

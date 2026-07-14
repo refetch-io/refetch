@@ -12,7 +12,11 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { CommandCenter } from '@/components/layout/command-center'
-import { resolvePageTitle } from '@/components/layout/nav-config'
+import { isAccountPath } from '@/components/account/account-nav'
+import {
+  isDocsPath,
+  resolvePageTitle,
+} from '@/components/layout/nav-config'
 import { RefetchMark } from '@/components/refetch-logo'
 import { useAuth } from '@/contexts/auth-context'
 
@@ -44,6 +48,28 @@ export function ShellHeader() {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
+            {isDocsPath(pathname) && pathname !== '/docs' ? (
+              <>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink asChild>
+                    <Link to="/docs">Docs</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+              </>
+            ) : null}
+            {isAccountPath(pathname) &&
+            pathname !== '/account' &&
+            pathname !== '/account/' ? (
+              <>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink asChild>
+                    <Link to="/account">Account</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+              </>
+            ) : null}
             <BreadcrumbItem className="min-w-0">
               <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
             </BreadcrumbItem>

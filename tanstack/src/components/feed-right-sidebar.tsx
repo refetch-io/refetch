@@ -14,7 +14,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { getInitialsAvatarUrl } from '@/lib/appwrite-web'
 import {
   PRESENCE_STATUS_DOT,
-  isPresenceSharingEnabled,
+  getPresenceSharingEnabled,
   persistPresenceSharing,
 } from '@/lib/presence'
 import { PresenceVisibilityToggle } from '@/components/presence-visibility-toggle'
@@ -27,6 +27,8 @@ type ChartPoint = {
   label: string
   visitors: number
 }
+
+type ChartSeries = Record<ChartTab, ChartPoint[]>
 
 const TRENDING_TOPICS = [
   'AI',
@@ -49,30 +51,33 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const PRESENCE_LIST_MIN_ROWS = 3
-/** Comfortable row height without tight hairline separators. */
+/** Fixed list height - keeps sidebar sections from jumping as users load. */
+const PRESENCE_LIST_CLASS = 'h-44'
 const PRESENCE_ROW_CLASS = 'flex items-center gap-2.5 py-2.5'
+
+const EMPTY_SERIES: ChartSeries = {
+  '24h': [],
+  '30d': [],
+  '1y': [],
+}
+
+let analyticsCache: ChartSeries | null = null
+let analyticsPromise: Promise<ChartSeries> | null = null
 
 function formatCount(count: number) {
   if (count >= 1000) return `${(count / 1000).toFixed(1)}k`
   return String(count)
 }
 
-function PresenceListSkeleton({ rows = PRESENCE_LIST_MIN_ROWS }: { rows?: number }) {
+function PresenceListSkeleton() {
   return (
     <div className="flex flex-col divide-y divide-border/40" aria-hidden>
-      {Array.from({ length: rows }).map((_, index) => (
-        <div
-          key={index}
-          className="animate-in fade-in-0 duration-500 fill-mode-both"
-          style={{ animationDelay: `${index * 60}ms` }}
-        >
-          <div className={PRESENCE_ROW_CLASS}>
-            <Skeleton className="size-7 shrink-0 rounded-full" />
-            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <Skeleton className="h-3.5 w-[58%]" />
-              <Skeleton className="h-2.5 w-[42%]" />
-            </div>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div key={index} className={PRESENCE_ROW_CLASS}>
+          <Skeleton className="size-7 shrink-0 rounded-full" />
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <Skeleton className="h-3.5 w-[58%]" />
+            <Skeleton className="h-2.5 w-[42%]" />
           </div>
         </div>
       ))}
@@ -86,7 +91,7 @@ function PresenceEmptyState({
   isAuthenticated: boolean
 }) {
   return (
-    <div className="flex min-h-[9.75rem] flex-col justify-center gap-2 animate-in fade-in-0 duration-500">
+    <div className="flex h-full flex-col justify-center gap-2">
       <div className="flex -space-x-2" aria-hidden>
         {Array.from({ length: 3 }).map((_, index) => (
           <div
@@ -114,8 +119,46 @@ async function fetchAnalytics<T>(type: string): Promise<T> {
   return payload.data as T
 }
 
+function loadAnalyticsSeries(): Promise<ChartSeries> {
+  if (analyticsCache) return Promise.resolve(analyticsCache)
+  if (analyticsPromise) return analyticsPromise
+
+  analyticsPromise = (async () => {
+    const [data24h, data30d, data1y] = await Promise.all([
+      fetchAnalytics<Array<{ hour?: number; visitors: number }>>('24h'),
+      fetchAnalytics<Array<{ day?: number; visitors: number }>>('30d'),
+      fetchAnalytics<Array<{ month?: string; visitors: number }>>('1y'),
+    ])
+
+    const next: ChartSeries = {
+      '24h': (Array.isArray(data24h) ? data24h : []).map((d, i) => ({
+        label:
+          d.hour !== undefined
+            ? `${String(d.hour).padStart(2, '0')}:00`
+            : `H${i + 1}`,
+        visitors: d.visitors ?? 0,
+      })),
+      '30d': (Array.isArray(data30d) ? data30d : []).map((d, i) => ({
+        label: d.day !== undefined ? `Day ${d.day}` : `D${i + 1}`,
+        visitors: d.visitors ?? 0,
+      })),
+      '1y': (Array.isArray(data1y) ? data1y : []).map((d, i) => ({
+        label: d.month ?? `M${i + 1}`,
+        visitors: d.visitors ?? 0,
+      })),
+    }
+    analyticsCache = next
+    return next
+  })().finally(() => {
+    analyticsPromise = null
+  })
+
+  return analyticsPromise
+}
+
 function LiveViewSection() {
-  const { isAuthenticated, user, refreshUser } = useAuth()
+  const { isAuthenticated, loading: authLoading, user, refreshUser } =
+    useAuth()
   const { users, count, loading, error, statusLabel, statusTone } =
     useOnlinePresences()
   const [isDark, setIsDark] = useState(false)
@@ -132,7 +175,7 @@ function LiveViewSection() {
   }, [])
 
   useEffect(() => {
-    if (user) setSharePresence(isPresenceSharingEnabled(user.prefs))
+    if (user) setSharePresence(getPresenceSharingEnabled(user.prefs))
   }, [user])
 
   const togglePresenceSharing = async (enabled: boolean) => {
@@ -157,37 +200,39 @@ function LiveViewSection() {
     }
   }
 
-  const displayCount = error && count === 0 ? '—' : count
-  const countLabel = count === 1 ? 'refetcher online' : 'refetchers online'
+  const authReady = !authLoading
   const showSkeleton = loading && users.length === 0
+  const showToggle = authReady && isAuthenticated
+  const displayCount = error && count === 0 ? '-' : count
+  const countLabel = count === 1 ? 'refetcher online' : 'refetchers online'
 
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <div className="flex h-8 items-baseline gap-1.5">
           <p className="font-heading text-2xl font-semibold tracking-tight tabular-nums">
-            {showSkeleton ? '0' : displayCount}
+            {showSkeleton ? '\u00a0' : displayCount}
           </p>
           <span className="text-sm text-muted-foreground">
-            {showSkeleton ? 'refetchers online' : countLabel}
+            {showSkeleton ? '\u00a0' : countLabel}
           </span>
         </div>
         <p className="h-4 text-xs text-muted-foreground">
           {showSkeleton
-            ? 'Connecting…'
+            ? '\u00a0'
             : error && count === 0
               ? 'Presence offline'
-              : sharePresence
+              : !authReady || !isAuthenticated || sharePresence
                 ? 'Live · Presence'
                 : 'Live · You’re hidden'}
         </p>
       </div>
 
-      <div className="relative min-h-[9.75rem]">
+      <div className={cn('relative overflow-hidden', PRESENCE_LIST_CLASS)}>
         {showSkeleton ? (
           <PresenceListSkeleton />
         ) : users.length > 0 ? (
-          <ul className="flex max-h-56 flex-col divide-y divide-border/40 overflow-y-auto overscroll-none">
+          <ul className="flex h-full flex-col divide-y divide-border/40 overflow-y-auto overscroll-none">
             {users.map((presenceUser) => {
               const tone = statusTone(presenceUser.status)
               return (
@@ -233,63 +278,45 @@ function LiveViewSection() {
             })}
           </ul>
         ) : (
-          <PresenceEmptyState isAuthenticated={isAuthenticated} />
+          <PresenceEmptyState isAuthenticated={authReady && isAuthenticated} />
         )}
       </div>
 
-      {isAuthenticated ? (
-        <div className="border-t border-border/50 pt-3">
-          <PresenceVisibilityToggle
-            enabled={sharePresence}
-            disabled={savingPresence}
-            onChange={togglePresenceSharing}
-          />
-        </div>
-      ) : null}
+      {/* Always reserve toggle height so auth resolve doesn’t shove sections down. */}
+      <div
+        className={cn(
+          'border-t border-border/50 pt-3',
+          !showToggle && 'invisible pointer-events-none',
+        )}
+        aria-hidden={!showToggle}
+      >
+        <PresenceVisibilityToggle
+          enabled={sharePresence}
+          disabled={!showToggle || savingPresence}
+          onChange={togglePresenceSharing}
+        />
+      </div>
     </section>
   )
 }
 
 function VisitorsChartSection() {
   const [tab, setTab] = useState<ChartTab>('24h')
-  const [series, setSeries] = useState<Record<ChartTab, ChartPoint[]>>({
-    '24h': [],
-    '30d': [],
-    '1y': [],
-  })
-  const [loading, setLoading] = useState(true)
+  const [series, setSeries] = useState<ChartSeries>(
+    () => analyticsCache ?? EMPTY_SERIES,
+  )
+  const [loading, setLoading] = useState(() => !analyticsCache)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     let cancelled = false
 
     const load = async () => {
+      if (!analyticsCache) setLoading(true)
       try {
-        setLoading(true)
-        const [data24h, data30d, data1y] = await Promise.all([
-          fetchAnalytics<Array<{ hour?: number; visitors: number }>>('24h'),
-          fetchAnalytics<Array<{ day?: number; visitors: number }>>('30d'),
-          fetchAnalytics<Array<{ month?: string; visitors: number }>>('1y'),
-        ])
+        const next = await loadAnalyticsSeries()
         if (cancelled) return
-
-        setSeries({
-          '24h': (Array.isArray(data24h) ? data24h : []).map((d, i) => ({
-            label:
-              d.hour !== undefined
-                ? `${String(d.hour).padStart(2, '0')}:00`
-                : `H${i + 1}`,
-            visitors: d.visitors ?? 0,
-          })),
-          '30d': (Array.isArray(data30d) ? data30d : []).map((d, i) => ({
-            label: d.day !== undefined ? `Day ${d.day}` : `D${i + 1}`,
-            visitors: d.visitors ?? 0,
-          })),
-          '1y': (Array.isArray(data1y) ? data1y : []).map((d, i) => ({
-            label: d.month ?? `M${i + 1}`,
-            visitors: d.visitors ?? 0,
-          })),
-        })
+        setSeries(next)
         setError(false)
       } catch {
         if (!cancelled) setError(true)
@@ -316,70 +343,73 @@ function VisitorsChartSection() {
   const activeData = series[tab]
   const periodLabel =
     PERIODS.find((period) => period.value === tab)?.description ?? 'Visitors'
+  const showChart = !loading && !error && activeData.length > 0
 
   return (
     <section className="flex flex-col gap-3">
-      <p className="text-xs text-muted-foreground">{periodLabel}</p>
+      <p className="h-4 text-xs text-muted-foreground">{periodLabel}</p>
 
-      {loading ? (
-        <Skeleton className="h-16 w-full" />
-      ) : error || activeData.length === 0 ? (
-        <div
-          aria-hidden
-          className="relative h-16 w-full overflow-hidden rounded-md bg-muted/30"
-        >
-          <svg
-            viewBox="0 0 240 64"
-            className="absolute inset-0 size-full text-muted-foreground/35"
-            preserveAspectRatio="none"
+      <div className="relative h-16 w-full overflow-hidden">
+        {showChart ? (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto! h-16 w-full"
+            initialDimension={{ width: 240, height: 64 }}
           >
-            <path
-              d="M0 48 C40 44 50 20 80 28 C110 36 120 12 150 22 C180 32 200 40 240 18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        </div>
-      ) : (
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-16 w-full"
-          initialDimension={{ width: 240, height: 64 }}
-        >
-          <AreaChart
-            data={activeData}
-            margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
+            <AreaChart
+              data={activeData}
+              margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-visitors)"
+                    stopOpacity={0.35}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-visitors)"
+                    stopOpacity={0.02}
+                  />
+                </linearGradient>
+              </defs>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel indicator="line" />}
+              />
+              <Area
+                dataKey="visitors"
+                type="monotone"
+                fill="url(#fillVisitors)"
+                stroke="var(--color-visitors)"
+                strokeWidth={2}
+                isAnimationActive={false}
+              />
+            </AreaChart>
+          </ChartContainer>
+        ) : loading ? (
+          <Skeleton className="size-full rounded-md" />
+        ) : (
+          <div
+            aria-hidden
+            className="relative size-full overflow-hidden rounded-md bg-muted/30"
           >
-            <defs>
-              <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-visitors)"
-                  stopOpacity={0.35}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-visitors)"
-                  stopOpacity={0.02}
-                />
-              </linearGradient>
-            </defs>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel indicator="line" />}
-            />
-            <Area
-              dataKey="visitors"
-              type="monotone"
-              fill="url(#fillVisitors)"
-              stroke="var(--color-visitors)"
-              strokeWidth={2}
-              isAnimationActive={false}
-            />
-          </AreaChart>
-        </ChartContainer>
-      )}
+            <svg
+              viewBox="0 0 240 64"
+              className="absolute inset-0 size-full text-muted-foreground/35"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0 48 C40 44 50 20 80 28 C110 36 120 12 150 22 C180 32 200 40 240 18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col">
         {PERIODS.map((period, index) => {
@@ -390,7 +420,7 @@ function VisitorsChartSection() {
                 type="button"
                 onClick={() => setTab(period.value)}
                 className={cn(
-                  'flex w-full items-center justify-between py-2 text-left text-sm transition-colors',
+                  'flex h-9 w-full items-center justify-between text-left text-sm transition-colors',
                   active
                     ? 'text-foreground'
                     : 'text-muted-foreground hover:text-foreground',
@@ -403,7 +433,7 @@ function VisitorsChartSection() {
                     active ? 'font-semibold text-foreground' : 'font-medium',
                   )}
                 >
-                  {loading || error ? '—' : formatCount(totals[period.value])}
+                  {loading || error ? '-' : formatCount(totals[period.value])}
                 </span>
               </button>
               {index < PERIODS.length - 1 ? <Separator /> : null}

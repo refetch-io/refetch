@@ -37,6 +37,8 @@
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
+    --color-brand-foreground: var(--brand-foreground);
+    --color-brand: var(--brand);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
@@ -59,7 +61,7 @@
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --brand: #4e1cb3;
+    --brand: #4709E0;
     --brand-foreground: #ffffff;
     --primary: var(--brand);
     --primary-foreground: var(--brand-foreground);
@@ -96,7 +98,7 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --brand: #6b3fd4;
+    --brand: #4709E0;
     --brand-foreground: #ffffff;
     --primary: var(--brand);
     --primary-foreground: var(--brand-foreground);
@@ -143,4 +145,11 @@
   h6 {
     @apply font-heading;
     }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled) {
+    cursor: pointer;
+  }
 }

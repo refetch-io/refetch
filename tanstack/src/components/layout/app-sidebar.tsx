@@ -1,4 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
+import { ArrowLeft, Braces } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -18,10 +19,13 @@ import { useAuth } from '@/contexts/auth-context'
 import {
   CHANNELS_NAV,
   DISCOVER_NAV,
+  DOCS_NAV,
   WORKSPACE_NAV,
+  isDocsPath,
   isNavActive,
   type AppNavItem,
   type ChannelNavItem,
+  type DocsNavItem,
 } from '@/components/layout/nav-config'
 
 function NavLink({ item }: { item: AppNavItem }) {
@@ -38,6 +42,25 @@ function NavLink({ item }: { item: AppNavItem }) {
         tooltip={item.label}
       >
         <Link to={href}>
+          <item.icon />
+          <span>{item.label}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
+function DocsNavLink({ item }: { item: DocsNavItem }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        asChild
+        isActive={isNavActive(pathname, item.to)}
+        tooltip={item.label}
+      >
+        <Link to={item.to}>
           <item.icon />
           <span>{item.label}</span>
         </Link>
@@ -64,6 +87,9 @@ function ChannelLink({ item }: { item: ChannelNavItem }) {
 }
 
 export function AppSidebar() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const docs = isDocsPath(pathname)
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="h-14 justify-center border-b border-sidebar-border">
@@ -78,38 +104,79 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="gap-3">
-        <SidebarGroup>
-          <SidebarGroupLabel>Discover</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {DISCOVER_NAV.map((item) => (
-                <NavLink key={item.to} item={item} />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {docs ? (
+          <>
+            <SidebarGroup>
+              <SidebarGroupLabel>Documentation</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {DOCS_NAV.map((item) => (
+                    <DocsNavLink key={item.to} item={item} />
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {WORKSPACE_NAV.map((item) => (
-                <NavLink key={item.to} item={item} />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>Resources</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip="OpenAPI spec">
+                      <a href="/openapi.json" download>
+                        <Braces />
+                        <span>OpenAPI spec</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip="Back to feed">
+                      <Link to="/">
+                        <ArrowLeft />
+                        <span>Back to feed</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        ) : (
+          <>
+            <SidebarGroup>
+              <SidebarGroupLabel>Discover</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {DISCOVER_NAV.map((item) => (
+                    <NavLink key={item.to} item={item} />
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Channels</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {CHANNELS_NAV.map((item) => (
-                <ChannelLink key={item.id} item={item} />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {WORKSPACE_NAV.map((item) => (
+                    <NavLink key={item.to} item={item} />
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>Channels</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {CHANNELS_NAV.map((item) => (
+                    <ChannelLink key={item.id} item={item} />
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">

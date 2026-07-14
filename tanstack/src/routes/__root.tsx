@@ -22,7 +22,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Refetch — Open-source alternative to YC-controlled HN',
+        title: 'Refetch - Open-source alternative to YC-controlled HN',
       },
       {
         name: 'description',

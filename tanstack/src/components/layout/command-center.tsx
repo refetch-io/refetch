@@ -5,8 +5,8 @@ import {
   ArrowUp,
   Clock,
   CornerDownLeft,
-  FileText,
   LogIn,
+  MessageSquare,
   Monitor,
   Plus,
   Search,
@@ -120,7 +120,7 @@ export function CommandCenter({ className }: { className?: string }) {
 
     const timer = window.setTimeout(async () => {
       try {
-        const result = await api.searchPosts({ q, limit: 20 })
+        const result = await api.listPosts({ q, limit: 20 })
         if (cancelled) return
         setPosts(result.data)
         setSearchError('')
@@ -265,63 +265,54 @@ export function CommandCenter({ className }: { className?: string }) {
           <CommandList>
             <CommandEmpty>
               {trimmed.length > 0 && trimmed.length < MIN_SEARCH_CHARS
-                ? `Type at least ${MIN_SEARCH_CHARS} characters to search posts`
-                : 'No results found.'}
+                ? `Type at least ${MIN_SEARCH_CHARS} characters to search`
+                : searching && loadingPosts
+                  ? 'Searching…'
+                  : searchError
+                    ? searchError
+                    : 'No results found.'}
             </CommandEmpty>
 
-            {searching ? (
+            {searching && posts.length > 0 ? (
               <CommandGroup
                 heading={
                   loadingPosts
                     ? 'Posts · Searching…'
-                    : searchError && posts.length > 0
+                    : searchError
                       ? 'Posts · Couldn’t refresh'
                       : 'Posts'
                 }
-                className={cn(loadingPosts && posts.length > 0 && 'opacity-60')}
+                className={cn(loadingPosts && 'opacity-60')}
               >
-                {posts.length > 0
-                  ? posts.map((post) => (
-                      <CommandItem
-                        key={post.id}
-                        value={`post ${post.id} ${post.title}`}
-                        onSelect={() =>
-                          run(() =>
-                            navigate({
-                              to: '/threads/$threadId',
-                              params: { threadId: post.id },
-                            }),
-                          )
-                        }
-                      >
-                        <CommandIcon>
-                          <FileText />
-                        </CommandIcon>
-                        <ItemLabel
-                          title={post.title}
-                          description={`${post.domain.replace(/^www\./, '')}${
-                            post.author ? ` · ${post.author}` : ''
-                          }`}
-                        />
-                      </CommandItem>
-                    ))
-                  : searchError ? (
-                      <div className="px-2 py-6 text-center text-sm text-muted-foreground">
-                        {searchError}
-                      </div>
-                    ) : loadingPosts ? (
-                      <div className="px-2 py-6 text-center text-sm text-muted-foreground">
-                        Searching…
-                      </div>
-                    ) : (
-                      <div className="px-2 py-6 text-center text-sm text-muted-foreground">
-                        No posts found for “{trimmed}”
-                      </div>
-                    )}
+                {posts.map((post) => (
+                  <CommandItem
+                    key={post.id}
+                    value={`post ${post.id} ${post.title}`}
+                    onSelect={() =>
+                      run(() =>
+                        navigate({
+                          to: '/threads/$threadId',
+                          params: { threadId: post.id },
+                        }),
+                      )
+                    }
+                  >
+                    <CommandIcon>
+                      <MessageSquare />
+                    </CommandIcon>
+                    <ItemLabel
+                      title={post.title}
+                      description={`${post.domain.replace(/^www\./, '')}${
+                        post.author ? ` · ${post.author}` : ''
+                      }`}
+                    />
+                  </CommandItem>
+                ))}
               </CommandGroup>
             ) : null}
 
             {searching &&
+            posts.length > 0 &&
             (navigationItems.length > 0 || createItems.length > 0) ? (
               <CommandSeparator />
             ) : null}
@@ -394,7 +385,7 @@ export function CommandCenter({ className }: { className?: string }) {
               </span>
             </div>
             <span className="hidden sm:inline">
-              Posts search after {MIN_SEARCH_CHARS}+ characters
+              Search posts after {MIN_SEARCH_CHARS}+ characters
             </span>
           </div>
         </Command>

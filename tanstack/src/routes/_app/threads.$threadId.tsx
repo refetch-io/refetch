@@ -7,6 +7,7 @@ import {
   ExternalLink,
   MessageSquare,
   Reply,
+  Trash2,
 } from 'lucide-react'
 import { Favicon } from '@/components/favicon'
 import { FeedRightSidebar } from '@/components/feed-right-sidebar'
@@ -73,8 +74,8 @@ export const Route = createFileRoute('/_app/threads/$threadId')({
     meta: [
       {
         title: loaderData?.post
-          ? `${loaderData.post.title} — Refetch`
-          : 'Thread — Refetch',
+          ? `${loaderData.post.title} - Refetch`
+          : 'Thread - Refetch',
       },
     ],
   }),
@@ -106,6 +107,32 @@ function insertReply(
       }
     }
     return comment
+  })
+}
+
+function removeComment(items: Comment[], commentId: string): Comment[] {
+  return items.flatMap((comment) => {
+    if (comment.id === commentId) return []
+    if (!comment.replies?.length) return [comment]
+    return [
+      {
+        ...comment,
+        replies: removeComment(comment.replies, commentId),
+      },
+    ]
+  })
+}
+
+function markCommentDeleted(items: Comment[], commentId: string): Comment[] {
+  return items.map((comment) => {
+    if (comment.id === commentId) {
+      return { ...comment, text: '[deleted]' }
+    }
+    if (!comment.replies?.length) return comment
+    return {
+      ...comment,
+      replies: markCommentDeleted(comment.replies, commentId),
+    }
   })
 }
 
@@ -166,7 +193,7 @@ type ReplyTarget = { id: string; author: string }
 
 function ThreadPage() {
   const { post, comments: initialComments } = Route.useLoaderData()
-  const { isAuthenticated, loading: authLoading } = useAuth()
+  const { isAuthenticated, loading: authLoading, user } = useAuth()
   const [comments, setComments] = useState(initialComments)
   const [voteState, setVoteState] = useState<VoteState>({
     currentVote: null,
@@ -180,6 +207,7 @@ function ThreadPage() {
   const [replyError, setReplyError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [replySubmitting, setReplySubmitting] = useState(false)
+  const [deletingIds, setDeletingIds] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     setComments(initialComments)
@@ -298,6 +326,45 @@ function ThreadPage() {
     setReplyError('')
     setReplyText('')
     setReplyTo(target)
+  }
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!isAuthenticated) {
+      window.location.href = '/signin'
+      return
+    }
+    if (
+      !window.confirm(
+        'Delete this comment? This cannot be undone.',
+      )
+    ) {
+      return
+    }
+
+    setDeletingIds((prev) => ({ ...prev, [commentId]: true }))
+    try {
+      const result = await api.deleteComment(commentId)
+      setComments((prev) =>
+        result.soft
+          ? markCommentDeleted(prev, commentId)
+          : removeComment(prev, commentId),
+      )
+      if (replyTo?.id === commentId) {
+        setReplyTo(null)
+        setReplyText('')
+        setReplyError('')
+      }
+    } catch (err) {
+      window.alert(
+        err instanceof Error ? err.message : 'Failed to delete comment',
+      )
+    } finally {
+      setDeletingIds((prev) => {
+        const next = { ...prev }
+        delete next[commentId]
+        return next
+      })
+    }
   }
 
   const hasExternalLink = !!post.link?.startsWith('http')
@@ -475,6 +542,7 @@ function ThreadPage() {
                     comment={comment}
                     depth={0}
                     postAuthorId={post.userId}
+                    currentUserId={user?.$id}
                     replyTo={replyTo}
                     replyText={replyText}
                     replyError={replyError}
@@ -487,6 +555,8 @@ function ThreadPage() {
                       setReplyError('')
                     }}
                     onSubmitReply={handleReply}
+                    onDelete={handleDeleteComment}
+                    isDeletingComment={(id) => !!deletingIds[id]}
                   />
                 ))}
               </div>
@@ -510,6 +580,7 @@ function CommentNode({
   comment,
   depth,
   postAuthorId,
+  currentUserId,
   replyTo,
   replyText,
   replyError,
@@ -518,10 +589,13 @@ function CommentNode({
   onStartReply,
   onCancelReply,
   onSubmitReply,
+  onDelete,
+  isDeletingComment,
 }: {
   comment: Comment
   depth: number
   postAuthorId: string
+  currentUserId?: string
   replyTo: ReplyTarget | null
   replyText: string
   replyError: string
@@ -530,10 +604,19 @@ function CommentNode({
   onStartReply: (target: ReplyTarget) => void
   onCancelReply: () => void
   onSubmitReply: (e: React.FormEvent) => void
+  onDelete: (commentId: string) => void
+  isDeletingComment: (commentId: string) => boolean
 }) {
   const isOp = Boolean(comment.userId) && comment.userId === postAuthorId
-  const canReply = depth < MAX_REPLY_DEPTH
+  const isOwn =
+    Boolean(currentUserId) &&
+    Boolean(comment.userId) &&
+    comment.userId === currentUserId
+  const isDeleted = comment.text.trim() === '[deleted]'
+  const canReply = depth < MAX_REPLY_DEPTH && !isDeleted
+  const canDelete = isOwn && !isDeleted
   const isReplying = replyTo?.id === comment.id
+  const deleting = isDeletingComment(comment.id)
   const indent = Math.min(depth, MAX_REPLY_DEPTH)
 
   return (
@@ -566,26 +649,48 @@ function CommentNode({
               </>
             ) : null}
           </div>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+          <p
+            className={cn(
+              'whitespace-pre-wrap text-sm leading-relaxed',
+              isDeleted
+                ? 'italic text-muted-foreground'
+                : 'text-foreground/90',
+            )}
+          >
             {comment.text}
           </p>
 
-          {canReply ? (
-            <div className="mt-2">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-                onClick={() =>
-                  isReplying
-                    ? onCancelReply()
-                    : onStartReply({ id: comment.id, author: comment.author })
-                }
-              >
-                <Reply className="size-3" />
-                {isReplying ? 'Cancel' : 'Reply'}
-              </Button>
+          {canReply || canDelete ? (
+            <div className="mt-2 flex flex-wrap items-center gap-1">
+              {canReply ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+                  onClick={() =>
+                    isReplying
+                      ? onCancelReply()
+                      : onStartReply({ id: comment.id, author: comment.author })
+                  }
+                >
+                  <Reply className="size-3" />
+                  {isReplying ? 'Cancel' : 'Reply'}
+                </Button>
+              ) : null}
+              {canDelete ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  disabled={deleting}
+                  className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-destructive"
+                  onClick={() => onDelete(comment.id)}
+                >
+                  <Trash2 className="size-3" />
+                  {deleting ? 'Deleting…' : 'Delete'}
+                </Button>
+              ) : null}
             </div>
           ) : null}
 
@@ -648,6 +753,7 @@ function CommentNode({
             comment={reply}
             depth={depth + 1}
             postAuthorId={postAuthorId}
+            currentUserId={currentUserId}
             replyTo={replyTo}
             replyText={replyText}
             replyError={replyError}
@@ -656,6 +762,8 @@ function CommentNode({
             onStartReply={onStartReply}
             onCancelReply={onCancelReply}
             onSubmitReply={onSubmitReply}
+            onDelete={onDelete}
+            isDeletingComment={isDeletingComment}
           />
         </div>
       ))}

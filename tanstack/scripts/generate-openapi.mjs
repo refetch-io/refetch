@@ -1,0 +1,949 @@
+#!/usr/bin/env node
+/**
+ * Builds the OpenAPI 3.1 specification for the Refetch HTTP API.
+ *
+ * Keep this file aligned with route handlers under `src/routes/api/v1/`.
+ *
+ * Usage:
+ *   node scripts/generate-openapi.mjs
+ *   npm run openapi
+ */
+
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const root = join(__dirname, '..')
+
+const outPaths = [
+  join(root, 'src/generated/openapi.json'),
+  join(root, 'public/openapi.json'),
+]
+
+const bearerAuth = [{ bearerAuth: [] }]
+
+/** @type {import('openapi-types').OpenAPIV3_1.Document} */
+const spec = {
+  openapi: '3.1.0',
+  info: {
+    title: 'Refetch API',
+    version: '1.0.0',
+    description:
+      'HTTP API for Refetch - curated tech news feed, comments, votes, and account management. Authenticated routes expect a personal API key (`rfk_…`) created in Account settings.',
+    contact: {
+      name: 'Refetch',
+      url: 'https://github.com/refetch-io/refetch',
+    },
+    license: {
+      name: 'See repository',
+      url: 'https://github.com/refetch-io/refetch',
+    },
+  },
+  servers: [
+    {
+      url: '/api/v1',
+      description: 'Same-origin API (Vite / production)',
+    },
+  ],
+  tags: [
+    { name: 'Posts', description: 'List, create, search, and delete posts' },
+    { name: 'Comments', description: 'Thread comments on posts' },
+    { name: 'Votes', description: 'Upvote / downvote posts and comments' },
+    { name: 'Account', description: 'Current user profile' },
+    { name: 'Keys', description: 'Personal API keys for external clients' },
+    { name: 'Analytics', description: 'Traffic stats via Plausible' },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'API key',
+        description:
+          'Personal API key starting with `rfk_`. Create and revoke keys in Account settings.',
+      },
+    },
+    schemas: {
+      ApiError: {
+        type: 'object',
+        required: ['error'],
+        properties: {
+          error: { type: 'string' },
+          message: { type: 'string' },
+          details: {},
+        },
+      },
+      PostType: {
+        type: 'string',
+        enum: ['link', 'show'],
+      },
+      SortType: {
+        type: 'string',
+        enum: ['score', 'new', 'show', 'mines'],
+      },
+      ResourceType: {
+        type: 'string',
+        enum: ['post', 'comment'],
+      },
+      VoteDirection: {
+        type: 'string',
+        enum: ['up', 'down'],
+      },
+      Post: {
+        type: 'object',
+        required: [
+          'id',
+          'title',
+          'description',
+          'domain',
+          'author',
+          'userId',
+          'count',
+          'countUp',
+          'countDown',
+          'countComments',
+          'type',
+          'createdAt',
+          'updatedAt',
+        ],
+        properties: {
+          id: { type: 'string' },
+          title: { type: 'string' },
+          description: { type: 'string' },
+          tldr: { type: 'string' },
+          link: { type: 'string', format: 'uri' },
+          domain: { type: 'string' },
+          author: { type: 'string' },
+          userId: { type: 'string' },
+          count: { type: 'integer' },
+          countUp: { type: 'integer' },
+          countDown: { type: 'integer' },
+          countComments: { type: 'integer' },
+          type: { $ref: '#/components/schemas/PostType' },
+          readingTime: { type: 'number' },
+          spamScore: { type: 'number' },
+          createdAt: { type: 'string', format: 'date-time' },
+          updatedAt: { type: 'string', format: 'date-time' },
+          currentVote: {
+            oneOf: [
+              { $ref: '#/components/schemas/VoteDirection' },
+              { type: 'null' },
+            ],
+          },
+          timeAgo: { type: 'string' },
+        },
+      },
+      Comment: {
+        type: 'object',
+        required: [
+          'id',
+          'postId',
+          'author',
+          'userId',
+          'text',
+          'count',
+          'countUp',
+          'countDown',
+          'createdAt',
+        ],
+        properties: {
+          id: { type: 'string' },
+          postId: { type: 'string' },
+          author: { type: 'string' },
+          userId: { type: 'string' },
+          text: { type: 'string' },
+          count: { type: 'integer' },
+          countUp: { type: 'integer' },
+          countDown: { type: 'integer' },
+          parentId: { type: 'string' },
+          createdAt: { type: 'string', format: 'date-time' },
+          timeAgo: { type: 'string' },
+          replies: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Comment' },
+          },
+          currentVote: {
+            oneOf: [
+              { $ref: '#/components/schemas/VoteDirection' },
+              { type: 'null' },
+            ],
+          },
+        },
+      },
+      PaginatedPosts: {
+        type: 'object',
+        required: ['data', 'total', 'limit', 'offset'],
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Post' },
+          },
+          total: { type: 'integer' },
+          limit: { type: 'integer' },
+          offset: { type: 'integer' },
+        },
+      },
+      CommentList: {
+        type: 'object',
+        required: ['data', 'total'],
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Comment' },
+          },
+          total: { type: 'integer' },
+        },
+      },
+      VoteState: {
+        type: 'object',
+        required: ['currentVote', 'count'],
+        properties: {
+          currentVote: {
+            oneOf: [
+              { $ref: '#/components/schemas/VoteDirection' },
+              { type: 'null' },
+            ],
+          },
+          count: { type: 'integer' },
+          countUp: { type: 'integer' },
+          countDown: { type: 'integer' },
+        },
+      },
+      VoteCastResult: {
+        allOf: [
+          { $ref: '#/components/schemas/VoteState' },
+          {
+            type: 'object',
+            required: ['operation', 'voteType'],
+            properties: {
+              operation: {
+                type: 'string',
+                enum: ['created', 'changed', 'removed'],
+              },
+              voteType: {
+                oneOf: [
+                  { $ref: '#/components/schemas/VoteDirection' },
+                  { type: 'null' },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      VoteBatchRequest: {
+        type: 'object',
+        required: ['action', 'resources'],
+        properties: {
+          action: { type: 'string', enum: ['batch'] },
+          resources: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['id', 'type'],
+              properties: {
+                id: { type: 'string' },
+                type: { $ref: '#/components/schemas/ResourceType' },
+              },
+            },
+          },
+        },
+      },
+      VoteCastRequest: {
+        type: 'object',
+        required: ['resourceId', 'resourceType', 'voteType'],
+        properties: {
+          resourceId: { type: 'string' },
+          resourceType: { $ref: '#/components/schemas/ResourceType' },
+          voteType: { $ref: '#/components/schemas/VoteDirection' },
+        },
+      },
+      VoteBatchResponse: {
+        type: 'object',
+        required: ['voteMap'],
+        properties: {
+          voteMap: {
+            type: 'object',
+            additionalProperties: {
+              oneOf: [
+                { $ref: '#/components/schemas/VoteDirection' },
+                { type: 'null' },
+              ],
+            },
+            description: 'Keys are `{resourceType}:{resourceId}`',
+          },
+        },
+      },
+      CreatePostRequest: {
+        type: 'object',
+        required: ['title'],
+        properties: {
+          title: { type: 'string', minLength: 1 },
+          url: {
+            type: 'string',
+            format: 'uri',
+            description: 'Required when type is `link` (default).',
+          },
+          description: {
+            type: 'string',
+            description: 'Optional first comment body.',
+          },
+          type: { $ref: '#/components/schemas/PostType' },
+        },
+      },
+      CreateCommentRequest: {
+        type: 'object',
+        required: ['text'],
+        properties: {
+          text: { type: 'string', minLength: 1 },
+          replyId: {
+            type: 'string',
+            description: 'Parent comment id for nested replies.',
+          },
+        },
+      },
+      DeleteCommentResult: {
+        type: 'object',
+        required: ['soft'],
+        properties: {
+          soft: {
+            type: 'boolean',
+            description:
+              '`true` when the comment is tombstoned as `[deleted]` because it has replies; `false` when hard-deleted.',
+          },
+        },
+      },
+      Account: {
+        type: 'object',
+        required: ['$id', 'name', 'email'],
+        properties: {
+          $id: { type: 'string' },
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+        },
+      },
+      UpdateAccountRequest: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+          password: {
+            type: 'string',
+            description: 'Current password (required with email change).',
+          },
+          newPassword: { type: 'string' },
+          oldPassword: {
+            type: 'string',
+            description: 'Current password (required with newPassword).',
+          },
+        },
+      },
+      ApiKey: {
+        type: 'object',
+        required: ['id', 'name', 'prefix', 'createdAt', 'lastUsedAt'],
+        properties: {
+          id: { type: 'string' },
+          name: { type: 'string' },
+          prefix: {
+            type: 'string',
+            description: 'Public prefix shown in the UI (e.g. rfk_a1b2c3d4).',
+          },
+          createdAt: { type: 'string', format: 'date-time' },
+          lastUsedAt: {
+            type: 'string',
+            format: 'date-time',
+            nullable: true,
+          },
+        },
+      },
+      CreatedApiKey: {
+        allOf: [
+          { $ref: '#/components/schemas/ApiKey' },
+          {
+            type: 'object',
+            required: ['secret'],
+            properties: {
+              secret: {
+                type: 'string',
+                description:
+                  'Full API key. Returned only once at creation; store it securely.',
+              },
+            },
+          },
+        ],
+      },
+      CreateApiKeyRequest: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            maxLength: 128,
+            description: 'Label for the key (defaults to "API key").',
+          },
+        },
+      },
+      AnalyticsType: {
+        type: 'string',
+        enum: ['realtime', '24h', '30d', '1y', 'config'],
+      },
+      AnalyticsConfig: {
+        type: 'object',
+        properties: {
+          configured: { type: 'boolean' },
+          hasApiKey: { type: 'boolean' },
+          hasSiteId: { type: 'boolean' },
+          timestamp: { type: 'string', format: 'date-time' },
+        },
+      },
+      AnalyticsEnvelope: {
+        type: 'object',
+        properties: {
+          data: {},
+          type: { $ref: '#/components/schemas/AnalyticsType' },
+          cached: { type: 'boolean' },
+          timestamp: { type: 'string', format: 'date-time' },
+          error: { type: 'string' },
+        },
+      },
+    },
+    parameters: {
+      PostId: {
+        name: 'postId',
+        in: 'path',
+        required: true,
+        schema: { type: 'string' },
+      },
+      CommentId: {
+        name: 'commentId',
+        in: 'path',
+        required: true,
+        schema: { type: 'string' },
+      },
+    },
+    responses: {
+      Unauthorized: {
+        description: 'Missing or invalid API key',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ApiError' },
+          },
+        },
+      },
+      Forbidden: {
+        description: 'Authenticated but not allowed',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ApiError' },
+          },
+        },
+      },
+      BadRequest: {
+        description: 'Invalid request',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ApiError' },
+          },
+        },
+      },
+      NotFound: {
+        description: 'Resource not found',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ApiError' },
+          },
+        },
+      },
+    },
+  },
+  paths: {
+    '/posts': {
+      get: {
+        tags: ['Posts'],
+        operationId: 'listPosts',
+        summary: 'List or search posts',
+        description:
+          'Returns a paginated feed. Pass `q` for full-text title search (skips the recent/quality feed window). Without `q`, non-`mines` sorts apply a recent window and quality filters.',
+        parameters: [
+          {
+            name: 'q',
+            in: 'query',
+            schema: { type: 'string' },
+            description:
+              'Full-text search on title. Length 1–2 returns 400; omit for the normal feed.',
+          },
+          {
+            name: 'sort',
+            in: 'query',
+            schema: {
+              allOf: [{ $ref: '#/components/schemas/SortType' }],
+              default: 'score',
+            },
+            description: 'Ignored when `q` is set.',
+          },
+          {
+            name: 'limit',
+            in: 'query',
+            schema: { type: 'integer', minimum: 1, maximum: 100, default: 25 },
+          },
+          {
+            name: 'offset',
+            in: 'query',
+            schema: { type: 'integer', minimum: 0, default: 0 },
+            description: 'Ignored when `q` is set (search always starts at 0).',
+          },
+          {
+            name: 'userId',
+            in: 'query',
+            schema: { type: 'string' },
+            description: 'Filter by author (commonly used with `sort=mines`).',
+          },
+          {
+            name: 'since',
+            in: 'query',
+            schema: { type: 'string', format: 'date-time' },
+            description: 'Only posts created after this timestamp.',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Paginated posts',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/PaginatedPosts' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+        },
+      },
+      post: {
+        tags: ['Posts'],
+        operationId: 'createPost',
+        summary: 'Create a post',
+        description:
+          'Creates a link or show post. The author is automatically upvoted. Rate limit: 5 posts per 16 hours.',
+        security: bearerAuth,
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CreatePostRequest' },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Created post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Post' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          409: {
+            description: 'Duplicate URL',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ApiError' },
+              },
+            },
+          },
+          429: {
+            description: 'Submission rate limit',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ApiError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/posts/{postId}': {
+      get: {
+        tags: ['Posts'],
+        operationId: 'getPost',
+        summary: 'Get a post',
+        parameters: [{ $ref: '#/components/parameters/PostId' }],
+        responses: {
+          200: {
+            description: 'Post',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Post' },
+              },
+            },
+          },
+          404: { $ref: '#/components/responses/NotFound' },
+        },
+      },
+      delete: {
+        tags: ['Posts'],
+        operationId: 'deletePost',
+        summary: 'Delete own post',
+        security: bearerAuth,
+        parameters: [{ $ref: '#/components/parameters/PostId' }],
+        responses: {
+          204: { description: 'Deleted' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { $ref: '#/components/responses/Forbidden' },
+          404: { $ref: '#/components/responses/NotFound' },
+        },
+      },
+    },
+    '/posts/{postId}/comments': {
+      get: {
+        tags: ['Comments'],
+        operationId: 'listComments',
+        summary: 'List comments for a post',
+        description: 'Returns a nested comment tree (`replies`).',
+        parameters: [{ $ref: '#/components/parameters/PostId' }],
+        responses: {
+          200: {
+            description: 'Comment tree',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/CommentList' },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ['Comments'],
+        operationId: 'createComment',
+        summary: 'Create a comment',
+        description: 'Rate limit: 50 comments per hour.',
+        security: bearerAuth,
+        parameters: [{ $ref: '#/components/parameters/PostId' }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CreateCommentRequest' },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Created comment',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Comment' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          429: {
+            description: 'Comment rate limit',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ApiError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/comments/{commentId}': {
+      delete: {
+        tags: ['Comments'],
+        operationId: 'deleteComment',
+        summary: 'Delete own comment',
+        description:
+          'Hard-deletes leaf comments. Soft-deletes (content `[deleted]`) when the comment has replies.',
+        security: bearerAuth,
+        parameters: [{ $ref: '#/components/parameters/CommentId' }],
+        responses: {
+          200: {
+            description: 'Delete result',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/DeleteCommentResult' },
+              },
+            },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { $ref: '#/components/responses/Forbidden' },
+        },
+      },
+    },
+    '/votes': {
+      get: {
+        tags: ['Votes'],
+        operationId: 'getVoteState',
+        summary: 'Get vote state for a resource',
+        security: bearerAuth,
+        parameters: [
+          {
+            name: 'resourceId',
+            in: 'query',
+            required: true,
+            schema: { type: 'string' },
+          },
+          {
+            name: 'resourceType',
+            in: 'query',
+            required: true,
+            schema: { $ref: '#/components/schemas/ResourceType' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Vote state',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/VoteState' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+      post: {
+        tags: ['Votes'],
+        operationId: 'castOrBatchVotes',
+        summary: 'Cast a vote or batch-fetch votes',
+        description:
+          'Send a cast payload to upvote/downvote (toggle removes). Send `{ "action": "batch", "resources": [...] }` to load the current user vote map.',
+        security: bearerAuth,
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                oneOf: [
+                  { $ref: '#/components/schemas/VoteCastRequest' },
+                  { $ref: '#/components/schemas/VoteBatchRequest' },
+                ],
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Cast result or batch map',
+            content: {
+              'application/json': {
+                schema: {
+                  oneOf: [
+                    { $ref: '#/components/schemas/VoteCastResult' },
+                    { $ref: '#/components/schemas/VoteBatchResponse' },
+                  ],
+                },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+    },
+    '/account': {
+      get: {
+        tags: ['Account'],
+        operationId: 'getAccount',
+        summary: 'Get current account',
+        security: bearerAuth,
+        responses: {
+          200: {
+            description: 'Account summary',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Account' },
+              },
+            },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+      patch: {
+        tags: ['Account'],
+        operationId: 'updateAccount',
+        summary: 'Update current account',
+        security: bearerAuth,
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/UpdateAccountRequest' },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Updated account',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Account' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+      delete: {
+        tags: ['Account'],
+        operationId: 'deleteAccount',
+        summary: 'Delete current account',
+        description:
+          'Permanently deletes the signed-in account. Requires a session JWT (not an API key).',
+        security: bearerAuth,
+        responses: {
+          200: {
+            description: 'Account deleted',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['ok'],
+                  properties: { ok: { type: 'boolean' } },
+                },
+              },
+            },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+    },
+    '/keys': {
+      get: {
+        tags: ['Keys'],
+        operationId: 'listApiKeys',
+        summary: 'List API keys',
+        description:
+          'List keys for the signed-in account. Secrets are never listed. Prefer the Account page.',
+        security: bearerAuth,
+        responses: {
+          200: {
+            description: 'Key metadata',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['data'],
+                  properties: {
+                    data: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/ApiKey' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+      post: {
+        tags: ['Keys'],
+        operationId: 'createApiKey',
+        summary: 'Create API key',
+        description:
+          'Create a key for the signed-in account. Returns the full secret once. At most 10 keys per user. Prefer the Account page.',
+        security: bearerAuth,
+        requestBody: {
+          required: false,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CreateApiKeyRequest' },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Created key including secret',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/CreatedApiKey' },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+        },
+      },
+    },
+    '/keys/{keyId}': {
+      delete: {
+        tags: ['Keys'],
+        operationId: 'deleteApiKey',
+        summary: 'Revoke API key',
+        description: 'Revoke a key for the signed-in account.',
+        security: bearerAuth,
+        parameters: [
+          {
+            name: 'keyId',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Revoked',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['ok'],
+                  properties: { ok: { type: 'boolean' } },
+                },
+              },
+            },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { $ref: '#/components/responses/Forbidden' },
+          404: { $ref: '#/components/responses/NotFound' },
+        },
+      },
+    },
+    '/analytics': {
+      get: {
+        tags: ['Analytics'],
+        operationId: 'getAnalytics',
+        summary: 'Get analytics snapshot',
+        parameters: [
+          {
+            name: 'type',
+            in: 'query',
+            schema: {
+              allOf: [{ $ref: '#/components/schemas/AnalyticsType' }],
+              default: 'realtime',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description:
+              'For `type=config`, returns AnalyticsConfig. Otherwise AnalyticsEnvelope with typed `data`.',
+            content: {
+              'application/json': {
+                schema: {
+                  oneOf: [
+                    { $ref: '#/components/schemas/AnalyticsConfig' },
+                    { $ref: '#/components/schemas/AnalyticsEnvelope' },
+                  ],
+                },
+              },
+            },
+          },
+          400: { $ref: '#/components/responses/BadRequest' },
+        },
+      },
+    },
+  },
+}
+
+const json = `${JSON.stringify(spec, null, 2)}\n`
+
+for (const out of outPaths) {
+  mkdirSync(dirname(out), { recursive: true })
+  writeFileSync(out, json, 'utf8')
+  console.log(`Wrote ${out}`)
+}

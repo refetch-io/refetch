@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 import { account } from '@/lib/appwrite-web'
+import { updateAccountPrefs } from '@/lib/account-prefs'
 import { useAuth } from '@/contexts/auth-context'
 import {
   isThemePreference,
@@ -31,7 +32,7 @@ export function ThemeSync() {
           appliedForUser.current = user.$id
         }
       } catch {
-        // guest / network — keep local theme
+        // guest / network - keep local theme
       }
     })()
   }, [isAuthenticated, loading, user, setTheme])
@@ -42,14 +43,8 @@ export function ThemeSync() {
 /** Persist theme to Appwrite prefs (merge; updatePrefs replaces the whole object). */
 export async function persistThemePreference(theme: ThemePreference) {
   try {
-    const prefs = await account.getPrefs<Record<string, unknown>>()
-    await account.updatePrefs({
-      prefs: {
-        ...prefs,
-        theme,
-      },
-    })
+    await updateAccountPrefs({ theme })
   } catch {
-    // Not signed in — localStorage via next-themes is enough.
+    // Not signed in - localStorage via next-themes is enough.
   }
 }

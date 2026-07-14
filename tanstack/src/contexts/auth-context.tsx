@@ -7,7 +7,7 @@ import {
 } from 'react'
 import { account } from '@/lib/appwrite-web'
 import { clearCachedJWT } from '@/lib/jwt-cache'
-import { clearOwnPresence } from '@/lib/presence'
+import { clearOwnPresence, resetPresenceSharingSession } from '@/lib/presence'
 import type { AccountUser } from '@/lib/types'
 
 interface AuthContextType {
@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // clear local state regardless
     } finally {
       clearCachedJWT()
+      resetPresenceSharingSession()
       setUser(null)
     }
   }

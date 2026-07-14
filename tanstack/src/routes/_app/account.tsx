@@ -1,322 +1,106 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Spinner } from '@/components/ui/spinner'
+import { Outlet, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useEffect, useRef, useState } from 'react'
+import { AccountSubmenu } from '@/components/account/account-submenu'
 import { Separator } from '@/components/ui/separator'
-import { PresenceVisibilityToggle } from '@/components/presence-visibility-toggle'
+import { Spinner } from '@/components/ui/spinner'
 import { useAuth } from '@/contexts/auth-context'
-import { api } from '@/lib/api/client'
-import { account } from '@/lib/appwrite-web'
-import { clearCachedJWT } from '@/lib/jwt-cache'
-import {
-  isPresenceSharingEnabled,
-  persistPresenceSharing,
-} from '@/lib/presence'
+import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/_app/account')({
-  component: AccountPage,
-  head: () => ({
-    meta: [{ title: 'Account — Refetch' }],
-  }),
+  component: AccountLayout,
 })
 
-function AccountPage() {
-  const { user, loading, isAuthenticated, refreshUser, logout } = useAuth()
+function AccountLayout() {
+  const { user, loading, isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [oldPassword, setOldPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [sharePresence, setSharePresence] = useState(true)
-  const [savingPresence, setSavingPresence] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const [stuck, setStuck] = useState(false)
 
   useEffect(() => {
     if (!loading && !isAuthenticated) navigate({ to: '/signin' })
   }, [loading, isAuthenticated, navigate])
 
   useEffect(() => {
-    if (user) {
-      setName(user.name)
-      setEmail(user.email)
-      setSharePresence(isPresenceSharingEnabled(user.prefs))
-    }
-  }, [user])
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+
+    const root = sentinel.closest('[data-app-scroll]')
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setStuck(!entry.isIntersecting)
+      },
+      { root, threshold: 0 },
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [user, loading])
 
   if (loading || !user) {
     return (
-      <div className="flex justify-center py-16">
+      <main className="flex min-w-0 justify-center px-8 py-16 sm:px-12 lg:px-16">
         <Spinner />
-      </div>
+      </main>
     )
   }
 
-  const saveProfile = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError('')
-    setMessage('')
-    try {
-      const payload: {
-        name?: string
-        email?: string
-        password?: string
-      } = {}
-      if (name.trim() && name.trim() !== user.name) payload.name = name.trim()
-      if (email.trim() && email.trim() !== user.email) {
-        if (!password) {
-          setError('Current password is required to change email')
-          setSaving(false)
-          return
-        }
-        payload.email = email.trim()
-        payload.password = password
-      }
-      if (Object.keys(payload).length === 0) {
-        setMessage('No changes to save')
-        setSaving(false)
-        return
-      }
-      await api.updateAccount(payload)
-      await refreshUser()
-      setPassword('')
-      setMessage('Account updated')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update account')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const changePassword = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError('')
-    setMessage('')
-    try {
-      await api.updateAccount({ oldPassword, newPassword })
-      setOldPassword('')
-      setNewPassword('')
-      setMessage('Password updated')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update password')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const togglePresenceSharing = async (enabled: boolean) => {
-    const previous = sharePresence
-    setSharePresence(enabled)
-    setSavingPresence(true)
-    setError('')
-    setMessage('')
-    try {
-      await persistPresenceSharing(enabled)
-      await refreshUser()
-      setMessage(
-        enabled
-          ? 'You’ll appear as online to other signed-in refetchers.'
-          : 'Your presence is hidden from other refetchers.',
-      )
-    } catch (err) {
-      setSharePresence(previous)
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Failed to update presence preference',
-      )
-    } finally {
-      setSavingPresence(false)
-    }
-  }
-
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 sm:px-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Account
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Manage your profile and credentials.
-        </p>
+    <main className="flex min-w-0 flex-col">
+      <div ref={sentinelRef} className="h-px w-full shrink-0" aria-hidden />
+
+      <div
+        className={cn(
+          'sticky top-0 z-20 bg-background/95 backdrop-blur-md transition-shadow duration-200',
+          stuck && 'shadow-sm',
+        )}
+      >
+        <div className="px-8 sm:px-12 lg:px-16">
+          <div
+            className={cn(
+              'mx-auto flex w-full max-w-5xl flex-col transition-[gap,padding] duration-200',
+              stuck ? 'gap-0 py-2.5' : 'gap-1.5 pb-6',
+            )}
+          >
+            <h1
+              className={cn(
+                'font-heading font-semibold tracking-tight transition-[font-size,line-height] duration-200',
+                stuck ? 'text-base leading-tight' : 'text-2xl',
+              )}
+            >
+              Account
+            </h1>
+            <p
+              className={cn(
+                'overflow-hidden text-sm text-muted-foreground transition-[max-height,opacity,margin] duration-200',
+                stuck
+                  ? 'mt-0 max-h-0 opacity-0'
+                  : 'max-h-10 opacity-100',
+              )}
+            >
+              Manage your profile, privacy, API keys, and security.
+            </p>
+          </div>
+        </div>
+        <Separator />
       </div>
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {message && (
-        <Alert>
-          <AlertDescription>{message}</AlertDescription>
-        </Alert>
-      )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Your public name and email.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={saveProfile}>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="account-name">Name</FieldLabel>
-                <Input
-                  id="account-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="account-email">Email</FieldLabel>
-                <Input
-                  id="account-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Field>
-              {email.trim() !== user.email && (
-                <Field>
-                  <FieldLabel htmlFor="account-password">
-                    Current password
-                  </FieldLabel>
-                  <Input
-                    id="account-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <FieldDescription>
-                    Required to change your email.
-                  </FieldDescription>
-                </Field>
+      <div className="px-8 pt-6 sm:px-12 lg:px-16">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 md:flex-row md:gap-10">
+          <aside className="w-full shrink-0 md:w-44 lg:w-52">
+            <div
+              className={cn(
+                'md:sticky md:z-10',
+                stuck ? 'md:top-14' : 'md:top-6',
               )}
-              <Button type="submit" disabled={saving}>
-                Save profile
-              </Button>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Privacy</CardTitle>
-          <CardDescription>
-            Control what other signed-in refetchers can see about you.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PresenceVisibilityToggle
-            enabled={sharePresence}
-            disabled={savingPresence}
-            onChange={togglePresenceSharing}
-            className="max-w-sm"
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Password</CardTitle>
-          <CardDescription>Update your sign-in password.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={changePassword}>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="old-password">Current password</FieldLabel>
-                <Input
-                  id="old-password"
-                  type="password"
-                  required
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="new-password">New password</FieldLabel>
-                <Input
-                  id="new-password"
-                  type="password"
-                  required
-                  minLength={8}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <FieldDescription>At least 8 characters.</FieldDescription>
-              </Field>
-              <Button type="submit" disabled={saving} variant="outline">
-                Update password
-              </Button>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Sessions</CardTitle>
-          <CardDescription>Sign out on this device or everywhere.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Button
-              variant="outline"
-              onClick={async () => {
-                await logout()
-                navigate({ to: '/' })
-              }}
             >
-              Sign out
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={async () => {
-                try {
-                  await account.deleteSessions()
-                  clearCachedJWT()
-                  await refreshUser()
-                  navigate({ to: '/signin' })
-                } catch (err) {
-                  setError(
-                    err instanceof Error
-                      ? err.message
-                      : 'Failed to sign out everywhere',
-                  )
-                }
-              }}
-            >
-              Sign out everywhere
-            </Button>
+              <AccountSubmenu />
+            </div>
+          </aside>
+          <div className="min-w-0 flex-1">
+            <Outlet />
           </div>
-          <Separator />
-          <p className="text-xs text-muted-foreground">
-            User ID: <code>{user.$id}</code>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </main>
   )
 }

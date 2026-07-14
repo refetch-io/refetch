@@ -1,6 +1,6 @@
 import { useOnlinePresenceContext } from '@/contexts/online-presence-context'
 
-/** Live presence list — backed by OnlinePresenceProvider in the app shell. */
+/** Live presence list - Appwrite Realtime + OnlinePresenceProvider. */
 export function useOnlinePresences() {
   return useOnlinePresenceContext()
 }

@@ -22,6 +22,7 @@ export const env = {
   postsTableId: read('APPWRITE_POSTS_COLLECTION_ID'),
   votesTableId: read('APPWRITE_VOTES_COLLECTION_ID'),
   commentsTableId: read('APPWRITE_COMMENTS_COLLECTION_ID'),
+  keysTableId: read('APPWRITE_KEYS_COLLECTION_ID') || 'keys',
   baseUrl: read('VITE_BASE_URL') || 'http://localhost:3000',
 }
 

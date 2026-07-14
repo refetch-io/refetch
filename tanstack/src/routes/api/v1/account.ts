@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Account } from 'node-appwrite'
-import { createJwtClient } from '@/lib/appwrite.server'
+import { Account, Users } from 'node-appwrite'
+import { createApiKeyClient, createJwtClient } from '@/lib/appwrite.server'
 import {
   apiError,
   getBearerToken,
   handleRouteError,
   json,
+  requireJwtUser,
   requireUser,
 } from '@/lib/api/http.server'
 
@@ -24,6 +25,16 @@ export const Route = createFileRoute('/api/v1/account')({
           return handleRouteError(error)
         }
       },
+      DELETE: async ({ request }) => {
+        try {
+          const user = await requireJwtUser(request)
+          const users = new Users(createApiKeyClient())
+          await users.delete({ userId: user.$id })
+          return json({ ok: true })
+        } catch (error) {
+          return handleRouteError(error)
+        }
+      },
       PATCH: async ({ request }) => {
         try {
           const jwt = getBearerToken(request)
@@ -31,7 +42,8 @@ export const Route = createFileRoute('/api/v1/account')({
             return apiError(401, 'Missing or invalid authorization header')
           }
 
-          await requireUser(request)
+          // Account mutations require a session JWT (not an API key).
+          await requireJwtUser(request)
           const body = await request.json()
           const jwtAccount = new Account(createJwtClient(jwt))
 

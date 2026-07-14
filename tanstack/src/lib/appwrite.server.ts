@@ -32,4 +32,5 @@ export const tables = {
   posts: () => env.postsTableId,
   votes: () => env.votesTableId,
   comments: () => env.commentsTableId,
+  keys: () => env.keysTableId,
 }

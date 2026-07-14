@@ -14,19 +14,27 @@ export const Route = createFileRoute('/api/v1/posts')({
       GET: async ({ request }) => {
         try {
           const url = new URL(request.url)
+          const q = (url.searchParams.get('q') || '').trim()
           const sort = (url.searchParams.get('sort') as SortType) || 'score'
-          const limit = Number(url.searchParams.get('limit') || 25)
+          const limit = Number(
+            url.searchParams.get('limit') || (q ? 20 : 25),
+          )
           const offset = Number(url.searchParams.get('offset') || 0)
           const userId = url.searchParams.get('userId') || undefined
           const since = url.searchParams.get('since') || undefined
 
+          if (q.length > 0 && q.length < 3) {
+            return apiError(400, 'Search query must be at least 3 characters')
+          }
+
           const result = await listPosts({
+            q: q || undefined,
             sort,
             limit,
             offset,
             userId,
             since,
-            feedWindow: sort !== 'mines',
+            feedWindow: !q && sort !== 'mines',
           })
           return json(result)
         } catch (error) {
