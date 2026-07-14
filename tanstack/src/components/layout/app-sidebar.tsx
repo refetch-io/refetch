@@ -27,6 +27,7 @@ import {
   type ChannelNavItem,
   type DocsNavItem,
 } from '@/components/layout/nav-config'
+import type { AccountPreview } from '@/lib/auth-cookie'
 
 function NavLink({ item }: { item: AppNavItem }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
@@ -86,7 +87,13 @@ function ChannelLink({ item }: { item: ChannelNavItem }) {
   )
 }
 
-export function AppSidebar() {
+export function AppSidebar({
+  defaultSignedIn = false,
+  defaultAccount = null,
+}: {
+  defaultSignedIn?: boolean
+  defaultAccount?: AccountPreview | null
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const docs = isDocsPath(pathname)
 
@@ -180,7 +187,10 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">
-        <UserMenu />
+        <UserMenu
+          defaultSignedIn={defaultSignedIn}
+          defaultAccount={defaultAccount}
+        />
       </SidebarFooter>
     </Sidebar>
   )

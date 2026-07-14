@@ -6,6 +6,7 @@ import { SidebarPrefsProvider } from '@/components/layout/sidebar-prefs-provider
 import { PresenceSync } from '@/components/presence-sync'
 import { SiteFooter } from '@/components/site-footer'
 import { OnlinePresenceProvider } from '@/contexts/online-presence-context'
+import type { AccountPreview } from '@/lib/auth-cookie'
 import { SidebarInset } from '@/components/ui/sidebar'
 
 const AUTH_PATHS = new Set(['/signin', '/signup'])
@@ -13,8 +14,12 @@ const FULLSCREEN_PATHS = new Set(['/submit'])
 
 export function AppShell({
   defaultSidebarOpen = true,
+  defaultSignedIn = false,
+  defaultAccount = null,
 }: {
   defaultSidebarOpen?: boolean
+  defaultSignedIn?: boolean
+  defaultAccount?: AccountPreview | null
 }) {
   const pathname = useRouterState({
     select: (s) => s.location.pathname,
@@ -39,9 +44,12 @@ export function AppShell({
     <SidebarPrefsProvider defaultOpen={defaultSidebarOpen}>
       <OnlinePresenceProvider>
         <PresenceSync />
-        <AppSidebar />
+        <AppSidebar
+          defaultSignedIn={defaultSignedIn}
+          defaultAccount={defaultAccount}
+        />
         <SidebarInset className="max-h-svh overflow-hidden">
-          <ShellHeader />
+          <ShellHeader defaultSignedIn={defaultSignedIn} />
           {docs ? (
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               <Outlet />

@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { writeAccountPreviewCookie, writeSignedInCookie } from '@/lib/auth-cookie'
 import { account } from '@/lib/appwrite-web'
 import { clearCachedJWT } from '@/lib/jwt-cache'
 import { clearOwnPresence, resetPresenceSharingSession } from '@/lib/presence'
@@ -28,16 +29,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshUser = async () => {
     try {
       const currentUser = await account.get()
-      setUser({
+      const nextUser: AccountUser = {
         $id: currentUser.$id,
         name: currentUser.name || '',
         email: currentUser.email || '',
         $createdAt: currentUser.$createdAt,
         emailVerification: currentUser.emailVerification,
         prefs: currentUser.prefs as Record<string, unknown> | undefined,
+      }
+      setUser(nextUser)
+      writeAccountPreviewCookie({
+        name:
+          nextUser.name.trim() ||
+          nextUser.email.trim() ||
+          'Your account',
+        email: nextUser.email,
       })
     } catch {
       setUser(null)
+      writeSignedInCookie(false)
     }
   }
 
@@ -67,6 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       clearCachedJWT()
       resetPresenceSharingSession()
+      writeSignedInCookie(false)
       setUser(null)
     }
   }

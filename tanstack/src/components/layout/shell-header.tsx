@@ -20,10 +20,16 @@ import {
 import { RefetchMark } from '@/components/refetch-logo'
 import { useAuth } from '@/contexts/auth-context'
 
-export function ShellHeader() {
+export function ShellHeader({
+  defaultSignedIn = false,
+}: {
+  defaultSignedIn?: boolean
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
   const title = resolvePageTitle(pathname)
+  // Prefer SSR cookie hint while auth resolves so Submit vs Sign in doesn't flash.
+  const showSignedIn = loading ? defaultSignedIn : isAuthenticated
 
   return (
     <header className="z-20 grid h-14 shrink-0 grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 border-b border-border bg-background px-3 sm:gap-3 sm:px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,28rem)_minmax(0,1fr)]">
@@ -81,20 +87,32 @@ export function ShellHeader() {
         <CommandCenter />
       </div>
 
-      <div className="flex items-center justify-end">
-        <Button
-          size="icon-lg"
-          className="sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3"
-          asChild
-        >
-          <Link
-            to={isAuthenticated ? '/submit' : '/signin'}
-            aria-label="Submit"
+      <div className="flex items-center justify-end gap-1.5">
+        {showSignedIn ? (
+          <Button
+            size="icon-lg"
+            className="sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3"
+            asChild
           >
-            <Plus />
-            <span className="hidden sm:inline">Submit</span>
-          </Link>
-        </Button>
+            <Link to="/submit" aria-label="Submit">
+              <Plus />
+              <span className="hidden sm:inline">Submit</span>
+            </Link>
+          </Button>
+        ) : (
+          <>
+            <Button variant="ghost" size="lg" className="px-2.5 sm:px-3" asChild>
+              <Link to="/signin" search={{}}>
+                Sign in
+              </Link>
+            </Button>
+            <Button size="lg" className="px-2.5 sm:px-3" asChild>
+              <Link to="/signup" search={{}}>
+                Sign up
+              </Link>
+            </Button>
+          </>
+        )}
       </div>
     </header>
   )

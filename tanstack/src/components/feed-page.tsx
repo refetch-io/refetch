@@ -218,30 +218,27 @@ export function FeedPage({
 
   return (
     <main className="relative flex min-w-0 flex-col gap-6">
-      {pendingCount > 0 ? (
-        <div className="sticky top-0 z-30 -mb-2">
-          <div className="border-b border-border/50 bg-background/90 px-8 py-2 backdrop-blur-md sm:px-12 lg:px-16">
-            <div className="flex w-full justify-center">
-              <button
-                type="button"
-                onClick={revealPendingPosts}
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors',
-                  'hover:bg-muted',
-                )}
-              >
-                <ArrowUp className="size-3.5 text-[var(--brand)]" />
-                <span>{pendingLabel}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="text-[var(--brand)]">Show latest</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
       <div className="flex w-full gap-0 px-8 sm:px-12 lg:gap-10 lg:px-16">
         <div className="flex min-w-0 flex-1 flex-col gap-6">
+          {pendingCount > 0 ? (
+            <div className="sticky top-0 z-30 -mb-2">
+              <div className="flex justify-center py-2">
+                <button
+                  type="button"
+                  onClick={revealPendingPosts}
+                  className={cn(
+                    'inline-flex items-center gap-2 rounded-full border border-border/70 bg-card px-3.5 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors',
+                    'hover:bg-muted',
+                  )}
+                >
+                  <ArrowUp className="size-3.5 text-[var(--brand)]" />
+                  <span>{pendingLabel}</span>
+                  <span className="text-[var(--brand)]">Show latest</span>
+                </button>
+              </div>
+            </div>
+          ) : null}
+
           <div className="flex flex-col gap-1.5">
             <h1 className="font-heading text-2xl font-semibold tracking-tight">
               {title}
@@ -293,9 +290,7 @@ export function FeedPage({
 
         <aside className="hidden w-72 shrink-0 border-l border-border/60 pl-8 lg:block">
           <div className="sticky top-6 z-10">
-            <div className="max-h-[calc(100svh-3.5rem-1.5rem)] overflow-y-auto overscroll-contain">
-              <FeedRightSidebar />
-            </div>
+            <FeedRightSidebar />
           </div>
         </aside>
       </div>

@@ -1,13 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AppShell } from '@/components/layout/app-shell'
-import { getSidebarOpenFromRequest } from '@/lib/sidebar-prefs.functions'
+import { getAppShellHints } from '@/lib/shell-hints.functions'
 
 export const Route = createFileRoute('/_app')({
-  loader: () => getSidebarOpenFromRequest(),
+  loader: () => getAppShellHints(),
   component: AppLayout,
 })
 
 function AppLayout() {
-  const sidebarOpen = Route.useLoaderData()
-  return <AppShell defaultSidebarOpen={sidebarOpen} />
+  const { sidebarOpen, signedIn, account } = Route.useLoaderData()
+  return (
+    <AppShell
+      defaultSidebarOpen={sidebarOpen}
+      defaultSignedIn={signedIn}
+      defaultAccount={account}
+    />
+  )
 }

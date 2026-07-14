@@ -232,7 +232,7 @@ function LiveViewSection() {
         {showSkeleton ? (
           <PresenceListSkeleton />
         ) : users.length > 0 ? (
-          <ul className="flex h-full flex-col divide-y divide-border/40 overflow-y-auto overscroll-none">
+          <ul className="flex h-full flex-col divide-y divide-border/40 overflow-y-auto overscroll-contain">
             {users.map((presenceUser) => {
               const tone = statusTone(presenceUser.status)
               return (

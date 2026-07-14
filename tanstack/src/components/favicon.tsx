@@ -28,7 +28,7 @@ export function Favicon({ domain, size = 16, className }: FaviconProps) {
       height={size}
       decoding="async"
       className={cn(
-        'shrink-0 rounded-[3px] bg-muted object-contain ring-1 ring-border/60',
+        'shrink-0 rounded-[3px] bg-muted object-contain ring-1 ring-border/60 dark:bg-white',
         className,
       )}
       onError={() => {

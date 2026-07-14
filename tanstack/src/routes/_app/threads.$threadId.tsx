@@ -11,8 +11,19 @@ import {
 } from 'lucide-react'
 import { Favicon } from '@/components/favicon'
 import { FeedRightSidebar } from '@/components/feed-right-sidebar'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -208,6 +219,7 @@ function ThreadPage() {
   const [submitting, setSubmitting] = useState(false)
   const [replySubmitting, setReplySubmitting] = useState(false)
   const [deletingIds, setDeletingIds] = useState<Record<string, boolean>>({})
+  const [deleteCommentId, setDeleteCommentId] = useState<string | null>(null)
 
   useEffect(() => {
     setComments(initialComments)
@@ -328,19 +340,15 @@ function ThreadPage() {
     setReplyTo(target)
   }
 
-  const handleDeleteComment = async (commentId: string) => {
+  const requestDeleteComment = (commentId: string) => {
     if (!isAuthenticated) {
       window.location.href = '/signin'
       return
     }
-    if (
-      !window.confirm(
-        'Delete this comment? This cannot be undone.',
-      )
-    ) {
-      return
-    }
+    setDeleteCommentId(commentId)
+  }
 
+  const handleDeleteComment = async (commentId: string) => {
     setDeletingIds((prev) => ({ ...prev, [commentId]: true }))
     try {
       const result = await api.deleteComment(commentId)
@@ -354,8 +362,9 @@ function ThreadPage() {
         setReplyText('')
         setReplyError('')
       }
+      setDeleteCommentId(null)
     } catch (err) {
-      window.alert(
+      setError(
         err instanceof Error ? err.message : 'Failed to delete comment',
       )
     } finally {
@@ -366,6 +375,9 @@ function ThreadPage() {
       })
     }
   }
+
+  const deletingPending =
+    deleteCommentId !== null && !!deletingIds[deleteCommentId]
 
   const hasExternalLink = !!post.link?.startsWith('http')
   const sourceHref =
@@ -555,7 +567,7 @@ function ThreadPage() {
                       setReplyError('')
                     }}
                     onSubmitReply={handleReply}
-                    onDelete={handleDeleteComment}
+                    onDelete={requestDeleteComment}
                     isDeletingComment={(id) => !!deletingIds[id]}
                   />
                 ))}
@@ -566,12 +578,43 @@ function ThreadPage() {
 
         <aside className="hidden w-72 shrink-0 border-l border-border/60 pl-8 lg:block">
           <div className="sticky top-6 z-10">
-            <div className="max-h-[calc(100svh-3.5rem-1.5rem)] overflow-y-auto overscroll-contain">
-              <FeedRightSidebar />
-            </div>
+            <FeedRightSidebar />
           </div>
         </aside>
       </div>
+
+      <AlertDialog
+        open={deleteCommentId !== null}
+        onOpenChange={(open) => {
+          if (!open && !deletingPending) setDeleteCommentId(null)
+        }}
+      >
+        <AlertDialogContent size="default" className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this comment?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This cannot be undone. Replies may remain with the comment marked
+              as deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deletingPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={deletingPending || !deleteCommentId}
+              onClick={(event) => {
+                event.preventDefault()
+                if (deleteCommentId) void handleDeleteComment(deleteCommentId)
+              }}
+            >
+              {deletingPending ? <Spinner data-icon="inline-start" /> : null}
+              Delete comment
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   )
 }
