@@ -1,4 +1,4 @@
-import { Check, Copy, KeyRound, Trash2 } from 'lucide-react'
+import { Check, Copy, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import {
   Alert,
@@ -8,11 +8,20 @@ import {
 import { Button } from '@/components/ui/button'
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Field,
   FieldDescription,
@@ -30,6 +39,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { api } from '@/lib/api/client'
 import type { ApiKey, CreatedApiKey } from '@/lib/types'
 
+const CREATE_KEY_FORM_ID = 'create-api-key-form'
+
 function formatDate(value: string | null) {
   if (!value) return 'Never'
   try {
@@ -42,12 +53,14 @@ function formatDate(value: string | null) {
 export function ApiKeysSection() {
   const [keys, setKeys] = useState<ApiKey[]>([])
   const [loading, setLoading] = useState(true)
+  const [createOpen, setCreateOpen] = useState(false)
   const [name, setName] = useState('')
   const [creating, setCreating] = useState(false)
   const [revokingId, setRevokingId] = useState<string | null>(null)
   const [created, setCreated] = useState<CreatedApiKey | null>(null)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState('')
+  const [createError, setCreateError] = useState('')
 
   const load = async () => {
     setLoading(true)
@@ -66,18 +79,27 @@ export function ApiKeysSection() {
     void load()
   }, [])
 
+  const openCreate = () => {
+    setCreateError('')
+    setName('')
+    setCreateOpen(true)
+  }
+
   const createKey = async (event: React.FormEvent) => {
     event.preventDefault()
     setCreating(true)
-    setError('')
+    setCreateError('')
     setCreated(null)
     try {
       const key = await api.createApiKey(name.trim() || 'API key')
       setCreated(key)
       setName('')
+      setCreateOpen(false)
       await load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create API key')
+      setCreateError(
+        err instanceof Error ? err.message : 'Failed to create API key',
+      )
     } finally {
       setCreating(false)
     }
@@ -132,7 +154,11 @@ export function ApiKeysSection() {
                   onClick={copySecret}
                   aria-label={copied ? 'Copied' : 'Copy API key'}
                 >
-                  {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
+                  {copied ? (
+                    <Check data-icon="inline-start" />
+                  ) : (
+                    <Copy data-icon="inline-start" />
+                  )}
                   {copied ? 'Copied' : 'Copy'}
                 </InputGroupButton>
               </InputGroupAddon>
@@ -143,46 +169,20 @@ export function ApiKeysSection() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Create key</CardTitle>
+          <CardTitle>Your keys</CardTitle>
           <CardDescription>
-            Send as{' '}
+            Secrets are shown once at creation. Revoke any key you no longer
+            need. Send as{' '}
             <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground/80">
               Authorization: Bearer rfk_…
             </code>
           </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={createKey}>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="api-key-name">Key name</FieldLabel>
-                <Input
-                  id="api-key-name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="CI bot, personal script..."
-                  maxLength={128}
-                />
-                <FieldDescription>
-                  A label so you can tell keys apart later.
-                </FieldDescription>
-              </Field>
-              <Button type="submit" className="w-fit" disabled={creating}>
-                {creating ? <Spinner data-icon="inline-start" /> : null}
-                Create API key
-              </Button>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Your keys</CardTitle>
-          <CardDescription>
-            Secrets are shown once at creation. Revoke any key you no longer
-            need.
-          </CardDescription>
+          <CardAction>
+            <Button type="button" size="sm" onClick={openCreate}>
+              <Plus data-icon="inline-start" />
+              Create key
+            </Button>
+          </CardAction>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -190,12 +190,18 @@ export function ApiKeysSection() {
               <Spinner />
             </div>
           ) : keys.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border/80 bg-muted/20 px-4 py-10 text-center">
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border/80 bg-muted/20 px-4 py-10 text-center">
               <KeyRound className="size-5 text-muted-foreground" />
-              <p className="text-sm font-medium">No API keys yet</p>
-              <p className="max-w-xs text-xs text-muted-foreground">
-                Create a key above to authenticate requests to the Refetch API.
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-medium">No API keys yet</p>
+                <p className="max-w-xs text-xs text-muted-foreground">
+                  Create a key to authenticate requests to the Refetch API.
+                </p>
+              </div>
+              <Button type="button" size="sm" onClick={openCreate}>
+                <Plus data-icon="inline-start" />
+                Create key
+              </Button>
             </div>
           ) : (
             <ul className="flex flex-col gap-2">
@@ -231,6 +237,71 @@ export function ApiKeysSection() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog
+        open={createOpen}
+        onOpenChange={(open) => {
+          setCreateOpen(open)
+          if (!open) {
+            setCreateError('')
+            setName('')
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md" showCloseButton>
+          <DialogHeader>
+            <DialogTitle>Create API key</DialogTitle>
+            <DialogDescription>
+              Choose a label so you can tell keys apart later. The secret is
+              shown only once.
+            </DialogDescription>
+          </DialogHeader>
+
+          {createError ? (
+            <Alert variant="destructive">
+              <AlertDescription>{createError}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <form id={CREATE_KEY_FORM_ID} onSubmit={createKey}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="api-key-name">Key name</FieldLabel>
+                <Input
+                  id="api-key-name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder="CI bot, personal script..."
+                  maxLength={128}
+                  autoFocus
+                />
+                <FieldDescription>
+                  Optional. Defaults to “API key”.
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
+          </form>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={creating}
+              onClick={() => setCreateOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              form={CREATE_KEY_FORM_ID}
+              disabled={creating}
+            >
+              {creating ? <Spinner data-icon="inline-start" /> : null}
+              Create key
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

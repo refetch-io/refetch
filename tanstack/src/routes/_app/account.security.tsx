@@ -20,6 +20,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -174,13 +175,13 @@ function AccountSecurityPage() {
         </Alert>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Password</CardTitle>
-          <CardDescription>Update your sign-in password.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={changePassword}>
+      <form onSubmit={changePassword}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Password</CardTitle>
+            <CardDescription>Update your sign-in password.</CardDescription>
+          </CardHeader>
+          <CardContent>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="old-password">Current password</FieldLabel>
@@ -204,13 +205,15 @@ function AccountSecurityPage() {
                 />
                 <FieldDescription>At least 8 characters.</FieldDescription>
               </Field>
-              <Button type="submit" variant="outline" disabled={saving}>
-                Update password
-              </Button>
             </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" variant="outline" disabled={saving}>
+              Update password
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
 
       <Card>
         <CardHeader>
@@ -219,7 +222,7 @@ function AccountSecurityPage() {
             Devices currently signed in to your account.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent>
           {loadingSessions ? (
             <div className="flex justify-center py-6">
               <Spinner />
@@ -278,38 +281,37 @@ function AccountSecurityPage() {
               ))}
             </ul>
           )}
-
-          <div className="flex flex-col gap-2 border-t border-border pt-4 sm:flex-row">
-            <Button
-              variant="outline"
-              onClick={async () => {
-                await logout()
-                navigate({ to: '/' })
-              }}
-            >
-              Sign out
-            </Button>
-            <Button
-              variant="outline"
-              onClick={async () => {
-                try {
-                  await account.deleteSessions()
-                  clearCachedJWT()
-                  await refreshUser()
-                  navigate({ to: '/signin' })
-                } catch (err) {
-                  setError(
-                    err instanceof Error
-                      ? err.message
-                      : 'Failed to sign out everywhere',
-                  )
-                }
-              }}
-            >
-              Sign out everywhere
-            </Button>
-          </div>
         </CardContent>
+        <CardFooter className="flex-wrap gap-2">
+          <Button
+            variant="outline"
+            onClick={async () => {
+              await logout()
+              navigate({ to: '/' })
+            }}
+          >
+            Sign out
+          </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              try {
+                await account.deleteSessions()
+                clearCachedJWT()
+                await refreshUser()
+                navigate({ to: '/signin' })
+              } catch (err) {
+                setError(
+                  err instanceof Error
+                    ? err.message
+                    : 'Failed to sign out everywhere',
+                )
+              }
+            }}
+          >
+            Sign out everywhere
+          </Button>
+        </CardFooter>
       </Card>
 
       <Card className="border-destructive/30">
@@ -320,7 +322,7 @@ function AccountSecurityPage() {
             Your posts and comments may remain as historical content.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardFooter>
           <AlertDialog
             open={deleteOpen}
             onOpenChange={(open) => {
@@ -372,7 +374,7 @@ function AccountSecurityPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </CardContent>
+        </CardFooter>
       </Card>
     </div>
   )

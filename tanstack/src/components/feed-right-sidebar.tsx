@@ -51,9 +51,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-/** Fixed list height - keeps sidebar sections from jumping as users load. */
-const PRESENCE_LIST_CLASS = 'h-44'
-const PRESENCE_ROW_CLASS = 'flex items-center gap-2.5 py-2.5'
+/**
+ * Fixed geometry for the online section — every loading/loaded state must
+ * fit these boxes so the rail never jumps when presence/auth resolves.
+ */
+const PRESENCE_LIST_CLASS = 'h-44 shrink-0'
+const PRESENCE_ROW_CLASS = 'flex h-14 items-center gap-2.5'
+const PRESENCE_HEADER_CLASS = 'flex h-[3.375rem] shrink-0 flex-col justify-center gap-1.5'
+const PRESENCE_TOGGLE_CLASS = 'flex h-12 shrink-0 items-end border-t border-border/50'
 
 const EMPTY_SERIES: ChartSeries = {
   '24h': [],
@@ -74,10 +79,10 @@ function PresenceListSkeleton() {
     <div className="flex flex-col divide-y divide-border/40" aria-hidden>
       {Array.from({ length: 3 }).map((_, index) => (
         <div key={index} className={PRESENCE_ROW_CLASS}>
-          <Skeleton className="size-7 shrink-0 rounded-full" />
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <Skeleton className="h-3.5 w-[58%]" />
-            <Skeleton className="h-2.5 w-[42%]" />
+          <Skeleton className="size-6 shrink-0 rounded-full" />
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <Skeleton className="h-3.5 w-[58%] rounded-sm" />
+            <Skeleton className="h-3 w-[42%] rounded-sm" />
           </div>
         </div>
       ))}
@@ -96,7 +101,7 @@ function PresenceEmptyState({
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
-            className="size-7 rounded-full border-2 border-background bg-muted"
+            className="size-6 rounded-full border-2 border-background bg-muted"
             style={{ zIndex: 3 - index }}
           />
         ))}
@@ -161,7 +166,11 @@ function LiveViewSection() {
     useAuth()
   const { users, count, loading, error, statusLabel, statusTone } =
     useOnlinePresences()
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(() =>
+    typeof document !== 'undefined'
+      ? document.documentElement.classList.contains('dark')
+      : false,
+  )
   const [sharePresence, setSharePresence] = useState(true)
   const [savingPresence, setSavingPresence] = useState(false)
 
@@ -205,26 +214,39 @@ function LiveViewSection() {
   const showToggle = authReady && isAuthenticated
   const displayCount = error && count === 0 ? '-' : count
   const countLabel = count === 1 ? 'refetcher online' : 'refetchers online'
+  const statusLine =
+    error && count === 0
+      ? 'Presence offline'
+      : !authReady || !isAuthenticated || sharePresence
+        ? 'Live · Presence'
+        : 'Live · You’re hidden'
 
   return (
-    <section className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <div className="flex h-8 items-baseline gap-1.5">
-          <p className="font-heading text-2xl font-semibold tracking-tight tabular-nums">
-            {showSkeleton ? '\u00a0' : displayCount}
-          </p>
-          <span className="text-sm text-muted-foreground">
-            {showSkeleton ? '\u00a0' : countLabel}
-          </span>
+    <section className="flex h-[19.375rem] flex-col gap-4 overflow-hidden">
+      <div className={PRESENCE_HEADER_CLASS}>
+        <div className="flex h-8 items-center gap-1.5 overflow-hidden">
+          {showSkeleton ? (
+            <>
+              <Skeleton className="h-7 w-9 shrink-0 rounded-md" />
+              <Skeleton className="h-3.5 w-28 rounded-md" />
+            </>
+          ) : (
+            <>
+              <p className="min-w-[1.25em] font-heading text-2xl leading-8 font-semibold tracking-tight tabular-nums">
+                {displayCount}
+              </p>
+              <span className="truncate text-sm leading-none text-muted-foreground">
+                {countLabel}
+              </span>
+            </>
+          )}
         </div>
-        <p className="h-4 text-xs text-muted-foreground">
-          {showSkeleton
-            ? '\u00a0'
-            : error && count === 0
-              ? 'Presence offline'
-              : !authReady || !isAuthenticated || sharePresence
-                ? 'Live · Presence'
-                : 'Live · You’re hidden'}
+        <p className="flex h-4 items-center overflow-hidden text-xs leading-none text-muted-foreground">
+          {showSkeleton ? (
+            <Skeleton className="h-3 w-24 rounded-md" />
+          ) : (
+            statusLine
+          )}
         </p>
       </div>
 
@@ -236,9 +258,9 @@ function LiveViewSection() {
             {users.map((presenceUser) => {
               const tone = statusTone(presenceUser.status)
               return (
-                <li key={presenceUser.userId}>
+                <li key={presenceUser.userId} className="shrink-0">
                   <div className={PRESENCE_ROW_CLASS}>
-                    <div className="relative shrink-0">
+                    <div className="relative size-6 shrink-0">
                       <Avatar size="sm">
                         <AvatarImage
                           src={getInitialsAvatarUrl(
@@ -248,7 +270,10 @@ function LiveViewSection() {
                           )}
                           alt=""
                         />
-                        <AvatarFallback className="bg-foreground text-[10px] text-background">
+                        <AvatarFallback
+                          delayMs={0}
+                          className="bg-foreground text-[10px] text-background"
+                        >
                           {getInitials(presenceUser.name)}
                         </AvatarFallback>
                       </Avatar>
@@ -260,11 +285,11 @@ function LiveViewSection() {
                         )}
                       />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium leading-5">
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-0.5">
+                      <p className="truncate text-sm leading-none font-medium">
                         {presenceUser.name}
                       </p>
-                      <p className="truncate text-xs leading-4 text-muted-foreground transition-[color] duration-300">
+                      <p className="truncate text-xs leading-none text-muted-foreground transition-[color] duration-300">
                         {statusLabel(presenceUser.status, {
                           page: presenceUser.page,
                           activity: presenceUser.activity,
@@ -285,7 +310,7 @@ function LiveViewSection() {
       {/* Always reserve toggle height so auth resolve doesn’t shove sections down. */}
       <div
         className={cn(
-          'border-t border-border/50 pt-3',
+          PRESENCE_TOGGLE_CLASS,
           !showToggle && 'invisible pointer-events-none',
         )}
         aria-hidden={!showToggle}
@@ -297,6 +322,47 @@ function LiveViewSection() {
         />
       </div>
     </section>
+  )
+}
+
+function ChartPlaceholder({
+  animated = false,
+}: {
+  animated?: boolean
+}) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        'relative size-full overflow-hidden',
+        animated && 'motion-safe:animate-pulse',
+      )}
+    >
+      <svg
+        viewBox="0 0 240 64"
+        className="absolute inset-0 size-full text-muted-foreground/30"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="chartPlaceholderFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="currentColor" stopOpacity="0.4" />
+            <stop offset="95%" stopColor="currentColor" stopOpacity="0.03" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M0 48 C40 44 50 20 80 28 C110 36 120 12 150 22 C180 32 200 40 240 18 V64 H0 Z"
+          fill="url(#chartPlaceholderFill)"
+        />
+        <path
+          d="M0 48 C40 44 50 20 80 28 C110 36 120 12 150 22 C180 32 200 40 240 18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          className="text-muted-foreground/45"
+        />
+      </svg>
+    </div>
   )
 }
 
@@ -347,13 +413,18 @@ function VisitorsChartSection() {
 
   return (
     <section className="flex flex-col gap-3">
-      <p className="h-4 text-xs text-muted-foreground">{periodLabel}</p>
+      <p className="flex h-4 items-center text-xs text-muted-foreground">
+        {periodLabel}
+      </p>
 
       <div className="relative h-16 w-full overflow-hidden">
+        {!showChart ? (
+          <ChartPlaceholder animated={loading} />
+        ) : null}
         {showChart ? (
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto! h-16 w-full"
+            className="absolute inset-0 aspect-auto! h-16 w-full"
             initialDimension={{ width: 240, height: 64 }}
           >
             <AreaChart
@@ -388,27 +459,7 @@ function VisitorsChartSection() {
               />
             </AreaChart>
           </ChartContainer>
-        ) : loading ? (
-          <Skeleton className="size-full rounded-md" />
-        ) : (
-          <div
-            aria-hidden
-            className="relative size-full overflow-hidden rounded-md bg-muted/30"
-          >
-            <svg
-              viewBox="0 0 240 64"
-              className="absolute inset-0 size-full text-muted-foreground/35"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M0 48 C40 44 50 20 80 28 C110 36 120 12 150 22 C180 32 200 40 240 18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-            </svg>
-          </div>
-        )}
+        ) : null}
       </div>
 
       <div className="flex flex-col">
@@ -419,21 +470,31 @@ function VisitorsChartSection() {
               <button
                 type="button"
                 onClick={() => setTab(period.value)}
+                disabled={loading}
                 className={cn(
-                  'flex h-9 w-full items-center justify-between text-left text-sm transition-colors',
+                  'flex h-9 w-full items-center justify-between gap-3 text-left text-sm transition-colors',
                   active
                     ? 'text-foreground'
                     : 'text-muted-foreground hover:text-foreground',
+                  loading && 'pointer-events-none',
                 )}
               >
                 <span>{period.label}</span>
-                <span
-                  className={cn(
-                    'tabular-nums',
-                    active ? 'font-semibold text-foreground' : 'font-medium',
+                <span className="inline-flex h-4 min-w-[2.75rem] items-center justify-end">
+                  {loading ? (
+                    <Skeleton className="h-3.5 w-8 rounded-sm" />
+                  ) : (
+                    <span
+                      className={cn(
+                        'tabular-nums',
+                        active
+                          ? 'font-semibold text-foreground'
+                          : 'font-medium',
+                      )}
+                    >
+                      {error ? '-' : formatCount(totals[period.value])}
+                    </span>
                   )}
-                >
-                  {loading || error ? '-' : formatCount(totals[period.value])}
                 </span>
               </button>
               {index < PERIODS.length - 1 ? <Separator /> : null}

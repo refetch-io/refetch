@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -115,13 +116,13 @@ function AccountProfilePage() {
         </CardHeader>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Your public name and email.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={saveProfile}>
+      <form onSubmit={saveProfile}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Profile</CardTitle>
+            <CardDescription>Your public name and email.</CardDescription>
+          </CardHeader>
+          <CardContent>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="account-name">Name</FieldLabel>
@@ -156,13 +157,15 @@ function AccountProfilePage() {
                   </FieldDescription>
                 </Field>
               ) : null}
-              <Button type="submit" disabled={saving}>
-                Save profile
-              </Button>
             </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" disabled={saving}>
+              Save profile
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
     </div>
   )
 }
