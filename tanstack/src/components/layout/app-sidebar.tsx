@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { ArrowLeft, Braces } from 'lucide-react'
+import { ArrowLeft, Braces, ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +12,11 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
-import { RefetchMark, RefetchWordmark } from '@/components/refetch-logo'
 import { UserMenu } from '@/components/layout/user-menu'
 import { useAuth } from '@/contexts/auth-context'
+import { cn } from '@/lib/utils'
 import {
   CHANNELS_NAV,
   DISCOVER_NAV,
@@ -87,6 +88,36 @@ function ChannelLink({ item }: { item: ChannelNavItem }) {
   )
 }
 
+/** Arrow control centered on the sidebar’s right border (desktop only). */
+function SidebarBorderToggle() {
+  const { state, toggleSidebar, isMobile } = useSidebar()
+  if (isMobile) return null
+
+  const collapsed = state === 'collapsed'
+
+  return (
+    <button
+      type="button"
+      onClick={toggleSidebar}
+      aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      className={cn(
+        'absolute top-1/2 right-0 z-20 hidden size-6 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full',
+        'border border-sidebar-border bg-background text-muted-foreground shadow-sm',
+        'transition-[color,background-color,box-shadow] hover:bg-muted hover:text-foreground',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+        'md:flex',
+      )}
+    >
+      {collapsed ? (
+        <ChevronRight className="size-3.5" />
+      ) : (
+        <ChevronLeft className="size-3.5" />
+      )}
+    </button>
+  )
+}
+
 export function AppSidebar({
   defaultSignedIn = false,
   defaultAccount = null,
@@ -99,16 +130,10 @@ export function AppSidebar({
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="h-14 justify-center border-b border-sidebar-border">
-        <Link
-          to="/"
-          aria-label="Refetch home"
-          className="flex h-8 items-center overflow-hidden rounded-md px-2 outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent focus-visible:ring-2 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0!"
-        >
-          <RefetchMark className="hidden size-5 shrink-0 group-data-[collapsible=icon]:block" />
-          <RefetchWordmark className="h-5 w-[90px] shrink-0 group-data-[collapsible=icon]:hidden" />
-        </Link>
-      </SidebarHeader>
+      {/* Spacer under the full-width shell header (desktop fixed sidebar only). */}
+      <SidebarHeader className="hidden h-14 shrink-0 p-0 md:flex" />
+
+      <SidebarBorderToggle />
 
       <SidebarContent className="gap-3">
         {docs ? (

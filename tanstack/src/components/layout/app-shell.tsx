@@ -44,33 +44,35 @@ export function AppShell({
     <SidebarPrefsProvider defaultOpen={defaultSidebarOpen}>
       <OnlinePresenceProvider>
         <PresenceSync />
-        <AppSidebar
-          defaultSignedIn={defaultSignedIn}
-          defaultAccount={defaultAccount}
-        />
-        <SidebarInset className="max-h-svh overflow-hidden">
-          <ShellHeader defaultSignedIn={defaultSignedIn} />
-          {docs ? (
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-              <Outlet />
-            </div>
-          ) : (
-            <div
-              data-app-scroll
-              data-scroll-restoration-id="app-main"
-              className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-none"
-            >
-              <div className="flex min-h-full flex-1 flex-col pt-6 pb-0">
-                <div className="flex-1">
-                  <Outlet />
-                </div>
-                <div className="mt-auto w-full px-8 pt-12 sm:px-12 lg:px-16">
-                  <SiteFooter />
+        <ShellHeader defaultSignedIn={defaultSignedIn} />
+        <div className="flex min-h-0 w-full flex-1 overflow-hidden">
+          <AppSidebar
+            defaultSignedIn={defaultSignedIn}
+            defaultAccount={defaultAccount}
+          />
+          <SidebarInset className="max-h-[calc(100svh-3.5rem)] overflow-hidden">
+            {docs ? (
+              <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <Outlet />
+              </div>
+            ) : (
+              <div
+                data-app-scroll
+                data-scroll-restoration-id="app-main"
+                className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-none"
+              >
+                <div className="flex min-h-full flex-1 flex-col pt-6 pb-0">
+                  <div className="flex-1">
+                    <Outlet />
+                  </div>
+                  <div className="mt-auto w-full px-8 pt-12 sm:px-12 lg:px-16">
+                    <SiteFooter />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </SidebarInset>
+            )}
+          </SidebarInset>
+        </div>
       </OnlinePresenceProvider>
     </SidebarPrefsProvider>
   )

@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
+import { Menu, Plus } from 'lucide-react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,15 +9,14 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useSidebar } from '@/components/ui/sidebar'
 import { CommandCenter } from '@/components/layout/command-center'
 import { isAccountPath } from '@/components/account/account-nav'
 import {
   isDocsPath,
   resolvePageTitle,
 } from '@/components/layout/nav-config'
-import { RefetchMark } from '@/components/refetch-logo'
+import { RefetchMark, RefetchWordmark } from '@/components/refetch-logo'
 import { useAuth } from '@/contexts/auth-context'
 
 export function ShellHeader({
@@ -27,33 +26,35 @@ export function ShellHeader({
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const { isAuthenticated, loading } = useAuth()
+  const { setOpenMobile } = useSidebar()
   const title = resolvePageTitle(pathname)
   // Prefer SSR cookie hint while auth resolves so Submit vs Sign in doesn't flash.
   const showSignedIn = loading ? defaultSignedIn : isAuthenticated
 
   return (
-    <header className="z-20 grid h-14 shrink-0 grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 border-b border-border bg-background px-3 sm:gap-3 sm:px-4 md:grid-cols-[minmax(0,1fr)_minmax(0,28rem)_minmax(0,1fr)]">
-      <div className="flex min-w-0 items-center gap-2">
-        <SidebarTrigger className="-ml-1 shrink-0" />
+    <header className="relative z-30 flex h-14 w-full shrink-0 items-center border-b border-border bg-background px-3 sm:px-4">
+      <div className="flex min-w-0 flex-1 items-center gap-2">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          className="shrink-0 md:hidden"
+          aria-label="Open menu"
+          onClick={() => setOpenMobile(true)}
+        >
+          <Menu />
+        </Button>
         <Link
           to="/"
           aria-label="Refetch home"
-          className="shrink-0 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
+          className="flex shrink-0 items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <RefetchMark className="size-5" />
+          <RefetchMark className="size-5 sm:hidden" />
+          <RefetchWordmark className="hidden h-5 w-[90px] sm:block" />
         </Link>
-        <Separator
-          orientation="vertical"
-          className="mr-1 hidden data-vertical:h-4 data-vertical:self-center md:block"
-        />
         <Breadcrumb className="min-w-0">
           <BreadcrumbList className="flex-nowrap">
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink asChild>
-                <Link to="/">Refetch</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
+            <BreadcrumbSeparator />
             {isDocsPath(pathname) && pathname !== '/docs' ? (
               <>
                 <BreadcrumbItem className="hidden md:block">
@@ -83,11 +84,13 @@ export function ShellHeader({
         </Breadcrumb>
       </div>
 
-      <div className="flex justify-end md:justify-center">
-        <CommandCenter />
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 flex w-full max-w-[min(28rem,calc(100%-12rem))] -translate-x-1/2 items-center px-2 sm:max-w-[min(28rem,calc(100%-18rem))]">
+        <div className="pointer-events-auto flex w-full justify-center md:justify-stretch">
+          <CommandCenter />
+        </div>
       </div>
 
-      <div className="flex items-center justify-end gap-1.5">
+      <div className="relative z-10 flex min-w-0 flex-1 items-center justify-end gap-1.5">
         {showSignedIn ? (
           <Button
             size="icon-lg"

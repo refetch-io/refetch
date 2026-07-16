@@ -94,6 +94,7 @@ export function SidebarPrefsProvider({
       key={clientReady ? 'client' : 'ssr'}
       open={open}
       onOpenChange={handleOpenChange}
+      className="flex-col"
     >
       {children}
     </SidebarProvider>
