@@ -49,11 +49,11 @@
     "cmdk": "1.0.4",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
-    "geist": "latest",
+    "geist": "1.4.2",
     "input-otp": "1.4.1",
     "jsdom": "^26.1.0",
     "lucide-react": "^0.454.0",
-    "next": "15.2.4",
+    "next": "15.5.20",
     "next-themes": "^0.4.4",
     "node-appwrite": "^24.1.0",
     "openai": "^5.12.2",
@@ -74,9 +74,16 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.4.5",
+    "eslint-config-next": "15.5.20",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch@>=9.0.0 <9.0.7": ">=9.0.7",
+      "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
+      "postcss@<8.5.10": ">=8.5.10"
+    }
   }
 }

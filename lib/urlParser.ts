@@ -110,32 +110,46 @@ function createSafeMailtoLink(email: string): string {
 }
 
 /**
- * Parses text and converts URLs and emails to safe clickable links
+ * Parses text and converts URLs and emails to safe clickable links.
+ * Non-link text is HTML-escaped so comment rendering via dangerouslySetInnerHTML
+ * cannot execute injected markup (script/img/on* handlers, etc.).
  */
 export function parseUrlsInText(text: string): string {
   if (!text || typeof text !== 'string') {
     return ''
   }
-  
-  let result = text
-  
-  // First, handle URLs
-  result = result.replace(URL_REGEX, (match) => {
-    if (isValidUrl(match)) {
-      return createSafeLink(match, match)
+
+  const tokens: string[] = []
+  let lastIndex = 0
+  const pattern = new RegExp(
+    `(?:${URL_REGEX.source})|(?:${EMAIL_REGEX.source})`,
+    'gi',
+  )
+
+  for (const match of text.matchAll(pattern)) {
+    const matched = match[0]
+    const index = match.index ?? 0
+
+    if (index > lastIndex) {
+      tokens.push(sanitizeText(text.slice(lastIndex, index)))
     }
-    return match // Return original if invalid
-  })
-  
-  // Then, handle email addresses
-  result = result.replace(EMAIL_REGEX, (match) => {
-    if (isValidEmail(match)) {
-      return createSafeMailtoLink(match)
+
+    if (/^https?:\/\//i.test(matched) && isValidUrl(matched)) {
+      tokens.push(createSafeLink(matched, matched))
+    } else if (isValidEmail(matched)) {
+      tokens.push(createSafeMailtoLink(matched))
+    } else {
+      tokens.push(sanitizeText(matched))
     }
-    return match // Return original if invalid
-  })
-  
-  return result
+
+    lastIndex = index + matched.length
+  }
+
+  if (lastIndex < text.length) {
+    tokens.push(sanitizeText(text.slice(lastIndex)))
+  }
+
+  return tokens.join('')
 }
 
 /**
