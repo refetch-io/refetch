@@ -139,6 +139,21 @@ export function AppSidebar({
         {docs ? (
           <>
             <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip="Back to feed">
+                      <Link to="/">
+                        <ArrowLeft />
+                        <span>Back to feed</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup>
               <SidebarGroupLabel>Documentation</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -159,14 +174,6 @@ export function AppSidebar({
                         <Braces />
                         <span>OpenAPI spec</span>
                       </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip="Back to feed">
-                      <Link to="/">
-                        <ArrowLeft />
-                        <span>Back to feed</span>
-                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>

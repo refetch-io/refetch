@@ -241,13 +241,13 @@ function LiveViewSection() {
             </>
           )}
         </div>
-        <p className="flex h-4 items-center overflow-hidden text-xs leading-none text-muted-foreground">
+        <div className="flex h-4 items-center overflow-hidden text-xs leading-none text-muted-foreground">
           {showSkeleton ? (
             <Skeleton className="h-3 w-24 rounded-md" />
           ) : (
             statusLine
           )}
-        </p>
+        </div>
       </div>
 
       <div className={cn('relative overflow-hidden', PRESENCE_LIST_CLASS)}>
