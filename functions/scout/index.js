@@ -786,7 +786,7 @@ Please return a JSON response with the structure specified in the system prompt.
           }
           
           const completion = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: process.env.OPENAI_MODEL || "gpt-4o-mini",
             messages: [
               { role: "system", content: SYSTEM_PROMPT },
               { role: "user", content: prompt }

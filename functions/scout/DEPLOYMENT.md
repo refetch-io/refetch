@@ -73,6 +73,7 @@ First, create a dedicated user account that will be the author of all auto-disco
 ```bash
 # OpenAI Configuration (Required)
 OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini  # Optional; global default recommended
 
 # Target websites (comma-separated); required for scraping
 SCOUT_TARGET_WEBSITES=https://example.com,https://another.com
@@ -80,6 +81,7 @@ SCOUT_TARGET_WEBSITES=https://example.com,https://another.com
 
 **Important Notes:**
 - **Required in environment**: `OPENAI_API_KEY` and `SCOUT_TARGET_WEBSITES`
+- **Optional**: `OPENAI_MODEL` (default `gpt-4o-mini`; set globally so Scout and Enhancement share it)
 - **Automatic**: Appwrite automatically provides `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT_ID`, `APPWRITE_API_KEY`, `APPWRITE_DATABASE_ID`, `APPWRITE_POSTS_COLLECTION_ID`, and `APPWRITE_COMMENTS_COLLECTION_ID`
 - **Scout user**: Set `SCOUT_USER_ID` (and optionally `SCOUT_USER_NAME`) at the top of `functions/scout/index.js` to match the user you created in Step 1
 - **Delays and limits**: Edit `SCRAPING_DELAY_MS`, `MAX_ARTICLES_PER_RUN`, `MAX_URLS_PER_SOURCE`, and LLM batching constants in `index.js` as needed

@@ -205,7 +205,7 @@ Use the same endpoint and project everywhere; some paths read `APPWRITE_*`, othe
 | Variable | Description |
 | --- | --- |
 | `OPENAI_API_KEY` | Scout and Enhancement. |
-| `OPENAI_MODEL` | OpenAI chat model for Enhancement; set as a **global** project variable (optional; default `gpt-4o-mini`). |
+| `OPENAI_MODEL` | OpenAI chat model for Scout and Enhancement; set as a **global** project variable (optional; default `gpt-4o-mini`). |
 
 ### 4. Scout-only (sources)
 
@@ -235,7 +235,7 @@ Safe to set globally if unused elsewhere.
 
 | Function | Groups |
 | --- | --- |
-| **Scout** | 1, 2, 3, 4 |
+| **Scout** | 1, 2, 3, 4 (`OPENAI_MODEL` optional; set globally) |
 | **Enhancement** | 1, 2, 3 (`OPENAI_MODEL` optional; set globally) |
 | **Algorithm** | 1, 2 (posts only) |
 | **Topic stats** | 1, 2 (incl. daily_topics + topics) |

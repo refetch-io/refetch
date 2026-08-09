@@ -79,6 +79,7 @@ APPWRITE_COMMENTS_COLLECTION_ID=your_comments_collection_id
 
 # OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4o-mini  # Optional; prefer global project variable (default gpt-4o-mini)
 
 # Target Websites (comma-separated URLs)
 # This should be a comma-separated list of URLs
