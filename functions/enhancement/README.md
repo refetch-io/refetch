@@ -59,6 +59,9 @@ APPWRITE_POSTS_COLLECTION_ID=your-posts-collection-id
 # OpenAI Configuration
 OPENAI_API_KEY=your-openai-api-key
 OPENAI_MODEL=gpt-4o-mini  # Optional; prefer **global** project variables in Appwrite (same as OPENAI_API_KEY)
+
+# Optional — multilingual title/description translations (default off; set true to enable)
+# ENABLE_TRANSLATIONS=true
 ```
 
 ### 2. Dependencies

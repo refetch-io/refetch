@@ -8,28 +8,10 @@
 import { Client, TablesDB, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 
-// System prompt for AI content analysis
-const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platform. Analyze the provided post content and return a JSON response with the following structure:
+// Set ENABLE_TRANSLATIONS=true to re-enable 12-locale title/description generation.
+const ENABLE_TRANSLATIONS = process.env.ENABLE_TRANSLATIONS === 'true';
 
-{
-  "language": "detected language (e.g., 'English', 'Spanish')",
-  "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
-  "relevancyScore": number 0-100 (0 = not relevant for tech audience, 100 = highly relevant for tech audience. Tech topics: software, hardware, AI, startups, tech companies, programming, cybersecurity, etc. Non-tech: sports, entertainment, etc.)",
-  "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
-  "spellingIssues": ["array of specific spelling/grammar issues found"],
-  "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
-  "spamIssues": ["array explaining why this was marked as spam, or empty if not spam"],
-  "safetyScore": number 0-100 (0 = unsafe/inappropriate content, 100 = completely safe)",
-  "safetyIssues": ["array of safety concerns, or empty if none found"],
-  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
-  "qualityIssues": ["array explaining the quality score and any issues found"],
-  "sensationScore": number 0-100 (0 = routine tech news, 100 = extremely dramatic/impactful tech news)",
-  "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
-  "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
-  "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
-  "readingTime": number (estimated reading time in minutes)",
-  "topics": ["array of relevant topics this post relates to"],
-  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description.",
+const TRANSLATIONS_SCHEMA = `
   "titleTranslations": {
     "en": "title in English (original if English, translated if not)",
     "es": "title in Spanish (original if Spanish, translated if not)",
@@ -57,7 +39,41 @@ const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platfor
     "zh": "description in Chinese (original if Chinese, translated if not)",
     "ar": "description in Arabic (original if Arabic, translated if not)",
     "he": "description in Hebrew (original if Hebrew, translated if not)"
-  }
+  }`;
+
+/**
+ * System prompt for AI content analysis.
+ * Translations are omitted unless ENABLE_TRANSLATIONS is true (cost control).
+ */
+function getSystemPrompt(enableTranslations) {
+    const translationsFields = enableTranslations
+        ? `,${TRANSLATIONS_SCHEMA}`
+        : '';
+    const translationGuideline = enableTranslations
+        ? '- Translate titles and descriptions accurately while maintaining the meaning and tech terminology\n'
+        : '- Do NOT include titleTranslations or descriptionTranslations in the response\n';
+
+    return `You are an expert content analyst for a tech news platform. Analyze the provided post content and return a JSON response with the following structure:
+
+{
+  "language": "detected language (e.g., 'English', 'Spanish')",
+  "type": "link" or "show" (IMPORTANT: This is the AI-recommended post type. "show" = product launches/announcements/initiatives, "link" = general tech news/analysis)",
+  "relevancyScore": number 0-100 (0 = not relevant for tech audience, 100 = highly relevant for tech audience. Tech topics: software, hardware, AI, startups, tech companies, programming, cybersecurity, etc. Non-tech: sports, entertainment, etc.)",
+  "spellingScore": number 0-100 (0 = many spelling/grammar errors, 100 = perfect spelling/grammar)",
+  "spellingIssues": ["array of specific spelling/grammar issues found"],
+  "spamScore": number 0-100 (0 = legitimate content, 100 = obvious spam)",
+  "spamIssues": ["array explaining why this was marked as spam, or empty if not spam"],
+  "safetyScore": number 0-100 (0 = unsafe/inappropriate content, 100 = completely safe)",
+  "safetyIssues": ["array of safety concerns, or empty if none found"],
+  "qualityScore": number 0-100 (0 = low impact/quality content, 100 = high impact/exceptional quality)",
+  "qualityIssues": ["array explaining the quality score and any issues found"],
+  "sensationScore": number 0-100 (0 = routine tech news, 100 = extremely dramatic/impactful tech news)",
+  "optimizedTitle": "improved title in sentence case (first letter capitalized, rest lowercase except proper nouns), no clickbait, no mistakes, proper length",
+  "optimizedDescription": "improved description that's playful, entertaining, and engaging while maintaining accuracy and avoiding clickbait. Use humor, wit, and creative language to make tech content more fun to read. Keep it informative but add personality and charm.",
+  "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
+  "readingTime": number (estimated reading time in minutes)",
+  "topics": ["array of relevant topics this post relates to"],
+  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description."${translationsFields}
 }
 
 CRITICAL GUIDELINES:
@@ -101,8 +117,7 @@ CRITICAL GUIDELINES:
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-- Translate titles and descriptions accurately while maintaining the meaning and tech terminology
-- When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
+${translationGuideline}- When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
 - Writing Style: Make descriptions playful and entertaining by using:
   * Clever wordplay and tech puns when appropriate
   * Engaging metaphors and analogies
@@ -121,10 +136,12 @@ CRITICAL GUIDELINES:
   * Non-tech topics that get low scores (0-39): Sports, politics, entertainment, fashion, food, travel, general business with no tech angle, personal life updates, non-tech hobbies
   * Always prioritize tech relevance - this is the most important factor for ranking
 - Return only valid JSON, no additional text`;
+}
 
 export default async function ({ req, res, log, error }) {
     try {
         log('Enhancement function started');
+        log(`Translations: ${ENABLE_TRANSLATIONS ? 'enabled' : 'disabled'} (ENABLE_TRANSLATIONS)`);
         
         // Initialize Appwrite client
         const client = new Client()
@@ -202,7 +219,7 @@ export default async function ({ req, res, log, error }) {
                 }
                 
                 // Analyze post with AI
-                const metadata = await analyzePostWithAI(openai, postData, urlContent, urlError);
+                const metadata = await analyzePostWithAI(openai, postData, urlContent, urlError, ENABLE_TRANSLATIONS);
                 
                 // Check for high spam scores and flag accordingly
                 const isHighSpam = metadata.spamScore >= 90;
@@ -229,9 +246,13 @@ export default async function ({ req, res, log, error }) {
                     readingTime: metadata.readingTime,
                     topics: metadata.topics,
                     tldr: metadata.tldr,
-                    titleTranslations: JSON.stringify(metadata.titleTranslations),
-                    descriptionTranslations: JSON.stringify(metadata.descriptionTranslations)
                 };
+
+                // Only write translations when enabled (preserves existing values when off)
+                if (ENABLE_TRANSLATIONS) {
+                    updateData.titleTranslations = JSON.stringify(metadata.titleTranslations);
+                    updateData.descriptionTranslations = JSON.stringify(metadata.descriptionTranslations);
+                }
                 
                 // Log spam detection
                 if (isHighSpam) {
@@ -485,8 +506,8 @@ function extractSimpleDescription(html) {
 /**
  * Analyze post content with OpenAI using the same system prompt as the submission script
  */
-async function analyzePostWithAI(openai, postData, urlContent, urlError) {
-            const prompt = buildAnalysisPrompt(postData, urlContent, urlError);
+async function analyzePostWithAI(openai, postData, urlContent, urlError, enableTranslations = false) {
+    const prompt = buildAnalysisPrompt(postData, urlContent, urlError);
     
     try {
         const completion = await openai.chat.completions.create({
@@ -494,7 +515,7 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError) {
             messages: [
                 {
                     role: "system",
-                    content: SYSTEM_PROMPT
+                    content: getSystemPrompt(enableTranslations)
                 },
                 {
                     role: "user",
@@ -502,7 +523,8 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError) {
                 }
             ],
             temperature: 0.1,
-            max_tokens: 16384,
+            // Translations inflate completion size; keep a higher ceiling only when enabled
+            max_tokens: enableTranslations ? 16384 : 4096,
             response_format: { type: "json_object" }
         });
 
@@ -512,7 +534,7 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError) {
         }
 
         const metadata = JSON.parse(response);
-        const validatedMetadata = validateAndSanitizeMetadata(metadata, postData);
+        const validatedMetadata = validateAndSanitizeMetadata(metadata, postData, enableTranslations);
         
         // Log compact post reference
         console.log(`📝 AI Analysis completed - ID: ${postData.title ? postData.title.substring(0, 50) : 'No title'} | URL: ${postData.url ? postData.url.substring(0, 60) : 'No URL'} | TL;DR: ${metadata.tldr ? metadata.tldr.substring(0, 80) + '...' : 'Not generated'}`);
@@ -617,11 +639,11 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
 /**
  * Validate and sanitize the AI response metadata
  */
-function validateAndSanitizeMetadata(metadata, postData) {
+function validateAndSanitizeMetadata(metadata, postData, enableTranslations = false) {
     // Validate and sanitize type field
     const validatedType = validateType(metadata.type);
     
-    return {
+    const sanitized = {
         language: typeof metadata.language === 'string' ? metadata.language.substring(0, 10) : 'English',
         type: validatedType,
         relevancyScore: Math.max(0, Math.min(100, Number(metadata.relevancyScore) || 0)),
@@ -640,9 +662,14 @@ function validateAndSanitizeMetadata(metadata, postData) {
         readingTime: Math.max(1, Math.min(480, Number(metadata.readingTime) || 5)),
         topics: Array.isArray(metadata.topics) ? metadata.topics.slice(0, 20) : [],
         tldr: typeof metadata.tldr === 'string' ? metadata.tldr.substring(0, 2000) : (postData.description ? `TL;DR: ${postData.description.substring(0, 2000)}...` : 'No summary available'),
-        titleTranslations: validateTranslations(metadata.titleTranslations),
-        descriptionTranslations: validateTranslations(metadata.descriptionTranslations)
     };
+
+    if (enableTranslations) {
+        sanitized.titleTranslations = validateTranslations(metadata.titleTranslations);
+        sanitized.descriptionTranslations = validateTranslations(metadata.descriptionTranslations);
+    }
+
+    return sanitized;
 }
 
 /**

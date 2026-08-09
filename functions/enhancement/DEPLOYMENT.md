@@ -42,6 +42,9 @@ Ensure these are available to the function (via globals or per-function env):
 OPENAI_API_KEY=your-openai-api-key
 OPENAI_MODEL=gpt-4o-mini  # Optional; global default recommended
 
+# Optional — 12-locale title/description translations (default off)
+# ENABLE_TRANSLATIONS=true
+
 # Appwrite configuration
 NEXT_PUBLIC_APPWRITE_ENDPOINT=https://your-endpoint.cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-project-id
