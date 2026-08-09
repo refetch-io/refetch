@@ -117,7 +117,7 @@ CRITICAL GUIDELINES:
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-${translationGuideline}- When analyzing HTML content: Look at the actual text content within HTML tags, ignore markup structure, focus on meaningful content in headings, paragraphs, and other text elements
+${translationGuideline}- When analyzing article text: Focus on meaningful content (headings, body paragraphs, key facts). Ignore navigation chrome or leftover markup if present
 - Writing Style: Make descriptions playful and entertaining by using:
   * Clever wordplay and tech puns when appropriate
   * Engaging metaphors and analogies
@@ -401,7 +401,6 @@ async function fetchURLContent(url) {
             content: cleanText,
             wordCount,
             readingTime,
-            rawHtml: html
         };
     } catch (error) {
         // Provide detailed error information
@@ -469,13 +468,14 @@ function extractCleanText(html) {
             .replace(/\s+/g, ' ')
             .replace(/\n\s*\n/g, '\n')
             .trim()
-            .substring(0, 5000); // Limit to first 5000 characters
+            // Enough for TL;DR/scoring; far cheaper than sending raw HTML
+            .substring(0, 16000);
         
         return text;
     } catch (error) {
         // If text extraction fails, return a simple fallback
         console.warn('Text extraction failed, using fallback:', error.message);
-        return html.substring(0, 5000).replace(/<[^>]*>/g, ' ').trim();
+        return html.substring(0, 16000).replace(/<[^>]*>/g, ' ').trim();
     }
 }
 
@@ -568,24 +568,17 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
         prompt += `URL Title: "${urlContent.title}"\n`;
         prompt += `URL Description: "${urlContent.description}"\n`;
         
-        if (urlContent.rawHtml) {
-            prompt += `\n=== WEBSITE HTML CONTENT (TRUNCATED) ===\n`;
-            prompt += `The following is a truncated version of the HTML content from the website. Analyze this to understand the context:\n\n`;
-            
-            // Use token-aware truncation to stay well under limits
-            // Reserve ~80k tokens for the prompt, ~40k for HTML content
-            const maxTokensForHtml = 40000;
-            const truncatedHtml = truncateToTokenLimit(urlContent.rawHtml, maxTokensForHtml);
-            
-            // Log token estimates for debugging
-            const originalTokens = estimateTokenCount(urlContent.rawHtml);
-            const truncatedTokens = estimateTokenCount(truncatedHtml);
-            console.log(`HTML tokens: ${originalTokens} → ${truncatedTokens} (truncated)`);
-            
-            prompt += truncatedHtml;
-            prompt += `\n=== END HTML CONTENT ===\n`;
-        } else {
-            prompt += `URL Content Preview: "${urlContent.content.substring(0, 1000)}..."\n`;
+        if (urlContent.content) {
+            // Send cleaned article text only (not raw HTML) to keep input tokens low
+            const maxTokensForArticle = 4000;
+            const articleText = truncateToTokenLimit(urlContent.content, maxTokensForArticle);
+            const articleTokens = estimateTokenCount(articleText);
+            console.log(`Article text tokens: ${articleTokens} (max ${maxTokensForArticle})`);
+
+            prompt += `\n=== ARTICLE TEXT ===\n`;
+            prompt += `The following is cleaned text extracted from the page. Use it for context, scoring, and TL;DR:\n\n`;
+            prompt += articleText;
+            prompt += `\n=== END ARTICLE TEXT ===\n`;
         }
         
         prompt += `URL Word Count: ${urlContent.wordCount}\n`;

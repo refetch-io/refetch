@@ -142,7 +142,7 @@ Review function execution logs for:
 
 - **Batch Size**: Adjust `Query.limit(5)` based on your needs
 - **Rate Limiting**: Modify the 1-second delay between posts
-- **Content Truncation**: Adjust `maxTokensForHtml` if needed
+- **Content Truncation**: Adjust `maxTokensForArticle` / cleaned-text length if TL;DRs need more context
 
 ## Rollback
 

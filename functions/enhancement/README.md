@@ -40,7 +40,7 @@ The Enhancement Function:
 ### URL Content Analysis
 - **Webpage Fetching**: Automatically fetches content from link posts
 - **Content Extraction**: Intelligent parsing of article content vs. navigation
-- **HTML Analysis**: Direct analysis of raw HTML for better context understanding
+- **Article text analysis**: Cleaned page text (not raw HTML) for TL;DR and scoring
 
 ## Setup
 
