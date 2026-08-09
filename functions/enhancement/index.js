@@ -386,7 +386,15 @@ async function fetchURLContent(url) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const html = await response.text();
+        // Cap download size before parsing — huge pages blow up regex + token counts
+        const MAX_HTML_BYTES = 200_000;
+        const htmlRaw = await response.text();
+        const html = htmlRaw.length > MAX_HTML_BYTES
+            ? htmlRaw.slice(0, MAX_HTML_BYTES)
+            : htmlRaw;
+        if (htmlRaw.length > MAX_HTML_BYTES) {
+            console.log(`HTML truncated before parse: ${htmlRaw.length} → ${MAX_HTML_BYTES} chars`);
+        }
         
         // Simple text extraction without complex HTML parsing
         let cleanText = extractCleanText(html);
@@ -396,8 +404,8 @@ async function fetchURLContent(url) {
         const readingTime = Math.ceil(wordCount / 225);
 
         return {
-            title: extractSimpleTitle(html),
-            description: extractSimpleDescription(html),
+            title: extractSimpleTitle(html).slice(0, 500),
+            description: extractSimpleDescription(html).slice(0, 1000),
             content: cleanText,
             wordCount,
             readingTime,
@@ -439,43 +447,47 @@ async function fetchURLContent(url) {
  * Extract clean text content from HTML without complex parsing
  */
 function extractCleanText(html) {
+    const MAX_ARTICLE_CHARS = 12000;
     try {
-        // Remove script and style tags completely
-        let text = html
-            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
-            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-            .replace(/<noscript[^>]*>[\s\S]*?<\/noscript>/gi, ' ')
-            .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, ' ')
-            .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, ' ')
-            .replace(/<embed[^>]*>/gi, ' ')
-            .replace(/<applet[^>]*>[\s\S]*?<\/applet>/gi, ' ');
-        
-        // Remove HTML tags but preserve line breaks
+        // Work on a bounded slice so pathological pages can't explode memory/regex
+        let text = (html || '').slice(0, 200_000);
+
+        // Drop high-noise blocks first (non-greedy; input already size-capped)
+        text = text
+            .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+            .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+            .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ')
+            .replace(/<svg[\s\S]*?<\/svg>/gi, ' ')
+            .replace(/<!--[\s\S]*?-->/g, ' ')
+            .replace(/<iframe[\s\S]*?<\/iframe>/gi, ' ');
+
+        // Strip tags; keep light structure as newlines
         text = text
             .replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p>/gi, '\n')
-            .replace(/<\/div>/gi, '\n')
-            .replace(/<\/h[1-6]>/gi, '\n')
-            .replace(/<\/li>/gi, '\n')
-            .replace(/<\/td>/gi, ' ')
-            .replace(/<\/th>/gi, ' ');
-        
-        // Remove remaining HTML tags
-        text = text.replace(/<[^>]*>/g, ' ');
-        
-        // Clean up whitespace and normalize
+            .replace(/<\/(?:p|div|h[1-6]|li|tr)>/gi, '\n')
+            .replace(/<[^>]+>/g, ' ');
+
+        // Decode a few common entities, collapse whitespace, hard-cap length
         text = text
-            .replace(/\s+/g, ' ')
-            .replace(/\n\s*\n/g, '\n')
+            .replace(/&nbsp;/gi, ' ')
+            .replace(/&amp;/gi, '&')
+            .replace(/&lt;/gi, '<')
+            .replace(/&gt;/gi, '>')
+            .replace(/&quot;/gi, '"')
+            .replace(/&#39;/gi, "'")
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{3,}/g, '\n\n')
             .trim()
-            // Enough for TL;DR/scoring; far cheaper than sending raw HTML
-            .substring(0, 16000);
-        
+            .slice(0, MAX_ARTICLE_CHARS);
+
         return text;
     } catch (error) {
-        // If text extraction fails, return a simple fallback
         console.warn('Text extraction failed, using fallback:', error.message);
-        return html.substring(0, 16000).replace(/<[^>]*>/g, ' ').trim();
+        return (html || '')
+            .slice(0, MAX_ARTICLE_CHARS)
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
 }
 
@@ -507,7 +519,27 @@ function extractSimpleDescription(html) {
  * Analyze post content with OpenAI using the same system prompt as the submission script
  */
 async function analyzePostWithAI(openai, postData, urlContent, urlError, enableTranslations = false) {
-    const prompt = buildAnalysisPrompt(postData, urlContent, urlError);
+    const systemPrompt = getSystemPrompt(enableTranslations);
+    // Completion budget counts against the 128k context window — keep headroom
+    const maxCompletionTokens = enableTranslations ? 8192 : 3072;
+    let userPrompt = buildAnalysisPrompt(postData, urlContent, urlError);
+
+    // Conservative char budget: OpenAI can tokenize denser than ~4 chars/token
+    // (especially leftover markup). Stay well under 128k - completion.
+    const MAX_MESSAGE_CHARS = 80_000;
+    const totalChars = systemPrompt.length + userPrompt.length;
+    if (totalChars > MAX_MESSAGE_CHARS) {
+        const allowedUserChars = Math.max(4_000, MAX_MESSAGE_CHARS - systemPrompt.length);
+        console.warn(
+            `Prompt too large (${totalChars} chars); truncating user message to ${allowedUserChars}`
+        );
+        userPrompt = userPrompt.slice(0, allowedUserChars) +
+            '\n\n[Content truncated to fit model context limits]';
+    }
+
+    console.log(
+        `OpenAI request size: system=${systemPrompt.length} chars, user=${userPrompt.length} chars, max_tokens=${maxCompletionTokens}`
+    );
     
     try {
         const completion = await openai.chat.completions.create({
@@ -515,16 +547,15 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError, enableT
             messages: [
                 {
                     role: "system",
-                    content: getSystemPrompt(enableTranslations)
+                    content: systemPrompt
                 },
                 {
                     role: "user",
-                    content: prompt
+                    content: userPrompt
                 }
             ],
             temperature: 0.1,
-            // Translations inflate completion size; keep a higher ceiling only when enabled
-            max_tokens: enableTranslations ? 16384 : 4096,
+            max_tokens: maxCompletionTokens,
             response_format: { type: "json_object" }
         });
 
@@ -550,30 +581,32 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError, enableT
  */
 function buildAnalysisPrompt(postData, urlContent, urlError) {
     const { title, description, url, type } = postData;
+    const safeTitle = String(title || '').slice(0, 500);
+    const safeDescription = String(description || '').slice(0, 2000);
+    const safeUrl = String(url || '').slice(0, 2000);
     
     let prompt = `Analyze this ${type} post submission:\n\n`;
-    prompt += `Title: "${title}"\n`;
+    prompt += `Title: "${safeTitle}"\n`;
     
-    if (description) {
-        prompt += `Description: "${description}"\n`;
+    if (safeDescription) {
+        prompt += `Description: "${safeDescription}"\n`;
     }
     
-    if (url) {
-        prompt += `URL: ${url}\n`;
+    if (safeUrl) {
+        prompt += `URL: ${safeUrl}\n`;
     }
     
     // Add URL content context if available
     if (urlContent) {
         prompt += `\n=== URL CONTENT ANALYSIS ===\n`;
-        prompt += `URL Title: "${urlContent.title}"\n`;
-        prompt += `URL Description: "${urlContent.description}"\n`;
+        prompt += `URL Title: "${String(urlContent.title || '').slice(0, 500)}"\n`;
+        prompt += `URL Description: "${String(urlContent.description || '').slice(0, 1000)}"\n`;
         
         if (urlContent.content) {
-            // Send cleaned article text only (not raw HTML) to keep input tokens low
-            const maxTokensForArticle = 4000;
-            const articleText = truncateToTokenLimit(urlContent.content, maxTokensForArticle);
-            const articleTokens = estimateTokenCount(articleText);
-            console.log(`Article text tokens: ${articleTokens} (max ${maxTokensForArticle})`);
+            // Hard char cap — denser tokenizers can exceed chars/4 estimates
+            const MAX_ARTICLE_CHARS = 12000;
+            const articleText = String(urlContent.content).slice(0, MAX_ARTICLE_CHARS);
+            console.log(`Article text chars: ${articleText.length} (max ${MAX_ARTICLE_CHARS})`);
 
             prompt += `\n=== ARTICLE TEXT ===\n`;
             prompt += `The following is cleaned text extracted from the page. Use it for context, scoring, and TL;DR:\n\n`;
@@ -589,7 +622,7 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
         // Add URL error context for spam detection
         prompt += `\n=== URL ERROR ANALYSIS ===\n`;
         prompt += `URL Status: FAILED TO LOAD\n`;
-        prompt += `Error Details: ${urlError.message}\n`;
+        prompt += `Error Details: ${String(urlError.message || '').slice(0, 500)}\n`;
         
         // Extract HTTP status codes if available
         if (urlError.message.includes('HTTP')) {
@@ -619,12 +652,6 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
     }
     
     prompt += `\nPlease analyze this content and provide the requested metadata in JSON format. Pay special attention to generating an accurate TL;DR summary based on the actual article content when available. If no article content is available, generate a TL;DR based on the title and description provided.`;
-    
-    // Final safety check: estimate total tokens and warn if approaching limits
-    const totalTokens = estimateTokenCount(prompt);
-    if (totalTokens > 100000) {
-        console.warn(`Warning: Prompt is ${totalTokens} tokens, approaching OpenAI limit of 128k`);
-    }
     
     return prompt;
 }
@@ -707,22 +734,3 @@ function validateTranslations(translations) {
     return {};
 }
 
-/**
- * Estimate token count for a given text
- * Rough approximation: 1 token ≈ 4 characters for English text
- */
-function estimateTokenCount(text) {
-    if (!text) return 0;
-    return Math.ceil(text.length / 4);
-}
-
-/**
- * Truncate text to fit within token limits
- */
-function truncateToTokenLimit(text, maxTokens) {
-    if (!text) return '';
-    const maxChars = maxTokens * 4; // Rough character estimate
-    if (text.length <= maxChars) return text;
-    
-    return text.substring(0, maxChars) + '\n\n[Content truncated to fit token limits]';
-}
