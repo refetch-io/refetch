@@ -36,7 +36,7 @@ export function Footer({ variant = 'sidebar', bottomPadding }: FooterProps) {
           Terms
         </a>
         <span>•</span>
-        <a href="https://appwrite.io/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-gray-700">
+        <a href="/privacy" className="hover:text-gray-700">
           Privacy
         </a>
         <span>•</span>
