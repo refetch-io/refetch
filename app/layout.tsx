@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { AuthProvider } from "@/contexts/auth-context"
+import { AnalyticsTracker } from "@/components/analytics-tracker"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -53,6 +54,7 @@ html {
         `}</style>
       </head>
       <body className="bg-gray-100">
+        <AnalyticsTracker />
         <AuthProvider>
           {children}
         </AuthProvider>
