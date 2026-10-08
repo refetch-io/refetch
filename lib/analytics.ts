@@ -9,12 +9,23 @@ const propertyId = process.env.NEXT_PUBLIC_APPWRITE_ANALYTICS_PROPERTY_ID ?? ''
 
 const analytics = new Analytics(client)
 
+// The same hosts `lib/plausible.ts` gates on, so a preview or local build that
+// happens to carry a property id does not pollute production stats. Checked per
+// event rather than once at module scope, which also runs during SSR where
+// there is no `window`.
+const PRODUCTION_HOSTS = ['refetch.io', 'www.refetch.io']
+
+const isProductionHost = () =>
+  typeof window !== 'undefined' && PRODUCTION_HOSTS.includes(window.location.hostname)
+
 // `createEvent` wants the endpoint's shape: `url` is required, and `props` is a
 // flat alternating key/value list rather than the object the tracker emits.
 const tracking = propertyId
   ? new AnalyticsTracking(
-      (name, options) =>
-        analytics.createEvent({
+      (name, options) => {
+        if (!isProductionHost()) return
+
+        return analytics.createEvent({
           propertyId: options?.propertyId ?? propertyId,
           name,
           url: options?.url ?? window.location.href,
@@ -25,7 +36,8 @@ const tracking = propertyId
             key,
             String(value),
           ]),
-        }),
+        })
+      },
       { propertyId },
     )
   : null
