@@ -122,8 +122,8 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5
       appwrite:
-        specifier: 28.2.0-rc.4
-        version: 28.2.0-rc.4(supports-color@7.2.0)
+        specifier: 28.2.0-rc.7
+        version: 28.2.0-rc.7(supports-color@7.2.0)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.21(postcss@8.5.19)
@@ -1566,8 +1566,8 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  appwrite@28.2.0-rc.4:
-    resolution: {integrity: sha512-sznY0VYNdoUxWlb7YpyUPEKD+uJHmy2gfOX5s/HiMclK5S9MGV+b56pJ2yXVgKv4rdd7OoH0wtt1wLbi3yHbcA==}
+  appwrite@28.2.0-rc.7:
+    resolution: {integrity: sha512-GC4JB+ozfbHpD+sKvPdFDRlz4ONMGiaD9apUw/1rT5lY1U4C9Uj4nMqBRaa/nxWgNmx6arc8zeNDMjNux3SW7w==}
     engines: {node: '>=18.0.0'}
 
   arg@5.0.2:
@@ -4717,7 +4717,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.2
 
-  appwrite@28.2.0-rc.4(supports-color@7.2.0):
+  appwrite@28.2.0-rc.7(supports-color@7.2.0):
     dependencies:
       buffer: 6.0.3
       json-bigint: 1.0.0

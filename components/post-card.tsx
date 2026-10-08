@@ -5,7 +5,7 @@ import { Favicon } from "@/components/favicon"
 import { VoteButtons } from "@/components/vote-buttons"
 import { type NewsItem } from "@/lib/data"
 import { type VoteState } from "@/lib/types"
-import { trackPostClick } from "@/lib/plausible"
+import { trackPostClick } from "@/lib/track"
 
 interface PostCardProps {
   item: NewsItem
