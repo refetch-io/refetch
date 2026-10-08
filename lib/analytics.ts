@@ -3,9 +3,9 @@ import type { AnalyticsEventOptions } from 'appwrite'
 
 import { client } from './appwrite'
 
-// The snippet id, not the property document id: tracking runs in the browser,
-// and the endpoint resolves either but only the snippet is meant to be public.
-const propertyId = process.env.NEXT_PUBLIC_APPWRITE_ANALYTICS_SNIPPET_ID ?? ''
+// The property document ID. Shipping it to the browser is fine: ingestion is
+// a public route, so the ID is not a secret.
+const propertyId = process.env.NEXT_PUBLIC_APPWRITE_ANALYTICS_PROPERTY_ID ?? ''
 
 const analytics = new Analytics(client)
 
@@ -30,7 +30,7 @@ const tracking = propertyId
     )
   : null
 
-/** No-op until NEXT_PUBLIC_APPWRITE_ANALYTICS_SNIPPET_ID is set, so local and
+/** No-op until NEXT_PUBLIC_APPWRITE_ANALYTICS_PROPERTY_ID is set, so local and
  *  fork setups run without an analytics property. */
 export const isAnalyticsEnabled = tracking !== null
 
