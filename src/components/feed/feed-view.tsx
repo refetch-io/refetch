@@ -36,7 +36,7 @@ interface FeedListProps {
   empty: { title: string; description: React.ReactNode; action?: React.ReactNode }
 }
 
-/** Inside a FeedColumn the column is the card; lists render flat. */
+/** Inside a FeedColumn the column is the card; lists render flat. Separators run edge to edge. */
 const BARE = 'rounded-none bg-transparent shadow-none'
 
 export function FeedList({ page, ranked, hideChannel, empty }: FeedListProps) {
@@ -54,7 +54,7 @@ export function FeedList({ page, ranked, hideChannel, empty }: FeedListProps) {
     <>
       <List
         className={cn(inColumn && BARE)}
-        style={{ '--list-inset': ranked ? '5rem' : '3rem' } as React.CSSProperties}
+        style={{ '--list-inset': '0px' } as React.CSSProperties}
       >
         {page.posts.map((post, index) => (
           <PostRow
@@ -136,7 +136,7 @@ export function FeedSkeleton({ rows = 10, ranked }: { rows?: number; ranked?: bo
       className={cn(inColumn && BARE)}
       aria-busy="true"
       aria-label="Loading stories"
-      style={{ '--list-inset': ranked ? '5rem' : '3rem' } as React.CSSProperties}
+      style={{ '--list-inset': '0px' } as React.CSSProperties}
     >
       {Array.from({ length: rows }, (_, i) => (
         <ListItem key={i} className="flex items-start gap-2 py-3 pr-4 pl-2">
