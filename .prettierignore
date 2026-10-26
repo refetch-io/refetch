@@ -1,0 +1,10 @@
+node_modules
+dist
+.output
+pnpm-lock.yaml
+src/routeTree.gen.ts
+functions
+extensions
+scripts
+public
+*.md

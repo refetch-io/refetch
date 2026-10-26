@@ -10,7 +10,14 @@
  * Table IDs default to human-readable slugs; override with env to attach to an existing project
  * (env vars still use *_COLLECTION_ID for backward compatibility):
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
- *   APPWRITE_KEYS_COLLECTION_ID, APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID
+ *   APPWRITE_KEYS_COLLECTION_ID, APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID,
+ *   APPWRITE_CHANNELS_COLLECTION_ID, APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID
+ *
+ * Channels are seeded from scripts/channels.json (name, sources, keywords…);
+ * member counts are never overwritten. Channel icons are PNGs in scripts/channel-icons/<id>.png,
+ * uploaded to the public "channel-icons" bucket (APPWRITE_CHANNEL_ICONS_BUCKET_ID). A channel
+ * without a local PNG keeps whatever icon file ID is set on its row, so icons can also be
+ * uploaded from the Console.
  *
  * Functions: matched by display name (must match the Appwrite Console function name exactly).
  *   On first run a new function id is generated. Function **variables** are not managed here — set
@@ -20,7 +27,9 @@
  * Index note: UTF-8 index byte limit (~767). Full-text on long string columns uses lengths: [191, …].
  */
 
-import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -35,6 +44,7 @@ import {
   Storage,
   TablesDB,
 } from 'node-appwrite';
+import { InputFile } from 'node-appwrite/file';
 
 const APPWRITE_ENDPOINT =
   process.env.APPWRITE_ENDPOINT ||
@@ -54,6 +64,15 @@ const COLLECTION_IDS = {
   keys: process.env.APPWRITE_KEYS_COLLECTION_ID || 'keys',
   daily_topics: process.env.APPWRITE_DAILY_TOPICS_COLLECTION_ID || 'daily_topics',
   topics: process.env.APPWRITE_TOPICS_COLLECTION_ID || 'topics',
+  channels: process.env.APPWRITE_CHANNELS_COLLECTION_ID || 'channels',
+  channel_members: process.env.APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID || 'channel_members',
+  profiles: process.env.APPWRITE_PROFILES_COLLECTION_ID || 'profiles',
+  user_blocks: process.env.APPWRITE_BLOCKS_COLLECTION_ID || 'user_blocks',
+  user_follows: process.env.APPWRITE_FOLLOWS_COLLECTION_ID || 'user_follows',
+  conversations: process.env.APPWRITE_CONVERSATIONS_COLLECTION_ID || 'conversations',
+  conversation_members: process.env.APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID || 'conversation_members',
+  messages: process.env.APPWRITE_MESSAGES_COLLECTION_ID || 'messages',
+  message_reactions: process.env.APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID || 'message_reactions',
 };
 
 const DEFAULT_PERMS = [
@@ -150,6 +169,7 @@ function buildCollectionDefinitions() {
         { key: 'sensationScore', type: 'integer', required: false, array: false, default: null },
         { key: 'diversityScore', type: 'integer', required: false, array: false, default: null },
         { key: 'relevancyScore', type: 'integer', required: false, array: false, default: null },
+        { key: 'channel', type: 'string', size: 64, required: false, array: false, default: null },
       ],
       indexes: [
         { key: 'index_1', type: 'key', columns: ['userId'], orders: ['ASC'] },
@@ -163,6 +183,7 @@ function buildCollectionDefinitions() {
           lengths: [191, 191],
         },
         { key: 'index_title', type: 'fulltext', columns: ['title'], orders: undefined, lengths: [191] },
+        { key: 'index_channel', type: 'key', columns: ['channel'], orders: ['ASC'] },
       ],
     },
     {
@@ -263,11 +284,256 @@ function buildCollectionDefinitions() {
       ],
       indexes: [{ key: 'uniq_topicKey', type: 'unique', columns: ['topicKey'], orders: ['ASC'] }],
     },
+    {
+      id: COLLECTION_IDS.channels,
+      name: 'Channels',
+      permissions: STATS_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'name', type: 'string', size: 128, required: true, array: false, default: null },
+        // Directory section ("Languages", "Platforms", "Topics"); ordered by first position.
+        { key: 'category', type: 'string', size: 32, required: false, array: false, default: null },
+        { key: 'glyph', type: 'string', size: 8, required: false, array: false, default: null },
+        { key: 'color', type: 'string', size: 16, required: false, array: false, default: null },
+        // File ID of the channel's PNG icon in the channel-icons bucket.
+        { key: 'icon', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'description', type: 'string', size: 512, required: false, array: false, default: null },
+        { key: 'keywords', type: 'string', size: 128, required: false, array: true, default: null },
+        // Official feeds (RSS/Atom) are preferred; community feeds fill quiet periods.
+        { key: 'sources', type: 'string', size: 2048, required: false, array: true, default: null },
+        { key: 'communitySources', type: 'string', size: 2048, required: false, array: true, default: null },
+        { key: 'memberCount', type: 'integer', required: false, array: false, default: 0 },
+        { key: 'position', type: 'integer', required: false, array: false, default: 0 },
+      ],
+      indexes: [{ key: 'index_position', type: 'key', columns: ['position'], orders: ['ASC'] }],
+    },
+    {
+      id: COLLECTION_IDS.channel_members,
+      name: 'Channel members',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 512, required: true, array: false, default: null },
+        { key: 'channelId', type: 'string', size: 64, required: true, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'index_userId', type: 'key', columns: ['userId'], orders: ['ASC'] },
+        { key: 'index_channelId', type: 'key', columns: ['channelId'], orders: ['ASC'] },
+        { key: 'uniq_member', type: 'unique', columns: ['userId', 'channelId'], orders: ['ASC', 'ASC'] },
+      ],
+    },
+    // Public profiles (row ID = user ID), written by the web app on sign-in.
+    {
+      id: COLLECTION_IDS.profiles,
+      name: 'Profiles',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'name', type: 'string', size: 128, required: true, array: false, default: null },
+        { key: 'bio', type: 'string', size: 280, required: false, array: false, default: null },
+        { key: 'website', type: 'string', size: 256, required: false, array: false, default: null },
+        // 'everyone' | 'nobody': who may start a conversation with this person.
+        { key: 'allowMessages', type: 'string', size: 16, required: false, array: false, default: 'everyone' },
+        { key: 'joinedAt', type: 'datetime', required: false, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'index_name', type: 'fulltext', columns: ['name'], orders: undefined },
+        { key: 'index_allowMessages', type: 'key', columns: ['allowMessages'], orders: ['ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.user_blocks,
+      name: 'User blocks',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'blockedUserId', type: 'string', size: 64, required: true, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'uniq_block', type: 'unique', columns: ['userId', 'blockedUserId'], orders: ['ASC', 'ASC'] },
+        { key: 'index_blockedUserId', type: 'key', columns: ['blockedUserId'], orders: ['ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.user_follows,
+      name: 'User follows',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'followerId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'uniq_follow', type: 'unique', columns: ['followerId', 'userId'], orders: ['ASC', 'ASC'] },
+        { key: 'index_userId', type: 'key', columns: ['userId'], orders: ['ASC'] },
+      ],
+    },
+    // Direct messages and group conversations.
+    {
+      id: COLLECTION_IDS.conversations,
+      name: 'Conversations',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'type', type: 'string', size: 16, required: true, array: false, default: null },
+        { key: 'name', type: 'string', size: 80, required: false, array: false, default: null },
+        { key: 'createdBy', type: 'string', size: 64, required: true, array: false, default: null },
+        // Sorted "userA:userB" for direct conversations, so each pair has one.
+        { key: 'directKey', type: 'string', size: 160, required: false, array: false, default: null },
+        { key: 'memberCount', type: 'integer', required: false, array: false, default: 0 },
+        { key: 'lastMessageAt', type: 'datetime', required: false, array: false, default: null },
+        { key: 'lastMessageId', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'lastMessagePreview', type: 'string', size: 200, required: false, array: false, default: null },
+        { key: 'lastMessageUserId', type: 'string', size: 64, required: false, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'uniq_directKey', type: 'unique', columns: ['directKey'], orders: ['ASC'] },
+        { key: 'index_createdBy', type: 'key', columns: ['createdBy'], orders: ['ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.conversation_members,
+      name: 'Conversation members',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'conversationId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'role', type: 'string', size: 16, required: false, array: false, default: 'member' },
+        // Denormalized from the conversation so the inbox is one ordered query.
+        { key: 'lastMessageAt', type: 'datetime', required: false, array: false, default: null },
+        { key: 'lastReadAt', type: 'datetime', required: false, array: false, default: null },
+        { key: 'unreadCount', type: 'integer', required: false, array: false, default: 0 },
+        { key: 'muted', type: 'boolean', required: false, array: false, default: false },
+      ],
+      indexes: [
+        { key: 'uniq_conversation_user', type: 'unique', columns: ['conversationId', 'userId'], orders: ['ASC', 'ASC'] },
+        { key: 'index_user_lastMessageAt', type: 'key', columns: ['userId', 'lastMessageAt'], orders: ['ASC', 'DESC'] },
+        { key: 'index_user_unread', type: 'key', columns: ['userId', 'unreadCount'], orders: ['ASC', 'ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.messages,
+      name: 'Messages',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'conversationId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        // 'text' | 'system' (group events such as "Ada added Grace").
+        { key: 'kind', type: 'string', size: 16, required: false, array: false, default: 'text' },
+        { key: 'content', type: 'string', size: 4000, required: false, array: false, default: null },
+        { key: 'replyToId', type: 'string', size: 64, required: false, array: false, default: null },
+        // A shared story (posts row ID).
+        { key: 'postId', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'editedAt', type: 'datetime', required: false, array: false, default: null },
+        { key: 'deleted', type: 'boolean', required: false, array: false, default: false },
+      ],
+      indexes: [
+        { key: 'index_conversationId', type: 'key', columns: ['conversationId'], orders: ['ASC'] },
+        { key: 'index_userId', type: 'key', columns: ['userId'], orders: ['ASC'] },
+      ],
+    },
+    {
+      id: COLLECTION_IDS.message_reactions,
+      name: 'Message reactions',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'messageId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'conversationId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'emoji', type: 'string', size: 16, required: true, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'uniq_reaction', type: 'unique', columns: ['messageId', 'userId', 'emoji'], orders: ['ASC', 'ASC', 'ASC'] },
+        { key: 'index_messageId', type: 'key', columns: ['messageId'], orders: ['ASC'] },
+      ],
+    },
   ];
 }
 
-/** Optional storage buckets (extend as needed). */
-const STORAGE_BUCKETS = {};
+const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Upload scripts/channel-icons/<id>.png when it changed. File IDs carry a content hash, so a new
+ * icon gets a new URL (no stale caches) and the previous file is removed. Returns the file ID, or
+ * undefined when there is no local icon (the row's current icon is then left alone).
+ */
+async function ensureChannelIcon(storage, channel, previousIcon) {
+  const path = resolve(SCRIPTS_DIR, 'channel-icons', `${channel.id}.png`);
+  if (!existsSync(path)) return undefined;
+  const hash = createHash('md5').update(readFileSync(path)).digest('hex').slice(0, 8);
+  const fileId = `${channel.id.slice(0, 27)}-${hash}`;
+  if (fileId === previousIcon) return fileId;
+  try {
+    await storage.getFile({ bucketId: CHANNEL_ICONS_BUCKET_ID, fileId });
+  } catch (error) {
+    if (error.code !== 404) throw error;
+    await storage.createFile({
+      bucketId: CHANNEL_ICONS_BUCKET_ID,
+      fileId,
+      file: InputFile.fromPath(path, `${channel.id}.png`),
+    });
+    log(`  Icon for "${channel.name}" uploaded`, 'success');
+  }
+  if (previousIcon) {
+    await storage.deleteFile({ bucketId: CHANNEL_ICONS_BUCKET_ID, fileId: previousIcon }).catch(() => {});
+  }
+  return fileId;
+}
+
+/** Upsert the channel catalog (and icons) without touching member counts. */
+async function ensureChannels(tablesDB, storage) {
+  const file = resolve(SCRIPTS_DIR, 'channels.json');
+  const channels = JSON.parse(readFileSync(file, 'utf8'));
+  for (const [position, channel] of channels.entries()) {
+    let existing = null;
+    try {
+      existing = await tablesDB.getRow(APPWRITE_DATABASE_ID, COLLECTION_IDS.channels, channel.id);
+    } catch (error) {
+      if (error.code !== 404) throw error;
+    }
+    const icon = await ensureChannelIcon(storage, channel, existing?.icon ?? null);
+    const data = {
+      name: channel.name,
+      category: channel.category ?? null,
+      glyph: channel.glyph,
+      color: channel.color,
+      description: channel.description,
+      keywords: channel.keywords ?? [],
+      sources: channel.sources ?? [],
+      communitySources: channel.communitySources ?? [],
+      position,
+      ...(icon ? { icon } : {}),
+    };
+    if (existing) {
+      await tablesDB.updateRow(APPWRITE_DATABASE_ID, COLLECTION_IDS.channels, channel.id, data);
+      log(`  Channel "${channel.name}" updated`, 'success');
+    } else {
+      await tablesDB.createRow(APPWRITE_DATABASE_ID, COLLECTION_IDS.channels, channel.id, {
+        ...data,
+        memberCount: 0,
+      });
+      log(`  Channel "${channel.name}" created`, 'success');
+    }
+  }
+}
+
+const CHANNEL_ICONS_BUCKET_ID = process.env.APPWRITE_CHANNEL_ICONS_BUCKET_ID || 'channel-icons';
+
+/** Storage buckets (extend as needed). */
+const STORAGE_BUCKETS = {
+  [CHANNEL_ICONS_BUCKET_ID]: {
+    name: 'Channel icons',
+    // Icons are public images; uploads happen with an API key (setup script or Console).
+    permissions: [Permission.read(Role.any())],
+    fileSecurity: false,
+    maxFileSize: 1_000_000,
+    allowedFileExtensions: ['png'],
+  },
+};
 
 const DB_SCOPES = [
   'databases.read',
@@ -311,6 +577,17 @@ function refetchFunctionDefinitions() {
       entrypoint: 'index.js',
       commands: 'npm install',
       scopes: DB_SCOPES,
+    },
+    {
+      folder: 'channels',
+      name: 'Channels',
+      runtime: Runtime.Node22,
+      timeout: 600,
+      entrypoint: 'index.js',
+      commands: 'npm install',
+      scopes: ['databases.read', 'tables.read', 'rows.read', 'rows.write'],
+      schedule: '15 */2 * * *',
+      execute: [], // scheduled only; nobody can trigger it from outside
     },
     {
       folder: 'readme',
@@ -505,9 +782,9 @@ async function ensureFunction(functions, def) {
       functionId,
       def.name,
       def.runtime,
-      ['any'],
+      def.execute ?? ['any'],
       [],
-      undefined,
+      def.schedule,
       def.timeout ?? 300,
       true,
       true,
@@ -576,6 +853,9 @@ export async function setupAppwrite() {
     }
   }
 
+  log('\nChannels', 'info');
+  await ensureChannels(tablesDB, storage);
+
   log('\nFunctions', 'info');
   for (const fnDef of refetchFunctionDefinitions()) {
     log(`\n${fnDef.name}`, 'info');
@@ -589,6 +869,16 @@ export async function setupAppwrite() {
   log(`  APPWRITE_KEYS_COLLECTION_ID=${COLLECTION_IDS.keys}`, 'info');
   log(`  APPWRITE_DAILY_TOPICS_COLLECTION_ID=${COLLECTION_IDS.daily_topics}`, 'info');
   log(`  APPWRITE_TOPICS_COLLECTION_ID=${COLLECTION_IDS.topics}`, 'info');
+  log(`  APPWRITE_CHANNELS_COLLECTION_ID=${COLLECTION_IDS.channels}`, 'info');
+  log(`  APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID=${COLLECTION_IDS.channel_members}`, 'info');
+  log(`  APPWRITE_CHANNEL_ICONS_BUCKET_ID=${CHANNEL_ICONS_BUCKET_ID}`, 'info');
+  log(`  APPWRITE_PROFILES_COLLECTION_ID=${COLLECTION_IDS.profiles}`, 'info');
+  log(`  APPWRITE_BLOCKS_COLLECTION_ID=${COLLECTION_IDS.user_blocks}`, 'info');
+  log(`  APPWRITE_FOLLOWS_COLLECTION_ID=${COLLECTION_IDS.user_follows}`, 'info');
+  log(`  APPWRITE_CONVERSATIONS_COLLECTION_ID=${COLLECTION_IDS.conversations}`, 'info');
+  log(`  APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID=${COLLECTION_IDS.conversation_members}`, 'info');
+  log(`  APPWRITE_MESSAGES_COLLECTION_ID=${COLLECTION_IDS.messages}`, 'info');
+  log(`  APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID=${COLLECTION_IDS.message_reactions}`, 'info');
 }
 
 const isMain =

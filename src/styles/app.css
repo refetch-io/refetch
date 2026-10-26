@@ -1,0 +1,579 @@
+/*
+ * Refetch Design System — tokens & base styles.
+ *
+ * Semantic tokens live in :root / .dark as raw CSS variables and are exposed
+ * to Tailwind through `@theme inline`, so every utility (bg-surface,
+ * text-label-secondary, border-separator, …) adapts to light and dark mode
+ * automatically. See DESIGN.md for the full reference.
+ */
+@import 'tailwindcss';
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────────────────────── Semantic tokens ───────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  /* Backgrounds & surfaces */
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --surface-secondary: #f5f5f7;
+  --surface-raised: #ffffff;
+
+  /* Fills (controls, tracks, hovers) */
+  --fill: rgb(118 118 128 / 0.12);
+  --fill-secondary: rgb(118 118 128 / 0.08);
+  --fill-strong: rgb(118 118 128 / 0.2);
+
+  /* Labels */
+  --label: #1d1d1f;
+  --label-secondary: #6e6e73;
+  --label-tertiary: #86868b;
+  --label-quaternary: #aeaeb2;
+
+  /* Separators */
+  --separator: rgb(0 0 0 / 0.08);
+  --separator-strong: rgb(0 0 0 / 0.14);
+
+  /* Brand — Refetch purple */
+  --brand: #4e1cb3;
+  --brand-hover: #5d2bc4;
+  --brand-pressed: #43169c;
+  --brand-2: #7c3aed;
+  --brand-text: #4e1cb3;
+  --brand-tint: #f3eeff;
+  --brand-tint-strong: #e7ddff;
+  --on-brand: #ffffff;
+
+  /* Feedback */
+  --up: #16a34a;
+  --up-tint: #e9f8ef;
+  --down: #dc2626;
+  --down-tint: #fdeded;
+  --warning: #c2410c;
+  --warning-tint: #fff4e5;
+
+  /* Materials */
+  --glass: rgb(255 255 255 / 0.72);
+  --glass-strong: rgb(255 255 255 / 0.86);
+  --glass-border: rgb(0 0 0 / 0.07);
+
+  /* Brand mark — identical in every theme, matching the original logo. */
+  --logo: #4e1cb3;
+  --logo-wordmark: #4e1cb3;
+
+  /* Liquid Glass (the floating mobile tab bar) */
+  --lg-bg: rgb(255 255 255 / 0.5);
+  --lg-sheen: rgb(255 255 255 / 0.55);
+  --lg-highlight: rgb(255 255 255 / 0.9);
+  --lg-rim: rgb(255 255 255 / 0.55);
+  --lg-edge: rgb(0 0 0 / 0.06);
+  --lg-selected: rgb(0 0 0 / 0.07);
+  --lg-shadow: 0 12px 32px -10px rgb(0 0 0 / 0.24), 0 2px 8px rgb(0 0 0 / 0.07);
+  --lg-rim-gradient: linear-gradient(
+    140deg,
+    rgb(255 255 255 / 0.95) 0%,
+    rgb(255 255 255 / 0.25) 26%,
+    rgb(255 255 255 / 0) 52%,
+    rgb(255 255 255 / 0.5) 100%
+  );
+
+  /* Segmented control thumb */
+  --thumb: #ffffff;
+  --thumb-shadow: 0 3px 8px rgb(0 0 0 / 0.12), 0 0 0 0.5px rgb(0 0 0 / 0.04);
+
+  /* Focus */
+  --ring: rgb(78 28 179 / 0.5);
+
+  /* Elevation */
+  --shadow-card: 0 1px 1px rgb(0 0 0 / 0.02), 0 2px 8px rgb(0 0 0 / 0.03);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.07);
+  --shadow-popover: 0 0 0 0.5px rgb(0 0 0 / 0.06), 0 12px 40px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.06);
+  --shadow-brand: 0 8px 24px rgb(78 28 179 / 0.28), 0 2px 6px rgb(78 28 179 / 0.2);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Midnight: near-black with a faint violet cast, so the purple feels at home. */
+  --bg: #0e0d13;
+  --surface: #17161e;
+  --surface-secondary: #1f1e28;
+  --surface-raised: #23222d;
+
+  --fill: rgb(255 255 255 / 0.07);
+  --fill-secondary: rgb(255 255 255 / 0.045);
+  --fill-strong: rgb(255 255 255 / 0.12);
+
+  --label: #f3f2f7;
+  --label-secondary: #a9a7b5;
+  --label-tertiary: #7a788a;
+  --label-quaternary: #4f4d5e;
+
+  --separator: rgb(255 255 255 / 0.07);
+  --separator-strong: rgb(255 255 255 / 0.11);
+
+  /* The brand purple stays #4e1cb3; only text accents are lifted for legibility. */
+  --logo-wordmark: #ffffff;
+
+  --brand: #4e1cb3;
+  --brand-hover: #5a25c8;
+  --brand-pressed: #43169c;
+  --brand-2: #7c3aed;
+  --brand-text: #9b7cf6;
+  --brand-tint: rgb(78 28 179 / 0.32);
+  --brand-tint-strong: rgb(78 28 179 / 0.5);
+  --on-brand: #ffffff;
+
+  --up: #30d158;
+  --up-tint: rgb(48 209 88 / 0.14);
+  --down: #ff453a;
+  --down-tint: rgb(255 69 58 / 0.14);
+  --warning: #ff9f0a;
+  --warning-tint: rgb(255 159 10 / 0.14);
+
+  --glass: rgb(23 22 30 / 0.66);
+  --glass-strong: rgb(31 30 40 / 0.86);
+  --glass-border: rgb(255 255 255 / 0.07);
+
+  --lg-bg: rgb(44 42 58 / 0.4);
+  --lg-sheen: rgb(255 255 255 / 0.1);
+  --lg-highlight: rgb(255 255 255 / 0.24);
+  --lg-rim: rgb(255 255 255 / 0.12);
+  --lg-edge: rgb(0 0 0 / 0.4);
+  --lg-selected: rgb(255 255 255 / 0.1);
+  --lg-shadow: 0 14px 36px -10px rgb(0 0 0 / 0.7), 0 2px 8px rgb(0 0 0 / 0.35);
+  --lg-rim-gradient: linear-gradient(
+    140deg,
+    rgb(255 255 255 / 0.38) 0%,
+    rgb(255 255 255 / 0.08) 28%,
+    rgb(255 255 255 / 0) 54%,
+    rgb(255 255 255 / 0.18) 100%
+  );
+
+  --thumb: rgb(255 255 255 / 0.16);
+  --thumb-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+
+  --ring: rgb(155 124 246 / 0.6);
+
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.045);
+  --shadow-raised: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px rgb(0 0 0 / 0.5);
+  --shadow-popover: 0 0 0 1px rgb(255 255 255 / 0.08), 0 20px 50px rgb(0 0 0 / 0.6);
+  --shadow-brand: 0 8px 24px rgb(78 28 179 / 0.45);
+}
+
+/* ─────────────────────────────── Tailwind theme ─────────────────────────────── */
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-raised: var(--surface-raised);
+  --color-fill: var(--fill);
+  --color-fill-secondary: var(--fill-secondary);
+  --color-fill-strong: var(--fill-strong);
+  --color-label: var(--label);
+  --color-label-secondary: var(--label-secondary);
+  --color-label-tertiary: var(--label-tertiary);
+  --color-label-quaternary: var(--label-quaternary);
+  --color-separator: var(--separator);
+  --color-separator-strong: var(--separator-strong);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-pressed: var(--brand-pressed);
+  --color-brand-2: var(--brand-2);
+  --color-brand-text: var(--brand-text);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-tint-strong: var(--brand-tint-strong);
+  --color-on-brand: var(--on-brand);
+  --color-up: var(--up);
+  --color-up-tint: var(--up-tint);
+  --color-down: var(--down);
+  --color-down-tint: var(--down-tint);
+  --color-warning: var(--warning);
+  --color-warning-tint: var(--warning-tint);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
+  --color-glass-border: var(--glass-border);
+  --color-ring: var(--ring);
+  --color-logo: var(--logo);
+  --color-logo-wordmark: var(--logo-wordmark);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-popover: var(--shadow-popover);
+  --shadow-brand: var(--shadow-brand);
+}
+
+@theme {
+  /* Typefaces — SF Pro on Apple platforms, Inter everywhere else. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  /* Titles use Poppins, the typeface of the Refetch wordmark. */
+  --font-display:
+    'Poppins', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter Variable', sans-serif;
+  --font-rounded:
+    ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, 'Inter Variable', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Type scale (Apple HIG, tuned for the web) */
+  --text-large-title: 2.125rem;
+  --text-large-title--line-height: 1.12;
+  --text-large-title--letter-spacing: -0.03em;
+  --text-large-title--font-weight: 700;
+  --text-title-1: 1.75rem;
+  --text-title-1--line-height: 1.18;
+  --text-title-1--letter-spacing: -0.025em;
+  --text-title-1--font-weight: 700;
+  --text-title-2: 1.375rem;
+  --text-title-2--line-height: 1.24;
+  --text-title-2--letter-spacing: -0.02em;
+  --text-title-2--font-weight: 700;
+  --text-title-3: 1.25rem;
+  --text-title-3--line-height: 1.26;
+  --text-title-3--letter-spacing: -0.015em;
+  --text-title-3--font-weight: 600;
+  --text-headline: 1.0625rem;
+  --text-headline--line-height: 1.32;
+  --text-headline--letter-spacing: -0.012em;
+  --text-headline--font-weight: 600;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.47;
+  --text-body--letter-spacing: -0.012em;
+  --text-callout: 1rem;
+  --text-callout--line-height: 1.4;
+  --text-callout--letter-spacing: -0.01em;
+  --text-subhead: 0.9375rem;
+  --text-subhead--line-height: 1.4;
+  --text-subhead--letter-spacing: -0.008em;
+  --text-footnote: 0.8125rem;
+  --text-footnote--line-height: 1.38;
+  --text-footnote--letter-spacing: -0.003em;
+  --text-caption-1: 0.75rem;
+  --text-caption-1--line-height: 1.33;
+  --text-caption-2: 0.6875rem;
+  --text-caption-2--line-height: 1.3;
+  --text-caption-2--letter-spacing: 0.006em;
+
+  /* Radii — continuous-feeling corners */
+  --radius-control: 0.75rem;
+  --radius-card: 1.25rem;
+  --radius-widget: 1.375rem;
+  --radius-sheet: 1.75rem;
+
+  /* Motion */
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: linear(
+    0,
+    0.006,
+    0.025 2.8%,
+    0.101 6.1%,
+    0.539 18.9%,
+    0.721 25.3%,
+    0.849 31.5%,
+    0.937 38.1%,
+    0.968 41.8%,
+    0.991 45.7%,
+    1.006 50.1%,
+    1.015 55%,
+    1.017 63.9%,
+    1.001
+  );
+
+  --animate-fade-in: fade-in 0.35s var(--ease-out-expo) both;
+  --animate-rise-in: rise-in 0.5s var(--ease-out-expo) both;
+  --animate-scale-in: scale-in 0.22s var(--ease-out-expo) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-live-pulse: live-pulse 2s var(--ease-apple) infinite;
+  --animate-count-up: count-up 0.32s var(--ease-out-expo) both;
+  --animate-count-down: count-down 0.32s var(--ease-out-expo) both;
+  --animate-progress: progress 1.2s var(--ease-apple) infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
+  @keyframes live-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgb(48 209 88 / 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 7px rgb(48 209 88 / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgb(48 209 88 / 0);
+    }
+  }
+  @keyframes count-up {
+    from {
+      opacity: 0;
+      transform: translateY(60%);
+    }
+  }
+  @keyframes count-down {
+    from {
+      opacity: 0;
+      transform: translateY(-60%);
+    }
+  }
+  @keyframes progress {
+    0% {
+      transform: translateX(-100%) scaleX(0.4);
+    }
+    60% {
+      transform: translateX(30%) scaleX(0.6);
+    }
+    100% {
+      transform: translateX(110%) scaleX(0.3);
+    }
+  }
+}
+
+/* ─────────────────────────────────── Base ─────────────────────────────────── */
+
+@layer base {
+  html,
+  body {
+    /* No rubber-band bounce at the edges of the page. */
+    overscroll-behavior: none;
+  }
+
+  html {
+    background-color: var(--bg);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--bg);
+    color: var(--label);
+    font-family: var(--font-sans);
+    font-size: var(--text-subhead);
+    line-height: var(--text-subhead--line-height);
+    letter-spacing: var(--text-subhead--letter-spacing);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  /* Brand typeface for titles. */
+  :where(.text-large-title, .text-title-1, .text-title-2, .text-title-3) {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background-color: var(--brand-tint-strong);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled='true'] {
+    cursor: default;
+  }
+
+  /* Apple-style thin scrollbars on desktop */
+  @media (pointer: fine) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--fill-strong) transparent;
+    }
+  }
+}
+
+/* ───────────────────────────────── Utilities ───────────────────────────────── */
+
+/* Frosted material used by the navigation bar, tab bar and floating composer. */
+@utility glass {
+  background-color: var(--glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+@utility glass-strong {
+  background-color: var(--glass-strong);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  backdrop-filter: saturate(180%) blur(24px);
+}
+
+/*
+ * Liquid Glass — the floating material from iOS 26: very translucent, a
+ * bright specular top edge, a soft rim and a lifted shadow. Used for the
+ * floating mobile tab bar. Requires a positioned parent.
+ */
+@utility liquid-glass {
+  background-color: var(--lg-bg);
+  background-image: linear-gradient(180deg, var(--lg-sheen) 0%, transparent 42%);
+  -webkit-backdrop-filter: blur(18px) saturate(200%) brightness(1.04);
+  backdrop-filter: blur(18px) saturate(200%) brightness(1.04);
+  box-shadow:
+    inset 0 1px 0.5px var(--lg-highlight),
+    inset 0 0 0 0.5px var(--lg-rim),
+    inset 0 -1px 1px var(--lg-edge),
+    var(--lg-shadow);
+  /* Light-catching rim: brighter where the light hits (top-left). */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--lg-rim-gradient);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* Subtle press feedback, like UIKit's highlighted state. */
+@utility pressable {
+  transition:
+    transform 0.28s var(--ease-spring),
+    background-color 0.2s var(--ease-apple),
+    color 0.2s var(--ease-apple),
+    box-shadow 0.2s var(--ease-apple),
+    opacity 0.2s var(--ease-apple);
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+    transition-duration: 0.08s;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+/* Continuous (squircle) corners where the browser supports them. */
+@utility squircle {
+  @supports (corner-shape: squircle) {
+    corner-shape: superellipse(1.4);
+  }
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, var(--fill-secondary) 25%, var(--fill) 37%, var(--fill-secondary) 63%);
+  background-size: 400% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+}
+
+@utility brand-gradient-text {
+  background-image: linear-gradient(120deg, var(--brand-text) 0%, var(--brand-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Rich text rendered inside comments (links produced by the URL parser). */
+@utility prose-comment {
+  & a {
+    color: var(--brand-text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--brand-text) 35%, transparent);
+    text-underline-offset: 2px;
+    overflow-wrap: anywhere;
+    transition: text-decoration-color 0.2s var(--ease-apple);
+  }
+  & a:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+@keyframes flash {
+  0%,
+  30% {
+    background-color: var(--brand-tint-strong);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes spinner-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.15;
+  }
+}
+
+/* ───────────────────────────── View transitions ───────────────────────────── */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: var(--ease-apple);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
