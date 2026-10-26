@@ -13,7 +13,6 @@ import type {
 import { FEED_MAX_PAGES, LIMITS } from '@/lib/constants'
 import { isHttpUrl, isValidId } from '@/lib/url'
 import { isBotUser } from '@/lib/utils'
-import { describeAuthError } from '@/server/appwrite.server'
 import { listUserPosts } from '@/server/posts.server'
 import { joinChannel } from '@/server/channels.server'
 import { getProfileInsights } from '@/server/people.server'
@@ -22,13 +21,11 @@ import {
   getProfile,
   setFollowing,
   listUserComments,
-  removePhoto,
   searchPeople,
   setBlocked,
-  updatePhoto,
   updateProfile,
 } from '@/server/profiles.server'
-import { getSessionSecret, getSessionUser } from '@/server/session.server'
+import { getSessionUser, issueSession } from '@/server/session.server'
 
 const userId = z.string().refine((value) => isValidId(value) || isBotUser(value), 'Invalid user')
 const page = z.number().int().min(1).max(FEED_MAX_PAGES)
@@ -77,41 +74,13 @@ export const saveProfile = createServerFn({ method: 'POST' })
     }),
   )
   .handler(async ({ data }): Promise<ActionResult<{ name: string }>> => {
-    const user = await getSessionUser({ fresh: true })
-    const secret = getSessionSecret()
-    if (!user || !secret) return UNAUTHORIZED
-    try {
-      return await updateProfile(user, secret, data)
-    } catch (error) {
-      return { ok: false, error: describeAuthError(error) }
-    }
+    const user = await getSessionUser()
+    if (!user) return UNAUTHORIZED
+    const result = await updateProfile(user, data)
+    // The session cookie carries the display name; keep it current.
+    if (result.ok && result.data.name !== user.name) issueSession({ ...user, name: result.data.name })
+    return result
   })
-
-export const uploadPhoto = createServerFn({ method: 'POST' })
-  .validator((data: unknown) => {
-    if (!(data instanceof FormData)) throw new Error('Expected form data')
-    const file = data.get('photo')
-    if (!(file instanceof File)) throw new Error('Choose a photo to upload.')
-    return { file }
-  })
-  .handler(async ({ data }): Promise<ActionResult> => {
-    const user = await getSessionUser({ fresh: true })
-    const secret = getSessionSecret()
-    if (!user || !secret) return UNAUTHORIZED
-    try {
-      return await updatePhoto(secret, data.file)
-    } catch (error) {
-      console.error('[profiles] photo upload failed', error)
-      return { ok: false, error: 'Couldn’t update your photo. Try a smaller image.' }
-    }
-  })
-
-export const deletePhoto = createServerFn({ method: 'POST' }).handler(async (): Promise<ActionResult> => {
-  const user = await getSessionUser({ fresh: true })
-  const secret = getSessionSecret()
-  if (!user || !secret) return UNAUTHORIZED
-  return removePhoto(secret)
-})
 
 export const setUserBlocked = createServerFn({ method: 'POST' })
   .validator(z.object({ userId, blocked: z.boolean() }))

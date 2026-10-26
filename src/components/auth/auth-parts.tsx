@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { useServerFn } from '@tanstack/react-start'
 import { Eye, EyeOff } from 'lucide-react'
-import { startAppwriteOAuth } from '@/api/session'
+import { startAppwriteOAuth } from '@/lib/auth-client'
+import { configQuery } from '@/lib/queries'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { AppwriteIcon } from '../brand-icons'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { fetchStoryPreview } from '@/api/content'
 import { isValidId } from '@/lib/url'
 import { Favicon } from '../favicon'
@@ -21,18 +21,14 @@ export function AppwriteSignInButton({
   label?: string
   onError: (message: string) => void
 }) {
-  const start = useServerFn(startAppwriteOAuth)
+  const { data: config } = useSuspenseQuery(configQuery())
   const [pending, setPending] = React.useState(false)
 
   const onClick = async () => {
     setPending(true)
     try {
-      const result = await start({ data: { redirect } })
-      if (result.ok) {
-        window.location.assign(result.data.url)
-        return // keep the spinner while the browser navigates away
-      }
-      onError(result.error)
+      await startAppwriteOAuth(config, redirect)
+      return // keep the spinner while the browser navigates to Appwrite
     } catch {
       onError('Couldn’t reach Appwrite. Please try again.')
     }

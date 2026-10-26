@@ -1,8 +1,9 @@
 import * as React from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
-import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
-import { signUp } from '@/api/session'
+import { signUpWithEmail } from '@/lib/auth-client'
+import { configQuery } from '@/lib/queries'
 import { LIMITS, LINKS } from '@/lib/constants'
 import { safeRedirect } from '@/lib/redirect'
 import { SITE_URL, seo } from '@/lib/seo'
@@ -33,7 +34,7 @@ function SignUpPage() {
   const search = Route.useSearch()
   const router = useRouter()
   const setSession = useSetSession()
-  const submit = useServerFn(signUp)
+  const { data: config } = useSuspenseQuery(configQuery())
   const [form, setForm] = React.useState({ name: '', email: '', password: '', confirm: '' })
   const [pending, setPending] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -57,14 +58,16 @@ function SignUpPage() {
     }
     setPending(true)
     try {
-      const result = await submit({
-        data: { name: form.name.trim(), email: form.email.trim(), password: form.password },
+      const result = await signUpWithEmail(config, {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
       })
       if (!result.ok) {
         setError(result.error)
         return
       }
-      await setSession(result.data)
+      await setSession(result.data.user)
       toast.success('Welcome to Refetch!', { description: 'Your account is ready.' })
       router.history.push(`/welcome?redirect=${encodeURIComponent(safeRedirect(search.redirect))}`)
     } catch {

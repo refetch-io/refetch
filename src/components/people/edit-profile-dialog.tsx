@@ -1,9 +1,12 @@
 import * as React from 'react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
 import { Camera, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { deletePhoto, saveProfile, uploadPhoto } from '@/api/profiles'
+import { saveProfile } from '@/api/profiles'
+import { appwriteBrowser } from '@/lib/appwrite-browser'
+import { describeAuthError } from '@/lib/auth-errors'
+import { configQuery } from '@/lib/queries'
 import { LIMITS } from '@/lib/constants'
 import { useSession, useSetSession } from '@/lib/session'
 import type { MessagePrivacy, Profile } from '@/lib/types'
@@ -27,8 +30,7 @@ export function EditProfileDialog({
   const setSession = useSetSession()
   const queryClient = useQueryClient()
   const save = useServerFn(saveProfile)
-  const upload = useServerFn(uploadPhoto)
-  const removePhoto = useServerFn(deletePhoto)
+  const { data: config } = useSuspenseQuery(configQuery())
   const fileInput = React.useRef<HTMLInputElement>(null)
 
   const [form, setForm] = React.useState({
@@ -52,6 +54,14 @@ export function EditProfileDialog({
     setError(null)
   }, [open, profile])
 
+  /** Account changes run as you in this browser; if its Appwrite session is gone, ask to sign in again. */
+  const accountError = (cause: unknown, fallback: string) =>
+    cause && typeof cause === 'object' && 'code' in cause && cause.code === 401
+      ? 'Sign out and back in to change this. Your sign-in on this device has expired.'
+      : cause && typeof cause === 'object' && 'type' in cause
+        ? describeAuthError(cause)
+        : fallback
+
   const onPhoto = async (file: File | undefined) => {
     if (!file) return
     if (file.size > LIMITS.photoMaxBytes) {
@@ -60,14 +70,17 @@ export function EditProfileDialog({
     }
     setPhotoBusy(true)
     try {
-      const data = new FormData()
-      data.set('photo', file)
-      const result = await upload({ data })
-      if (!result.ok) throw new Error(result.error)
+      if (!/^image\/(png|jpe?g|webp)$/.test(file.type)) throw new Error('Use a PNG, JPEG or WebP image.')
+      const { avatars } = await appwriteBrowser(config)
+      await avatars.updatePhoto({ file })
       refreshAvatar(profile.id)
       toast.success('Photo updated')
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : 'Couldn’t update your photo.')
+      toast.error(
+        cause instanceof Error && !('code' in cause)
+          ? cause.message
+          : accountError(cause, 'Couldn’t update your photo.'),
+      )
     } finally {
       setPhotoBusy(false)
       if (fileInput.current) fileInput.current.value = ''
@@ -77,12 +90,12 @@ export function EditProfileDialog({
   const onRemovePhoto = async () => {
     setPhotoBusy(true)
     try {
-      const result = await removePhoto()
-      if (!result.ok) throw new Error(result.error)
+      const { avatars } = await appwriteBrowser(config)
+      await avatars.deletePhoto()
       refreshAvatar(profile.id)
       toast.success('Photo removed')
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : 'Couldn’t remove your photo.')
+      toast.error(accountError(cause, 'Couldn’t remove your photo.'))
     } finally {
       setPhotoBusy(false)
     }
@@ -93,6 +106,16 @@ export function EditProfileDialog({
     setSaving(true)
     setError(null)
     try {
+      if (form.name.trim() !== profile.name) {
+        // Rename the Appwrite account too, so new posts and comments carry the new name.
+        const { account } = await appwriteBrowser(config)
+        try {
+          await account.updateName({ name: form.name.trim() })
+        } catch (cause) {
+          setError(accountError(cause, 'Couldn’t change your name.'))
+          return
+        }
+      }
       const result = await save({ data: form })
       if (!result.ok) {
         setError(result.error)

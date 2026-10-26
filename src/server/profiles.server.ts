@@ -1,5 +1,4 @@
 import { AppwriteException, ID } from 'node-appwrite'
-import { InputFile } from 'node-appwrite/file'
 import type {
   ActionResult,
   MessagePrivacy,
@@ -10,9 +9,9 @@ import type {
   SuggestedPerson,
   UserCommentsPage,
 } from '@/lib/types'
-import { FEATURED_PEOPLE, FEED_PAGE_SIZE, LIMITS, ONBOARDING_CHANNELS } from '@/lib/constants'
+import { FEATURED_PEOPLE, FEED_PAGE_SIZE, ONBOARDING_CHANNELS } from '@/lib/constants'
 import { isBotUser } from '@/lib/utils'
-import { createSessionClient, isNotFound } from './appwrite.server'
+import { isNotFound } from './appwrite.server'
 import { Query, chunk, db, type Row } from './db.server'
 
 /*
@@ -315,9 +314,9 @@ export interface ProfileInput {
   allowMessages: MessagePrivacy
 }
 
+/** The browser renames the Appwrite account itself; this keeps the public profile in step. */
 export async function updateProfile(
   user: SessionUser,
-  secret: string,
   input: ProfileInput,
 ): Promise<ActionResult<{ name: string }>> {
   const { tables, ids } = db()
@@ -327,10 +326,6 @@ export async function updateProfile(
     bio: input.bio.trim(),
     website: input.website.trim(),
     allowMessages: input.allowMessages,
-  }
-  if (name !== user.name) {
-    // Keep the Appwrite account (and so new posts and comments) in sync.
-    await createSessionClient(secret).account.updateName({ name })
   }
   const existing = await getProfileRow(user.id)
   if (existing) {
@@ -345,23 +340,6 @@ export async function updateProfile(
   }
   synced.set(user.id, name)
   return { ok: true, data: { name } }
-}
-
-export async function updatePhoto(secret: string, file: File): Promise<ActionResult> {
-  if (!/^image\/(png|jpe?g|webp)$/.test(file.type)) {
-    return { ok: false, error: 'Use a PNG, JPEG or WebP image.' }
-  }
-  if (file.size > LIMITS.photoMaxBytes) return { ok: false, error: 'Photos can be up to 5 MB.' }
-  const buffer = Buffer.from(await file.arrayBuffer())
-  await createSessionClient(secret).avatars.updatePhoto({
-    file: InputFile.fromBuffer(buffer, file.name || 'photo.png'),
-  })
-  return { ok: true, data: undefined }
-}
-
-export async function removePhoto(secret: string): Promise<ActionResult> {
-  await createSessionClient(secret).avatars.deletePhoto()
-  return { ok: true, data: undefined }
 }
 
 export async function setBlocked(

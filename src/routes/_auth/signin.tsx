@@ -1,8 +1,9 @@
 import * as React from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
-import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
-import { signIn } from '@/api/session'
+import { signInWithEmail } from '@/lib/auth-client'
+import { configQuery } from '@/lib/queries'
 import { safeRedirect } from '@/lib/redirect'
 import { SITE_URL, seo } from '@/lib/seo'
 import { useSetSession } from '@/lib/session'
@@ -34,7 +35,7 @@ function SignInPage() {
   const search = Route.useSearch()
   const router = useRouter()
   const setSession = useSetSession()
-  const submit = useServerFn(signIn)
+  const { data: config } = useSuspenseQuery(configQuery())
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [pending, setPending] = React.useState(false)
@@ -47,13 +48,14 @@ function SignInPage() {
     setPending(true)
     setError(null)
     try {
-      const result = await submit({ data: { email: email.trim(), password } })
+      const result = await signInWithEmail(config, email.trim(), password)
       if (!result.ok) {
         setError(result.error)
         return
       }
-      await setSession(result.data)
-      toast.success(`Welcome back${result.data.name ? `, ${result.data.name.split(' ')[0]}` : ''}!`)
+      const { user } = result.data
+      await setSession(user)
+      toast.success(`Welcome back${user.name ? `, ${user.name.split(' ')[0]}` : ''}!`)
       router.history.push(safeRedirect(search.redirect))
     } catch {
       setError('Something went wrong. Please try again.')

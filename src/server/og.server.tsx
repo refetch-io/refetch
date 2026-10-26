@@ -1,9 +1,9 @@
-import { readFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
 import type { ReactNode } from 'react'
 import interMedium from '@fontsource/inter/files/inter-latin-500-normal.woff?inline'
 import interBold from '@fontsource/inter/files/inter-latin-700-normal.woff?inline'
 import poppinsBold from '@fontsource/poppins/files/poppins-latin-700-normal.woff?inline'
+// Dev serves it from node_modules; builds publish it at /assets/resvg.wasm (see vite.config.ts).
+import devResvgWasmUrl from '@resvg/resvg-wasm/index_bg.wasm?url'
 import type { PostDetail } from '@/lib/types'
 import { timeAgo } from '@/lib/utils'
 import { getPublicConfig } from './env.server'
@@ -30,12 +30,14 @@ let renderer: Promise<{
   Resvg: typeof import('@resvg/resvg-wasm').Resvg
 }> | null = null
 
-function loadRenderer() {
+/** `origin` is the current request's, where the build's static assets are served. */
+function loadRenderer(origin: string) {
   renderer ??= (async () => {
     const [{ default: satori }, resvg] = await Promise.all([import('satori'), import('@resvg/resvg-wasm')])
     try {
-      const require = createRequire(import.meta.url)
-      await resvg.initWasm(readFileSync(require.resolve('@resvg/resvg-wasm/index_bg.wasm')))
+      const wasm = await fetch(new URL(import.meta.env.DEV ? devResvgWasmUrl : '/assets/resvg.wasm', origin))
+      if (!wasm.ok) throw new Error(`Couldn't load resvg wasm (${wasm.status})`)
+      await resvg.initWasm(await wasm.arrayBuffer())
     } catch (error) {
       // The wasm module is process-wide; a hot reload may find it ready already.
       if (!(error instanceof Error && error.message.includes('Already initialized'))) throw error
@@ -48,8 +50,8 @@ function loadRenderer() {
   return renderer
 }
 
-async function renderPng(element: ReactNode, cacheControl: string): Promise<Response> {
-  const { satori, Resvg } = await loadRenderer()
+async function renderPng(element: ReactNode, cacheControl: string, origin: string): Promise<Response> {
+  const { satori, Resvg } = await loadRenderer(origin)
   const svg = await satori(element, { width: WIDTH, height: HEIGHT, fonts })
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng()
   return new Response(new Uint8Array(png), {
@@ -129,7 +131,7 @@ function Pill({ icon, children }: { icon: keyof typeof ICONS; children: string }
 }
 
 /** 1200×630 social card for a thread. */
-export async function renderThreadImage(post: PostDetail | null): Promise<Response> {
+export async function renderThreadImage(post: PostDetail | null, origin: string): Promise<Response> {
   if (!post) {
     return renderPng(
       <div
@@ -145,6 +147,7 @@ export async function renderThreadImage(post: PostDetail | null): Promise<Respon
         <LogoLockup />
       </div>,
       'public, max-age=300',
+      origin,
     )
   }
 
@@ -252,5 +255,6 @@ export async function renderThreadImage(post: PostDetail | null): Promise<Respon
       </div>
     </div>,
     'public, max-age=900, s-maxage=3600, stale-while-revalidate=86400',
+    origin,
   )
 }

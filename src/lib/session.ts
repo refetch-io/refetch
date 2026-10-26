@@ -1,9 +1,8 @@
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
-import { signOut } from '@/api/session'
-import { sessionQuery } from './queries'
+import { signOutEverywhere } from './auth-client'
+import { configQuery, sessionQuery } from './queries'
 import type { SessionUser } from './types'
 import { clearVoteOverrides } from './vote-store'
 
@@ -42,12 +41,13 @@ export function useSetSession() {
 }
 
 export function useSignOut() {
-  const signOutFn = useServerFn(signOut)
+  const { data: config } = useSuspenseQuery(configQuery())
   const setSession = useSetSession()
   const router = useRouter()
   return async () => {
     try {
-      await signOutFn()
+      // Ends the Appwrite session in this browser and clears the server cookie.
+      await signOutEverywhere(config)
     } finally {
       await setSession(null)
       toast.success('Signed out', { description: 'See you soon.' })

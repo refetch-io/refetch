@@ -81,7 +81,7 @@ While Hacker News has been the go-to platform for tech discussions for years, we
 ### Backend — Appwrite
 
 - **Tables DB** — `posts`, `comments`, `votes`, `daily_topics` and `topics`, plus `channels` and `channel_members` for channels, `profiles`, `user_follows` and `user_blocks` for people, and `conversations`, `conversation_members`, `messages` and `message_reactions` for messages. The web app reads and writes them on the server with an API key, exactly as before (same tables, columns, counters and rate limits; posts gain an optional `channel` column).
-- **Authentication** — email & password and **Continue with Appwrite** (Appwrite as an OAuth2 provider). Sessions are created on the server and stored in an `httpOnly` cookie (Appwrite's SSR pattern), so pages render signed-in on the first byte.
+- **Authentication** — email & password and **Continue with Appwrite** (Appwrite as an OAuth2 provider), run in the browser with the Appwrite web SDK. The browser then hands the server a short-lived JWT; the server verifies it with Appwrite and sets its own signed `httpOnly` cookie, so pages render signed-in on the first byte. The API key never creates sessions.
 - **Avatars** — site favicons and profile photos (`/avatars/photo`: uploaded photo, OAuth picture, Gravatar, then initials).
 - **Functions** — Scout, Enhancement, Algorithm, Topic stats and Readme (unchanged), plus Channels, in [`functions/`](functions).
 - **Sites** — hosting with SSR.
@@ -193,7 +193,8 @@ Table IDs use the legacy name `*_COLLECTION_ID` but refer to **Appwrite Tables**
 | --- | --- |
 | `APPWRITE_ENDPOINT` | REST API base (e.g. `https://fra.cloud.appwrite.io/v1`). |
 | `APPWRITE_PROJECT_ID` | Project ID. |
-| `APPWRITE_API_KEY` | Server API key. The web app needs table/row access **and `sessions.write`** (sign-in, sign-up, Continue with Appwrite). |
+| `APPWRITE_API_KEY` | Server API key with table/row access. Sign-in runs in the browser, so it doesn't need session scopes. |
+| `SESSION_SECRET` | Optional. Signs the session cookie; derived from the API key when unset (rotating the key then signs everyone out). |
 
 ### 2. Appwrite data IDs (global)
 
@@ -269,7 +270,7 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 
 ## 🔐 Appwrite setup checklist
 
-1. **API key scopes** — `rows.read`, `rows.write`, `tables.read` for the feeds, votes and comments, plus **`sessions.write`** so the server can create sessions. Without it, sign-in shows *“the server API key needs the sessions.write scope”*.
+1. **API key scopes** — `rows.read`, `rows.write`, `tables.read` for the feeds, votes and comments. Sign-in happens in the browser, so no session scopes are needed.
 2. **Continue with Appwrite** — in *Auth → Settings → OAuth2 providers*, enable **Appwrite**. The callback path is `/auth/callback`.
 3. **Platforms** — add a Web platform for each hostname the site runs on (e.g. `refetch.io`, `localhost`) so OAuth redirects are accepted.
 4. **People & messages** — `pnpm appwrite:setup` also creates the profile, follow, block and messaging tables. Profiles are written when people sign in (the server key doesn't need `users.read`); people who haven't signed in since are shown from their posts and comments. Messages refresh by polling (every few seconds in an open conversation).
