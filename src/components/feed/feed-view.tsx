@@ -52,10 +52,7 @@ export function FeedList({ page, ranked, hideChannel, empty }: FeedListProps) {
   const offset = (page.page - 1) * FEED_PAGE_SIZE
   return (
     <>
-      <List
-        className={cn(inColumn && BARE)}
-        style={{ '--list-inset': '0px' } as React.CSSProperties}
-      >
+      <List className={cn(inColumn && BARE)} style={{ '--list-inset': '0px' } as React.CSSProperties}>
         {page.posts.map((post, index) => (
           <PostRow
             key={post.id}
