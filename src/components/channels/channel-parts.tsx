@@ -64,7 +64,8 @@ export function ChannelIcon({
     <span
       aria-hidden
       className={cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden font-display font-semibold tracking-[-0.02em] select-none',
+        // Saturated brand colors glare on dark surfaces; soften them a touch.
+        'inline-flex shrink-0 items-center justify-center overflow-hidden font-display font-semibold tracking-[-0.02em] select-none dark:opacity-80',
         className,
       )}
       style={{
