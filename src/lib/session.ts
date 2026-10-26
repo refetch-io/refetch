@@ -17,6 +17,8 @@ const USER_SCOPED = new Set([
   'profile',
   'people',
   'onboarding',
+  'who-to-follow',
+  'followed',
   'inbox',
   'unread',
   'conversation',

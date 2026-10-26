@@ -467,3 +467,13 @@ export async function getOnboardingSuggestions(viewer: SessionUser): Promise<Onb
   })
   return { channels: ONBOARDING_CHANNELS, people: suggestions.slice(0, 6) }
 }
+
+/** "Who to follow": onboarding suggestions minus people already followed (everyone, for visitors). */
+export async function getWhoToFollow(viewer: SessionUser | null, limit = 3): Promise<Array<SuggestedPerson>> {
+  const [suggestions, followed] = await Promise.all([
+    getOnboardingSuggestions(viewer ?? { id: '', name: '', email: '' }),
+    viewer ? getFollowedIds(viewer.id) : Promise.resolve([] as Array<string>),
+  ])
+  const skip = new Set(followed)
+  return suggestions.people.filter((person) => !skip.has(person.id)).slice(0, limit)
+}

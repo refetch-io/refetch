@@ -8,7 +8,9 @@ import { fetchConversation, fetchInbox, fetchMessages, fetchUnreadCount } from '
 import {
   fetchOnboarding,
   fetchProfile,
+  fetchFollowedIds,
   fetchProfileInsights,
+  fetchWhoToFollow,
   fetchUserComments,
   fetchUserStories,
   findPeople,
@@ -201,4 +203,18 @@ export const messagesQuery = (id: string, userId: string) =>
     getNextPageParam: (last) => (last.hasMore ? last.messages[0]?.id : undefined),
     staleTime: 2_000,
     refetchInterval: MESSAGES_POLL_MS,
+  })
+
+export const whoToFollowQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['who-to-follow', userId],
+    queryFn: () => fetchWhoToFollow(),
+    staleTime: 10 * 60_000,
+  })
+
+export const followedIdsQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['followed', userId],
+    queryFn: () => fetchFollowedIds(),
+    staleTime: 60_000,
   })

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import {
@@ -16,6 +16,7 @@ import {
 import { toast } from 'sonner'
 import { deleteStory } from '@/api/content'
 import { trackPostClick } from '@/lib/analytics'
+import { followedIdsQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
 import { copyToClipboard } from '@/lib/share'
 import type { PostDetail } from '@/lib/types'
@@ -32,6 +33,7 @@ import { Favicon } from '../favicon'
 import { VoteControl } from '../vote-control'
 import { ChannelTag } from '../channels/channel-parts'
 import { ShareDialog } from '../messages/share-dialog'
+import { FollowButton } from '../people/follow-button'
 import { useJoinGate } from '../auth/join-gate'
 
 export function BackButton() {
@@ -52,6 +54,7 @@ export function BackButton() {
 
 export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: string }) {
   const { user } = useSession()
+  const { data: followed } = useQuery({ ...followedIdsQuery(user?.id ?? ''), enabled: Boolean(user) })
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const removeStory = useServerFn(deleteStory)
@@ -128,6 +131,15 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
               </Link>
               {isBotUser(post.userId) && <BotBadge />}
             </span>
+            {!isBotUser(post.userId) && post.userId !== user?.id && (
+              <FollowButton
+                userId={post.userId}
+                name={post.userName}
+                following={(followed ?? []).includes(post.userId)}
+                size="xs"
+                className="ml-1 min-w-0"
+              />
+            )}
             {post.readingTime && (
               <>
                 <Dot className="max-sm:hidden" />

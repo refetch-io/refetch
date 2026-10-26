@@ -9,6 +9,11 @@ import { Skeleton } from '../ui/misc'
 import { SegmentedControl } from '../ui/segmented-control'
 import { AppwriteIcon } from '../brand-icons'
 import { Sparkline } from './sparkline'
+import { Link } from '@tanstack/react-router'
+import { followedIdsQuery, whoToFollowQuery } from '@/lib/queries'
+import { useSession } from '@/lib/session'
+import { FollowButton } from '../people/follow-button'
+import { Avatar } from '../ui/avatar'
 
 const RANGES: Array<{ value: VisitorRange; label: string; caption: string }> = [
   { value: '24h', label: '24H', caption: 'Last 24 hours' },
@@ -179,7 +184,49 @@ export function InsightsRail({ children }: { children?: React.ReactNode }) {
       {children}
       <ActivityWidget />
       <TrendingWidget />
+      <WhoToFollow />
       <SponsorCard />
     </aside>
+  )
+}
+
+/** People to follow, Twitter style; Follow sends visitors to sign in. Hidden once nobody is left to suggest. */
+export function WhoToFollow() {
+  const { user } = useSession()
+  const { data: people } = useQuery(whoToFollowQuery(user?.id ?? ''))
+  const { data: followed } = useQuery({ ...followedIdsQuery(user?.id ?? ''), enabled: Boolean(user) })
+  if (!people || people.length === 0) return null
+  const following = new Set(followed ?? [])
+
+  return (
+    <Card className="py-3">
+      <SectionLabel className="px-4 pb-1">Who to follow</SectionLabel>
+      <ul role="list">
+        {people.map((person) => (
+          <li key={person.id} className="flex items-center gap-3 px-4 py-2">
+            <Link
+              to="/u/$userId"
+              params={{ userId: person.id }}
+              className="group flex min-w-0 flex-1 items-center gap-3"
+            >
+              <Avatar name={person.name} userId={person.id} size={36} />
+              <span className="min-w-0">
+                <span className="block truncate text-subhead font-semibold text-label group-hover:text-brand-text">
+                  {person.name}
+                </span>
+                <span className="block truncate text-caption-1 text-label-tertiary">{person.reason}</span>
+              </span>
+            </Link>
+            <FollowButton
+              userId={person.id}
+              name={person.name}
+              following={following.has(person.id)}
+              size="xs"
+              className="min-w-0"
+            />
+          </li>
+        ))}
+      </ul>
+    </Card>
   )
 }

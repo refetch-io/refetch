@@ -8,6 +8,7 @@ import type {
   PersonSummary,
   Profile,
   ProfileInsights,
+  SuggestedPerson,
   UserCommentsPage,
 } from '@/lib/types'
 import { FEED_MAX_PAGES, LIMITS } from '@/lib/constants'
@@ -17,7 +18,9 @@ import { listUserPosts } from '@/server/posts.server'
 import { joinChannel } from '@/server/channels.server'
 import { getProfileInsights } from '@/server/people.server'
 import {
+  getFollowedIds,
   getOnboardingSuggestions,
+  getWhoToFollow,
   getProfile,
   setFollowing,
   listUserComments,
@@ -129,3 +132,18 @@ export const completeOnboarding = createServerFn({ method: 'POST' })
 export const fetchProfileInsights = createServerFn({ method: 'GET' })
   .validator(z.object({ userId }))
   .handler(({ data }): Promise<ProfileInsights> => getProfileInsights(data.userId))
+
+export const fetchWhoToFollow = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<Array<SuggestedPerson>> => {
+    const user = await getSessionUser()
+    return getWhoToFollow(user)
+  },
+)
+
+/** IDs of everyone the signed-in person follows (for Follow buttons outside profiles). */
+export const fetchFollowedIds = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<Array<string>> => {
+    const user = await getSessionUser()
+    return user ? getFollowedIds(user.id) : []
+  },
+)

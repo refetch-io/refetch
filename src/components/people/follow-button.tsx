@@ -47,6 +47,7 @@ export function FollowButton({
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['profile', userId] }),
         queryClient.invalidateQueries({ queryKey: ['following'] }),
+        queryClient.invalidateQueries({ queryKey: ['followed'] }),
       ])
     } catch (error) {
       setOptimistic(!next)
