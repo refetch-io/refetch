@@ -223,6 +223,7 @@ Table IDs use the legacy name `*_COLLECTION_ID` but refer to **Appwrite Tables**
 | --- | --- |
 | `SITE_URL` | Canonical public origin for SEO metadata and social cards (default `https://refetch.io`). |
 | `PLAUSIBLE_API_KEY` | Optional. Powers “refetchers online” and the visitors chart. |
+| `APPWRITE_ANALYTICS_PROPERTY_ID` | Optional. Appwrite Analytics property; pageviews and custom events are sent alongside Plausible, from production hosts only. |
 | `PLAUSIBLE_SITE_ID` | Optional. Plausible site ID (e.g. `refetch.io`). |
 
 ### 4. OpenAI (global for AI functions)

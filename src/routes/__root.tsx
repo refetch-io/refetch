@@ -8,6 +8,7 @@ import { ThemeProvider, themeScript } from '@/lib/theme'
 import { Toaster } from '@/components/ui/toaster'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { NavigationProgress } from '@/components/layout/navigation'
+import { AnalyticsTracker } from '@/components/analytics-tracker'
 
 const PLAUSIBLE_QUEUE =
   'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}'
@@ -20,7 +21,8 @@ const SECURITY_HEADERS: Record<string, string> = {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://plausible.io",
+    // Appwrite Analytics ingestion goes to the project's Cloud endpoint.
+    "connect-src 'self' https://plausible.io https://*.appwrite.io",
     "frame-src 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
@@ -94,6 +96,7 @@ function RootComponent() {
   return (
     <>
       <NavigationProgress />
+      <AnalyticsTracker />
       <Outlet />
     </>
   )

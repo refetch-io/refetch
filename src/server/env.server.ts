@@ -35,6 +35,9 @@ export function getPublicConfig() {
   return {
     appwriteEndpoint: required('APPWRITE_ENDPOINT', 'NEXT_PUBLIC_APPWRITE_ENDPOINT').replace(/\/+$/, ''),
     appwriteProjectId: required('APPWRITE_PROJECT_ID', 'NEXT_PUBLIC_APPWRITE_PROJECT_ID'),
+    /** Appwrite Analytics property (public: ingestion is a public route). Empty disables tracking. */
+    analyticsPropertyId:
+      read('APPWRITE_ANALYTICS_PROPERTY_ID', 'NEXT_PUBLIC_APPWRITE_ANALYTICS_PROPERTY_ID') ?? '',
     siteUrl: getSiteUrl(),
   }
 }
