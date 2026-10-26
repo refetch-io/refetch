@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
-import { ArrowRight, BadgeCheck, ChevronDown, Link2, ScanSearch, Type } from 'lucide-react'
+import { ArrowRight, BadgeCheck, Link2, ScanSearch, Type } from 'lucide-react'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { submitStory } from '@/api/content'
@@ -15,7 +15,8 @@ import { Card } from '@/components/ui/card'
 import { Callout, Field } from '@/components/ui/field'
 import { Input, Textarea } from '@/components/ui/input'
 import { Favicon } from '@/components/favicon'
-import { ChannelIcon, groupByCategory, useChannels } from '@/components/channels/channel-parts'
+import { useChannels } from '@/components/channels/channel-parts'
+import { ChannelPicker } from '@/components/channels/channel-picker'
 
 export const Route = createFileRoute('/_app/submit')({
   validateSearch: z.object({ channel: z.string().max(64).optional().catch(undefined) }),
@@ -55,11 +56,10 @@ function SubmitPage() {
   const [title, setTitle] = React.useState('')
   const [comment, setComment] = React.useState('')
   const search = Route.useSearch()
-  const { channels, byId } = useChannels()
+  const { byId } = useChannels()
   const [channel, setChannel] = React.useState(
     search.channel && byId.has(search.channel) ? search.channel : '',
   )
-  const selected = channel ? byId.get(channel) : undefined
   const [pending, setPending] = React.useState(false)
   const [error, setError] = React.useState<{ message: string; existingId?: string } | null>(null)
   const [touched, setTouched] = React.useState(false)
@@ -174,36 +174,7 @@ function SubmitPage() {
             optional
             hint="Pick where it belongs. It always appears on the front page too."
           >
-            <div className="relative">
-              {selected && (
-                <ChannelIcon
-                  channel={selected}
-                  size={22}
-                  className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
-                />
-              )}
-              <select
-                value={channel}
-                onChange={(event) => setChannel(event.target.value)}
-                className={cn(
-                  'h-11 w-full appearance-none rounded-control border border-transparent bg-fill-secondary pr-10 text-callout text-label transition-[background-color,border-color,box-shadow] outline-none hover:bg-fill focus:border-brand/40 focus:bg-surface focus:shadow-[0_0_0_4px_var(--brand-tint)]',
-                  selected ? 'pl-11' : 'pl-3.5',
-                  !channel && 'text-label-tertiary',
-                )}
-              >
-                <option value="">No channel</option>
-                {groupByCategory(channels).map((group) => (
-                  <optgroup key={group.category} label={group.category}>
-                    {group.channels.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-label-tertiary" />
-            </div>
+            <ChannelPicker value={channel} onChange={setChannel} />
           </Field>
 
           <Field label="Start the discussion" htmlFor="comment" optional hint="Posted as the first comment.">

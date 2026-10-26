@@ -26,6 +26,7 @@ import { Input, Textarea } from '@/components/ui/input'
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@/components/ui/menu'
 import { EmptyState, Kbd, Skeleton } from '@/components/ui/misc'
 import { SegmentedControl } from '@/components/ui/segmented-control'
+import { ChannelPicker } from '@/components/channels/channel-picker'
 import { Spinner } from '@/components/ui/spinner'
 import { Tooltip } from '@/components/ui/tooltip'
 import { PostRow } from '@/components/feed/post-row'
@@ -449,6 +450,7 @@ function Buttons() {
 
 function Forms() {
   const [title, setTitle] = React.useState('The Curse of Soldered RAM')
+  const [channel, setChannel] = React.useState('rust')
   return (
     <Section
       id="forms"
@@ -473,6 +475,14 @@ function Forms() {
             </Field>
             <Field label="Comment" htmlFor="ds-comment" optional>
               <Textarea rows={3} placeholder="Grows as you type…" />
+            </Field>
+            <Field
+              label="Channel"
+              htmlFor="ds-channel"
+              optional
+              hint="Searchable picker, grouped by category."
+            >
+              <ChannelPicker value={channel} onChange={setChannel} />
             </Field>
           </div>
         </Demo>
