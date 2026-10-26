@@ -27,6 +27,7 @@ import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@/compo
 import { EmptyState, Kbd, Skeleton } from '@/components/ui/misc'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { ChannelPicker } from '@/components/channels/channel-picker'
+import { FeedEndArt, type Season, type TimeOfDay } from '@/components/feed/feed-end-art'
 import { Spinner } from '@/components/ui/spinner'
 import { Tooltip } from '@/components/ui/tooltip'
 import { PostRow } from '@/components/feed/post-row'
@@ -105,6 +106,7 @@ function DesignSystemPage() {
         <Forms />
         <Controls />
         <Content />
+        <Scenes />
         <Feedback />
         <Overlays />
       </div>
@@ -754,6 +756,46 @@ function Overlays() {
           toast('Nothing was deleted. This is a demo.')
         }}
       />
+    </Section>
+  )
+}
+
+const TIMES: Array<TimeOfDay> = ['morning', 'day', 'evening', 'night']
+const SEASONS: Array<Season> = ['spring', 'summer', 'autumn', 'winter']
+
+function Scenes() {
+  return (
+    <Section
+      id="scenes"
+      title="End-of-feed scenes"
+      description="The meadow follows the reader's local time of day and season (flipped in Southern Hemisphere time zones)."
+    >
+      <div className="overflow-x-auto rounded-card bg-surface p-4 shadow-card">
+        <table className="w-full min-w-[720px] border-separate border-spacing-2 text-caption-1 text-label-tertiary">
+          <thead>
+            <tr>
+              <th />
+              {TIMES.map((time) => (
+                <th key={time} className="font-semibold capitalize">
+                  {time}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {SEASONS.map((season) => (
+              <tr key={season}>
+                <th className="pr-2 text-left font-semibold capitalize">{season}</th>
+                {TIMES.map((time) => (
+                  <td key={time}>
+                    <FeedEndArt done scene={{ time, season }} className="mx-auto h-[78px] w-[156px]" />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Section>
   )
 }
