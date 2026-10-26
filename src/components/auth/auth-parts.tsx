@@ -124,13 +124,18 @@ export function StoryTeaser({ storyId, label }: { storyId: string | undefined; l
   })
   if (!id || !story) return null
   return (
-    <div className="mb-7 animate-rise-in rounded-[16px] bg-brand-tint p-3.5 ring-1 ring-brand/15">
-      <p className="text-caption-1 font-semibold text-brand-text">{label}</p>
-      <p className="mt-1.5 flex items-center gap-1.5 text-caption-1 text-label-secondary">
-        <Favicon domain={story.domain} size={14} />
-        {story.domain ?? 'refetch.io'}
+    <div className="mb-8 animate-rise-in">
+      <p className="px-1 text-caption-1 font-semibold tracking-[0.06em] text-label-tertiary uppercase">
+        {label}
       </p>
-      <p className="mt-1 line-clamp-2 text-subhead font-semibold text-label">{story.title}</p>
+      {/* Same shape as a story row: the thing they wanted, nothing louder. */}
+      <div className="mt-2 flex items-start gap-3 rounded-card bg-surface p-3.5 shadow-card">
+        <Favicon domain={story.domain} size={20} className="mt-0.5" />
+        <div className="min-w-0 flex-1">
+          <p className="line-clamp-2 text-subhead font-semibold text-label">{story.title}</p>
+          <p className="mt-0.5 truncate text-caption-1 text-label-tertiary">{story.domain ?? 'refetch.io'}</p>
+        </div>
+      </div>
     </div>
   )
 }
