@@ -5,6 +5,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { Check, Link2, Send, Share } from 'lucide-react'
 import { toast } from 'sonner'
 import { shareStoryInMessages } from '@/api/messages'
+import { trackStoryShare } from '@/lib/analytics'
 import { LIMITS } from '@/lib/constants'
 import { inboxQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
@@ -62,6 +63,7 @@ export function ShareDialog({
         },
       })
       if (!result.ok) return toast.error(result.error)
+      trackStoryShare(post.id, 'message')
       void queryClient.invalidateQueries({ queryKey: ['inbox'] })
       void queryClient.invalidateQueries({ queryKey: ['messages'] })
       onOpenChange(false)
@@ -87,11 +89,24 @@ export function ShareDialog({
       description={<span className="line-clamp-1">{post.title}</span>}
       footer={
         <div className="flex items-center gap-2">
-          <Button variant="secondary" size="md" onClick={() => void copyToClipboard(url)}>
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={async () => {
+              if (await copyToClipboard(url)) trackStoryShare(post.id, 'copy')
+            }}
+          >
             <Link2 />
             Copy link
           </Button>
-          <Button variant="ghost" size="md" onClick={() => void shareLink({ title: post.title, url })}>
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={async () => {
+              const method = await shareLink({ title: post.title, url })
+              if (method) trackStoryShare(post.id, method)
+            }}
+          >
             <Share />
             More
           </Button>

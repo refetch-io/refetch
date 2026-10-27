@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { deleteStory } from '@/api/content'
-import { trackPostClick } from '@/lib/analytics'
+import { trackArticleOpen, trackPostClick, trackStoryShare } from '@/lib/analytics'
 import { followedIdsQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
 import { copyToClipboard } from '@/lib/share'
@@ -161,9 +161,13 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(event) => {
-                    if (gate(event, post)) trackPostClick(post.id, post.title, true)
+                    if (!gate(event, post)) return
+                    trackPostClick(post.id, post.title, true)
+                    trackArticleOpen(post.id, 'thread')
                   }}
-                  onAuxClick={(event) => gate(event, post)}
+                  onAuxClick={(event) => {
+                    if (gate(event, post) && event.button === 1) trackArticleOpen(post.id, 'thread')
+                  }}
                   data-kb-action="open"
                 >
                   <BookOpen />
@@ -184,7 +188,9 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
               aria-label="Copy link"
               title="Copy link"
               className="max-sm:hidden"
-              onClick={() => copyToClipboard(permalink)}
+              onClick={async () => {
+                if (await copyToClipboard(permalink)) trackStoryShare(post.id, 'copy')
+              }}
             >
               <Link2 />
             </Button>

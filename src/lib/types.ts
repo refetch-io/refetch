@@ -86,6 +86,22 @@ export interface VisitorPoint {
   visitors: number
 }
 
+/** A thread's Appwrite Analytics totals since it was posted. */
+export interface ThreadStats {
+  views: number
+  /** Unique people who viewed the thread. */
+  visitors: number
+  /** Times the linked article was opened, from a feed or from the thread. */
+  articleOpens: number
+  shares: number
+  /** Chart buckets: hourly for the first two days, then daily (30 days at most). */
+  interval: '1h' | '1d'
+  /** Views per bucket (`visitors` holds the view count, matching the Sparkline's points). */
+  points: Array<VisitorPoint>
+  /** Where viewers came from, most first. */
+  sources: Array<{ label: string; visitors: number }>
+}
+
 export type ActionResult<T = undefined> =
   { ok: true; data: T } | { ok: false; error: string; code?: string; existingId?: string }
 

@@ -2,7 +2,13 @@ import { infiniteQueryOptions, keepPreviousData, queryOptions } from '@tanstack/
 import type { ChannelSort, FeedSort, VisitorRange } from './types'
 import { fetchChannelDirectory, fetchChannelFeed, fetchFollowingFeed, searchRefetch } from '@/api/channels'
 import { fetchFeed, fetchMyPosts, fetchThread } from '@/api/content'
-import { fetchGitHubStars, fetchLiveVisitors, fetchTrendingTopics, fetchVisitorSeries } from '@/api/insights'
+import {
+  fetchGitHubStars,
+  fetchLiveVisitors,
+  fetchThreadStats,
+  fetchTrendingTopics,
+  fetchVisitorSeries,
+} from '@/api/insights'
 import { fetchPublicConfig, fetchSession } from '@/api/session'
 import { fetchConversation, fetchInbox, fetchMessages, fetchUnreadCount } from '@/api/messages'
 import { fetchNotificationCount, fetchNotificationSettings, fetchNotifications } from '@/api/notifications'
@@ -73,6 +79,14 @@ export const visitorSeriesQuery = (range: VisitorRange) =>
   queryOptions({
     queryKey: ['insights', 'series', range],
     queryFn: () => fetchVisitorSeries({ data: { range } }),
+    staleTime: 5 * 60_000,
+  })
+
+/** A thread's analytics (cached on the server for five minutes). */
+export const threadStatsQuery = (postId: string) =>
+  queryOptions({
+    queryKey: ['insights', 'thread', postId],
+    queryFn: () => fetchThreadStats({ data: { postId } }),
     staleTime: 5 * 60_000,
   })
 

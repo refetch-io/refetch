@@ -2,7 +2,8 @@ import * as React from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { MessageCircleOff } from 'lucide-react'
-import { configQuery, threadQuery } from '@/lib/queries'
+import { preloadWithin } from '@/lib/preload'
+import { configQuery, threadQuery, threadStatsQuery } from '@/lib/queries'
 import type { CommentNode } from '@/lib/comments'
 import { seo } from '@/lib/seo'
 import type { Comment } from '@/lib/types'
@@ -13,12 +14,17 @@ import { SponsorCard } from '@/components/insights/insights-rail'
 import { CommentsSection } from '@/components/thread/comments'
 import { Composer } from '@/components/thread/composer'
 import { BackButton, StoryHeader, StoryRailCard, StorySummary } from '@/components/thread/story-header'
+import { ThreadStatsCard } from '@/components/thread/thread-stats'
+
+/** Longest the page waits for its stats, so they usually render with it but never hold it up. */
+const STATS_WAIT_MS = 300
 
 export const Route = createFileRoute('/_app/threads/$threadId')({
   loader: async ({ context, params }) => {
     const [thread, config] = await Promise.all([
       context.queryClient.ensureQueryData(threadQuery(params.threadId, context.user?.id ?? null)),
       context.queryClient.ensureQueryData(configQuery()),
+      preloadWithin(context.queryClient, threadStatsQuery(params.threadId), STATS_WAIT_MS),
     ])
     return {
       title: thread.post.title,
@@ -81,6 +87,8 @@ function ThreadPage() {
         <BackButton />
         <StoryHeader post={thread.post} siteUrl={config.siteUrl} />
         <StorySummary post={thread.post} />
+        {/* Wide screens show the full card in the rail. */}
+        <ThreadStatsCard postId={thread.post.id} compact className="mt-3 xl:hidden" />
         <CommentsSection
           thread={thread}
           queryKey={query.queryKey}
@@ -100,6 +108,7 @@ function ThreadPage() {
         className="sticky top-[76px] hidden w-[300px] shrink-0 space-y-4 self-start xl:block"
       >
         <StoryRailCard post={thread.post} />
+        <ThreadStatsCard postId={thread.post.id} />
         <SponsorCard />
       </aside>
     </div>

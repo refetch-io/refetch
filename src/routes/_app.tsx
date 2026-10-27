@@ -3,6 +3,7 @@ import { AppHeader } from '@/components/layout/header'
 import { Sidebar, TabBar } from '@/components/layout/navigation'
 import { CommandCenterProvider } from '@/components/command-center'
 import { KeyboardShortcutsProvider } from '@/components/keyboard-shortcuts'
+import { preloadWithin } from '@/lib/preload'
 import { channelDirectoryQuery, githubStarsQuery, trendingTopicsQuery, whoToFollowQuery } from '@/lib/queries'
 
 /** Longest the first render waits for shell widgets. */
@@ -12,15 +13,13 @@ export const Route = createFileRoute('/_app')({
   loader: async ({ context }) => {
     // The header's star count and the rail's trending topics and suggestions render
     // with the page so they don't pop in, but a slow upstream never holds the page.
-    const widgets = Promise.all([
-      context.queryClient.ensureQueryData(githubStarsQuery()).catch(() => null),
-      context.queryClient.ensureQueryData(trendingTopicsQuery()).catch(() => null),
-      context.queryClient.ensureQueryData(whoToFollowQuery(context.user?.id ?? '')).catch(() => null),
-    ])
+    const { queryClient } = context
     await Promise.all([
       // Channel names and memberships are used across the shell (sidebar, post tags).
-      context.queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
-      Promise.race([widgets, new Promise((resolve) => setTimeout(resolve, WIDGET_WAIT_MS))]),
+      queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
+      preloadWithin(queryClient, githubStarsQuery(), WIDGET_WAIT_MS),
+      preloadWithin(queryClient, trendingTopicsQuery(), WIDGET_WAIT_MS),
+      preloadWithin(queryClient, whoToFollowQuery(context.user?.id ?? ''), WIDGET_WAIT_MS),
     ])
   },
   component: AppLayout,

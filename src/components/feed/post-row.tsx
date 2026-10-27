@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight, MessageCircle } from 'lucide-react'
-import { trackPostClick } from '@/lib/analytics'
+import { trackArticleOpen, trackPostClick } from '@/lib/analytics'
 import type { Post } from '@/lib/types'
 import { withRef } from '@/lib/url'
 import { cn, formatDateTime, timeAgo } from '@/lib/utils'
@@ -71,9 +71,13 @@ export function PostRow({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(event) => {
-                if (gate(event, post)) trackPostClick(post.id, post.title, true)
+                if (!gate(event, post)) return
+                trackPostClick(post.id, post.title, true)
+                trackArticleOpen(post.id, 'feed')
               }}
-              onAuxClick={(event) => gate(event, post)}
+              onAuxClick={(event) => {
+                if (gate(event, post) && event.button === 1) trackArticleOpen(post.id, 'feed')
+              }}
               data-kb-action="open"
               className={titleClass}
             >

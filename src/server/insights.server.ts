@@ -1,16 +1,19 @@
-import type { TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
+import type { ThreadStats, TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
+import { buildThreadStats, threadStatsWindow, type MetricRow } from '@/lib/thread-stats'
 import { Query, db, type Row } from './db.server'
 import { getAppwriteConfig, getPublicConfig } from './env.server'
 
-/** Tiny TTL cache that serves stale data when the upstream fails. */
-function createCache<T>() {
+/** Tiny TTL cache that serves stale data when the upstream fails. Oldest keys go past `maxEntries`. */
+function createCache<T>(maxEntries = Infinity) {
   const entries = new Map<string, { value: T; expires: number }>()
   return async (key: string, ttl: number, load: () => Promise<T>, fallback: T): Promise<T> => {
     const hit = entries.get(key)
     if (hit && hit.expires > Date.now()) return hit.value
     try {
       const value = await load()
+      entries.delete(key)
       entries.set(key, { value, expires: Date.now() + ttl })
+      if (entries.size > maxEntries) entries.delete(entries.keys().next().value!)
       return value
     } catch (error) {
       console.error(`[insights] ${key} failed`, error)
@@ -24,14 +27,23 @@ function createCache<T>() {
 type Interval = '1h' | '1d' | '1m'
 
 interface MetricsResult {
-  metrics: Array<{ date: string | null; visitors: number | null }>
+  metrics: Array<MetricRow>
 }
+
+/** `equal` filter in Appwrite's JSON query syntax. */
+const equal = (attribute: string, value: string) =>
+  JSON.stringify({ method: 'equal', attribute, values: [value] })
 
 /** Reads the property's metrics with the server key (needs the `analytics.read` scope). */
 async function analytics(params: {
   startAt: Date
   endAt: Date
   interval?: Interval
+  /** Break the metrics down by one dimension (page, eventName, referrerSource…). */
+  dimension?: string
+  /** Filters on the underlying events, built with `equal`. */
+  queries?: Array<string>
+  limit?: number
 }): Promise<MetricsResult> {
   const { appwriteEndpoint, appwriteProjectId, analyticsPropertyId } = getPublicConfig()
   if (!analyticsPropertyId)
@@ -40,6 +52,9 @@ async function analytics(params: {
   url.searchParams.set('startAt', params.startAt.toISOString())
   url.searchParams.set('endAt', params.endAt.toISOString())
   if (params.interval) url.searchParams.set('interval', params.interval)
+  if (params.dimension) url.searchParams.append('dimensions[]', params.dimension)
+  for (const query of params.queries ?? []) url.searchParams.append('queries[]', query)
+  if (params.limit) url.searchParams.set('limit', String(params.limit))
   const response = await fetch(url, {
     headers: { 'X-Appwrite-Project': appwriteProjectId, 'X-Appwrite-Key': getAppwriteConfig().apiKey },
     signal: AbortSignal.timeout(8_000),
@@ -127,6 +142,66 @@ export function getVisitorSeries(range: VisitorRange) {
         })),
         total: Number(totals.metrics[0]?.visitors ?? 0),
       }
+    },
+    null,
+  )
+}
+
+/* ───────────────────────────────── Thread stats ───────────────────────────────── */
+
+const threadStatsCache = createCache<ThreadStats | null>(1_000)
+
+async function postCreatedAt(postId: string): Promise<Date | null> {
+  const { tables, ids } = db()
+  try {
+    const row = await tables.getRow({
+      databaseId: ids.databaseId,
+      tableId: ids.posts,
+      rowId: postId,
+      queries: [Query.select(['$createdAt'])],
+    })
+    return new Date(String(row.$createdAt))
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Views, unique viewers, article opens, shares, a views chart and top sources
+ * for one thread. Views and viewers count pageviews only, since article opens
+ * from the feed are recorded against the thread's URL too.
+ */
+export function getThreadStats(postId: string): Promise<ThreadStats | null> {
+  return threadStatsCache(
+    `thread:${postId}`,
+    5 * 60_000,
+    async () => {
+      if (!getPublicConfig().analyticsPropertyId) return null
+      const createdAt = await postCreatedAt(postId)
+      if (!createdAt) return null
+      const window = threadStatsWindow(createdAt, new Date())
+      const page = equal('page', `/threads/${postId}`)
+      const pageviews = [page, equal('eventName', 'pageview')]
+      const span = { startAt: window.startAt, endAt: window.endAt }
+
+      const [byEvent, byHostname, series, bySource] = await Promise.all([
+        analytics({ ...span, dimension: 'eventName', queries: [page], limit: 50 }),
+        analytics({ ...span, dimension: 'hostname', queries: pageviews }),
+        analytics({
+          startAt: window.buckets[0],
+          endAt: window.endAt,
+          interval: window.interval,
+          queries: pageviews,
+        }),
+        analytics({ ...span, dimension: 'referrerSource', queries: pageviews, limit: 5 }),
+      ])
+      return buildThreadStats({
+        window,
+        byEvent: byEvent.metrics,
+        byHostname: byHostname.metrics,
+        series: series.metrics,
+        bySource: bySource.metrics,
+      })
     },
     null,
   )
