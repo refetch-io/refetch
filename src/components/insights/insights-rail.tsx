@@ -45,7 +45,8 @@ export function ActivityWidget() {
   const caption = RANGES.find((r) => r.value === range)?.caption
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between gap-2.5">
+      {/* Fixed height so the count replacing its skeleton doesn't nudge the card. */}
+      <div className="flex h-6 items-center justify-between gap-2.5">
         {live.data == null ? (
           <Skeleton className="h-4 w-36 rounded-full" />
         ) : (
@@ -190,11 +191,39 @@ export function InsightsRail({ children }: { children?: React.ReactNode }) {
   )
 }
 
+/** Suggestions the server returns (getWhoToFollow's default). */
+const WHO_TO_FOLLOW_COUNT = 3
+
 /** People to follow, Twitter style; Follow sends visitors to sign in. Hidden once nobody is left to suggest. */
 export function WhoToFollow() {
   const { user } = useSession()
-  const { data: people } = useQuery(whoToFollowQuery(user?.id ?? ''))
+  const { data: people, isPending } = useQuery(whoToFollowQuery(user?.id ?? ''))
   const { data: followed } = useQuery({ ...followedIdsQuery(user?.id ?? ''), enabled: Boolean(user) })
+  if (isPending) {
+    // Same rows as the loaded list, so the cards below don't jump when people arrive.
+    return (
+      <Card className="py-3" aria-hidden>
+        <SectionLabel className="px-4 pb-1">Who to follow</SectionLabel>
+        <ul>
+          {Array.from({ length: WHO_TO_FOLLOW_COUNT }, (_, i) => (
+            <li key={i} className="flex items-center gap-3 px-4 py-2">
+              <Skeleton className="size-9 shrink-0 rounded-full" />
+              {/* Skeletons sit in real line boxes so each row matches the loaded height exactly. */}
+              <span className="min-w-0 flex-1">
+                <span className="flex h-[1lh] items-center text-subhead">
+                  <Skeleton className="h-3.5 rounded-full" style={{ width: `${50 + ((i * 17) % 30)}%` }} />
+                </span>
+                <span className="flex h-[1lh] items-center text-caption-1">
+                  <Skeleton className="h-3 w-3/4 rounded-full" />
+                </span>
+              </span>
+              <Skeleton className="h-7 w-16 shrink-0 rounded-full" />
+            </li>
+          ))}
+        </ul>
+      </Card>
+    )
+  }
   if (!people || people.length === 0) return null
   const following = new Set(followed ?? [])
 

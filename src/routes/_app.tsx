@@ -3,18 +3,19 @@ import { AppHeader } from '@/components/layout/header'
 import { Sidebar, TabBar } from '@/components/layout/navigation'
 import { CommandCenterProvider } from '@/components/command-center'
 import { KeyboardShortcutsProvider } from '@/components/keyboard-shortcuts'
-import { channelDirectoryQuery, githubStarsQuery, trendingTopicsQuery } from '@/lib/queries'
+import { channelDirectoryQuery, githubStarsQuery, trendingTopicsQuery, whoToFollowQuery } from '@/lib/queries'
 
-/** Longest the first render waits for shell widgets (both are cached on the server). */
+/** Longest the first render waits for shell widgets. */
 const WIDGET_WAIT_MS = 300
 
 export const Route = createFileRoute('/_app')({
   loader: async ({ context }) => {
-    // The header's star count and the rail's trending topics render with the
-    // page so they don't pop in, but a slow upstream never holds the page.
+    // The header's star count and the rail's trending topics and suggestions render
+    // with the page so they don't pop in, but a slow upstream never holds the page.
     const widgets = Promise.all([
       context.queryClient.ensureQueryData(githubStarsQuery()).catch(() => null),
       context.queryClient.ensureQueryData(trendingTopicsQuery()).catch(() => null),
+      context.queryClient.ensureQueryData(whoToFollowQuery(context.user?.id ?? '')).catch(() => null),
     ])
     await Promise.all([
       // Channel names and memberships are used across the shell (sidebar, post tags).
