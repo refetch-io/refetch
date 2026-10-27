@@ -43,7 +43,7 @@ export function LogoMark({ className, title = 'Refetch' }: LogoProps) {
   )
 }
 
-/** Mark + wordmark lockup. The mark is always #4e1cb3; the wordmark turns white in dark mode for legibility. */
+/** Mark + wordmark lockup. The mark is always #4e1cb3; the wordmark is near-black in light mode and white in dark mode. */
 export function Logo({ className, title = 'Refetch' }: LogoProps) {
   return (
     <svg viewBox="0 0 913 203" role="img" aria-label={title} className={className}>

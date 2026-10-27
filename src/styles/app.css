@@ -62,9 +62,9 @@
   --glass-strong: rgb(255 255 255 / 0.86);
   --glass-border: rgb(0 0 0 / 0.07);
 
-  /* Brand mark — identical in every theme, matching the original logo. */
+  /* Brand mark — identical in every theme; the wordmark follows the label color. */
   --logo: #4e1cb3;
-  --logo-wordmark: #4e1cb3;
+  --logo-wordmark: #1d1d1f;
 
   /* Liquid Glass (the floating mobile tab bar) */
   --lg-bg: rgb(255 255 255 / 0.5);
