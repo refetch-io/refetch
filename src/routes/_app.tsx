@@ -44,7 +44,7 @@ function AppLayout() {
               Skip to content
             </a>
             <AppHeader />
-            <div className="mx-auto flex max-w-[1320px] gap-8 px-4 lg:px-6">
+            <div className="mx-auto flex max-w-[1480px] gap-8 px-4 lg:px-6">
               <Sidebar />
               <main
                 id="main"

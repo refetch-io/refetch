@@ -31,7 +31,7 @@ function items(): Array<HTMLElement> {
 
 /** First row whose top is below the sticky header. */
 function firstOnScreen(list: Array<HTMLElement>): number {
-  const index = list.findIndex((el) => el.getBoundingClientRect().bottom > 110)
+  const index = list.findIndex((el) => el.getBoundingClientRect().bottom > 132)
   return index < 0 ? 0 : index
 }
 

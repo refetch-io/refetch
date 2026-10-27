@@ -24,6 +24,32 @@ export function FeedColumn({ header, children }: { header: React.ReactNode; chil
   )
 }
 
+/**
+ * Sticky header of a column. It stays where it rests below the app header
+ * instead of sliding up to meet it: a strip of page background fills the gap
+ * above it and two corner pieces keep its rounded corners clear of the list
+ * scrolling underneath. The offsets match the top padding of `main`.
+ */
+function StickyColumnHeader({ className, children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <div className="sticky top-[72px] z-20 sm:top-[80px] lg:top-[76px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-2 bottom-full h-5 bg-bg sm:h-7 lg:h-6"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute top-0 left-0 size-(--radius-card) bg-[radial-gradient(circle_at_100%_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute top-0 right-0 size-(--radius-card) bg-[radial-gradient(circle_at_0_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
+      />
+      <div className={cn('rounded-t-card border-b border-separator glass', className)}>{children}</div>
+    </div>
+  )
+}
+
 const FEED_TABS = [
   { to: '/', label: 'Top' },
   { to: '/new', label: 'New' },
@@ -36,7 +62,7 @@ export function FeedTabs({ title }: { title: string }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const { user } = useSession()
   return (
-    <div className="sticky top-[52px] z-20 rounded-t-card border-b border-separator glass">
+    <StickyColumnHeader>
       {/* The visible tabs name the page; keep a real heading for assistive tech. */}
       <h1 className="sr-only">{title}</h1>
       <nav aria-label="Feeds" className="flex">
@@ -62,7 +88,7 @@ export function FeedTabs({ title }: { title: string }) {
           )
         })}
       </nav>
-    </div>
+    </StickyColumnHeader>
   )
 }
 
@@ -77,12 +103,12 @@ export function ColumnTitle({
   actions?: React.ReactNode
 }) {
   return (
-    <div className="sticky top-[52px] z-20 flex min-h-[52px] items-center gap-3 rounded-t-card border-b border-separator glass px-4 py-2 sm:px-5">
+    <StickyColumnHeader className="flex min-h-[52px] items-center gap-3 px-4 py-2 sm:px-5">
       <div className="min-w-0 flex-1">
         <h1 className="truncate text-headline text-label">{title}</h1>
         {subtitle && <p className="truncate text-caption-1 text-label-secondary">{subtitle}</p>}
       </div>
       {actions}
-    </div>
+    </StickyColumnHeader>
   )
 }

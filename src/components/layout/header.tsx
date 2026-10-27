@@ -49,7 +49,7 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-glass-border glass">
-      <div className="mx-auto flex h-[52px] max-w-[1320px] items-center gap-3 px-4 lg:px-6">
+      <div className="mx-auto flex h-[52px] max-w-[1480px] items-center gap-3 px-4 lg:px-6">
         <Link
           to="/"
           aria-label="Refetch, top stories"
