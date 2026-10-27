@@ -81,7 +81,7 @@ function FollowingPage() {
   }
 
   return (
-    <FeedLayout column={header}>
+    <FeedLayout column={header} feed={data}>
       <FeedList
         page={data}
         ranked

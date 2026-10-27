@@ -32,7 +32,7 @@ function ShowPage() {
   const { data } = useSuspenseQuery(feedQuery('show', page, user?.id ?? null))
 
   return (
-    <FeedLayout column={<FeedTabs title={TITLE} />}>
+    <FeedLayout column={<FeedTabs title={TITLE} />} feed={data}>
       <FeedList
         page={data}
         ranked

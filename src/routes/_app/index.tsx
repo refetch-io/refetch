@@ -33,7 +33,7 @@ function TopPage() {
   const { data } = useSuspenseQuery(feedQuery('top', page, user?.id ?? null))
 
   return (
-    <FeedLayout column={<FeedTabs title={TITLE} />}>
+    <FeedLayout column={<FeedTabs title={TITLE} />} feed={data}>
       <FeedList
         page={data}
         ranked

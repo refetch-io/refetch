@@ -33,7 +33,7 @@ function SavedPage() {
   const { data } = useSuspenseQuery(savedStoriesQuery(page, user.id))
 
   return (
-    <FeedLayout column={<ColumnTitle title={TITLE} subtitle={DESCRIPTION} />}>
+    <FeedLayout column={<ColumnTitle title={TITLE} subtitle={DESCRIPTION} />} feed={data}>
       <FeedList
         page={data ?? { posts: [], page, hasMore: false }}
         empty={{

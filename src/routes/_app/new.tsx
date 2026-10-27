@@ -32,7 +32,7 @@ function NewPage() {
   const { data } = useSuspenseQuery(feedQuery('new', page, user?.id ?? null))
 
   return (
-    <FeedLayout column={<FeedTabs title={TITLE} />}>
+    <FeedLayout column={<FeedTabs title={TITLE} />} feed={data}>
       <FeedList
         page={data}
         empty={{

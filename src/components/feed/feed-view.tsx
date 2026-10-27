@@ -63,15 +63,16 @@ export function FeedList({ page, ranked, hideChannel, empty }: FeedListProps) {
           />
         ))}
       </List>
-      <FeedPagination page={page.page} hasMore={page.hasMore} />
+      {/* In a column, FeedLayout's `feed` puts pagination below the card instead. */}
+      {!inColumn && <FeedPagination page={page.page} hasMore={page.hasMore} />}
     </>
   )
 }
 
+/** End-of-page art and Previous/Next, always below the list's card. */
 export function FeedPagination({ page, hasMore }: { page: number; hasMore: boolean }) {
-  const inColumn = useInColumn()
   return (
-    <div className={cn('text-center', inColumn ? 'border-t border-separator px-4 pt-10 pb-8' : 'mt-12')}>
+    <div className="mt-12 text-center">
       <FeedEndArt done={!hasMore} className="mx-auto h-[104px] w-[208px]" />
       <p className="mt-3 text-headline text-label">
         {hasMore ? 'You’ve reached the end of this page' : 'That’s everything for now'}
