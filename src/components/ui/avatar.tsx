@@ -35,6 +35,9 @@ function useAvatarVersion(userId: string | undefined) {
   )
 }
 
+/* Photos that already loaded or 404'd this session, so remounts render the final state straight away. */
+const photoStatus = new Map<string, 'loaded' | 'failed'>()
+
 interface AvatarProps {
   name: string
   /** With a user ID, shows their photo from Appwrite Avatars (uploaded, OAuth, Gravatar…). */
@@ -43,16 +46,52 @@ interface AvatarProps {
   className?: string
 }
 
-/** Profile photo over a Contacts-style monogram, which shows while loading or if there's no photo. */
+/**
+ * Profile photo, or a Contacts-style monogram when there's none. While a photo we haven't seen yet
+ * is loading, the circle stays a quiet neutral fill and the photo fades in, so a monogram never
+ * flashes up before the real picture.
+ */
 export function Avatar({ name, userId, size = 32, className }: AvatarProps) {
   const { data: config } = useSuspenseQuery(configQuery())
   const version = useAvatarVersion(userId)
-  const [failed, setFailed] = React.useState(false)
   const [from, to] = GRADIENTS[hashString(name || '?') % GRADIENTS.length]
-  const photo = userId && !isBotUser(userId) && !failed
   const pixels = Math.min(512, Math.ceil(size * 2))
+  const src =
+    userId && !isBotUser(userId)
+      ? `${config.appwriteEndpoint}/avatars/photo?userId=${encodeURIComponent(userId)}&name=${encodeURIComponent(
+          name || '',
+        )}&width=${pixels}&height=${pixels}&project=${config.appwriteProjectId}${version ? `&v=${version}` : ''}`
+      : undefined
 
-  React.useEffect(() => setFailed(false), [userId, version])
+  const [status, setStatus] = React.useState<'pending' | 'loaded' | 'failed'>(() =>
+    src ? (photoStatus.get(src) ?? 'pending') : 'failed',
+  )
+  /* Only photos seen for the first time fade in; cached ones paint immediately. */
+  const [fresh, setFresh] = React.useState(() => !src || photoStatus.get(src) !== 'loaded')
+
+  React.useEffect(() => {
+    const cached = src ? photoStatus.get(src) : 'failed'
+    setFresh(cached !== 'loaded')
+    setStatus(cached ?? 'pending')
+  }, [src])
+
+  const settle = React.useCallback(
+    (next: 'loaded' | 'failed') => {
+      if (src) photoStatus.set(src, next)
+      setStatus(next)
+    },
+    [src],
+  )
+
+  /* Server-rendered images can finish before hydration attaches onLoad/onError. */
+  const imgRef = React.useCallback(
+    (img: HTMLImageElement | null) => {
+      if (img?.complete) settle(img.naturalWidth > 0 ? 'loaded' : 'failed')
+    },
+    [settle],
+  )
+
+  const monogram = status === 'failed'
 
   return (
     <span
@@ -65,24 +104,30 @@ export function Avatar({ name, userId, size = 32, className }: AvatarProps) {
         width: size,
         height: size,
         fontSize: Math.round(size * 0.4),
-        backgroundImage: `linear-gradient(180deg, ${from}, ${to})`,
+        backgroundColor: 'var(--fill)',
+        backgroundImage: monogram ? `linear-gradient(180deg, ${from}, ${to})` : undefined,
         boxShadow: 'inset 0 0 0 0.5px rgb(0 0 0 / 0.08)',
       }}
     >
-      {initials(name)}
-      {photo && (
+      {monogram && initials(name)}
+      {src && status !== 'failed' && (
         <img
-          src={`${config.appwriteEndpoint}/avatars/photo?userId=${encodeURIComponent(userId)}&name=${encodeURIComponent(
-            name || '',
-          )}&width=${pixels}&height=${pixels}&project=${config.appwriteProjectId}${version ? `&v=${version}` : ''}`}
+          key={src}
+          ref={imgRef}
+          src={src}
           alt=""
           width={size}
           height={size}
-          loading="lazy"
-          decoding="async"
+          loading={fresh ? 'lazy' : 'eager'}
+          decoding={fresh ? 'async' : 'sync'}
           draggable={false}
-          onError={() => setFailed(true)}
-          className="absolute inset-0 size-full object-cover"
+          onLoad={() => settle('loaded')}
+          onError={() => settle('failed')}
+          className={cn(
+            'absolute inset-0 size-full object-cover',
+            fresh && 'transition-opacity duration-200',
+            status === 'loaded' ? 'opacity-100' : 'opacity-0',
+          )}
         />
       )}
     </span>
