@@ -62,7 +62,8 @@ export function ActivityWidget() {
         <SectionLabel className="px-0">Visitors</SectionLabel>
         <span className="text-caption-1 text-label-tertiary">{caption}</span>
       </div>
-      <div className="mt-0.5 h-8">
+      {/* Flex, so the skeleton's top margin can't collapse through and shift everything below. */}
+      <div className="mt-0.5 flex h-8">
         {series.data ? (
           <p className="animate-fade-in font-rounded text-title-2 text-label tabular">
             {compactNumber(series.data.total)}
