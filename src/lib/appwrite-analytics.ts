@@ -30,8 +30,8 @@ function getTracking(config?: AnalyticsConfig): Promise<Tracking | null> {
   }
   tracking = import('appwrite').then(({ Analytics, Client, Tracking }) => {
     const client = new Client().setEndpoint(config.appwriteEndpoint).setProject(config.appwriteProjectId)
-    // Plausible's script ignores Do Not Track; respecting it on only one of the
-    // two backends would skew every comparison between them.
+    // Do Not Track has been ignored since tracking began; honouring it now
+    // would read as a traffic drop in the visitor history.
     return new Tracking(new Analytics(client), config.analyticsPropertyId, { respectDoNotTrack: false })
   })
   return tracking

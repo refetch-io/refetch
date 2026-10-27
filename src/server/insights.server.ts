@@ -1,6 +1,6 @@
 import type { TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
 import { Query, db, type Row } from './db.server'
-import { getPlausibleConfig } from './env.server'
+import { getAppwriteConfig, getPublicConfig } from './env.server'
 
 /** Tiny TTL cache that serves stale data when the upstream fails. */
 function createCache<T>() {
@@ -19,28 +19,34 @@ function createCache<T>() {
   }
 }
 
-/* ───────────────────────────── Plausible analytics ───────────────────────────── */
+/* ───────────────────────────── Appwrite Analytics ───────────────────────────── */
 
-const PLAUSIBLE_QUERY_URL = 'https://plausible.io/api/v2/query'
+type Interval = '1h' | '1d' | '1m'
 
-interface PlausibleResult {
-  results: Array<{ metrics: Array<number | null>; dimensions: Array<string | null> }>
-  meta?: { time_labels?: Array<string> }
+interface MetricsResult {
+  metrics: Array<{ date: string | null; visitors: number | null }>
 }
 
-async function plausible(query: Record<string, unknown>): Promise<PlausibleResult> {
-  const config = getPlausibleConfig()
-  if (!config) throw new Error('Plausible is not configured (PLAUSIBLE_API_KEY, PLAUSIBLE_SITE_ID).')
-  const response = await fetch(PLAUSIBLE_QUERY_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${config.apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ site_id: config.siteId, metrics: ['visitors'], ...query }),
+/** Reads the property's metrics with the server key (needs the `analytics.read` scope). */
+async function analytics(params: {
+  startAt: Date
+  endAt: Date
+  interval?: Interval
+}): Promise<MetricsResult> {
+  const { appwriteEndpoint, appwriteProjectId, analyticsPropertyId } = getPublicConfig()
+  if (!analyticsPropertyId)
+    throw new Error('Appwrite Analytics is not configured (APPWRITE_ANALYTICS_PROPERTY_ID).')
+  const url = new URL(`${appwriteEndpoint}/analytics/properties/${analyticsPropertyId}/metrics`)
+  url.searchParams.set('startAt', params.startAt.toISOString())
+  url.searchParams.set('endAt', params.endAt.toISOString())
+  if (params.interval) url.searchParams.set('interval', params.interval)
+  const response = await fetch(url, {
+    headers: { 'X-Appwrite-Project': appwriteProjectId, 'X-Appwrite-Key': getAppwriteConfig().apiKey },
     signal: AbortSignal.timeout(8_000),
   })
-  if (!response.ok) throw new Error(`Plausible responded with ${response.status}: ${await response.text()}`)
-  const json = (await response.json()) as PlausibleResult & { error?: string }
-  if (json.error) throw new Error(json.error)
-  return json
+  if (!response.ok)
+    throw new Error(`Appwrite Analytics responded with ${response.status}: ${await response.text()}`)
+  return (await response.json()) as MetricsResult
 }
 
 const liveCache = createCache<number | null>()
@@ -53,25 +59,48 @@ export function getLiveVisitors(): Promise<number | null> {
     30_000,
     async () => {
       const now = new Date()
-      const since = new Date(now.getTime() - 5 * 60 * 1000)
-      const result = await plausible({ date_range: [since.toISOString(), now.toISOString()] })
+      const result = await analytics({ startAt: new Date(now.getTime() - 5 * 60 * 1000), endAt: now })
       // The person looking at the widget is online too.
-      return Math.max(Number(result.results[0]?.metrics[0] ?? 0), 1)
+      return Math.max(Number(result.metrics[0]?.visitors ?? 0), 1)
     },
     null,
   )
 }
 
-const RANGE_CONFIG: Record<VisitorRange, { ttl: number; dateRange: () => string | Array<string> }> = {
+/**
+ * Bucket starts (UTC) for each range, oldest first. Appwrite leaves out empty
+ * buckets, so the series is laid out here and filled with zeros.
+ */
+const RANGE_CONFIG: Record<
+  VisitorRange,
+  { ttl: number; interval: Interval; buckets: (now: Date) => Array<Date> }
+> = {
   '24h': {
     ttl: 5 * 60_000,
-    dateRange: () => {
-      const now = new Date()
-      return [new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(), now.toISOString()]
+    interval: '1h',
+    buckets: (now) => {
+      const hour = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours())
+      return Array.from({ length: 24 }, (_, i) => new Date(hour - (23 - i) * 3_600_000))
     },
   },
-  '30d': { ttl: 30 * 60_000, dateRange: () => '30d' },
-  '1y': { ttl: 60 * 60_000, dateRange: () => '12mo' },
+  '30d': {
+    ttl: 30 * 60_000,
+    interval: '1d',
+    buckets: (now) =>
+      Array.from(
+        { length: 30 },
+        (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - (29 - i))),
+      ),
+  },
+  '1y': {
+    ttl: 60 * 60_000,
+    interval: '1m',
+    buckets: (now) =>
+      Array.from(
+        { length: 12 },
+        (_, i) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (11 - i), 1)),
+      ),
+  },
 }
 
 export function getVisitorSeries(range: VisitorRange) {
@@ -80,20 +109,23 @@ export function getVisitorSeries(range: VisitorRange) {
     `series:${range}`,
     config.ttl,
     async () => {
-      const dateRange = config.dateRange()
+      const endAt = new Date()
+      const buckets = config.buckets(endAt)
+      const startAt = buckets[0]
       const [series, totals] = await Promise.all([
-        plausible({ date_range: dateRange, dimensions: ['time'], include: { time_labels: true } }),
-        plausible({ date_range: dateRange }),
+        analytics({ startAt, endAt, interval: config.interval }),
+        analytics({ startAt, endAt }),
       ])
-      const byLabel = new Map<string, number>()
-      for (const row of series.results) {
-        const label = row.dimensions[0]
-        if (label) byLabel.set(label, Number(row.metrics[0] ?? 0))
+      const byTime = new Map<number, number>()
+      for (const row of series.metrics) {
+        if (row.date) byTime.set(new Date(row.date).getTime(), Number(row.visitors ?? 0))
       }
-      const labels = series.meta?.time_labels ?? [...byLabel.keys()]
       return {
-        points: labels.map((label) => ({ label, visitors: byLabel.get(label) ?? 0 })),
-        total: Number(totals.results[0]?.metrics[0] ?? 0),
+        points: buckets.map((start) => ({
+          label: range === '24h' ? start.toISOString() : start.toISOString().slice(0, 10),
+          visitors: byTime.get(start.getTime()) ?? 0,
+        })),
+        total: Number(totals.metrics[0]?.visitors ?? 0),
       }
     },
     null,

@@ -204,9 +204,7 @@ Table IDs use the legacy name `*_COLLECTION_ID` but refer to **Appwrite Tables**
 | --- | --- |
 | `SITE_URL` | Canonical public origin for SEO metadata, social cards, the sitemap and links in emails (default `https://refetch.io`). |
 | `MODERATOR_USER_IDS` | Optional. Comma-separated user IDs who can review reports, besides accounts with the `moderator` or `admin` label. |
-| `PLAUSIBLE_API_KEY` | Optional. Powers “refetchers online” and the visitors chart. |
-| `APPWRITE_ANALYTICS_PROPERTY_ID` | Optional. Appwrite Analytics property; pageviews and custom events are sent alongside Plausible, from production hosts only. |
-| `PLAUSIBLE_SITE_ID` | Optional. Plausible site ID (e.g. `refetch.io`). |
+| `APPWRITE_ANALYTICS_PROPERTY_ID` | Optional. Appwrite Analytics property. Pageviews and custom events are sent from production hosts only; the server reads it back for “refetchers online” and the visitors chart (needs `analytics.read` on the API key). |
 
 ### 4. OpenAI (global for AI functions)
 
@@ -240,7 +238,7 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 
 ## 🔐 Appwrite setup checklist
 
-1. **API key scopes** — `rows.read`, `rows.write`, `tables.read` for the feeds, votes and comments. Sign-in happens in the browser, so no session scopes are needed.
+1. **API key scopes** — `rows.read`, `rows.write`, `tables.read` for the feeds, votes and comments, plus `analytics.read` for “refetchers online” and the visitors chart. Sign-in happens in the browser, so no session scopes are needed.
 2. **Continue with Appwrite** — in *Auth → Settings → OAuth2 providers*, enable **Appwrite**. The callback path is `/auth/callback`.
 3. **Platforms** — add a Web platform for each hostname the site runs on (e.g. `refetch.io`, `localhost`) so OAuth redirects are accepted.
 4. **People & messages** — `pnpm appwrite:setup` also creates the profile, follow, block and messaging tables. Profiles are written when people sign in (the server key doesn't need `users.read`); people who haven't signed in since are shown from their posts and comments. Messages refresh by polling (every few seconds in an open conversation).

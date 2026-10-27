@@ -33,7 +33,7 @@ function formatPointLabel(range: VisitorRange) {
   }
 }
 
-/** "Refetchers online" + visitors chart, powered by Plausible. */
+/** "Refetchers online" + visitors chart, powered by Appwrite Analytics (read on the server). */
 export function ActivityWidget() {
   const [range, setRange] = React.useState<VisitorRange>('24h')
   const live = useQuery(liveVisitorsQuery())

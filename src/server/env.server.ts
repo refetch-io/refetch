@@ -35,7 +35,10 @@ export function getPublicConfig() {
   return {
     appwriteEndpoint: required('APPWRITE_ENDPOINT', 'NEXT_PUBLIC_APPWRITE_ENDPOINT').replace(/\/+$/, ''),
     appwriteProjectId: required('APPWRITE_PROJECT_ID', 'NEXT_PUBLIC_APPWRITE_PROJECT_ID'),
-    /** Appwrite Analytics property (public: ingestion is a public route). Empty disables tracking. */
+    /**
+     * Appwrite Analytics property (public: ingestion is a public route). Empty
+     * disables tracking and the visitor stats, which the server reads back.
+     */
     analyticsPropertyId:
       read('APPWRITE_ANALYTICS_PROPERTY_ID', 'NEXT_PUBLIC_APPWRITE_ANALYTICS_PROPERTY_ID') ?? '',
     siteUrl: getSiteUrl(),
@@ -91,12 +94,6 @@ export function getModeratorIds(): Set<string> {
       .map((id) => id.trim())
       .filter(Boolean),
   )
-}
-
-export function getPlausibleConfig() {
-  const apiKey = read('PLAUSIBLE_API_KEY')
-  const siteId = read('PLAUSIBLE_SITE_ID')
-  return apiKey && siteId ? { apiKey, siteId } : null
 }
 
 export const isProduction = process.env.NODE_ENV === 'production'

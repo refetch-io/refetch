@@ -10,19 +10,16 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { NavigationProgress } from '@/components/layout/navigation'
 import { AnalyticsTracker } from '@/components/analytics-tracker'
 
-const PLAUSIBLE_QUEUE =
-  'window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}'
-
 /** Hardening carried over from the previous deployment (ClearFake / EtherHiding injects). */
 const SECURITY_HEADERS: Record<string, string> = {
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://plausible.io",
+    "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     // Appwrite Analytics ingestion goes to the project's Cloud endpoint.
-    "connect-src 'self' https://plausible.io https://*.appwrite.io",
+    "connect-src 'self' https://*.appwrite.io",
     "frame-src 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
@@ -65,10 +62,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
       { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
       { rel: 'manifest', href: '/manifest.webmanifest' },
-    ],
-    scripts: [
-      { children: PLAUSIBLE_QUEUE },
-      { src: 'https://plausible.io/js/script.js', defer: true, 'data-domain': 'refetch.io' },
     ],
   }),
   shellComponent: RootDocument,
