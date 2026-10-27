@@ -1,8 +1,9 @@
 import { ID } from 'node-appwrite'
 import type { ActionResult, Comment, SessionUser } from '@/lib/types'
-import { MAX_COMMENT_DEPTH } from '@/lib/constants'
+import { COMMENT_EDIT_WINDOW_MS, MAX_COMMENT_DEPTH } from '@/lib/constants'
 import { isNotFound } from './appwrite.server'
 import { Query, db, toComment, type Row } from './db.server'
+import { notify } from './notifications.server'
 
 /** Abuse protection, unchanged from the original API. */
 const MAX_COMMENTS_PER_HOUR = 50
@@ -43,7 +44,7 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
   if (!content) return { ok: false, error: 'Write something first.' }
 
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
-  const [recentCount, postExists, parentDepth] = await Promise.all([
+  const [recentCount, post, parentDepth, parent] = await Promise.all([
     tables
       .listRows({
         databaseId: ids.databaseId,
@@ -63,17 +64,28 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
         databaseId: ids.databaseId,
         tableId: ids.posts,
         rowId: input.postId,
-        queries: [Query.select(['$id'])],
+        queries: [Query.select(['$id', 'userId', 'title'])],
       })
-      .then(() => true)
+      .then((row) => row as Row)
       .catch((error: unknown) => {
-        if (isNotFound(error)) return false
+        if (isNotFound(error)) return null
         throw error
       }),
     input.replyId ? commentDepth(input.replyId) : Promise.resolve(0),
+    input.replyId
+      ? tables
+          .getRow({
+            databaseId: ids.databaseId,
+            tableId: ids.comments,
+            rowId: input.replyId,
+            queries: [Query.select(['$id', 'userId'])],
+          })
+          .then((row) => row as Row)
+          .catch(() => null)
+      : Promise.resolve(null),
   ])
 
-  if (!postExists) return { ok: false, error: 'This story no longer exists.' }
+  if (!post) return { ok: false, error: 'This story no longer exists.' }
   if (recentCount >= MAX_COMMENTS_PER_HOUR) {
     return {
       ok: false,
@@ -115,6 +127,17 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
     console.error('Failed to increment countComments', error)
   }
 
+  // Replies notify the parent's author; top-level comments notify the story's.
+  await notify({
+    recipientId: String((parent ?? post).userId ?? ''),
+    type: parent ? 'reply' : 'comment',
+    actor: { id: user.id, name: user.name || 'Anonymous' },
+    postId: input.postId,
+    postTitle: String(post.title ?? ''),
+    commentId: row.$id,
+    preview: content,
+  })
+
   return { ok: true, data: toComment(row as Row) }
 }
 
@@ -152,4 +175,41 @@ export async function removeComment(user: SessionUser, commentId: string): Promi
   }
 
   return { ok: true, data: undefined }
+}
+
+/** Authors can fix their own comment for a while after posting it. */
+export async function editComment(
+  user: SessionUser,
+  commentId: string,
+  content: string,
+): Promise<ActionResult<Comment>> {
+  const { tables, ids } = db()
+  const text = content.trim()
+  if (!text) return { ok: false, error: 'Write something first.' }
+
+  let comment: Row
+  try {
+    comment = (await tables.getRow({
+      databaseId: ids.databaseId,
+      tableId: ids.comments,
+      rowId: commentId,
+    })) as Row
+  } catch (error) {
+    if (isNotFound(error)) return { ok: false, error: 'This comment no longer exists.' }
+    throw error
+  }
+
+  if (comment.userId !== user.id) return { ok: false, error: 'You can only edit your own comments.' }
+  if (Date.now() - new Date(comment.$createdAt).getTime() > COMMENT_EDIT_WINDOW_MS) {
+    return { ok: false, error: 'Comments can only be edited during the first hour.' }
+  }
+  if (text === comment.content) return { ok: true, data: toComment(comment) }
+
+  const row = await tables.updateRow({
+    databaseId: ids.databaseId,
+    tableId: ids.comments,
+    rowId: commentId,
+    data: { content: text, editedAt: new Date().toISOString() },
+  })
+  return { ok: true, data: toComment(row as Row) }
 }

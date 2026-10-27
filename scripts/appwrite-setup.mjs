@@ -11,7 +11,8 @@
  * (env vars still use *_COLLECTION_ID for backward compatibility):
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
  *   APPWRITE_KEYS_COLLECTION_ID, APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID,
- *   APPWRITE_CHANNELS_COLLECTION_ID, APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID
+ *   APPWRITE_CHANNELS_COLLECTION_ID, APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID,
+ *   APPWRITE_NOTIFICATIONS_COLLECTION_ID, APPWRITE_SAVES_COLLECTION_ID, APPWRITE_REPORTS_COLLECTION_ID
  *
  * Channels are seeded from scripts/channels.json (name, sources, keywords…);
  * member counts are never overwritten. Channel icons are PNGs in scripts/channel-icons/<id>.png,
@@ -73,6 +74,9 @@ const COLLECTION_IDS = {
   conversation_members: process.env.APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID || 'conversation_members',
   messages: process.env.APPWRITE_MESSAGES_COLLECTION_ID || 'messages',
   message_reactions: process.env.APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID || 'message_reactions',
+  notifications: process.env.APPWRITE_NOTIFICATIONS_COLLECTION_ID || 'notifications',
+  saves: process.env.APPWRITE_SAVES_COLLECTION_ID || 'saves',
+  reports: process.env.APPWRITE_REPORTS_COLLECTION_ID || 'reports',
 };
 
 const DEFAULT_PERMS = [
@@ -133,8 +137,7 @@ function buildCollectionDefinitions() {
       name: 'Posts',
       permissions: DEFAULT_PERMS,
       rowSecurity: false,
-      // Mirrors Appwrite console: title/userId/userName required; topics = string[] with 256 chars per element;
-      // translations stored as JSON strings (see enhancement function).
+      // Mirrors Appwrite console: title/userId/userName required; topics = string[] with 256 chars per element.
       attributes: [
         { key: 'title', type: 'string', size: 2048, required: true, array: false, default: null },
         { key: 'description', type: 'string', size: 2048, required: false, array: false, default: null },
@@ -160,8 +163,6 @@ function buildCollectionDefinitions() {
         { key: 'readingLevel', type: 'string', size: 64, required: false, array: false, default: null },
         { key: 'readingTime', type: 'integer', required: false, array: false, default: null },
         { key: 'topics', type: 'string', size: 256, required: false, array: true, default: null },
-        { key: 'titleTranslations', type: 'string', size: 100000, required: false, array: false, default: null },
-        { key: 'descriptionTranslations', type: 'string', size: 100000, required: false, array: false, default: null },
         { key: 'countComments', type: 'integer', required: false, array: false, default: null },
         { key: 'tldr', type: 'string', size: 100000, required: false, array: false, default: null },
         { key: 'timeScore', type: 'integer', required: false, array: false, default: null },
@@ -170,6 +171,7 @@ function buildCollectionDefinitions() {
         { key: 'diversityScore', type: 'integer', required: false, array: false, default: null },
         { key: 'relevancyScore', type: 'integer', required: false, array: false, default: null },
         { key: 'channel', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'countReports', type: 'integer', required: false, array: false, default: null },
       ],
       indexes: [
         { key: 'index_1', type: 'key', columns: ['userId'], orders: ['ASC'] },
@@ -201,6 +203,7 @@ function buildCollectionDefinitions() {
         { key: 'count', type: 'integer', required: false, array: false, default: null },
         { key: 'countUp', type: 'integer', required: false, array: false, default: null },
         { key: 'countDown', type: 'integer', required: false, array: false, default: null },
+        { key: 'editedAt', type: 'datetime', required: false, array: false, default: null },
       ],
       indexes: [
         { key: 'index_1', type: 'key', columns: ['postId'], orders: ['ASC'] },
@@ -335,6 +338,8 @@ function buildCollectionDefinitions() {
         // 'everyone' | 'nobody': who may start a conversation with this person.
         { key: 'allowMessages', type: 'string', size: 16, required: false, array: false, default: 'everyone' },
         { key: 'joinedAt', type: 'datetime', required: false, array: false, default: null },
+        // Email about replies and new followers (sent with Appwrite Messaging).
+        { key: 'emailNotifications', type: 'boolean', required: false, array: false, default: true },
       ],
       indexes: [
         { key: 'index_name', type: 'fulltext', columns: ['name'], orders: undefined },
@@ -449,6 +454,74 @@ function buildCollectionDefinitions() {
       indexes: [
         { key: 'uniq_reaction', type: 'unique', columns: ['messageId', 'userId', 'emoji'], orders: ['ASC', 'ASC', 'ASC'] },
         { key: 'index_messageId', type: 'key', columns: ['messageId'], orders: ['ASC'] },
+      ],
+    },
+    // Activity for the bell: replies, comments on your stories, follows and milestones.
+    {
+      id: COLLECTION_IDS.notifications,
+      name: 'Notifications',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        // 'comment' | 'reply' | 'follow' | 'milestone'
+        { key: 'type', type: 'string', size: 16, required: true, array: false, default: null },
+        { key: 'actorId', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'actorName', type: 'string', size: 128, required: false, array: false, default: null },
+        { key: 'postId', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'postTitle', type: 'string', size: 300, required: false, array: false, default: null },
+        { key: 'commentId', type: 'string', size: 64, required: false, array: false, default: null },
+        { key: 'preview', type: 'string', size: 280, required: false, array: false, default: null },
+        { key: 'read', type: 'boolean', required: false, array: false, default: false },
+      ],
+      indexes: [
+        { key: 'index_userId', type: 'key', columns: ['userId'], orders: ['ASC'] },
+        { key: 'index_user_read', type: 'key', columns: ['userId', 'read'], orders: ['ASC', 'ASC'] },
+      ],
+    },
+    // Stories people saved to read later.
+    {
+      id: COLLECTION_IDS.saves,
+      name: 'Saves',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'postId', type: 'string', size: 64, required: true, array: false, default: null },
+      ],
+      indexes: [
+        { key: 'uniq_save', type: 'unique', columns: ['userId', 'postId'], orders: ['ASC', 'ASC'] },
+        { key: 'index_postId', type: 'key', columns: ['postId'], orders: ['ASC'] },
+      ],
+    },
+    // Reported stories and comments, reviewed by moderators.
+    {
+      id: COLLECTION_IDS.reports,
+      name: 'Reports',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'reporterId', type: 'string', size: 64, required: true, array: false, default: null },
+        // 'post' | 'comment'
+        { key: 'resourceType', type: 'string', size: 16, required: true, array: false, default: null },
+        { key: 'resourceId', type: 'string', size: 64, required: true, array: false, default: null },
+        { key: 'postId', type: 'string', size: 64, required: false, array: false, default: null },
+        // 'spam' | 'offtopic' | 'abuse' | 'misleading' | 'other'
+        { key: 'reason', type: 'string', size: 32, required: true, array: false, default: null },
+        { key: 'note', type: 'string', size: 500, required: false, array: false, default: null },
+        // 'open' | 'dismissed' | 'removed'
+        { key: 'status', type: 'string', size: 16, required: false, array: false, default: 'open' },
+        { key: 'resolvedBy', type: 'string', size: 64, required: false, array: false, default: null },
+      ],
+      indexes: [
+        {
+          key: 'uniq_report',
+          type: 'unique',
+          columns: ['reporterId', 'resourceType', 'resourceId'],
+          orders: ['ASC', 'ASC', 'ASC'],
+        },
+        { key: 'index_status', type: 'key', columns: ['status'], orders: ['ASC'] },
+        { key: 'index_resourceId', type: 'key', columns: ['resourceId'], orders: ['ASC'] },
       ],
     },
   ];
@@ -588,15 +661,6 @@ function refetchFunctionDefinitions() {
       scopes: ['databases.read', 'tables.read', 'rows.read', 'rows.write'],
       schedule: '15 */2 * * *',
       execute: [], // scheduled only; nobody can trigger it from outside
-    },
-    {
-      folder: 'readme',
-      name: 'Readme',
-      runtime: Runtime.Node180,
-      timeout: 300,
-      entrypoint: 'index.js',
-      commands: 'npm install',
-      scopes: ['databases.read', 'tables.read', 'rows.read'],
     },
     {
       folder: 'topic-stats',
@@ -879,6 +943,9 @@ export async function setupAppwrite() {
   log(`  APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID=${COLLECTION_IDS.conversation_members}`, 'info');
   log(`  APPWRITE_MESSAGES_COLLECTION_ID=${COLLECTION_IDS.messages}`, 'info');
   log(`  APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID=${COLLECTION_IDS.message_reactions}`, 'info');
+  log(`  APPWRITE_NOTIFICATIONS_COLLECTION_ID=${COLLECTION_IDS.notifications}`, 'info');
+  log(`  APPWRITE_SAVES_COLLECTION_ID=${COLLECTION_IDS.saves}`, 'info');
+  log(`  APPWRITE_REPORTS_COLLECTION_ID=${COLLECTION_IDS.reports}`, 'info');
 }
 
 const isMain =

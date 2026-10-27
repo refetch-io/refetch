@@ -102,7 +102,35 @@ export const COMMENT_FIELDS = [
   'content',
   'replyId',
   'count',
+  'editedAt',
 ]
+
+/**
+ * `comments.editedAt` arrives with `appwrite:setup`; until then, select without
+ * it. Checked again every minute, so a running server picks the column up.
+ */
+const RECHECK_MS = 60_000
+let editedAtMissingAt = 0
+
+export async function listCommentRows(queries: Array<string>): Promise<Array<Row>> {
+  const { tables, ids } = db()
+  const skip = Date.now() - editedAtMissingAt < RECHECK_MS
+  const fields = skip ? COMMENT_FIELDS.filter((field) => field !== 'editedAt') : COMMENT_FIELDS
+  try {
+    const result = await tables.listRows({
+      databaseId: ids.databaseId,
+      tableId: ids.comments,
+      queries: [...queries, Query.select(fields)],
+      total: false,
+    })
+    return result.rows as Array<Row>
+  } catch (error) {
+    if (skip || !(error instanceof Error) || !/editedAt/.test(error.message)) throw error
+    console.warn('[db] comments.editedAt is missing, run `npm run appwrite:setup` to enable comment edits')
+    editedAtMissingAt = Date.now()
+    return listCommentRows(queries)
+  }
+}
 
 const number = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
@@ -147,6 +175,7 @@ export function toComment(row: Row, vote: Vote = null): Comment {
     replyId: typeof row.replyId === 'string' && row.replyId ? row.replyId : null,
     count: number(row.count),
     createdAt: row.$createdAt,
+    editedAt: typeof row.editedAt === 'string' && row.editedAt ? row.editedAt : null,
     vote,
   }
 }

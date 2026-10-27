@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Formatting
+        run: pnpm format:check
+
+      - name: Unit tests
+        run: pnpm test
+
+      # build:app skips appwrite:setup, so CI never touches an Appwrite project.
+      - name: Build
+        run: pnpm build:app
+
+      - name: Check functions parse
+        run: for f in functions/*/index.js; do node --check "$f"; done

@@ -50,6 +50,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: 'theme-color', media: '(prefers-color-scheme: light)', content: '#f5f5f7' },
       { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#0e0d13' },
       { name: 'apple-mobile-web-app-title', content: 'Refetch' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      { name: 'mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
       { name: 'application-name', content: 'Refetch' },
       {
         name: 'keywords',
@@ -60,7 +63,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: 'stylesheet', href: appCss },
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
-      { rel: 'apple-touch-icon', href: '/favicon.png' },
+      { rel: 'apple-touch-icon', href: '/icons/apple-touch-icon.png' },
+      { rel: 'manifest', href: '/manifest.webmanifest' },
     ],
     scripts: [
       { children: PLAUSIBLE_QUEUE },
@@ -92,7 +96,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
 }
 
+/** Installable app + offline page (public/sw.js). Production only: dev assets aren't fingerprinted. */
+function useServiceWorker() {
+  React.useEffect(() => {
+    if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return
+    navigator.serviceWorker.register('/sw.js').catch((error: unknown) => {
+      console.warn('[sw] registration failed', error)
+    })
+  }, [])
+}
+
 function RootComponent() {
+  useServiceWorker()
   return (
     <>
       <NavigationProgress />

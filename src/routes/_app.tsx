@@ -2,6 +2,7 @@ import { Outlet, createFileRoute, useRouterState } from '@tanstack/react-router'
 import { AppHeader } from '@/components/layout/header'
 import { Sidebar, TabBar } from '@/components/layout/navigation'
 import { CommandCenterProvider } from '@/components/command-center'
+import { KeyboardShortcutsProvider } from '@/components/keyboard-shortcuts'
 import { channelDirectoryQuery, githubStarsQuery, trendingTopicsQuery } from '@/lib/queries'
 
 /** Longest the first render waits for shell widgets (both are cached on the server). */
@@ -32,34 +33,36 @@ function AppLayout() {
   const isMessages = pathname === '/messages' || pathname.startsWith('/messages/')
 
   return (
-    <CommandCenterProvider>
-      <>
-        <div className="min-h-dvh">
-          <a
-            href="#main"
-            className="sr-only z-50 rounded-full bg-brand px-4 py-2 text-footnote font-semibold text-on-brand focus:not-sr-only focus:fixed focus:top-3 focus:left-4"
-          >
-            Skip to content
-          </a>
-          <AppHeader />
-          <div className="mx-auto flex max-w-[1320px] gap-8 px-4 lg:px-6">
-            <Sidebar />
-            <main
-              id="main"
-              className={
-                isMessages
-                  ? 'min-w-0 flex-1 lg:py-6'
-                  : isThread
-                    ? 'min-w-0 flex-1 pt-4 sm:pt-6'
-                    : 'min-w-0 flex-1 pt-5 pb-28 sm:pt-7 lg:pt-6 lg:pb-16'
-              }
+    <KeyboardShortcutsProvider>
+      <CommandCenterProvider>
+        <>
+          <div className="min-h-dvh">
+            <a
+              href="#main"
+              className="sr-only z-50 rounded-full bg-brand px-4 py-2 text-footnote font-semibold text-on-brand focus:not-sr-only focus:fixed focus:top-3 focus:left-4"
             >
-              <Outlet />
-            </main>
+              Skip to content
+            </a>
+            <AppHeader />
+            <div className="mx-auto flex max-w-[1320px] gap-8 px-4 lg:px-6">
+              <Sidebar />
+              <main
+                id="main"
+                className={
+                  isMessages
+                    ? 'min-w-0 flex-1 lg:py-6'
+                    : isThread
+                      ? 'min-w-0 flex-1 pt-4 sm:pt-6'
+                      : 'min-w-0 flex-1 pt-5 pb-28 sm:pt-7 lg:pt-6 lg:pb-16'
+                }
+              >
+                <Outlet />
+              </main>
+            </div>
+            {!isThread && !isMessages && <TabBar />}
           </div>
-          {!isThread && !isMessages && <TabBar />}
-        </div>
-      </>
-    </CommandCenterProvider>
+        </>
+      </CommandCenterProvider>
+    </KeyboardShortcutsProvider>
   )
 }

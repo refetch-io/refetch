@@ -170,7 +170,8 @@ function Foundations() {
           </div>
           <p className="mt-4 text-footnote text-label-secondary">
             Always the original Refetch purple, <code className="font-mono">#4e1cb3</code> (
-            <code className="font-mono">--logo</code>), in every theme. The wordmark is near-black in light mode and white in dark mode.
+            <code className="font-mono">--logo</code>), in every theme. The wordmark is near-black in light
+            mode and white in dark mode.
           </p>
         </Demo>
         <Demo label="Materials">

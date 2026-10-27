@@ -410,6 +410,29 @@
     cursor: default;
   }
 
+  /* Keyboard navigation (j/k): keep the selection clear of the sticky bars. */
+  [data-kb-item] {
+    scroll-margin-top: 120px;
+    scroll-margin-bottom: 110px;
+  }
+
+  [data-kb-selected] {
+    position: relative;
+    background-color: var(--fill-secondary);
+    box-shadow: inset 3px 0 0 var(--brand-text);
+  }
+
+  /* Comments nest, so the selected one gets a rounded ring instead of a bar. */
+  article[data-kb-selected],
+  [data-kb-selected]:is(.rounded-card, [class*='rounded-']) {
+    box-shadow: 0 0 0 2px var(--brand-text);
+    border-radius: 14px;
+  }
+
+  article[data-kb-selected] {
+    background-color: transparent;
+  }
+
   /* Apple-style thin scrollbars on desktop */
   @media (pointer: fine) {
     * {

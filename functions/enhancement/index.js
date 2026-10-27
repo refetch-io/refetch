@@ -8,51 +8,10 @@
 import { Client, TablesDB, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 
-// Set ENABLE_TRANSLATIONS=true to re-enable 12-locale title/description generation.
-const ENABLE_TRANSLATIONS = process.env.ENABLE_TRANSLATIONS === 'true';
-
-const TRANSLATIONS_SCHEMA = `
-  "titleTranslations": {
-    "en": "title in English (original if English, translated if not)",
-    "es": "title in Spanish (original if Spanish, translated if not)",
-    "fr": "title in French (original if French, translated if not)", 
-    "de": "title in German (original if German, translated if not)",
-    "it": "title in Italian (original if Italian, translated if not)",
-    "pt": "title in Portuguese (original if Portuguese, translated if not)",
-    "ru": "title in Russian (original if Russian, translated if not)",
-    "ja": "title in Japanese (original if Japanese, translated if not)",
-    "ko": "title in Korean (original if Korean, translated if not)",
-    "zh": "title in Chinese (original if Chinese, translated if not)",
-    "ar": "title in Arabic (original if Arabic, translated if not)",
-    "he": "title in Hebrew (original if Hebrew, translated if not)"
-  },
-  "descriptionTranslations": {
-    "en": "description in English (original if English, translated if not)",
-    "es": "description in Spanish (original if Spanish, translated if not)",
-    "fr": "description in French (original if French, translated if not)", 
-    "de": "description in German (original if German, translated if not)",
-    "it": "description in Italian (original if Italian, translated if not)",
-    "pt": "description in Portuguese (original if Portuguese, translated if not)",
-    "ru": "description in Russian (original if Russian, translated if not)",
-    "ja": "description in Japanese (original if Japanese, translated if not)",
-    "ko": "description in Korean (original if Korean, translated if not)",
-    "zh": "description in Chinese (original if Chinese, translated if not)",
-    "ar": "description in Arabic (original if Arabic, translated if not)",
-    "he": "description in Hebrew (original if Hebrew, translated if not)"
-  }`;
-
 /**
  * System prompt for AI content analysis.
- * Translations are omitted unless ENABLE_TRANSLATIONS is true (cost control).
  */
-function getSystemPrompt(enableTranslations) {
-    const translationsFields = enableTranslations
-        ? `,${TRANSLATIONS_SCHEMA}`
-        : '';
-    const translationGuideline = enableTranslations
-        ? '- Translate titles and descriptions accurately while maintaining the meaning and tech terminology\n'
-        : '- Do NOT include titleTranslations or descriptionTranslations in the response\n';
-
+function getSystemPrompt() {
     return `You are an expert content analyst for a tech news platform. Analyze the provided post content and return a JSON response with the following structure:
 
 {
@@ -73,7 +32,7 @@ function getSystemPrompt(enableTranslations) {
   "readingLevel": "Beginner", "Intermediate", "Advanced", or "Expert" (based on content complexity)",
   "readingTime": number (estimated reading time in minutes)",
   "topics": ["array of relevant topics this post relates to"],
-  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description."${translationsFields}
+  "tldr": "A concise 2-3 sentence summary of the key points from the article content. Focus on the main takeaways, findings, or announcements. If no substantial content is available, provide a brief summary based on the title and description."
 }
 
 CRITICAL GUIDELINES:
@@ -117,7 +76,7 @@ CRITICAL GUIDELINES:
 - Consider the context of tech news and community guidelines
 - For reading level: Beginner (general audience), Intermediate (some technical knowledge), Advanced (technical audience), Expert (deep technical knowledge)
 - For quality score: Consider relevance, accuracy, depth, originality, and impact on the tech community
-${translationGuideline}- When analyzing article text: Focus on meaningful content (headings, body paragraphs, key facts). Ignore navigation chrome or leftover markup if present
+- When analyzing article text: Focus on meaningful content (headings, body paragraphs, key facts). Ignore navigation chrome or leftover markup if present
 - Writing Style: Make descriptions playful and entertaining by using:
   * Clever wordplay and tech puns when appropriate
   * Engaging metaphors and analogies
@@ -141,7 +100,6 @@ ${translationGuideline}- When analyzing article text: Focus on meaningful conten
 export default async function ({ req, res, log, error }) {
     try {
         log('Enhancement function started');
-        log(`Translations: ${ENABLE_TRANSLATIONS ? 'enabled' : 'disabled'} (ENABLE_TRANSLATIONS)`);
         
         // Initialize Appwrite client
         const client = new Client()
@@ -219,7 +177,7 @@ export default async function ({ req, res, log, error }) {
                 }
                 
                 // Analyze post with AI
-                const metadata = await analyzePostWithAI(openai, postData, urlContent, urlError, ENABLE_TRANSLATIONS);
+                const metadata = await analyzePostWithAI(openai, postData, urlContent, urlError);
                 
                 // Check for high spam scores and flag accordingly
                 const isHighSpam = metadata.spamScore >= 90;
@@ -247,12 +205,6 @@ export default async function ({ req, res, log, error }) {
                     topics: metadata.topics,
                     tldr: metadata.tldr,
                 };
-
-                // Only write translations when enabled (preserves existing values when off)
-                if (ENABLE_TRANSLATIONS) {
-                    updateData.titleTranslations = JSON.stringify(metadata.titleTranslations);
-                    updateData.descriptionTranslations = JSON.stringify(metadata.descriptionTranslations);
-                }
                 
                 // Log spam detection
                 if (isHighSpam) {
@@ -518,10 +470,10 @@ function extractSimpleDescription(html) {
 /**
  * Analyze post content with OpenAI using the same system prompt as the submission script
  */
-async function analyzePostWithAI(openai, postData, urlContent, urlError, enableTranslations = false) {
-    const systemPrompt = getSystemPrompt(enableTranslations);
+async function analyzePostWithAI(openai, postData, urlContent, urlError) {
+    const systemPrompt = getSystemPrompt();
     // Completion budget counts against the 128k context window — keep headroom
-    const maxCompletionTokens = enableTranslations ? 8192 : 3072;
+    const maxCompletionTokens = 3072;
     let userPrompt = buildAnalysisPrompt(postData, urlContent, urlError);
 
     // Conservative char budget: OpenAI can tokenize denser than ~4 chars/token
@@ -565,7 +517,7 @@ async function analyzePostWithAI(openai, postData, urlContent, urlError, enableT
         }
 
         const metadata = JSON.parse(response);
-        const validatedMetadata = validateAndSanitizeMetadata(metadata, postData, enableTranslations);
+        const validatedMetadata = validateAndSanitizeMetadata(metadata, postData);
         
         // Log compact post reference
         console.log(`📝 AI Analysis completed - ID: ${postData.title ? postData.title.substring(0, 50) : 'No title'} | URL: ${postData.url ? postData.url.substring(0, 60) : 'No URL'} | TL;DR: ${metadata.tldr ? metadata.tldr.substring(0, 80) + '...' : 'Not generated'}`);
@@ -659,7 +611,7 @@ function buildAnalysisPrompt(postData, urlContent, urlError) {
 /**
  * Validate and sanitize the AI response metadata
  */
-function validateAndSanitizeMetadata(metadata, postData, enableTranslations = false) {
+function validateAndSanitizeMetadata(metadata, postData) {
     // Validate and sanitize type field
     const validatedType = validateType(metadata.type);
     
@@ -683,11 +635,6 @@ function validateAndSanitizeMetadata(metadata, postData, enableTranslations = fa
         topics: Array.isArray(metadata.topics) ? metadata.topics.slice(0, 20) : [],
         tldr: typeof metadata.tldr === 'string' ? metadata.tldr.substring(0, 2000) : (postData.description ? `TL;DR: ${postData.description.substring(0, 2000)}...` : 'No summary available'),
     };
-
-    if (enableTranslations) {
-        sanitized.titleTranslations = validateTranslations(metadata.titleTranslations);
-        sanitized.descriptionTranslations = validateTranslations(metadata.descriptionTranslations);
-    }
 
     return sanitized;
 }
@@ -713,24 +660,3 @@ function validateReadingLevel(level) {
     const validLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
     return validLevels.includes(level) ? level : 'Intermediate';
 }
-
-/**
- * Validate translations object
- */
-function validateTranslations(translations) {
-    if (typeof translations === 'object' && translations !== null) {
-        const validTranslations = {};
-        const validLocales = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh', 'ar', 'he'];
-        
-        for (const locale of validLocales) {
-            if (translations[locale] && typeof translations[locale] === 'string') {
-                validTranslations[locale] = translations[locale];
-            }
-        }
-        
-        return validTranslations;
-    }
-    
-    return {};
-}
-

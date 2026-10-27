@@ -18,7 +18,6 @@ The Enhancement Function:
    - Spam and safety assessment
    - Reading level and time estimation
    - **TL;DR summaries** based on article content
-   - Multilingual translations (12 languages)
    - Quality scoring
 5. **Database Updates**: Updates each post with the enhanced metadata
 
@@ -28,7 +27,6 @@ The Enhancement Function:
 - **Comprehensive Scoring**: 0-100 scores for spelling, spam, safety, and quality
 - **Content Optimization**: Improved titles and descriptions that are engaging and accurate
 - **TL;DR Generation**: Intelligent summaries extracted from article content when available
-- **Multilingual Support**: Title and description translations in 12 languages
 - **Reading Assessment**: Beginner to Expert level classification with time estimates
 
 ### Intelligent Processing
@@ -59,9 +57,6 @@ APPWRITE_POSTS_COLLECTION_ID=your-posts-collection-id
 # OpenAI Configuration
 OPENAI_API_KEY=your-openai-api-key
 OPENAI_MODEL=gpt-4o-mini  # Optional; prefer **global** project variables in Appwrite (same as OPENAI_API_KEY)
-
-# Optional — multilingual title/description translations (default off; set true to enable)
-# ENABLE_TRANSLATIONS=true
 ```
 
 ### 2. Dependencies
@@ -95,14 +90,6 @@ Your posts collection should have a `metadata` field that can store the enhanced
     "readingLevel": "Intermediate",
     "readingTime": 3,
     "tldr": "A concise 2-3 sentence summary of the key points from the article content",
-    "titleTranslations": {
-      "es": "Título en español",
-      "fr": "Titre en français"
-    },
-    "descriptionTranslations": {
-      "es": "Descripción en español",
-      "fr": "Description en français"
-    },
     "qualityScore": 85,
     "qualityIssues": ["Good content with room for improvement"],
     "enhanced": true,

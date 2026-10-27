@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router'
 import * as React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
-import { ChevronDown, MessageCircle, Reply, Trash2 } from 'lucide-react'
+import { ChevronDown, MessageCircle, Pencil, Reply, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { deleteComment } from '@/api/content'
+import { deleteComment, updateComment } from '@/api/content'
 import { buildCommentTree, countDescendants, type CommentNode, type CommentSort } from '@/lib/comments'
-import { MAX_COMMENT_DEPTH } from '@/lib/constants'
+import { COMMENT_EDIT_WINDOW_MS, LIMITS, MAX_COMMENT_DEPTH } from '@/lib/constants'
 import { useSession } from '@/lib/session'
-import type { Thread } from '@/lib/types'
+import type { Comment, Thread } from '@/lib/types'
 import { cn, formatDateTime, isBotUser, timeAgo } from '@/lib/utils'
 import { Avatar } from '../ui/avatar'
 import { Badge } from '../ui/badge'
@@ -16,10 +16,12 @@ import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { ConfirmDialog } from '../ui/confirm-dialog'
 import { Dot, EmptyState } from '../ui/misc'
+import { Textarea } from '../ui/input'
 import { SegmentedControl } from '../ui/segmented-control'
 import { BotBadge } from '../bot-badge'
 import { RichText } from '../rich-text'
 import { VoteControl } from '../vote-control'
+import { ReportButton } from '../moderation/report-dialog'
 
 const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
@@ -43,6 +45,23 @@ export function CommentsSection({ thread, queryKey, highlightId, onReply }: Comm
   const removeComment = useServerFn(deleteComment)
 
   const tree = React.useMemo(() => buildCommentTree(thread.comments, sort), [thread.comments, sort])
+
+  const onEdited = React.useCallback(
+    (updated: Comment) =>
+      queryClient.setQueryData<Thread>(queryKey, (current) =>
+        current
+          ? {
+              ...current,
+              comments: current.comments.map((comment) =>
+                comment.id === updated.id
+                  ? { ...updated, vote: comment.vote, count: comment.count }
+                  : comment,
+              ),
+            }
+          : current,
+      ),
+    [queryClient, queryKey],
+  )
 
   const confirmDelete = async () => {
     if (!pendingDelete) return
@@ -111,6 +130,7 @@ export function CommentsSection({ thread, queryKey, highlightId, onReply }: Comm
                 highlightId={highlightId}
                 onReply={onReply}
                 onDelete={setPendingDelete}
+                onEdited={onEdited}
               />
             </div>
           ))}
@@ -138,16 +158,42 @@ interface CommentItemProps {
   highlightId: string | null
   onReply: (comment: CommentNode) => void
   onDelete: (comment: CommentNode) => void
+  onEdited: (comment: Comment) => void
 }
 
-function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDelete }: CommentItemProps) {
+/** Whether the comment's edit window is still open (decided after hydration; it depends on the clock). */
+function useEditable(createdAt: string, isAuthor: boolean) {
+  const [editable, setEditable] = React.useState(false)
+  React.useEffect(() => {
+    if (!isAuthor) return setEditable(false)
+    const remaining = new Date(createdAt).getTime() + COMMENT_EDIT_WINDOW_MS - Date.now()
+    setEditable(remaining > 0)
+    if (remaining <= 0) return
+    const timer = setTimeout(() => setEditable(false), Math.min(remaining, 2 ** 31 - 1))
+    return () => clearTimeout(timer)
+  }, [createdAt, isAuthor])
+  return editable
+}
+
+function CommentItem({
+  node,
+  opUserId,
+  currentUserId,
+  highlightId,
+  onReply,
+  onDelete,
+  onEdited,
+}: CommentItemProps) {
   const [collapsed, setCollapsed] = React.useState(false)
+  const [editing, setEditing] = React.useState(false)
+  const isAuthor = Boolean(currentUserId) && currentUserId === node.userId
+  const editable = useEditable(node.createdAt, isAuthor)
   const hiddenCount = collapsed ? countDescendants(node) : 0
   const isBot = isBotUser(node.userId)
   const isRoot = node.depth === 0
 
   return (
-    <article id={`comment-${node.id}`} className={cn('scroll-mt-24', isRoot ? 'py-4' : 'pt-4')}>
+    <article id={`comment-${node.id}`} data-kb-item className={cn('scroll-mt-24', isRoot ? 'py-4' : 'pt-4')}>
       <div className="flex gap-3">
         <Link
           to="/u/$userId"
@@ -187,8 +233,28 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
               >
                 {timeAgo(node.createdAt)}
               </time>
+              {node.editedAt && (
+                <span
+                  className="text-label-tertiary"
+                  title={`Edited ${formatDateTime(node.editedAt)}`}
+                  suppressHydrationWarning
+                >
+                  (edited)
+                </span>
+              )}
             </header>
-            <RichText text={node.content} className="mt-1 text-subhead leading-[1.55] text-label" />
+            {editing ? (
+              <CommentEditor
+                comment={node}
+                onCancel={() => setEditing(false)}
+                onSaved={(updated) => {
+                  onEdited(updated)
+                  setEditing(false)
+                }}
+              />
+            ) : (
+              <RichText text={node.content} className="mt-1 text-subhead leading-[1.55] text-label" />
+            )}
           </div>
 
           <footer className="mt-2 -ml-1 flex flex-wrap items-center gap-1">
@@ -200,7 +266,7 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
               size="sm"
             />
             {node.depth < MAX_COMMENT_DEPTH && (
-              <Button variant="ghost" size="xs" onClick={() => onReply(node)}>
+              <Button variant="ghost" size="xs" data-kb-action="reply" onClick={() => onReply(node)}>
                 <Reply />
                 Reply
               </Button>
@@ -216,7 +282,13 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
                 {collapsed ? `${hiddenCount} ${hiddenCount === 1 ? 'reply' : 'replies'}` : 'Hide'}
               </Button>
             )}
-            {currentUserId && currentUserId === node.userId && (
+            {editable && !editing && (
+              <Button variant="ghost" size="xs" data-kb-action="edit" onClick={() => setEditing(true)}>
+                <Pencil />
+                Edit
+              </Button>
+            )}
+            {isAuthor && (
               <Button
                 variant="ghost"
                 size="xs"
@@ -227,6 +299,7 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
                 Delete
               </Button>
             )}
+            {!isAuthor && <ReportButton resourceType="comment" resourceId={node.id} className="ml-auto" />}
           </footer>
 
           {!collapsed && node.children.length > 0 && (
@@ -240,6 +313,7 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
                   highlightId={highlightId}
                   onReply={onReply}
                   onDelete={onDelete}
+                  onEdited={onEdited}
                 />
               ))}
             </div>
@@ -247,5 +321,75 @@ function CommentItem({ node, opUserId, currentUserId, highlightId, onReply, onDe
         </div>
       </div>
     </article>
+  )
+}
+
+function CommentEditor({
+  comment,
+  onCancel,
+  onSaved,
+}: {
+  comment: Comment
+  onCancel: () => void
+  onSaved: (comment: Comment) => void
+}) {
+  const save = useServerFn(updateComment)
+  const [text, setText] = React.useState(comment.content)
+  const [saving, setSaving] = React.useState(false)
+  const unchanged = text.trim() === comment.content.trim()
+
+  const submit = async () => {
+    if (!text.trim() || saving) return
+    if (unchanged) return onCancel()
+    setSaving(true)
+    try {
+      const result = await save({ data: { id: comment.id, content: text } })
+      if (!result.ok) {
+        toast.error(result.error)
+        return
+      }
+      onSaved(result.data)
+      toast.success('Comment updated')
+    } catch {
+      toast.error('Couldn’t save your edit. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <form
+      className="mt-2"
+      onSubmit={(event) => {
+        event.preventDefault()
+        void submit()
+      }}
+    >
+      <Textarea
+        aria-label="Edit your comment"
+        autoFocus
+        rows={3}
+        maxRows={12}
+        maxLength={LIMITS.commentMax}
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault()
+            void submit()
+          }
+          if (event.key === 'Escape') onCancel()
+        }}
+        className="py-2.5 text-subhead"
+      />
+      <div className="mt-2 flex justify-end gap-2">
+        <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" variant="primary" size="sm" loading={saving} disabled={!text.trim()}>
+          Save
+        </Button>
+      </div>
+    </form>
   )
 }

@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, useLocation } from '@tanstack/react-router'
 import {
+  Bell,
+  Bookmark,
   Check,
   CircleUserRound,
   LogOut,
@@ -10,6 +12,7 @@ import {
   PenLine,
   Plus,
   Search,
+  ShieldCheck,
   Star,
   Sun,
   UserRound,
@@ -28,6 +31,7 @@ import { GitHubIcon } from '../brand-icons'
 import { Logo } from '../logo'
 import { useCommandCenter, useModKey } from '../command-center'
 import { Kbd } from '../ui/misc'
+import { NotificationBell } from '../notifications/notification-parts'
 
 const THEME_OPTIONS: Array<{ value: ThemePreference; label: string; icon: typeof Sun }> = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -82,6 +86,7 @@ export function AppHeader() {
             </Button>
           )}
           <ThemeMenu />
+          {user && <NotificationBell />}
           {user ? (
             <UserMenu user={user} />
           ) : (
@@ -200,11 +205,31 @@ function UserMenu({ user }: { user: SessionUser }) {
           </Link>
         </MenuItem>
         <MenuItem asChild>
+          <Link to="/notifications">
+            <Bell />
+            Notifications
+          </Link>
+        </MenuItem>
+        <MenuItem asChild>
+          <Link to="/saved">
+            <Bookmark />
+            Saved
+          </Link>
+        </MenuItem>
+        <MenuItem asChild>
           <Link to="/mines">
             <UserRound />
             Your posts
           </Link>
         </MenuItem>
+        {user.moderator && (
+          <MenuItem asChild>
+            <Link to="/moderation">
+              <ShieldCheck />
+              Moderation
+            </Link>
+          </MenuItem>
+        )}
         <MenuItem asChild>
           <Link to="/submit">
             <PenLine />

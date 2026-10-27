@@ -59,6 +59,9 @@ export function getTableIds() {
     conversationMembers: read('APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID') ?? 'conversation_members',
     messages: read('APPWRITE_MESSAGES_COLLECTION_ID') ?? 'messages',
     messageReactions: read('APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID') ?? 'message_reactions',
+    notifications: read('APPWRITE_NOTIFICATIONS_COLLECTION_ID') ?? 'notifications',
+    saves: read('APPWRITE_SAVES_COLLECTION_ID') ?? 'saves',
+    reports: read('APPWRITE_REPORTS_COLLECTION_ID') ?? 'reports',
   }
 }
 
@@ -74,6 +77,19 @@ export function getSiteUrl(): string {
   return (read('SITE_URL', 'NEXT_PUBLIC_BASE_URL', 'APP_BASE_URL') ?? 'https://refetch.io').replace(
     /\/+$/,
     '',
+  )
+}
+
+/**
+ * People who can review reports, besides accounts with the `moderator` or
+ * `admin` label in Appwrite (read at sign-in). Comma-separated user IDs.
+ */
+export function getModeratorIds(): Set<string> {
+  return new Set(
+    (read('MODERATOR_USER_IDS') ?? '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean),
   )
 }
 

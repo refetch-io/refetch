@@ -1,7 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto'
 import { deleteCookie, getCookie, getRequestProtocol, setCookie } from '@tanstack/react-start/server'
 import type { SessionUser } from '@/lib/types'
-import { getAppwriteConfig } from './env.server'
+import { getAppwriteConfig, getModeratorIds } from './env.server'
 
 /*
  * Server session: a signed, httpOnly cookie holding who you are. People sign in
@@ -16,6 +16,8 @@ const SESSION_DAYS = 30
 interface Claims extends SessionUser {
   v: 1
   exp: number
+  /** The account had the `moderator` or `admin` label at sign-in. */
+  mod?: boolean
 }
 
 /** SESSION_SECRET if set; otherwise derived from the server API key (never sent anywhere). */
@@ -38,9 +40,22 @@ function cookieOptions() {
   }
 }
 
-export function issueSession(user: SessionUser) {
+/**
+ * `mod` comes from the account's labels at sign-in; when it's left out (a name
+ * change, say) the current session's value carries over.
+ */
+export function issueSession(user: SessionUser, options: { mod?: boolean } = {}) {
   const exp = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000
-  const claims: Claims = { v: 1, id: user.id, name: user.name, email: user.email, exp }
+  const token = getCookie(SESSION_COOKIE)
+  const mod = options.mod ?? (token ? readClaims(token)?.mod === true : false)
+  const claims: Claims = {
+    v: 1,
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    exp,
+    ...(mod ? { mod } : {}),
+  }
   const payload = Buffer.from(JSON.stringify(claims)).toString('base64url')
   setCookie(SESSION_COOKIE, `${payload}.${sign(payload)}`, { ...cookieOptions(), expires: new Date(exp) })
 }
@@ -74,7 +89,8 @@ export async function getSessionUser(_options: { fresh?: boolean } = {}): Promis
     clearSessionCookie()
     return null
   }
-  return { id: claims.id, name: claims.name, email: claims.email }
+  const moderator = claims.mod === true || getModeratorIds().has(claims.id)
+  return { id: claims.id, name: claims.name, email: claims.email, ...(moderator ? { moderator } : {}) }
 }
 
 export class AuthRequiredError extends Error {
@@ -89,3 +105,6 @@ export async function requireUser(): Promise<SessionUser> {
   if (!user) throw new AuthRequiredError()
   return user
 }
+
+/** Labels that make an account a moderator. */
+export const MODERATOR_LABELS = ['moderator', 'admin']

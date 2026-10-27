@@ -4,7 +4,7 @@ import { z } from 'zod'
 import type { ActionResult, Comment, FeedPage, PostDetail, Thread, VoteState } from '@/lib/types'
 import { FEED_MAX_PAGES, LIMITS } from '@/lib/constants'
 import { isHttpUrl, isValidId } from '@/lib/url'
-import { createComment, removeComment } from '@/server/comments.server'
+import { createComment, editComment, removeComment } from '@/server/comments.server'
 import {
   createPost,
   getPostById,
@@ -84,6 +84,19 @@ export const addComment = createServerFn({ method: 'POST' })
     const user = await getSessionUser({ fresh: true })
     if (!user) return UNAUTHORIZED
     return createComment(user, data)
+  })
+
+export const updateComment = createServerFn({ method: 'POST' })
+  .validator(
+    z.object({
+      id,
+      content: z.string().trim().min(1, 'Write something first.').max(LIMITS.commentMax),
+    }),
+  )
+  .handler(async ({ data }): Promise<ActionResult<Comment>> => {
+    const user = await getSessionUser({ fresh: true })
+    if (!user) return UNAUTHORIZED
+    return editComment(user, data.id, data.content)
   })
 
 export const deleteComment = createServerFn({ method: 'POST' })

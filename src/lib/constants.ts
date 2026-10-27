@@ -4,6 +4,9 @@ export const FEED_MAX_PAGES = 10
 /** Replies can nest three levels deep (root → reply → reply). */
 export const MAX_COMMENT_DEPTH = 2
 
+/** How long after posting a comment its author can still edit it. */
+export const COMMENT_EDIT_WINDOW_MS = 60 * 60_000
+
 export const LIMITS = {
   titleMax: 300,
   urlMax: 2048,

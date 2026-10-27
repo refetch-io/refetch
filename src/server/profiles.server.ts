@@ -13,6 +13,7 @@ import { FEATURED_PEOPLE, FEED_PAGE_SIZE, ONBOARDING_CHANNELS } from '@/lib/cons
 import { isBotUser } from '@/lib/utils'
 import { isNotFound } from './appwrite.server'
 import { Query, chunk, db, type Row } from './db.server'
+import { notify } from './notifications.server'
 
 /*
  * Profiles live in the `profiles` table (row ID = user ID). The server API key
@@ -406,16 +407,27 @@ export async function setFollowing(
     total: false,
   })
   if (follow && existing.rows.length === 0) {
-    await tables
+    const created = await tables
       .createRow({
         databaseId: ids.databaseId,
         tableId: ids.follows,
         rowId: ID.unique(),
         data: { followerId: user.id, userId },
       })
+      .then(() => true)
       .catch((error: unknown) => {
         if (!(error instanceof AppwriteException && error.code === 409)) throw error
+        return false
       })
+    // Once per pair: unfollowing and following again doesn't ping them twice.
+    if (created) {
+      await notify({
+        recipientId: userId,
+        type: 'follow',
+        actor: { id: user.id, name: user.name || 'Refetch user' },
+        dedupeKey: `follow:${user.id}:${userId}`,
+      })
+    }
   }
   if (!follow) {
     await Promise.all(

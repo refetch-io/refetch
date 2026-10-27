@@ -97,6 +97,7 @@ export function VoteControl({
       <button
         type="button"
         onClick={() => onVote('up')}
+        data-kb-action="upvote"
         aria-pressed={state.vote === 'up'}
         aria-label={state.vote === 'up' ? `Remove upvote from ${noun}` : `Upvote ${noun}`}
         className={cn(
@@ -130,6 +131,7 @@ export function VoteControl({
       <button
         type="button"
         onClick={() => onVote('down')}
+        data-kb-action="downvote"
         aria-pressed={state.vote === 'down'}
         aria-label={state.vote === 'down' ? `Remove downvote from ${noun}` : `Downvote ${noun}`}
         className={cn(

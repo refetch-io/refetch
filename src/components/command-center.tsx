@@ -5,11 +5,14 @@ import { Command } from 'cmdk'
 import { Dialog } from 'radix-ui'
 import {
   ArrowRight,
+  Bell,
+  Bookmark,
   CircleUserRound,
   Clock3,
   CornerDownLeft,
   FileText,
   Hash,
+  Keyboard,
   MessageCircle,
   MessagesSquare,
   Monitor,
@@ -27,6 +30,7 @@ import { useTheme, type ThemePreference } from '@/lib/theme'
 import { cn, timeAgo } from '@/lib/utils'
 import { ChannelIcon, useChannels } from './channels/channel-parts'
 import { Kbd } from './ui/misc'
+import { useKeyboardShortcuts } from './keyboard-shortcuts'
 import { Spinner } from './ui/spinner'
 
 const CommandCenterContext = React.createContext<{ open: () => void }>({ open: () => {} })
@@ -87,7 +91,17 @@ function useDebounced<T>(value: T, delay: number) {
 
 interface PageItem {
   label: string
-  to: '/' | '/new' | '/show' | '/following' | '/channels' | '/mines' | '/submit' | '/messages'
+  to:
+    | '/'
+    | '/new'
+    | '/show'
+    | '/following'
+    | '/channels'
+    | '/mines'
+    | '/submit'
+    | '/messages'
+    | '/notifications'
+    | '/saved'
   icon: LucideIcon
   keywords: string
   requiresAuth?: boolean
@@ -110,6 +124,20 @@ const PAGES: Array<PageItem> = [
     to: '/messages',
     icon: MessagesSquare,
     keywords: 'dm direct inbox chat group conversation',
+    requiresAuth: true,
+  },
+  {
+    label: 'Notifications',
+    to: '/notifications',
+    icon: Bell,
+    keywords: 'activity replies mentions followers alerts bell',
+    requiresAuth: true,
+  },
+  {
+    label: 'Saved',
+    to: '/saved',
+    icon: Bookmark,
+    keywords: 'bookmarks read later reading list',
     requiresAuth: true,
   },
   {
@@ -154,6 +182,7 @@ function CommandDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
   const { channels, joined } = useChannels()
   const { user } = useSession()
   const { setPreference } = useTheme()
+  const { openHelp } = useKeyboardShortcuts()
   const navigate = useNavigate()
 
   React.useEffect(() => {
@@ -173,6 +202,7 @@ function CommandDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
     .sort((a, b) => Number(joined.has(b.id)) - Number(joined.has(a.id)))
     .slice(0, term ? 6 : 5)
   const themes = THEMES.filter((theme) => matches(`${theme.label} theme mode`))
+  const showShortcuts = matches('Keyboard shortcuts keys hotkeys help')
   const stories = debounced.length >= 2 ? (search.data ?? []) : []
   const searching = debounced.length >= 2 && search.isFetching
 
@@ -287,6 +317,18 @@ function CommandDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
                       <span className="flex-1">{theme.label}</span>
                     </Command.Item>
                   ))}
+                </Command.Group>
+              )}
+
+              {showShortcuts && (
+                <Command.Group heading="Help" className={groupClass}>
+                  <Command.Item value="help-shortcuts" onSelect={() => run(openHelp)} className={itemClass}>
+                    <ItemIcon icon={Keyboard} />
+                    <span className="flex-1">Keyboard shortcuts</span>
+                    <Kbd data-muted className="border-0 bg-transparent">
+                      ?
+                    </Kbd>
+                  </Command.Item>
                 </Command.Group>
               )}
             </Command.List>

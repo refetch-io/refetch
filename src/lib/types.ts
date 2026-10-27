@@ -11,6 +11,8 @@ export interface SessionUser {
   id: string
   name: string
   email: string
+  /** Can review reports (Appwrite `moderator`/`admin` label, or MODERATOR_USER_IDS). */
+  moderator?: boolean
 }
 
 export interface Post {
@@ -50,6 +52,8 @@ export interface Comment {
   replyId: string | null
   count: number
   createdAt: string
+  /** Set once the author edits it. */
+  editedAt: string | null
   vote: Vote
 }
 

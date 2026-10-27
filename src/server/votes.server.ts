@@ -1,7 +1,9 @@
 import { ID } from 'node-appwrite'
 import type { ActionResult, ResourceType, SessionUser, VoteDirection, VoteState } from '@/lib/types'
 import { isNotFound } from './appwrite.server'
+import { crossedMilestone } from '@/lib/notifications'
 import { Query, db, voteFromCount, type Row } from './db.server'
+import { notify } from './notifications.server'
 
 type Delta = Partial<Record<'count' | 'countUp' | 'countDown', number>>
 
@@ -40,7 +42,9 @@ export async function castVote(
         databaseId: ids.databaseId,
         tableId,
         rowId: resourceId,
-        queries: [Query.select(['$id', 'count'])],
+        queries: [
+          Query.select(resourceType === 'post' ? ['$id', 'count', 'userId', 'title'] : ['$id', 'count']),
+        ],
       })
       .catch((error: unknown) => {
         if (isNotFound(error)) return null
@@ -110,6 +114,20 @@ export async function castVote(
       value > 0 ? await tables.incrementRowColumn(params) : await tables.decrementRowColumn(params)
     ) as Row
     if (column === 'count' && typeof row.count === 'number') finalCount = row.count
+  }
+
+  const startCount = Number((resource as Row).count ?? 0)
+  const milestone = resourceType === 'post' ? crossedMilestone(startCount, finalCount) : null
+  if (milestone) {
+    await notify({
+      recipientId: String((resource as Row).userId ?? ''),
+      type: 'milestone',
+      actor: null,
+      postId: resourceId,
+      postTitle: String((resource as Row).title ?? ''),
+      preview: String(milestone),
+      dedupeKey: `milestone:${resourceId}:${milestone}`,
+    })
   }
 
   return { ok: true, data: { vote, count: finalCount } }

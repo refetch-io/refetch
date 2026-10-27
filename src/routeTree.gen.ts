@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppChannelsRouteImport } from './routes/_app/channels'
@@ -19,7 +21,10 @@ import { Route as AppFollowingRouteImport } from './routes/_app/following'
 import { Route as AppMeRouteImport } from './routes/_app/me'
 import { Route as AppMessagesRouteImport } from './routes/_app/messages'
 import { Route as AppMinesRouteImport } from './routes/_app/mines'
+import { Route as AppModerationRouteImport } from './routes/_app/moderation'
 import { Route as AppNewRouteImport } from './routes/_app/new'
+import { Route as AppNotificationsRouteImport } from './routes/_app/notifications'
+import { Route as AppSavedRouteImport } from './routes/_app/saved'
 import { Route as AppShowRouteImport } from './routes/_app/show'
 import { Route as AppSubmitRouteImport } from './routes/_app/submit'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
@@ -38,6 +43,16 @@ const AppRoute = AppRouteImport.update({
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -80,9 +95,24 @@ const AppMinesRoute = AppMinesRouteImport.update({
   path: '/mines',
   getParentRoute: () => AppRoute,
 } as any)
+const AppModerationRoute = AppModerationRouteImport.update({
+  id: '/moderation',
+  path: '/moderation',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppNewRoute = AppNewRouteImport.update({
   id: '/new',
   path: '/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSavedRoute = AppSavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
   getParentRoute: () => AppRoute,
 } as any)
 const AppShowRoute = AppShowRouteImport.update({
@@ -144,6 +174,8 @@ const ApiOgThreadIdRoute = ApiOgThreadIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
   '/channels': typeof AppChannelsRoute
   '/design': typeof AppDesignRoute
@@ -151,7 +183,10 @@ export interface FileRoutesByFullPath {
   '/me': typeof AppMeRoute
   '/messages': typeof AppMessagesRouteWithChildren
   '/mines': typeof AppMinesRoute
+  '/moderation': typeof AppModerationRoute
   '/new': typeof AppNewRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/saved': typeof AppSavedRoute
   '/show': typeof AppShowRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
@@ -166,13 +201,18 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
   '/channels': typeof AppChannelsRoute
   '/design': typeof AppDesignRoute
   '/following': typeof AppFollowingRoute
   '/me': typeof AppMeRoute
   '/mines': typeof AppMinesRoute
+  '/moderation': typeof AppModerationRoute
   '/new': typeof AppNewRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/saved': typeof AppSavedRoute
   '/show': typeof AppShowRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
@@ -189,6 +229,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
   '/_app/channels': typeof AppChannelsRoute
   '/_app/design': typeof AppDesignRoute
@@ -196,7 +238,10 @@ export interface FileRoutesById {
   '/_app/me': typeof AppMeRoute
   '/_app/messages': typeof AppMessagesRouteWithChildren
   '/_app/mines': typeof AppMinesRoute
+  '/_app/moderation': typeof AppModerationRoute
   '/_app/new': typeof AppNewRoute
+  '/_app/notifications': typeof AppNotificationsRoute
+  '/_app/saved': typeof AppSavedRoute
   '/_app/show': typeof AppShowRoute
   '/_app/submit': typeof AppSubmitRoute
   '/_auth/signin': typeof AuthSigninRoute
@@ -214,6 +259,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/welcome'
     | '/channels'
     | '/design'
@@ -221,7 +268,10 @@ export interface FileRouteTypes {
     | '/me'
     | '/messages'
     | '/mines'
+    | '/moderation'
     | '/new'
+    | '/notifications'
+    | '/saved'
     | '/show'
     | '/submit'
     | '/signin'
@@ -236,13 +286,18 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/welcome'
     | '/channels'
     | '/design'
     | '/following'
     | '/me'
     | '/mines'
+    | '/moderation'
     | '/new'
+    | '/notifications'
+    | '/saved'
     | '/show'
     | '/submit'
     | '/signin'
@@ -258,6 +313,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_auth'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/welcome'
     | '/_app/channels'
     | '/_app/design'
@@ -265,7 +322,10 @@ export interface FileRouteTypes {
     | '/_app/me'
     | '/_app/messages'
     | '/_app/mines'
+    | '/_app/moderation'
     | '/_app/new'
+    | '/_app/notifications'
+    | '/_app/saved'
     | '/_app/show'
     | '/_app/submit'
     | '/_auth/signin'
@@ -283,6 +343,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WelcomeRoute: typeof WelcomeRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   ApiOgThreadIdRoute: typeof ApiOgThreadIdRoute
@@ -302,6 +364,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/welcome': {
@@ -360,11 +436,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMinesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/moderation': {
+      id: '/_app/moderation'
+      path: '/moderation'
+      fullPath: '/moderation'
+      preLoaderRoute: typeof AppModerationRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/new': {
       id: '/_app/new'
       path: '/new'
       fullPath: '/new'
       preLoaderRoute: typeof AppNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/saved': {
+      id: '/_app/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof AppSavedRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/show': {
@@ -468,7 +565,10 @@ interface AppRouteChildren {
   AppMeRoute: typeof AppMeRoute
   AppMessagesRoute: typeof AppMessagesRouteWithChildren
   AppMinesRoute: typeof AppMinesRoute
+  AppModerationRoute: typeof AppModerationRoute
   AppNewRoute: typeof AppNewRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppSavedRoute: typeof AppSavedRoute
   AppShowRoute: typeof AppShowRoute
   AppSubmitRoute: typeof AppSubmitRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -484,7 +584,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppMeRoute: AppMeRoute,
   AppMessagesRoute: AppMessagesRouteWithChildren,
   AppMinesRoute: AppMinesRoute,
+  AppModerationRoute: AppModerationRoute,
   AppNewRoute: AppNewRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppSavedRoute: AppSavedRoute,
   AppShowRoute: AppShowRoute,
   AppSubmitRoute: AppSubmitRoute,
   AppIndexRoute: AppIndexRoute,
@@ -510,6 +613,8 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   WelcomeRoute: WelcomeRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   ApiOgThreadIdRoute: ApiOgThreadIdRoute,

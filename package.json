@@ -10,6 +10,8 @@
     "build:app": "vite build",
     "preview": "vite preview --port 3000",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "appwrite:setup": "node scripts/appwrite-setup.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -47,6 +49,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   }
 }

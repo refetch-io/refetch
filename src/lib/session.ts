@@ -23,6 +23,11 @@ const USER_SCOPED = new Set([
   'unread',
   'conversation',
   'messages',
+  'notifications',
+  'notification-count',
+  'saved',
+  'saved-ids',
+  'moderation',
 ])
 
 export function useSession(): { user: SessionUser | null } {

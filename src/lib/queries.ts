@@ -5,6 +5,9 @@ import { fetchFeed, fetchMyPosts, fetchThread } from '@/api/content'
 import { fetchGitHubStars, fetchLiveVisitors, fetchTrendingTopics, fetchVisitorSeries } from '@/api/insights'
 import { fetchPublicConfig, fetchSession } from '@/api/session'
 import { fetchConversation, fetchInbox, fetchMessages, fetchUnreadCount } from '@/api/messages'
+import { fetchNotificationCount, fetchNotificationSettings, fetchNotifications } from '@/api/notifications'
+import { fetchSavedIds, fetchSavedStories } from '@/api/saves'
+import { fetchModerationQueue } from '@/api/moderation'
 import {
   fetchOnboarding,
   fetchProfile,
@@ -217,4 +220,53 @@ export const followedIdsQuery = (userId: string) =>
     queryKey: ['followed', userId],
     queryFn: () => fetchFollowedIds(),
     staleTime: 60_000,
+  })
+
+/* ──────────────────────────── Notifications ──────────────────────────── */
+
+export const notificationCountQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['notification-count', userId],
+    queryFn: () => fetchNotificationCount(),
+    staleTime: 10_000,
+    refetchInterval: 30_000,
+  })
+
+export const notificationsQuery = (userId: string) =>
+  infiniteQueryOptions({
+    queryKey: ['notifications', userId],
+    queryFn: ({ pageParam }) => fetchNotifications({ data: { before: pageParam } }),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (last) => last.nextCursor ?? undefined,
+    staleTime: 10_000,
+  })
+
+export const notificationSettingsQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['notifications', userId, 'settings'],
+    queryFn: () => fetchNotificationSettings(),
+    staleTime: 5 * 60_000,
+  })
+
+/* ──────────────────────────────── Saved ──────────────────────────────── */
+
+export const savedIdsQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['saved-ids', userId],
+    queryFn: () => fetchSavedIds(),
+    staleTime: 60_000,
+  })
+
+export const savedStoriesQuery = (page: number, userId: string) =>
+  queryOptions({
+    queryKey: ['saved', page, userId],
+    queryFn: () => fetchSavedStories({ data: { page } }),
+    staleTime: 15_000,
+  })
+
+export const moderationQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['moderation', userId],
+    queryFn: () => fetchModerationQueue(),
+    staleTime: 10_000,
   })

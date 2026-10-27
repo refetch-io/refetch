@@ -11,6 +11,7 @@ import { Favicon } from '../favicon'
 import { VoteControl } from '../vote-control'
 import { ChannelTag, useChannels } from '../channels/channel-parts'
 import { useJoinGate } from '../auth/join-gate'
+import { SaveButton } from '../saved/save-button'
 
 export function PostRow({
   post,
@@ -32,7 +33,10 @@ export function PostRow({
     'text-label decoration-brand-text/30 underline-offset-[3px] transition-colors hover:text-brand-text focus-visible:rounded-sm'
 
   return (
-    <ListItem className="group/row flex items-center gap-2 py-2.5 pr-3 pl-2 transition-colors duration-200 hover:bg-fill-secondary/50 sm:pr-4">
+    <ListItem
+      data-kb-item
+      className="group/row flex items-center gap-2 py-2.5 pr-3 pl-2 transition-colors duration-200 hover:bg-fill-secondary/50 sm:pr-4"
+    >
       {rank !== undefined && (
         <span
           aria-hidden
@@ -70,6 +74,7 @@ export function PostRow({
                 if (gate(event, post)) trackPostClick(post.id, post.title, true)
               }}
               onAuxClick={(event) => gate(event, post)}
+              data-kb-action="open"
               className={titleClass}
             >
               {post.title}
@@ -83,6 +88,7 @@ export function PostRow({
               to="/threads/$threadId"
               params={{ threadId: post.id }}
               onClick={() => trackPostClick(post.id, post.title, false)}
+              data-kb-action="open"
               className={titleClass}
             >
               {post.title}
@@ -130,11 +136,13 @@ export function PostRow({
         </div>
       </div>
 
+      {!demo && <SaveButton postId={post.id} quiet className="max-sm:hidden" />}
       <Link
         to="/threads/$threadId"
         params={{ threadId: post.id }}
         onClick={() => trackPostClick(post.id, post.title, false)}
         aria-label={`${post.countComments} comments on “${post.title}”`}
+        data-kb-action="comments"
         className="inline-flex h-7 shrink-0 pressable items-center gap-1 rounded-full bg-fill-secondary px-2.5 text-footnote font-semibold text-label-secondary tabular hover:bg-brand-tint hover:text-brand-text max-sm:hidden"
       >
         <MessageCircle className="size-3.5" strokeWidth={2.2} aria-hidden />

@@ -90,6 +90,7 @@ export function FeedPagination({ page, hasMore }: { page: number; hasMore: boole
                   page: page - 1 === 1 ? undefined : page - 1,
                 })}
                 resetScroll
+                data-kb-page="previous"
               >
                 <ChevronLeft strokeWidth={2.5} />
                 Previous
@@ -110,6 +111,7 @@ export function FeedPagination({ page, hasMore }: { page: number; hasMore: boole
                 to="."
                 search={(prev: Record<string, unknown>) => ({ ...prev, page: page + 1 })}
                 resetScroll
+                data-kb-page="next"
               >
                 Next
                 <ChevronRight strokeWidth={2.5} />

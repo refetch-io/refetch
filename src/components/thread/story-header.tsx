@@ -35,6 +35,8 @@ import { ChannelTag } from '../channels/channel-parts'
 import { ShareDialog } from '../messages/share-dialog'
 import { FollowButton } from '../people/follow-button'
 import { useJoinGate } from '../auth/join-gate'
+import { SaveButton } from '../saved/save-button'
+import { ReportButton } from '../moderation/report-dialog'
 
 export function BackButton() {
   const router = useRouter()
@@ -88,7 +90,7 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
   }
 
   return (
-    <Card className="animate-rise-in p-4 sm:p-6">
+    <Card data-kb-item className="animate-rise-in p-4 sm:p-6">
       <div className="flex gap-3 sm:gap-4">
         <VoteControl
           type="post"
@@ -162,6 +164,7 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
                     if (gate(event, post)) trackPostClick(post.id, post.title, true)
                   }}
                   onAuxClick={(event) => gate(event, post)}
+                  data-kb-action="open"
                 >
                   <BookOpen />
                   Read article
@@ -174,6 +177,7 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
               Share
             </Button>
             <ShareDialog post={post} url={permalink} open={sharing} onOpenChange={setSharing} />
+            <SaveButton postId={post.id} variant="button" />
             <Button
               variant="ghost"
               size="icon"
@@ -195,6 +199,9 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
               >
                 <Trash2 />
               </Button>
+            )}
+            {!isOwner && (
+              <ReportButton resourceType="post" resourceId={post.id} size="md" className="ml-auto" />
             )}
           </div>
         </div>

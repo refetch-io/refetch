@@ -19,33 +19,6 @@
 
 **Refetch** was born from a simple yet powerful idea: create a modern, open-source alternative to Hacker News that combines the best of community-driven curation with intelligent AI-powered content discovery. Free from YC-control, open and transparent, doesn't favor anyone.
 
-<div align="center">
-
-## 🔥 Top Posts Today (Tuesday, September 16, 2025)
-
-*Auto-updated with the highest-scoring community content*
-
-</div>
-
-**🥇 [Unraveling the Mystery of 'Leopard Spots' on Mars: A New Hint of Life?](https://refetch.io/threads/68c917670014c1882305)**
-📊 Votes: **0** | ⏰ 7 minutes ago | 🔗 [Original](https://sciencedaily.com/releases/2025/09/250916032210.htm)
-
-**🥈 [Condor Technology's 'Cuzco' RISC-V CPU to Revolutionize Datacenters](https://refetch.io/threads/68c852bb002bd3d604f5)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://www.nextplatform.com/2025/09/15/condor-technology-to-fly-cuzco-risc-v-cpu-into-the-datacenter/)
-
-**🥉 [AOMedia's Next-Gen Video Codec AV2 Set for Year-End Launch](https://refetch.io/threads/68c860fe0018b7b0180e)**
-📊 Votes: **0** | ⏰ 13 hours ago | 🔗 [Original](https://aomedia.org/press%20releases/AOMedia-Announces-Year-End-Launch-of-Next-Generation-Video-Codec-AV2-on-10th-Anniversary/)
-
-**⭐ [Active NPM Supply Chain Attack: Tinycolor and 40 Packages Compromised](https://refetch.io/threads/68c8ae020039b1701666)**
-📊 Votes: **0** | ⏰ 7 hours ago | 🔗 [Original](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages)
-
-**⭐ [In-Depth Review: macOS 26 Tahoe](https://refetch.io/threads/68c84c5a0009ff3aa8eb)**
-📊 Votes: **0** | ⏰ 14 hours ago | 🔗 [Original](https://arstechnica.com/gadgets/2025/09/macos-26-tahoe-the-ars-technica-review/)
-
----
-
-*Last updated: 2025-09-16T08:00:21.416Z*
-
 ### What We're Building
 
 - **🤖 AI-Powered Discovery**: Our intelligent scout functions automatically discover high-quality tech content from leading sources so you can be lazy and enjoy
@@ -54,7 +27,11 @@
 - **⌘K Command center**: Search stories, jump to channels and pages, or switch appearance from anywhere
 - **👤 Profiles & follows**: Public profiles with photos from Appwrite Avatars, karma and history. Follow people and their stories join your Following feed
 - **💬 Messages**: Direct messages and group chats with replies, reactions, read receipts, shared stories, mute and block
-- **🌍 Global Reach**: Multilingual support with AI-powered translations in 12+ languages
+- **🔔 Notifications**: Replies, comments on your stories, new followers and points milestones, in the app and by email (Appwrite Messaging)
+- **🔖 Saved stories**: Bookmark stories to read later
+- **🛡️ Moderation**: Report stories and comments; moderators review a queue and remove what breaks the rules
+- **⌨️ Keyboard first**: `j`/`k` to move, `o` to open, `u` to upvote, `s` to save, `?` for every shortcut
+- **📲 Installable**: Add Refetch to your home screen or dock as an app
 - **🔒 Privacy-First**: Built on Appwrite's secure, self-hostable backend infrastructure
 - **📱 Modern UX**: An Apple-inspired, server-rendered interface with dark mode — the opposite of HN
 - **🚀 Open Source**: 100% open source, community-driven
@@ -83,7 +60,8 @@ While Hacker News has been the go-to platform for tech discussions for years, we
 - **Tables DB** — `posts`, `comments`, `votes`, `daily_topics` and `topics`, plus `channels` and `channel_members` for channels, `profiles`, `user_follows` and `user_blocks` for people, and `conversations`, `conversation_members`, `messages` and `message_reactions` for messages. The web app reads and writes them on the server with an API key, exactly as before (same tables, columns, counters and rate limits; posts gain an optional `channel` column).
 - **Authentication** — email & password and **Continue with Appwrite** (Appwrite as an OAuth2 provider), run in the browser with the Appwrite web SDK. The browser then hands the server a short-lived JWT; the server verifies it with Appwrite and sets its own signed `httpOnly` cookie, so pages render signed-in on the first byte. The API key never creates sessions.
 - **Avatars** — site favicons and profile photos (`/avatars/photo`: uploaded photo, OAuth picture, Gravatar, then initials).
-- **Functions** — Scout, Enhancement, Algorithm, Topic stats and Readme (unchanged), plus Channels, in [`functions/`](functions).
+- **Functions** — Scout, Enhancement, Algorithm and Topic stats, plus Channels, in [`functions/`](functions).
+- **Messaging** — email notifications (replies, comments on your stories, new followers) through the project's email provider.
 - **Sites** — hosting with SSR.
 
 ### AI-Powered Features
@@ -91,7 +69,6 @@ While Hacker News has been the go-to platform for tech discussions for years, we
 - **Content Scout**: Automatically discovers tech articles from 20+ sources
 - **Content Enhancement**: AI analysis for quality scoring, categorization, summaries and optimization
 - **Smart Ranking**: Multi-factor algorithm considering time, quality, and community engagement
-- **Multilingual Support**: AI-powered translations and language detection
 
 ---
 
@@ -117,8 +94,7 @@ refetch/
 │   ├── enhancement/           # AI content analysis
 │   ├── algorithm/             # Ranking algorithm
 │   ├── topic-stats/           # Topic ranking (scheduled)
-│   ├── channels/              # Pulls each channel's sources (scheduled)
-│   └── readme/                # Syncs top posts into GitHub README
+│   └── channels/              # Pulls each channel's sources (scheduled)
 ├── scripts/appwrite-setup.mjs # Creates/updates tables, indexes and function shells
 ├── scripts/channels.json      # Channel catalog: names, colors, keywords and sources
 ├── scripts/channel-icons/     # Channel icons (PNG), uploaded to Storage by appwrite:setup
@@ -172,6 +148,7 @@ refetch/
 | `pnpm build:app` | Build the app only |
 | `pnpm preview` | Serve the production build locally |
 | `pnpm typecheck` | Type-check the project |
+| `pnpm test` | Run the unit tests (Vitest) |
 | `pnpm format` | Format with Prettier (Tailwind classes sorted) |
 | `pnpm appwrite:setup` | Create or update the database, tables, indexes and function shells |
 
@@ -217,12 +194,16 @@ Table IDs use the legacy name `*_COLLECTION_ID` but refer to **Appwrite Tables**
 | `APPWRITE_CONVERSATION_MEMBERS_COLLECTION_ID` | `conversation_members` table (read state, unread counts, mute). Defaults to `conversation_members`. |
 | `APPWRITE_MESSAGES_COLLECTION_ID` | `messages` table. Defaults to `messages`. |
 | `APPWRITE_MESSAGE_REACTIONS_COLLECTION_ID` | `message_reactions` table. Defaults to `message_reactions`. |
+| `APPWRITE_NOTIFICATIONS_COLLECTION_ID` | `notifications` table (the bell). Defaults to `notifications`. |
+| `APPWRITE_SAVES_COLLECTION_ID` | `saves` table (saved stories). Defaults to `saves`. |
+| `APPWRITE_REPORTS_COLLECTION_ID` | `reports` table (the moderation queue). Defaults to `reports`. |
 
 ### 3. Web app
 
 | Variable | Description |
 | --- | --- |
-| `SITE_URL` | Canonical public origin for SEO metadata and social cards (default `https://refetch.io`). |
+| `SITE_URL` | Canonical public origin for SEO metadata, social cards, the sitemap and links in emails (default `https://refetch.io`). |
+| `MODERATOR_USER_IDS` | Optional. Comma-separated user IDs who can review reports, besides accounts with the `moderator` or `admin` label. |
 | `PLAUSIBLE_API_KEY` | Optional. Powers “refetchers online” and the visitors chart. |
 | `APPWRITE_ANALYTICS_PROPERTY_ID` | Optional. Appwrite Analytics property; pageviews and custom events are sent alongside Plausible, from production hosts only. |
 | `PLAUSIBLE_SITE_ID` | Optional. Plausible site ID (e.g. `refetch.io`). |
@@ -242,16 +223,6 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 | --- | --- |
 | `SCOUT_TARGET_WEBSITES` | Comma-separated site roots to crawl (can be very long). |
 
-### 6. Readme function only
-
-| Variable | Description |
-| --- | --- |
-| `README_ORIGIN` | Public origin for links in generated `README.md` (default `https://refetch.io`). |
-| `README_GITHUB_TOKEN` | PAT with `contents: write` (or equivalent) to update `README.md`. |
-| `README_GITHUB_OWNER` | Owner (user or org). |
-| `README_GITHUB_REPO` | Repository name. |
-| `README_GITHUB_BRANCH` | Branch to commit on (default `main`). |
-
 **Bootstrap (`scripts/appwrite-setup.mjs`):** `npm run build` runs this first; it uses the same **Appwrite connection** and **data IDs** to create or update the database, tables, indexes, and function shells (not deployments or function env).
 
 ### Which parts need which groups
@@ -264,7 +235,6 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 | **Algorithm** | 1, 2 (posts only) |
 | **Topic stats** | 1, 2 (incl. daily_topics + topics) |
 | **Channels** | 1, 2 (posts + channels) |
-| **Readme** | 1, 2 (posts only), 6 |
 
 ---
 
@@ -275,6 +245,8 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 3. **Platforms** — add a Web platform for each hostname the site runs on (e.g. `refetch.io`, `localhost`) so OAuth redirects are accepted.
 4. **People & messages** — `pnpm appwrite:setup` also creates the profile, follow, block and messaging tables. Profiles are written when people sign in (the server key doesn't need `users.read`); people who haven't signed in since are shown from their posts and comments. Messages refresh by polling (every few seconds in an open conversation).
 5. **Channels** — `pnpm appwrite:setup` adds the `posts.channel` column, creates `channels` and `channel_members`, seeds the catalog from [`scripts/channels.json`](scripts/channels.json) (member counts are kept), uploads each icon from [`scripts/channel-icons`](scripts/channel-icons) to the public `channel-icons` bucket and creates the scheduled **Channels** function. Deploy [`functions/channels`](functions/channels) to start the content flowing. Until the setup runs, the app serves the bundled catalog and matches stories by topic, but joining is unavailable.
+6. **Notifications** — `pnpm appwrite:setup` creates the `notifications` table. Emails go out through Appwrite Messaging: add an email provider (SMTP, Resend, Mailgun…) in *Messaging → Providers* and give the API key the `messages.write` scope. Until then the bell works and emails are skipped.
+7. **Moderation** — add the `moderator` (or `admin`) label to an account in *Auth → Users*, or list its ID in `MODERATOR_USER_IDS`. Labels are read when someone signs in, so sign out and back in after adding one. The queue lives at `/moderation`.
 
 ## ☁️ Deploying to Appwrite Sites
 
@@ -309,7 +281,7 @@ We believe in the power of community-driven development and welcome all types of
    git checkout -b feature/amazing-feature
    ```
 3. **Make your changes**
-4. **Test thoroughly** (`pnpm typecheck && pnpm build:app`)
+4. **Test thoroughly** (`pnpm typecheck && pnpm test && pnpm build:app`; CI runs the same checks on every pull request)
 5. **Submit a pull request**
 
 ---
@@ -322,7 +294,7 @@ Refetch uses several Appwrite serverless functions for automated content process
 Automatically discovers high-quality tech content from 20+ sources including TechCrunch, The Verge, Ars Technica, and more.
 
 ### Enhancement Function
-AI-powered content analysis that generates metadata, quality scores, summaries and multilingual translations.
+AI-powered content analysis that generates metadata, quality scores and summaries.
 
 ### Algorithm Function
 Sophisticated ranking algorithm that considers time decay, quality metrics, and community engagement.
@@ -332,9 +304,6 @@ Scheduled job that aggregates post data into `daily_topics` and `topics` tables 
 
 ### Channels function
 Runs every two hours (at :15). For each channel in `channels`, it reads the official feeds first (blogs, release notes, GitHub releases), falls back to community feeds (mostly DEV tags) when those have nothing new, and posts at most one fresh story per channel as Scout, tagged with that channel. Enhancement then scores and summarizes it like any other story. Stories also reach channels when their AI topics match a channel's keywords. To add a channel, add it to [`scripts/channels.json`](scripts/channels.json), drop a square PNG icon (256×256, full bleed; the app rounds the corners) at `scripts/channel-icons/<id>.png` and run `pnpm appwrite:setup`. You can also upload an icon to the `channel-icons` bucket in the Console and put its file ID in the channel's `icon` column.
-
-### Readme function
-Commits an auto-generated “top posts” section into this repository’s `README.md` using the GitHub API.
 
 ---
 

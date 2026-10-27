@@ -4,9 +4,9 @@ import { FEED_MAX_PAGES, FEED_PAGE_SIZE } from '@/lib/constants'
 import { cleanUrl } from '@/lib/url'
 import { isNotFound } from './appwrite.server'
 import {
-  COMMENT_FIELDS,
   POST_LIST_FIELDS,
   Query,
+  listCommentRows,
   listPostRows,
   db,
   getUserVotes,
@@ -119,19 +119,11 @@ export async function getThread(postId: string, userId?: string): Promise<Thread
         if (isNotFound(error)) return null
         throw error
       }),
-    tables
-      .listRows({
-        databaseId: ids.databaseId,
-        tableId: ids.comments,
-        queries: [
-          Query.equal('postId', postId),
-          Query.orderDesc('$createdAt'),
-          Query.limit(MAX_THREAD_COMMENTS),
-          Query.select(COMMENT_FIELDS),
-        ],
-        total: false,
-      })
-      .then((result) => result.rows as Array<Row>),
+    listCommentRows([
+      Query.equal('postId', postId),
+      Query.orderDesc('$createdAt'),
+      Query.limit(MAX_THREAD_COMMENTS),
+    ]),
   ])
 
   if (!postRow) return null

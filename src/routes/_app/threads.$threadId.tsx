@@ -56,6 +56,16 @@ function ThreadPage() {
   const [replyingTo, setReplyingTo] = React.useState<CommentNode | null>(null)
   const [highlightId, setHighlightId] = React.useState<string | null>(null)
 
+  // Links to a comment (from notifications) land on it and flash it.
+  React.useEffect(() => {
+    const match = /^#comment-([A-Za-z0-9._-]+)$/.exec(window.location.hash)
+    if (!match) return
+    setHighlightId(match[1])
+    requestAnimationFrame(() => {
+      document.getElementById(`comment-${match[1]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }, [threadId])
+
   const onPosted = React.useCallback((comment: Comment) => {
     setHighlightId(comment.id)
     requestAnimationFrame(() => {

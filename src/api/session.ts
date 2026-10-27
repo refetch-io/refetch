@@ -2,9 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { Account, Client } from 'node-appwrite'
 import { z } from 'zod'
 import type { ActionResult, SessionUser } from '@/lib/types'
-import { getPublicConfig } from '@/server/env.server'
+import { getModeratorIds, getPublicConfig } from '@/server/env.server'
 import { isNewMember, syncProfile } from '@/server/profiles.server'
-import { clearSessionCookie, getSessionUser, issueSession } from '@/server/session.server'
+import { MODERATOR_LABELS, clearSessionCookie, getSessionUser, issueSession } from '@/server/session.server'
 
 export const fetchSession = createServerFn({ method: 'GET' }).handler(async () => {
   return getSessionUser()
@@ -28,7 +28,9 @@ export const establishSession = createServerFn({ method: 'POST' })
     const user: SessionUser = { id: account.$id, name: account.name, email: account.email }
     const isNew = await isNewMember(user.id)
     await syncProfile(user, account.registration)
-    issueSession(user)
+    const mod = account.labels.some((label) => MODERATOR_LABELS.includes(label))
+    issueSession(user, { mod })
+    if (mod || getModeratorIds().has(user.id)) user.moderator = true
     return { ok: true, data: { user, isNew } }
   })
 

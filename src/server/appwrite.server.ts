@@ -1,4 +1,4 @@
-import { Account, AppwriteException, Client, TablesDB } from 'node-appwrite'
+import { Account, AppwriteException, Client, Messaging, TablesDB } from 'node-appwrite'
 import { getRequestHeader } from '@tanstack/react-start/server'
 import { getAppwriteConfig } from './env.server'
 
@@ -19,6 +19,7 @@ export function createAdminClient() {
   return {
     account: new Account(client),
     tables: new TablesDB(client),
+    messaging: new Messaging(client),
   }
 }
 
