@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowUpRight, Hash } from 'lucide-react'
 import { liveVisitorsQuery, trendingTopicsQuery, visitorSeriesQuery } from '@/lib/queries'
+import { useCountUp } from '@/lib/use-count-up'
 import type { VisitorRange } from '@/lib/types'
 import { cn, compactNumber, pluralize } from '@/lib/utils'
 import { Card, SectionLabel } from '../ui/card'
@@ -9,6 +10,7 @@ import { Skeleton } from '../ui/misc'
 import { SegmentedControl } from '../ui/segmented-control'
 import { AppwriteIcon } from '../brand-icons'
 import { Sparkline } from './sparkline'
+import { TodayWidget } from './today-widget'
 import { Link } from '@tanstack/react-router'
 import { followedIdsQuery, whoToFollowQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
@@ -38,6 +40,8 @@ export function ActivityWidget() {
   const [range, setRange] = React.useState<VisitorRange>('24h')
   const live = useQuery(liveVisitorsQuery())
   const series = useQuery(visitorSeriesQuery(range))
+  const online = useCountUp(live.data ?? 0)
+  const visitors = useCountUp(series.data?.total ?? 0)
 
   // Analytics are optional; hide the widget entirely when unavailable.
   if (live.isSuccess && live.data === null && series.isSuccess && series.data === null) return null
@@ -51,7 +55,7 @@ export function ActivityWidget() {
           <Skeleton className="h-4 w-36 rounded-full" />
         ) : (
           <p className="animate-fade-in text-subhead text-label-secondary">
-            <span className="font-rounded text-headline text-label tabular">{live.data}</span>{' '}
+            <span className="font-rounded text-headline text-label tabular">{online}</span>{' '}
             {live.data === 1 ? 'refetcher' : 'refetchers'} online
           </p>
         )}
@@ -66,7 +70,7 @@ export function ActivityWidget() {
       <div className="mt-0.5 flex h-8">
         {series.data ? (
           <p className="animate-fade-in font-rounded text-title-2 text-label tabular">
-            {compactNumber(series.data.total)}
+            {compactNumber(visitors)}
           </p>
         ) : (
           <Skeleton className="mt-1 h-6 w-20 rounded-full" />
@@ -195,6 +199,7 @@ export function InsightsRail({ children }: { children?: React.ReactNode }) {
       className="sticky top-[76px] hidden w-[300px] shrink-0 space-y-4 self-start xl:block"
     >
       {children}
+      <TodayWidget />
       <ActivityWidget />
       <TrendingWidget />
       <WhoToFollow />

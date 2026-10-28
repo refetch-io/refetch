@@ -1,7 +1,7 @@
-import type { ThreadStats, TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
+import type { ThreadStats, TodayStats, TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
 import { buildThreadStats, threadStatsWindow, type MetricRow } from '@/lib/thread-stats'
 import { topicDisplayLabel, topicKey } from '@/lib/topics'
-import { Query, db, type Row } from './db.server'
+import { Query, db, listPostRows, type Row } from './db.server'
 import { getAppwriteConfig, getPublicConfig } from './env.server'
 
 /** Tiny TTL cache that serves stale data when the upstream fails. Oldest keys go past `maxEntries`. */
@@ -295,6 +295,91 @@ export function getTrendingTopics(limit = 8): Promise<Array<TrendingTopic>> {
       return daily.length > 0 ? daily : computeTopicsFromPosts(limit)
     },
     [],
+  )
+}
+
+/* ──────────────────────────────────── Today ──────────────────────────────────── */
+
+const todayCache = createCache<TodayStats | null>()
+
+const HOUR_MS = 3_600_000
+const DAY_MS = 24 * HOUR_MS
+/** Today's posts are read in pages; the cap keeps a flood from turning into dozens of requests. */
+const TODAY_PAGE_SIZE = 500
+const TODAY_MAX_PAGES = 10
+
+/** Stories shared since midnight UTC (by hour, and against yesterday), with the day's comments, votes and channels. */
+export function getTodayStats(): Promise<TodayStats | null> {
+  return todayCache(
+    'today',
+    2 * 60_000,
+    async () => {
+      const { tables, ids } = db()
+      const now = Date.now()
+      const today = new Date(now)
+      const midnight = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+      const iso = (ms: number) => new Date(ms).toISOString()
+      // Same gates as the feeds, so the number matches what people can actually read.
+      const onTopic = [
+        Query.lessThan('spamScore', 70),
+        Query.greaterThan('relevancyScore', 30),
+        Query.equal('enhanced', true),
+      ]
+      const count = (tableId: string, queries: Array<string>) =>
+        tables
+          .listRows({
+            databaseId: ids.databaseId,
+            tableId,
+            queries: [...queries, Query.limit(1), Query.select(['$id'])],
+          })
+          .then((result) => result.total)
+
+      async function todaysPosts() {
+        const rows: Array<Row> = []
+        for (let page = 0; page < TODAY_MAX_PAGES; page++) {
+          const batch = await listPostRows([
+            Query.greaterThanEqual('$createdAt', iso(midnight)),
+            ...onTopic,
+            Query.limit(TODAY_PAGE_SIZE),
+            Query.select(['$id', '$createdAt', 'channel']),
+            ...(rows.length > 0 ? [Query.cursorAfter(rows[rows.length - 1].$id)] : []),
+          ])
+          rows.push(...batch)
+          if (batch.length < TODAY_PAGE_SIZE) break
+        }
+        return rows
+      }
+
+      const [posts, yesterday, comments, votes] = await Promise.all([
+        todaysPosts(),
+        count(ids.posts, [
+          Query.greaterThanEqual('$createdAt', iso(midnight - DAY_MS)),
+          Query.lessThan('$createdAt', iso(now - DAY_MS)),
+          ...onTopic,
+        ]),
+        count(ids.comments, [Query.greaterThanEqual('$createdAt', iso(midnight))]),
+        count(ids.votes, [Query.greaterThanEqual('$createdAt', iso(midnight))]),
+      ])
+
+      const hours = Array.from({ length: 24 }, () => 0)
+      const channels = new Set<string>()
+      for (const post of posts) {
+        const hour = Math.floor((new Date(post.$createdAt).getTime() - midnight) / HOUR_MS)
+        if (hour >= 0 && hour < 24) hours[hour]++
+        if (typeof post.channel === 'string' && post.channel) channels.add(post.channel)
+      }
+
+      return {
+        stories: posts.length,
+        yesterday,
+        hours,
+        hour: today.getUTCHours(),
+        comments,
+        votes,
+        channels: channels.size,
+      }
+    },
+    null,
   )
 }
 

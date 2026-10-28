@@ -31,6 +31,14 @@ interface SparklineProps {
 export function Sparkline({ points, formatLabel, className }: SparklineProps) {
   const id = React.useId()
   const [hover, setHover] = React.useState<number | null>(null)
+  // The line draws in from the left on mount and whenever the data changes (a new range).
+  // A timer rather than a frame, so it still finishes on pages that get no frames.
+  const [revealed, setRevealed] = React.useState(false)
+  React.useEffect(() => {
+    setRevealed(false)
+    const timer = window.setTimeout(() => setRevealed(true), 30)
+    return () => window.clearTimeout(timer)
+  }, [points])
   const max = Math.max(1, ...points.map((p) => p.visitors))
 
   const coords = points.map((p, i): [number, number] => [
@@ -60,7 +68,15 @@ export function Sparkline({ points, formatLabel, className }: SparklineProps) {
       <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         preserveAspectRatio="none"
-        className="block h-[72px] w-full overflow-visible"
+        // Only the reveal transitions; hiding again is instant so a new range starts from the left.
+        className={cn(
+          'block h-[72px] w-full overflow-visible',
+          revealed && 'transition-[clip-path] duration-1000',
+        )}
+        style={{
+          clipPath: revealed ? 'inset(-12px 0 -12px 0)' : 'inset(-12px 100% -12px 0)',
+          transitionTimingFunction: 'var(--ease-out-expo)',
+        }}
       >
         <defs>
           <linearGradient id={`${id}-fill`} x1="0" x2="0" y1="0" y2="1">

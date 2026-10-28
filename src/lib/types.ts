@@ -107,6 +107,22 @@ export interface VisitorPoint {
   visitors: number
 }
 
+/** Activity since midnight UTC, for the rail's "Today" card. */
+export interface TodayStats {
+  /** Enhanced, on-topic stories shared today. */
+  stories: number
+  /** Stories shared yesterday by this time of day. */
+  yesterday: number
+  /** Stories per UTC hour, 00:00 first. */
+  hours: Array<number>
+  /** The current UTC hour (bars after it haven't happened yet). */
+  hour: number
+  comments: number
+  votes: number
+  /** Channels that got at least one story today. */
+  channels: number
+}
+
 /** A thread's Appwrite Analytics totals since it was posted. */
 export interface ThreadStats {
   views: number

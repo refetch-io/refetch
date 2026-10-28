@@ -7,6 +7,7 @@ import {
   fetchGitHubStars,
   fetchLiveVisitors,
   fetchThreadStats,
+  fetchTodayStats,
   fetchTrendingTopics,
   fetchVisitorSeries,
 } from '@/api/insights'
@@ -97,6 +98,14 @@ export const trendingTopicsQuery = () =>
     queryKey: ['insights', 'topics'],
     queryFn: () => fetchTrendingTopics(),
     staleTime: 5 * 60_000,
+  })
+
+export const todayStatsQuery = () =>
+  queryOptions({
+    queryKey: ['insights', 'today'],
+    queryFn: () => fetchTodayStats(),
+    staleTime: 2 * 60_000,
+    refetchInterval: 2 * 60_000,
   })
 
 export const githubStarsQuery = () =>

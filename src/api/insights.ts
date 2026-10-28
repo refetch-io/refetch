@@ -5,6 +5,7 @@ import {
   getGitHubStars,
   getLiveVisitors,
   getThreadStats,
+  getTodayStats,
   getTrendingTopics,
   getVisitorSeries,
 } from '@/server/insights.server'
@@ -20,5 +21,7 @@ export const fetchThreadStats = createServerFn({ method: 'GET' })
   .handler(({ data }) => getThreadStats(data.postId))
 
 export const fetchTrendingTopics = createServerFn({ method: 'GET' }).handler(() => getTrendingTopics())
+
+export const fetchTodayStats = createServerFn({ method: 'GET' }).handler(() => getTodayStats())
 
 export const fetchGitHubStars = createServerFn({ method: 'GET' }).handler(() => getGitHubStars())
