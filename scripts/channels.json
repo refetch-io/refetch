@@ -11,6 +11,17 @@
     "communitySources": ["https://dev.to/feed/tag/appwrite", "https://dev.to/feed/appwrite"]
   },
   {
+    "id": "resend",
+    "name": "Resend",
+    "category": "Platforms",
+    "glyph": "Re",
+    "color": "#000000",
+    "description": "Email for developers: releases, guides and news from Resend and React Email.",
+    "keywords": ["Resend", "resend", "React Email", "Transactional Email", "Email API"],
+    "sources": ["https://resend.com/blog/rss.xml", "https://resend.com/changelog/rss.xml"],
+    "communitySources": ["https://dev.to/feed/tag/resend"]
+  },
+  {
     "id": "web",
     "name": "Web",
     "category": "Platforms",
