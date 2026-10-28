@@ -44,6 +44,72 @@
     "communitySources": ["https://dev.to/feed/tag/flutter", "https://dev.to/feed/tag/reactnative", "https://dev.to/feed/tag/ios", "https://dev.to/feed/tag/android"]
   },
   {
+    "id": "google",
+    "name": "Google",
+    "category": "Companies",
+    "glyph": "G",
+    "color": "#4285F4",
+    "description": "Gemini, Google Cloud, Chrome and research news from Google and DeepMind.",
+    "keywords": ["Google", "google", "Gemini", "Google Cloud", "DeepMind", "Chrome"],
+    "sources": ["https://blog.google/rss/", "https://research.google/blog/rss/"],
+    "communitySources": ["https://dev.to/feed/tag/google"]
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "category": "Companies",
+    "glyph": "Ap",
+    "color": "#000000",
+    "description": "Product launches, platform updates and machine learning research from Apple.",
+    "keywords": ["Apple", "apple", "iPhone", "macOS", "Apple Silicon", "WWDC", "Vision Pro"],
+    "sources": ["https://www.apple.com/newsroom/rss-feed.rss", "https://developer.apple.com/news/rss/news.rss", "https://machinelearning.apple.com/rss.xml"],
+    "communitySources": ["https://dev.to/feed/tag/apple"]
+  },
+  {
+    "id": "microsoft",
+    "name": "Microsoft",
+    "category": "Companies",
+    "glyph": "MS",
+    "color": "#0078D4",
+    "description": "Azure, Windows, Copilot and developer tools news from Microsoft.",
+    "keywords": ["Microsoft", "microsoft", "Azure", "Windows", "Copilot", "Visual Studio Code"],
+    "sources": ["https://blogs.microsoft.com/feed/", "https://devblogs.microsoft.com/landingpage/"],
+    "communitySources": ["https://dev.to/feed/tag/microsoft"]
+  },
+  {
+    "id": "meta",
+    "name": "Meta",
+    "category": "Companies",
+    "glyph": "Me",
+    "color": "#0081FB",
+    "description": "Engineering, AI and product news from Meta, Facebook, Instagram and WhatsApp.",
+    "keywords": ["Meta", "Facebook", "Instagram", "WhatsApp", "Llama"],
+    "sources": ["https://engineering.fb.com/feed/", "https://about.fb.com/feed/"],
+    "communitySources": ["https://dev.to/feed/tag/meta"]
+  },
+  {
+    "id": "amazon",
+    "name": "Amazon",
+    "category": "Companies",
+    "glyph": "Am",
+    "color": "#FF9900",
+    "description": "AWS launches, Amazon Science research and company news from Amazon.",
+    "keywords": ["Amazon", "amazon", "AWS", "Amazon Web Services", "Alexa"],
+    "sources": ["https://aws.amazon.com/blogs/aws/feed/", "https://www.amazon.science/index.rss", "https://www.aboutamazon.com/rss"],
+    "communitySources": ["https://dev.to/feed/tag/aws"]
+  },
+  {
+    "id": "nvidia",
+    "name": "NVIDIA",
+    "category": "Companies",
+    "glyph": "NV",
+    "color": "#76B900",
+    "description": "GPUs, CUDA and AI infrastructure news from NVIDIA.",
+    "keywords": ["NVIDIA", "Nvidia", "CUDA"],
+    "sources": ["https://nvidianews.nvidia.com/releases.xml", "https://blogs.nvidia.com/feed/", "https://developer.nvidia.com/blog/feed/"],
+    "communitySources": ["https://dev.to/feed/tag/nvidia"]
+  },
+  {
     "id": "javascript",
     "name": "JavaScript",
     "category": "Languages",
