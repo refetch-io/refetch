@@ -52,6 +52,14 @@ export async function isNewMember(userId: string): Promise<boolean> {
 
 /** userId → name last written, so a busy server doesn't rewrite the same row. */
 const synced = new Map<string, string>()
+/** Past this, the oldest entries go; forgetting one only costs a redundant profile read. */
+const SYNCED_MAX = 5_000
+
+function markSynced(userId: string, name: string) {
+  synced.delete(userId)
+  synced.set(userId, name)
+  if (synced.size > SYNCED_MAX) synced.delete(synced.keys().next().value!)
+}
 
 /** Create or refresh someone's profile from their account. Never throws. */
 export async function syncProfile(user: SessionUser, registeredAt?: string) {
@@ -80,10 +88,10 @@ export async function syncProfile(user: SessionUser, registeredAt?: string) {
         data: { name: user.name },
       })
     }
-    synced.set(user.id, user.name)
+    markSynced(user.id, user.name)
   } catch (error) {
     // 409: another request created it first.
-    if (error instanceof AppwriteException && error.code === 409) synced.set(user.id, user.name)
+    if (error instanceof AppwriteException && error.code === 409) markSynced(user.id, user.name)
     else console.error('[profiles] sync failed', error)
   }
 }
@@ -340,7 +348,7 @@ export async function updateProfile(
       data: { ...data, joinedAt: new Date().toISOString() },
     })
   }
-  synced.set(user.id, name)
+  markSynced(user.id, name)
   return { ok: true, data: { name } }
 }
 

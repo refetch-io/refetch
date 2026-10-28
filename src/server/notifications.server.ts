@@ -102,6 +102,10 @@ async function sendEmail(input: NotifyInput) {
   if (now - (lastEmailAt.get(input.recipientId) ?? 0) < EMAIL_COOLDOWN_MS) return
   if (!(await wantsEmail(input.recipientId))) return
   lastEmailAt.set(input.recipientId, now)
+  // Only the cooldown window matters, so drop older entries rather than keep one per person forever.
+  if (lastEmailAt.size > 1_000) {
+    for (const [id, at] of lastEmailAt) if (now - at >= EMAIL_COOLDOWN_MS) lastEmailAt.delete(id)
+  }
 
   const site = getSiteUrl()
   const headline = notificationSentence({

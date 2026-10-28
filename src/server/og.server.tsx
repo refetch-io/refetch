@@ -53,7 +53,20 @@ function loadRenderer(origin: string) {
 async function renderPng(element: ReactNode, cacheControl: string, origin: string): Promise<Response> {
   const { satori, Resvg } = await loadRenderer(origin)
   const svg = await satori(element, { width: WIDTH, height: HEIGHT, fonts })
-  const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng()
+  // resvg's objects live in WASM memory, which the garbage collector can't reclaim. Free both,
+  // or every image leaks ~3 MB and crawlers fetching share images run the server out of memory.
+  const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } })
+  let png: Uint8Array
+  try {
+    const image = resvg.render()
+    try {
+      png = image.asPng()
+    } finally {
+      image.free()
+    }
+  } finally {
+    resvg.free()
+  }
   return new Response(new Uint8Array(png), {
     headers: { 'Content-Type': 'image/png', 'Cache-Control': cacheControl },
   })
