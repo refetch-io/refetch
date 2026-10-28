@@ -79,14 +79,11 @@ const COLLECTION_IDS = {
   reports: process.env.APPWRITE_REPORTS_COLLECTION_ID || 'reports',
 };
 
-const DEFAULT_PERMS = [
-  Permission.read(Role.any()),
-  Permission.create(Role.users()),
-  Permission.update(Role.users()),
-  Permission.delete(Role.users()),
-];
-
-const STATS_PERMS = [Permission.read(Role.any())];
+/**
+ * Public content: anyone can read through the Appwrite API, but every write goes
+ * through the web app or a function with the API key, which checks ownership.
+ */
+const PUBLIC_READ_PERMS = [Permission.read(Role.any())];
 
 /** Server SDK only (API key). Never expose secrets via client permissions. */
 const SERVER_ONLY_PERMS = [];
@@ -135,7 +132,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.posts,
       name: 'Posts',
-      permissions: DEFAULT_PERMS,
+      permissions: PUBLIC_READ_PERMS,
       rowSecurity: false,
       // Mirrors Appwrite console: title/userId/userName required; topics = string[] with 256 chars per element.
       attributes: [
@@ -191,7 +188,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.comments,
       name: 'Comments',
-      permissions: DEFAULT_PERMS,
+      permissions: PUBLIC_READ_PERMS,
       rowSecurity: false,
       attributes: [
         { key: 'postId', type: 'string', size: 512, required: true, array: false, default: null },
@@ -214,7 +211,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.votes,
       name: 'Votes',
-      permissions: DEFAULT_PERMS,
+      permissions: SERVER_ONLY_PERMS,
       rowSecurity: false,
       attributes: [
         { key: 'count', type: 'integer', required: false, array: false, default: null },
@@ -257,7 +254,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.daily_topics,
       name: 'Daily topics',
-      permissions: STATS_PERMS,
+      permissions: PUBLIC_READ_PERMS,
       rowSecurity: false,
       attributes: [
         { key: 'date', type: 'string', size: 32, required: true, array: false, default: null },
@@ -276,7 +273,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.topics,
       name: 'Topics',
-      permissions: STATS_PERMS,
+      permissions: PUBLIC_READ_PERMS,
       rowSecurity: false,
       attributes: [
         { key: 'topicKey', type: 'string', size: 128, required: true, array: false, default: null },
@@ -290,7 +287,7 @@ function buildCollectionDefinitions() {
     {
       id: COLLECTION_IDS.channels,
       name: 'Channels',
-      permissions: STATS_PERMS,
+      permissions: PUBLIC_READ_PERMS,
       rowSecurity: false,
       attributes: [
         { key: 'name', type: 'string', size: 128, required: true, array: false, default: null },
@@ -693,6 +690,22 @@ async function ensureTable(tablesDB, tableId, config) {
   try {
     const table = await tablesDB.getTable(APPWRITE_DATABASE_ID, tableId);
     log(`Table "${config.name}" (${tableId}) exists`, 'success');
+    // Keep permissions in step with the definitions, so tightening them here
+    // also locks down tables created by an earlier run.
+    const wanted = [...config.permissions].sort();
+    const current = [...table.$permissions].sort();
+    const rowSecurity = config.rowSecurity ?? false;
+    if (wanted.join('\n') !== current.join('\n') || table.rowSecurity !== rowSecurity) {
+      log(`  Updating permissions on "${config.name}"…`, 'info');
+      return tablesDB.updateTable(
+        APPWRITE_DATABASE_ID,
+        tableId,
+        table.name,
+        config.permissions,
+        rowSecurity,
+        table.enabled
+      );
+    }
     return table;
   } catch (error) {
     if (error.code === 404) {

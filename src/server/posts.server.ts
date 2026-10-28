@@ -227,7 +227,8 @@ export async function createPost(
     }
   }
 
-  const userName = user.name || user.email || 'Anonymous'
+  // Never fall back to the email: userName is public.
+  const userName = user.name || 'Anonymous'
   const description = input.comment?.trim() ?? ''
 
   const post = await tables.createRow({
