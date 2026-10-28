@@ -47,7 +47,7 @@ export function NotificationRow({ notification }: { notification: AppNotificatio
   // Follows open the follower's profile; everything else opens the comment in its thread.
   const target =
     notification.type === 'follow' && notification.actor
-      ? ({ to: '/u/$userId', params: { userId: notification.actor.id } } as const)
+      ? ({ to: '/users/$userId', params: { userId: notification.actor.id } } as const)
       : notification.postId
         ? ({
             to: '/threads/$threadId',

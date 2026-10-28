@@ -79,6 +79,27 @@ export interface TrendingTopic {
   articleCount: number
 }
 
+/** A topic page's subject: one of the AI labels stories are tagged with. */
+export interface Topic {
+  /** URL slug (`/topics/$key`). */
+  key: string
+  label: string
+  /** Stories tagged with it, all time (0 when the daily stats haven't counted it yet). */
+  articleCount: number
+}
+
+/** Newest first, or the best of the last 30 days. */
+export type TopicSort = 'new' | 'top'
+
+export interface TopicAbout {
+  /** Topics that show up on the same stories, most often first. */
+  related: Array<Topic>
+  /** Channels that cover the topic. */
+  channels: Array<string>
+  /** Stories tagged with it over the last seven days. */
+  weeklyStories: number
+}
+
 export type VisitorRange = '24h' | '30d' | '1y'
 
 export interface VisitorPoint {
@@ -204,6 +225,17 @@ export interface UserComment {
 
 export interface UserCommentsPage {
   comments: Array<UserComment>
+  page: number
+  hasMore: boolean
+}
+
+/** Someone in a followers or following list. */
+export interface PersonCard extends PersonSummary {
+  bio: string
+}
+
+export interface PeoplePage {
+  people: Array<PersonCard>
   page: number
   hasMore: boolean
 }

@@ -15,12 +15,15 @@ interface TooltipProps {
   side?: 'top' | 'right' | 'bottom' | 'left'
   children: React.ReactElement
   className?: string
+  /** Controlled state, e.g. to also open on tap where hover doesn't exist. */
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
-export function Tooltip({ content, side = 'top', children, className }: TooltipProps) {
+export function Tooltip({ content, side = 'top', children, className, open, onOpenChange }: TooltipProps) {
   if (!content) return children
   return (
-    <TooltipPrimitive.Root>
+    <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
       <TooltipPrimitive.Portal>
         <TooltipPrimitive.Content

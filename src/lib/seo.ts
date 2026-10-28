@@ -42,3 +42,67 @@ export function seo({
   if (noindex) meta.push({ name: 'robots', content: 'noindex, nofollow' })
   return meta
 }
+
+/** Structured data for `head().scripts`. `<` is escaped so a title can't close the tag. */
+export function jsonLd(data: Record<string, unknown>) {
+  return {
+    type: 'application/ld+json',
+    children: JSON.stringify({ '@context': 'https://schema.org', ...data }).replace(/</g, '\\u003c'),
+  }
+}
+
+/** Trail of links above a page in search results; the last item is the page itself. */
+export function breadcrumbs(items: Array<{ name: string; url: string }>) {
+  return jsonLd({
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  })
+}
+
+/** A listing page (a channel, a topic) and the stories on it, numbered from `offset + 1`. */
+export function collectionPage({
+  siteUrl,
+  url,
+  name,
+  description,
+  items,
+  offset = 0,
+}: {
+  siteUrl: string
+  url: string
+  name: string
+  description: string
+  items: Array<{ name: string; url: string }>
+  offset?: number
+}) {
+  return jsonLd({
+    '@type': 'CollectionPage',
+    name,
+    description,
+    url,
+    isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: siteUrl },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: offset + index + 1,
+        url: item.url,
+        name: item.name,
+      })),
+    },
+  })
+}
+
+/** Search snippets are cut near 160 characters; end on a word. */
+export function clampDescription(text: string, max = 160): string {
+  const clean = text.replace(/\s+/g, ' ').trim()
+  if (clean.length <= max) return clean
+  const cut = clean.slice(0, max - 1)
+  return `${cut.slice(0, cut.lastIndexOf(' ') > 80 ? cut.lastIndexOf(' ') : cut.length).replace(/[,.;:]$/, '')}…`
+}

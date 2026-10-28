@@ -1,5 +1,6 @@
 import type { ThreadStats, TrendingTopic, VisitorPoint, VisitorRange } from '@/lib/types'
 import { buildThreadStats, threadStatsWindow, type MetricRow } from '@/lib/thread-stats'
+import { topicDisplayLabel, topicKey } from '@/lib/topics'
 import { Query, db, type Row } from './db.server'
 import { getAppwriteConfig, getPublicConfig } from './env.server'
 
@@ -211,23 +212,6 @@ export function getThreadStats(postId: string): Promise<ThreadStats | null> {
 
 const topicsCache = createCache<Array<TrendingTopic>>()
 
-/** Same normalization as functions/topic-stats, so keys line up. */
-function topicKey(raw: string): string {
-  return raw
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 80)
-}
-
-function displayLabel(label: string) {
-  const trimmed = label.trim()
-  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1)
-}
-
 async function readDailyTopics(limit: number): Promise<Array<TrendingTopic>> {
   const { tables, ids } = db()
   const day = (offset: number) => new Date(Date.now() - offset * 86_400_000).toISOString().slice(0, 10)
@@ -246,7 +230,7 @@ async function readDailyTopics(limit: number): Promise<Array<TrendingTopic>> {
     if (result.rows.length > 0) {
       return (result.rows as Array<Row>).map((row) => ({
         key: String(row.topicKey),
-        label: displayLabel(String(row.topicLabel)),
+        label: topicDisplayLabel(String(row.topicLabel)),
         articleCount: Number(row.articleCount ?? 0),
       }))
     }
@@ -289,7 +273,7 @@ async function computeTopicsFromPosts(limit: number): Promise<Array<TrendingTopi
         entry.score += score
         entry.articleCount += 1
       } else {
-        totals.set(key, { key, label: displayLabel(raw), articleCount: 1, score })
+        totals.set(key, { key, label: topicDisplayLabel(raw), articleCount: 1, score })
       }
     }
   }

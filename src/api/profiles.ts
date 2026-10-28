@@ -5,6 +5,7 @@ import type {
   ActionResult,
   FeedPage,
   OnboardingSuggestions,
+  PeoplePage,
   PersonSummary,
   Profile,
   ProfileInsights,
@@ -23,6 +24,7 @@ import {
   getWhoToFollow,
   getProfile,
   setFollowing,
+  listFollows,
   listUserComments,
   searchPeople,
   setBlocked,
@@ -54,6 +56,10 @@ export const fetchUserStories = createServerFn({ method: 'GET' })
 export const fetchUserComments = createServerFn({ method: 'GET' })
   .validator(z.object({ userId, page }))
   .handler(({ data }): Promise<UserCommentsPage> => listUserComments(data.userId, data.page))
+
+export const fetchFollows = createServerFn({ method: 'GET' })
+  .validator(z.object({ userId, direction: z.enum(['followers', 'following']), page }))
+  .handler(({ data }): Promise<PeoplePage> => listFollows(data.userId, data.direction, data.page))
 
 export const findPeople = createServerFn({ method: 'GET' })
   .validator(z.object({ q: z.string().max(64) }))

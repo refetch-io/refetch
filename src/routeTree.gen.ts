@@ -15,7 +15,6 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AppChannelsRouteImport } from './routes/_app/channels'
 import { Route as AppDesignRouteImport } from './routes/_app/design'
 import { Route as AppFollowingRouteImport } from './routes/_app/following'
 import { Route as AppMeRouteImport } from './routes/_app/me'
@@ -30,11 +29,20 @@ import { Route as AppSubmitRouteImport } from './routes/_app/submit'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as AppCChannelIdRouteImport } from './routes/_app/c.$channelId'
+import { Route as CSplatRouteImport } from './routes/c.$'
+import { Route as USplatRouteImport } from './routes/u.$'
+import { Route as AppChannelsIndexRouteImport } from './routes/_app/channels.index'
+import { Route as AppChannelsChannelIdRouteImport } from './routes/_app/channels.$channelId'
 import { Route as AppMessagesIndexRouteImport } from './routes/_app/messages.index'
 import { Route as AppMessagesConversationIdRouteImport } from './routes/_app/messages.$conversationId'
 import { Route as AppThreadsThreadIdRouteImport } from './routes/_app/threads.$threadId'
-import { Route as AppUUserIdRouteImport } from './routes/_app/u.$userId'
+import { Route as AppTopicsIndexRouteImport } from './routes/_app/topics.index'
+import { Route as AppTopicsTopicKeyRouteImport } from './routes/_app/topics.$topicKey'
+import { Route as AppUsersUserIdRouteImport } from './routes/_app/users.$userId'
+import { Route as AppUsersUserIdIndexRouteImport } from './routes/_app/users.$userId.index'
+import { Route as AppUsersUserIdCommentsRouteImport } from './routes/_app/users.$userId.comments'
+import { Route as AppUsersUserIdFollowersRouteImport } from './routes/_app/users.$userId.followers'
+import { Route as AppUsersUserIdFollowingRouteImport } from './routes/_app/users.$userId.following'
 import { Route as ApiOgThreadIdRouteImport } from './routes/api/og/thread.$id'
 
 const AppRoute = AppRouteImport.update({
@@ -63,11 +71,6 @@ const WelcomeRoute = WelcomeRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppChannelsRoute = AppChannelsRouteImport.update({
-  id: '/channels',
-  path: '/channels',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDesignRoute = AppDesignRouteImport.update({
@@ -140,9 +143,24 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppCChannelIdRoute = AppCChannelIdRouteImport.update({
-  id: '/c/$channelId',
-  path: '/c/$channelId',
+const CSplatRoute = CSplatRouteImport.update({
+  id: '/c/$',
+  path: '/c/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const USplatRoute = USplatRouteImport.update({
+  id: '/u/$',
+  path: '/u/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppChannelsIndexRoute = AppChannelsIndexRouteImport.update({
+  id: '/channels/',
+  path: '/channels/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppChannelsChannelIdRoute = AppChannelsChannelIdRouteImport.update({
+  id: '/channels/$channelId',
+  path: '/channels/$channelId',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMessagesIndexRoute = AppMessagesIndexRouteImport.update({
@@ -161,10 +179,40 @@ const AppThreadsThreadIdRoute = AppThreadsThreadIdRouteImport.update({
   path: '/threads/$threadId',
   getParentRoute: () => AppRoute,
 } as any)
-const AppUUserIdRoute = AppUUserIdRouteImport.update({
-  id: '/u/$userId',
-  path: '/u/$userId',
+const AppTopicsIndexRoute = AppTopicsIndexRouteImport.update({
+  id: '/topics/',
+  path: '/topics/',
   getParentRoute: () => AppRoute,
+} as any)
+const AppTopicsTopicKeyRoute = AppTopicsTopicKeyRouteImport.update({
+  id: '/topics/$topicKey',
+  path: '/topics/$topicKey',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUsersUserIdRoute = AppUsersUserIdRouteImport.update({
+  id: '/users/$userId',
+  path: '/users/$userId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUsersUserIdIndexRoute = AppUsersUserIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppUsersUserIdRoute,
+} as any)
+const AppUsersUserIdCommentsRoute = AppUsersUserIdCommentsRouteImport.update({
+  id: '/comments',
+  path: '/comments',
+  getParentRoute: () => AppUsersUserIdRoute,
+} as any)
+const AppUsersUserIdFollowersRoute = AppUsersUserIdFollowersRouteImport.update({
+  id: '/followers',
+  path: '/followers',
+  getParentRoute: () => AppUsersUserIdRoute,
+} as any)
+const AppUsersUserIdFollowingRoute = AppUsersUserIdFollowingRouteImport.update({
+  id: '/following',
+  path: '/following',
+  getParentRoute: () => AppUsersUserIdRoute,
 } as any)
 const ApiOgThreadIdRoute = ApiOgThreadIdRouteImport.update({
   id: '/api/og/thread/$id',
@@ -177,7 +225,6 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
-  '/channels': typeof AppChannelsRoute
   '/design': typeof AppDesignRoute
   '/following': typeof AppFollowingRoute
   '/me': typeof AppMeRoute
@@ -192,19 +239,27 @@ export interface FileRoutesByFullPath {
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
-  '/c/$channelId': typeof AppCChannelIdRoute
+  '/c/$': typeof CSplatRoute
+  '/u/$': typeof USplatRoute
+  '/channels/$channelId': typeof AppChannelsChannelIdRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
-  '/u/$userId': typeof AppUUserIdRoute
+  '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
+  '/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/channels/': typeof AppChannelsIndexRoute
   '/messages/': typeof AppMessagesIndexRoute
+  '/topics/': typeof AppTopicsIndexRoute
+  '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
+  '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
+  '/users/$userId/following': typeof AppUsersUserIdFollowingRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
+  '/users/$userId/': typeof AppUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
-  '/channels': typeof AppChannelsRoute
   '/design': typeof AppDesignRoute
   '/following': typeof AppFollowingRoute
   '/me': typeof AppMeRoute
@@ -218,12 +273,20 @@ export interface FileRoutesByTo {
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
-  '/c/$channelId': typeof AppCChannelIdRoute
+  '/c/$': typeof CSplatRoute
+  '/u/$': typeof USplatRoute
+  '/channels/$channelId': typeof AppChannelsChannelIdRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
-  '/u/$userId': typeof AppUUserIdRoute
+  '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
+  '/channels': typeof AppChannelsIndexRoute
   '/messages': typeof AppMessagesIndexRoute
+  '/topics': typeof AppTopicsIndexRoute
+  '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
+  '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
+  '/users/$userId/following': typeof AppUsersUserIdFollowingRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
+  '/users/$userId': typeof AppUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -232,7 +295,6 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/welcome': typeof WelcomeRoute
-  '/_app/channels': typeof AppChannelsRoute
   '/_app/design': typeof AppDesignRoute
   '/_app/following': typeof AppFollowingRoute
   '/_app/me': typeof AppMeRoute
@@ -247,13 +309,22 @@ export interface FileRoutesById {
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/c/$': typeof CSplatRoute
+  '/u/$': typeof USplatRoute
   '/_app/': typeof AppIndexRoute
-  '/_app/c/$channelId': typeof AppCChannelIdRoute
+  '/_app/channels/$channelId': typeof AppChannelsChannelIdRoute
   '/_app/messages/$conversationId': typeof AppMessagesConversationIdRoute
   '/_app/threads/$threadId': typeof AppThreadsThreadIdRoute
-  '/_app/u/$userId': typeof AppUUserIdRoute
+  '/_app/topics/$topicKey': typeof AppTopicsTopicKeyRoute
+  '/_app/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/_app/channels/': typeof AppChannelsIndexRoute
   '/_app/messages/': typeof AppMessagesIndexRoute
+  '/_app/topics/': typeof AppTopicsIndexRoute
+  '/_app/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
+  '/_app/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
+  '/_app/users/$userId/following': typeof AppUsersUserIdFollowingRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
+  '/_app/users/$userId/': typeof AppUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -262,7 +333,6 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/welcome'
-    | '/channels'
     | '/design'
     | '/following'
     | '/me'
@@ -277,19 +347,27 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/auth/callback'
-    | '/c/$channelId'
+    | '/c/$'
+    | '/u/$'
+    | '/channels/$channelId'
     | '/messages/$conversationId'
     | '/threads/$threadId'
-    | '/u/$userId'
+    | '/topics/$topicKey'
+    | '/users/$userId'
+    | '/channels/'
     | '/messages/'
+    | '/topics/'
+    | '/users/$userId/comments'
+    | '/users/$userId/followers'
+    | '/users/$userId/following'
     | '/api/og/thread/$id'
+    | '/users/$userId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/welcome'
-    | '/channels'
     | '/design'
     | '/following'
     | '/me'
@@ -303,12 +381,20 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/auth/callback'
-    | '/c/$channelId'
+    | '/c/$'
+    | '/u/$'
+    | '/channels/$channelId'
     | '/messages/$conversationId'
     | '/threads/$threadId'
-    | '/u/$userId'
+    | '/topics/$topicKey'
+    | '/channels'
     | '/messages'
+    | '/topics'
+    | '/users/$userId/comments'
+    | '/users/$userId/followers'
+    | '/users/$userId/following'
     | '/api/og/thread/$id'
+    | '/users/$userId'
   id:
     | '__root__'
     | '/_app'
@@ -316,7 +402,6 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/welcome'
-    | '/_app/channels'
     | '/_app/design'
     | '/_app/following'
     | '/_app/me'
@@ -331,13 +416,22 @@ export interface FileRouteTypes {
     | '/_auth/signin'
     | '/_auth/signup'
     | '/auth/callback'
+    | '/c/$'
+    | '/u/$'
     | '/_app/'
-    | '/_app/c/$channelId'
+    | '/_app/channels/$channelId'
     | '/_app/messages/$conversationId'
     | '/_app/threads/$threadId'
-    | '/_app/u/$userId'
+    | '/_app/topics/$topicKey'
+    | '/_app/users/$userId'
+    | '/_app/channels/'
     | '/_app/messages/'
+    | '/_app/topics/'
+    | '/_app/users/$userId/comments'
+    | '/_app/users/$userId/followers'
+    | '/_app/users/$userId/following'
     | '/api/og/thread/$id'
+    | '/_app/users/$userId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -347,6 +441,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WelcomeRoute: typeof WelcomeRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
+  CSplatRoute: typeof CSplatRoute
+  USplatRoute: typeof USplatRoute
   ApiOgThreadIdRoute: typeof ApiOgThreadIdRoute
 }
 
@@ -392,13 +488,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/channels': {
-      id: '/_app/channels'
-      path: '/channels'
-      fullPath: '/channels'
-      preLoaderRoute: typeof AppChannelsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/design': {
@@ -499,11 +588,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/c/$channelId': {
-      id: '/_app/c/$channelId'
-      path: '/c/$channelId'
-      fullPath: '/c/$channelId'
-      preLoaderRoute: typeof AppCChannelIdRouteImport
+    '/c/$': {
+      id: '/c/$'
+      path: '/c/$'
+      fullPath: '/c/$'
+      preLoaderRoute: typeof CSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$': {
+      id: '/u/$'
+      path: '/u/$'
+      fullPath: '/u/$'
+      preLoaderRoute: typeof USplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/channels/': {
+      id: '/_app/channels/'
+      path: '/channels'
+      fullPath: '/channels/'
+      preLoaderRoute: typeof AppChannelsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/channels/$channelId': {
+      id: '/_app/channels/$channelId'
+      path: '/channels/$channelId'
+      fullPath: '/channels/$channelId'
+      preLoaderRoute: typeof AppChannelsChannelIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/messages/': {
@@ -527,12 +637,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppThreadsThreadIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/u/$userId': {
-      id: '/_app/u/$userId'
-      path: '/u/$userId'
-      fullPath: '/u/$userId'
-      preLoaderRoute: typeof AppUUserIdRouteImport
+    '/_app/topics/': {
+      id: '/_app/topics/'
+      path: '/topics'
+      fullPath: '/topics/'
+      preLoaderRoute: typeof AppTopicsIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/topics/$topicKey': {
+      id: '/_app/topics/$topicKey'
+      path: '/topics/$topicKey'
+      fullPath: '/topics/$topicKey'
+      preLoaderRoute: typeof AppTopicsTopicKeyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/users/$userId': {
+      id: '/_app/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof AppUsersUserIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/users/$userId/': {
+      id: '/_app/users/$userId/'
+      path: '/'
+      fullPath: '/users/$userId/'
+      preLoaderRoute: typeof AppUsersUserIdIndexRouteImport
+      parentRoute: typeof AppUsersUserIdRoute
+    }
+    '/_app/users/$userId/comments': {
+      id: '/_app/users/$userId/comments'
+      path: '/comments'
+      fullPath: '/users/$userId/comments'
+      preLoaderRoute: typeof AppUsersUserIdCommentsRouteImport
+      parentRoute: typeof AppUsersUserIdRoute
+    }
+    '/_app/users/$userId/followers': {
+      id: '/_app/users/$userId/followers'
+      path: '/followers'
+      fullPath: '/users/$userId/followers'
+      preLoaderRoute: typeof AppUsersUserIdFollowersRouteImport
+      parentRoute: typeof AppUsersUserIdRoute
+    }
+    '/_app/users/$userId/following': {
+      id: '/_app/users/$userId/following'
+      path: '/following'
+      fullPath: '/users/$userId/following'
+      preLoaderRoute: typeof AppUsersUserIdFollowingRouteImport
+      parentRoute: typeof AppUsersUserIdRoute
     }
     '/api/og/thread/$id': {
       id: '/api/og/thread/$id'
@@ -558,8 +710,25 @@ const AppMessagesRouteWithChildren = AppMessagesRoute._addFileChildren(
   AppMessagesRouteChildren,
 )
 
+interface AppUsersUserIdRouteChildren {
+  AppUsersUserIdCommentsRoute: typeof AppUsersUserIdCommentsRoute
+  AppUsersUserIdFollowersRoute: typeof AppUsersUserIdFollowersRoute
+  AppUsersUserIdFollowingRoute: typeof AppUsersUserIdFollowingRoute
+  AppUsersUserIdIndexRoute: typeof AppUsersUserIdIndexRoute
+}
+
+const AppUsersUserIdRouteChildren: AppUsersUserIdRouteChildren = {
+  AppUsersUserIdCommentsRoute: AppUsersUserIdCommentsRoute,
+  AppUsersUserIdFollowersRoute: AppUsersUserIdFollowersRoute,
+  AppUsersUserIdFollowingRoute: AppUsersUserIdFollowingRoute,
+  AppUsersUserIdIndexRoute: AppUsersUserIdIndexRoute,
+}
+
+const AppUsersUserIdRouteWithChildren = AppUsersUserIdRoute._addFileChildren(
+  AppUsersUserIdRouteChildren,
+)
+
 interface AppRouteChildren {
-  AppChannelsRoute: typeof AppChannelsRoute
   AppDesignRoute: typeof AppDesignRoute
   AppFollowingRoute: typeof AppFollowingRoute
   AppMeRoute: typeof AppMeRoute
@@ -572,13 +741,15 @@ interface AppRouteChildren {
   AppShowRoute: typeof AppShowRoute
   AppSubmitRoute: typeof AppSubmitRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppCChannelIdRoute: typeof AppCChannelIdRoute
+  AppChannelsChannelIdRoute: typeof AppChannelsChannelIdRoute
   AppThreadsThreadIdRoute: typeof AppThreadsThreadIdRoute
-  AppUUserIdRoute: typeof AppUUserIdRoute
+  AppTopicsTopicKeyRoute: typeof AppTopicsTopicKeyRoute
+  AppUsersUserIdRoute: typeof AppUsersUserIdRouteWithChildren
+  AppChannelsIndexRoute: typeof AppChannelsIndexRoute
+  AppTopicsIndexRoute: typeof AppTopicsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppChannelsRoute: AppChannelsRoute,
   AppDesignRoute: AppDesignRoute,
   AppFollowingRoute: AppFollowingRoute,
   AppMeRoute: AppMeRoute,
@@ -591,9 +762,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppShowRoute: AppShowRoute,
   AppSubmitRoute: AppSubmitRoute,
   AppIndexRoute: AppIndexRoute,
-  AppCChannelIdRoute: AppCChannelIdRoute,
+  AppChannelsChannelIdRoute: AppChannelsChannelIdRoute,
   AppThreadsThreadIdRoute: AppThreadsThreadIdRoute,
-  AppUUserIdRoute: AppUUserIdRoute,
+  AppTopicsTopicKeyRoute: AppTopicsTopicKeyRoute,
+  AppUsersUserIdRoute: AppUsersUserIdRouteWithChildren,
+  AppChannelsIndexRoute: AppChannelsIndexRoute,
+  AppTopicsIndexRoute: AppTopicsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -617,6 +791,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WelcomeRoute: WelcomeRoute,
   AuthCallbackRoute: AuthCallbackRoute,
+  CSplatRoute: CSplatRoute,
+  USplatRoute: USplatRoute,
   ApiOgThreadIdRoute: ApiOgThreadIdRoute,
 }
 export const routeTree = rootRouteImport

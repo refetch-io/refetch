@@ -60,7 +60,7 @@ function FollowingPage() {
               <li key={channel.id} className="flex items-center gap-3 bg-surface px-4 py-3">
                 <ChannelIcon channel={channel} size={36} />
                 <Link
-                  to="/c/$channelId"
+                  to="/channels/$channelId"
                   params={{ channelId: channel.id }}
                   className="min-w-0 flex-1 truncate text-subhead font-semibold text-label hover:text-brand-text"
                 >

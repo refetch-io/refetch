@@ -1,7 +1,8 @@
 import { infiniteQueryOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
-import type { ChannelSort, FeedSort, VisitorRange } from './types'
+import type { ChannelSort, FeedSort, TopicSort, VisitorRange } from './types'
 import { fetchChannelDirectory, fetchChannelFeed, fetchFollowingFeed, searchRefetch } from '@/api/channels'
 import { fetchFeed, fetchMyPosts, fetchThread } from '@/api/content'
+import { fetchTopicDirectory, fetchTopicFeed } from '@/api/topics'
 import {
   fetchGitHubStars,
   fetchLiveVisitors,
@@ -16,6 +17,7 @@ import { fetchSavedIds, fetchSavedStories } from '@/api/saves'
 import { fetchModerationQueue } from '@/api/moderation'
 import {
   fetchOnboarding,
+  fetchFollows,
   fetchProfile,
   fetchFollowedIds,
   fetchProfileInsights,
@@ -118,6 +120,20 @@ export const channelFeedQuery = (id: string, sort: ChannelSort, page: number, us
     staleTime: 30_000,
   })
 
+export const topicFeedQuery = (key: string, sort: TopicSort, page: number, userId: string | null) =>
+  queryOptions({
+    queryKey: ['topic', key, sort, page, userId],
+    queryFn: () => fetchTopicFeed({ data: { key, sort, page } }),
+    staleTime: 30_000,
+  })
+
+export const topicDirectoryQuery = () =>
+  queryOptions({
+    queryKey: ['topics'],
+    queryFn: () => fetchTopicDirectory(),
+    staleTime: 10 * 60_000,
+  })
+
 export const followingQuery = (page: number, userId: string | null) =>
   queryOptions({
     queryKey: ['following', page, userId],
@@ -162,6 +178,13 @@ export const userCommentsQuery = (userId: string, page: number) =>
   queryOptions({
     queryKey: ['profile', userId, 'comments', page],
     queryFn: () => fetchUserComments({ data: { userId, page } }),
+    staleTime: 30_000,
+  })
+
+export const followsQuery = (userId: string, direction: 'followers' | 'following', page: number) =>
+  queryOptions({
+    queryKey: ['profile', userId, direction, page],
+    queryFn: () => fetchFollows({ data: { userId, direction, page } }),
     staleTime: 30_000,
   })
 

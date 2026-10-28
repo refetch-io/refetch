@@ -145,7 +145,7 @@ function ModerationRow({
             <span>
               by{' '}
               <Link
-                to="/u/$userId"
+                to="/users/$userId"
                 params={{ userId: item.author.id }}
                 className="font-medium text-label hover:text-brand-text"
               >

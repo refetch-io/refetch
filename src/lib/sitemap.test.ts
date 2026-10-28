@@ -5,14 +5,14 @@ describe('buildSitemap', () => {
   it('writes a urlset with escaped locations and day-precision dates', () => {
     const xml = buildSitemap([
       { loc: 'https://refetch.io/', lastmod: '2026-10-27T10:00:00.000Z', changefreq: 'hourly', priority: 1 },
-      { loc: 'https://refetch.io/c/a&b' },
+      { loc: 'https://refetch.io/channels/a&b' },
     ])
     expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true)
     expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
     expect(xml).toContain(
       '<url><loc>https://refetch.io/</loc><lastmod>2026-10-27</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>',
     )
-    expect(xml).toContain('<loc>https://refetch.io/c/a&amp;b</loc>')
+    expect(xml).toContain('<loc>https://refetch.io/channels/a&amp;b</loc>')
   })
 })
 
@@ -24,8 +24,8 @@ describe('buildRobots', () => {
     expect(robots).toContain('Sitemap: https://refetch.io/sitemap.xml')
   })
 
-  it('lets stories, channels and profiles be crawled', () => {
-    for (const path of ['/threads/', '/c/', '/u/']) {
+  it('lets stories, channels, topics and profiles be crawled', () => {
+    for (const path of ['/threads/', '/channels/', '/users/', '/topics/']) {
       expect(PRIVATE_PATHS.some((blocked) => path.startsWith(blocked))).toBe(false)
     }
   })

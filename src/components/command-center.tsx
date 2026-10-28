@@ -97,6 +97,7 @@ interface PageItem {
     | '/show'
     | '/following'
     | '/channels'
+    | '/topics'
     | '/mines'
     | '/submit'
     | '/messages'
@@ -119,6 +120,7 @@ const PAGES: Array<PageItem> = [
     requiresAuth: true,
   },
   { label: 'All channels', to: '/channels', icon: Hash, keywords: 'topics communities browse join' },
+  { label: 'All topics', to: '/topics', icon: Hash, keywords: 'tags subjects browse trending' },
   {
     label: 'Messages',
     to: '/messages',
@@ -267,7 +269,7 @@ function CommandDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
                       key={channel.id}
                       value={`channel-${channel.id}`}
                       onSelect={() =>
-                        run(() => navigate({ to: '/c/$channelId', params: { channelId: channel.id } }))
+                        run(() => navigate({ to: '/channels/$channelId', params: { channelId: channel.id } }))
                       }
                       className={itemClass}
                     >

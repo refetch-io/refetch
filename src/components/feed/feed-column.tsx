@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, useRouterState } from '@tanstack/react-router'
+import { Link, linkOptions, useRouterState, type LinkOptions } from '@tanstack/react-router'
 import { useSession } from '@/lib/session'
 import { cn } from '@/lib/utils'
 
@@ -70,31 +70,65 @@ export function FeedTabs({ title }: { title: string }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const { user } = useSession()
   return (
+    <ColumnTabs
+      title={title}
+      label="Feeds"
+      tabs={FEED_TABS.map((tab) => ({
+        key: tab.to,
+        label: tab.label,
+        active: pathname === tab.to,
+        link:
+          'requiresAuth' in tab && !user
+            ? linkOptions({ to: '/signin', search: { redirect: tab.to } })
+            : linkOptions({ to: tab.to }),
+      }))}
+    />
+  )
+}
+
+export interface ColumnTab {
+  key: string
+  label: string
+  /** Shown next to the label from the `sm` breakpoint up. */
+  count?: string
+  active: boolean
+  link: LinkOptions
+}
+
+/** Sticky underline tabs at the top of a column, one per page. */
+export function ColumnTabs({
+  title,
+  label,
+  tabs,
+}: {
+  title?: string
+  label: string
+  tabs: Array<ColumnTab>
+}) {
+  return (
     <StickyColumnHeader>
       {/* The visible tabs name the page; keep a real heading for assistive tech. */}
-      <h1 className="sr-only">{title}</h1>
-      <nav aria-label="Feeds" className="flex">
-        {FEED_TABS.map((tab) => {
-          const active = pathname === tab.to
-          const target =
-            'requiresAuth' in tab && !user
-              ? ({ to: '/signin', search: { redirect: tab.to } } as const)
-              : ({ to: tab.to } as const)
-          return (
-            <Link
-              key={tab.to}
-              {...target}
-              aria-current={active ? 'page' : undefined}
-              className={cn(
-                'relative flex h-[52px] flex-1 items-center justify-center text-subhead transition-colors first:rounded-tl-card last:rounded-tr-card hover:bg-fill-secondary/70',
-                active ? 'font-bold text-label' : 'font-medium text-label-secondary hover:text-label',
-              )}
-            >
-              {tab.label}
-              {active && <span aria-hidden className="absolute inset-x-0 -bottom-px h-[3px] bg-brand" />}
-            </Link>
-          )
-        })}
+      {title && <h1 className="sr-only">{title}</h1>}
+      <nav aria-label={label} className="flex">
+        {tabs.map((tab) => (
+          <Link
+            key={tab.key}
+            {...tab.link}
+            // Only the exact page counts; the router would also mark parents (a profile's Stories tab).
+            activeOptions={{ exact: true, includeSearch: false }}
+            aria-current={tab.active ? 'page' : undefined}
+            className={cn(
+              'relative flex h-[52px] min-w-0 flex-1 items-center justify-center gap-1.5 px-1 text-subhead transition-colors first:rounded-tl-card last:rounded-tr-card hover:bg-fill-secondary/70',
+              tab.active ? 'font-bold text-label' : 'font-medium text-label-secondary hover:text-label',
+            )}
+          >
+            <span className="truncate">{tab.label}</span>
+            {tab.count !== undefined && (
+              <span className="hidden font-medium text-label-tertiary tabular sm:inline">{tab.count}</span>
+            )}
+            {tab.active && <span aria-hidden className="absolute inset-x-0 -bottom-px h-[3px] bg-brand" />}
+          </Link>
+        ))}
       </nav>
     </StickyColumnHeader>
   )

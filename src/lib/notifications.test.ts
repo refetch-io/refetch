@@ -41,7 +41,7 @@ describe('notificationHref', () => {
   it('links follows to the follower and the rest to the comment in its thread', () => {
     expect(
       notificationHref({ type: 'follow', actor: { id: 'u2', name: 'G' }, postId: null, commentId: null }),
-    ).toBe('/u/u2')
+    ).toBe('/users/u2')
     expect(notificationHref({ type: 'reply', actor: null, postId: 'p1', commentId: 'c9' })).toBe(
       '/threads/p1#comment-c9',
     )

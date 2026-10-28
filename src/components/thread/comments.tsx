@@ -196,7 +196,7 @@ function CommentItem({
     <article id={`comment-${node.id}`} data-kb-item className={cn('scroll-mt-24', isRoot ? 'py-4' : 'pt-4')}>
       <div className="flex gap-3">
         <Link
-          to="/u/$userId"
+          to="/users/$userId"
           params={{ userId: node.userId }}
           aria-label={node.userName}
           className="mt-0.5 shrink-0"
@@ -212,7 +212,7 @@ function CommentItem({
           >
             <header className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-footnote">
               <Link
-                to="/u/$userId"
+                to="/users/$userId"
                 params={{ userId: node.userId }}
                 className="font-semibold text-label hover:text-brand-text"
               >

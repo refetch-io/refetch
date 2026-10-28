@@ -103,7 +103,7 @@ export function ChannelTag({ channelId, className }: { channelId: string | null;
   if (!channel) return null
   return (
     <Link
-      to="/c/$channelId"
+      to="/channels/$channelId"
       params={{ channelId: channel.id }}
       className={cn(
         'inline-flex shrink-0 items-center gap-1.5 font-semibold text-label transition-colors hover:text-brand-text',

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { z } from 'zod'
 import { FEED_MAX_PAGES } from '@/lib/constants'
-import type { FeedPage } from '@/lib/types'
 import { SiteFooter } from '../layout/footer'
 import { InsightsRail } from '../insights/insights-rail'
 import { FeedPagination, FeedSkeleton } from './feed-view'
@@ -24,7 +23,7 @@ export function FeedLayout({
   /** Sticky header of a single feed column (tabs or a column title); the list joins it. */
   column?: React.ReactNode
   /** The column's feed page; its pagination goes below the card rather than inside it. */
-  feed?: Pick<FeedPage, 'posts' | 'page' | 'hasMore'> | null
+  feed?: { posts: ReadonlyArray<unknown>; page: number; hasMore: boolean } | null
   /** Replaces the default insights rail (e.g. a channel's own sidebar). */
   rail?: React.ReactNode
   /** Accessible name for a custom rail. */
@@ -37,10 +36,9 @@ export function FeedLayout({
       <div className="flex gap-8">
         <div className="min-w-0 flex-1">
           {column ? (
-            <>
-              <FeedColumn header={column}>{children}</FeedColumn>
-              {feed && feed.posts.length > 0 && <FeedPagination page={feed.page} hasMore={feed.hasMore} />}
-            </>
+            <FeedColumnSection column={column} feed={feed}>
+              {children}
+            </FeedColumnSection>
           ) : (
             <>
               {header}
@@ -61,6 +59,24 @@ export function FeedLayout({
         )}
       </div>
     </div>
+  )
+}
+
+/** A feed column with its pagination below the card; for pages that frame it themselves. */
+export function FeedColumnSection({
+  column,
+  feed,
+  children,
+}: {
+  column: React.ReactNode
+  feed?: { posts: ReadonlyArray<unknown>; page: number; hasMore: boolean } | null
+  children: React.ReactNode
+}) {
+  return (
+    <>
+      <FeedColumn header={column}>{children}</FeedColumn>
+      {feed && feed.posts.length > 0 && <FeedPagination page={feed.page} hasMore={feed.hasMore} />}
+    </>
   )
 }
 

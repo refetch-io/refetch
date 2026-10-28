@@ -70,7 +70,7 @@ export function notificationSentence(
 export function notificationHref(
   notification: Pick<AppNotification, 'type' | 'postId' | 'commentId' | 'actor'>,
 ): string {
-  if (notification.type === 'follow' && notification.actor) return `/u/${notification.actor.id}`
+  if (notification.type === 'follow' && notification.actor) return `/users/${notification.actor.id}`
   if (!notification.postId) return '/'
   const hash = notification.commentId ? `#comment-${notification.commentId}` : ''
   return `/threads/${notification.postId}${hash}`

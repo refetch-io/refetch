@@ -68,11 +68,11 @@ function SidebarChannels({ pathname }: { pathname: string }) {
       </div>
       <nav aria-label="Channels" className="-mr-2 min-h-0 space-y-0.5 overflow-y-auto pr-2">
         {list.map((channel) => {
-          const active = pathname === `/c/${channel.id}`
+          const active = pathname === `/channels/${channel.id}`
           return (
             <Link
               key={channel.id}
-              to="/c/$channelId"
+              to="/channels/$channelId"
               params={{ channelId: channel.id }}
               aria-current={active ? 'page' : undefined}
               className={cn(

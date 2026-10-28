@@ -120,26 +120,37 @@ export function TrendingWidget() {
       ) : (
         <ol className="mt-1">
           {data!.map((topic, index) => (
-            <li key={topic.key} className="flex h-[34px] items-center gap-3 px-4">
-              <span
-                className={cn(
-                  'w-4 text-right font-rounded text-footnote font-semibold tabular',
-                  index < 3 ? 'text-brand-text' : 'text-label-quaternary',
-                )}
+            <li key={topic.key}>
+              <Link
+                to="/topics/$topicKey"
+                params={{ topicKey: topic.key }}
+                className="group flex h-[34px] items-center gap-3 px-4 transition-colors hover:bg-fill-secondary"
               >
-                {index + 1}
-              </span>
-              <span className="flex min-w-0 flex-1 items-center gap-1 text-subhead font-medium text-label">
-                <Hash className="size-3.5 shrink-0 text-label-tertiary" aria-hidden />
-                <span className="truncate">{topic.label}</span>
-              </span>
-              <span className="shrink-0 text-caption-1 text-label-tertiary tabular">
-                {pluralize(topic.articleCount, 'story', 'stories')}
-              </span>
+                <span
+                  className={cn(
+                    'w-4 text-right font-rounded text-footnote font-semibold tabular',
+                    index < 3 ? 'text-brand-text' : 'text-label-quaternary',
+                  )}
+                >
+                  {index + 1}
+                </span>
+                <span className="flex min-w-0 flex-1 items-center gap-1 text-subhead font-medium text-label group-hover:text-brand-text">
+                  <Hash className="size-3.5 shrink-0 text-label-tertiary" aria-hidden />
+                  <span className="truncate">{topic.label}</span>
+                </span>
+                <span className="shrink-0 text-caption-1 text-label-tertiary tabular">
+                  {pluralize(topic.articleCount, 'story', 'stories')}
+                </span>
+              </Link>
             </li>
           ))}
         </ol>
       )}
+      <div className="px-4 pt-1">
+        <Link to="/topics" className="text-footnote font-semibold text-brand-text hover:underline">
+          All topics
+        </Link>
+      </div>
     </Card>
   )
 }
@@ -235,7 +246,7 @@ export function WhoToFollow() {
         {people.map((person) => (
           <li key={person.id} className="flex items-center gap-3 px-4 py-2">
             <Link
-              to="/u/$userId"
+              to="/users/$userId"
               params={{ userId: person.id }}
               className="group flex min-w-0 flex-1 items-center gap-3"
             >

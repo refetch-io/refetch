@@ -214,7 +214,7 @@ function ConversationHeader({ detail, userId }: { detail: ConversationDetail; us
             </p>
           </button>
         ) : (
-          <Link to="/u/$userId" params={{ userId: other?.id ?? userId }} className="block max-w-full">
+          <Link to="/users/$userId" params={{ userId: other?.id ?? userId }} className="block max-w-full">
             <p className="truncate text-headline text-label hover:text-brand-text">{conversation.title}</p>
             <p className="truncate text-caption-1 text-label-secondary">View profile</p>
           </Link>
@@ -255,7 +255,7 @@ function ConversationHeader({ detail, userId }: { detail: ConversationDetail; us
           ) : (
             other && (
               <MenuItem asChild>
-                <Link to="/u/$userId" params={{ userId: other.id }}>
+                <Link to="/users/$userId" params={{ userId: other.id }}>
                   <Users />
                   Profile, block or report
                 </Link>
@@ -337,7 +337,7 @@ function MembersDialog({
         {detail.members.map((member) => (
           <li key={member.id} className="flex items-center gap-3 rounded-xl px-2 py-2">
             <Link
-              to="/u/$userId"
+              to="/users/$userId"
               params={{ userId: member.id }}
               className="flex min-w-0 flex-1 items-center gap-3"
             >
@@ -688,7 +688,7 @@ function MessageBubble({
       {!mine && (
         <span className="w-8 shrink-0">
           {!stacked && (
-            <Link to="/u/$userId" params={{ userId: message.userId }} aria-label={name}>
+            <Link to="/users/$userId" params={{ userId: message.userId }} aria-label={name}>
               <Avatar name={name} userId={message.userId} size={32} />
             </Link>
           )}

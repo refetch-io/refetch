@@ -120,7 +120,7 @@ export function PostRow({
           </time>
           <Dot className="max-sm:hidden" />
           <Link
-            to="/u/$userId"
+            to="/users/$userId"
             params={{ userId: post.userId }}
             className="truncate hover:text-brand-text max-sm:hidden"
           >

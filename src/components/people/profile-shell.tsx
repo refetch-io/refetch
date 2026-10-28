@@ -1,123 +1,156 @@
 import * as React from 'react'
 import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { Link, linkOptions, useNavigate, useParams, useRouteContext } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
-import { Ban, CalendarDays, Ellipsis, Link2, MessageCircle, PenLine, UserRound } from 'lucide-react'
+import { Ban, CalendarDays, Ellipsis, Info, Link2, MessageCircle, PenLine, Users } from 'lucide-react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { createConversation } from '@/api/messages'
 import { setUserBlocked } from '@/api/profiles'
-import { FEED_MAX_PAGES } from '@/lib/constants'
-import { profileInsightsQuery, profileQuery, userCommentsQuery, userStoriesQuery } from '@/lib/queries'
+import { followedIdsQuery, profileInsightsQuery, profileQuery } from '@/lib/queries'
 import { SITE_URL, seo } from '@/lib/seo'
-import type { Profile, ProfileInsights } from '@/lib/types'
-import { compactNumber, pluralize, timeAgo } from '@/lib/utils'
+import { useSession } from '@/lib/session'
+import type { PeoplePage, Profile, ProfileInsights } from '@/lib/types'
+import { compactNumber, pluralize } from '@/lib/utils'
 import { BotBadge } from '@/components/bot-badge'
 import { ChannelIcon, useChannels } from '@/components/channels/channel-parts'
 import { SponsorCard } from '@/components/insights/insights-rail'
-import { FeedLayout } from '@/components/feed/feed-layout'
-import { FeedList, FeedPagination, FeedSkeleton } from '@/components/feed/feed-view'
+import { ColumnTabs } from '@/components/feed/feed-column'
+import { FeedColumnSection, FeedLayout } from '@/components/feed/feed-layout'
+import { FeedSkeleton } from '@/components/feed/feed-view'
 import { EditProfileDialog } from '@/components/people/edit-profile-dialog'
 import { FollowButton } from '@/components/people/follow-button'
 import { Avatar } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, List, SectionLabel } from '@/components/ui/card'
+import { Card, List, ListItem, SectionLabel } from '@/components/ui/card'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { Menu, MenuContent, MenuItem, MenuTrigger } from '@/components/ui/menu'
-import { EmptyState } from '@/components/ui/misc'
-import { SegmentedControl } from '@/components/ui/segmented-control'
+import { EmptyState, Skeleton } from '@/components/ui/misc'
+import { Tooltip } from '@/components/ui/tooltip'
 
-type Tab = 'stories' | 'comments'
+/*
+ * Every profile page (stories, comments, followers, following) shares one
+ * shell: the layout route renders the profile card and rail (ProfileFrame),
+ * and each tab renders its column with the sticky tabs (ProfileColumn).
+ */
 
-export const Route = createFileRoute('/_app/u/$userId')({
-  validateSearch: z.object({
-    tab: z.enum(['stories', 'comments']).optional().catch(undefined),
-    page: z.number().int().min(2).max(FEED_MAX_PAGES).optional().catch(undefined),
-  }),
-  loaderDeps: ({ search }) => ({ tab: (search.tab ?? 'stories') as Tab, page: search.page ?? 1 }),
-  loader: async ({ context, params, deps }) => {
-    const viewerId = context.user?.id ?? null
-    // Sidebar insights load alongside but never hold the page.
-    void context.queryClient.prefetchQuery(profileInsightsQuery(params.userId))
-    const [profile] = await Promise.all([
-      context.queryClient.ensureQueryData(profileQuery(params.userId, viewerId)),
-      deps.tab === 'stories'
-        ? context.queryClient.ensureQueryData(userStoriesQuery(params.userId, deps.page, viewerId))
-        : context.queryClient.ensureQueryData(userCommentsQuery(params.userId, deps.page)),
-    ])
-    return { name: profile.name, bio: profile.bio }
-  },
-  head: ({ loaderData, params }) => ({
-    meta: seo({
-      title: loaderData ? `${loaderData.name} - Refetch` : 'Profile - Refetch',
-      description:
-        loaderData?.bio || `Stories and comments by ${loaderData?.name ?? 'this person'} on Refetch.`,
-      url: `${SITE_URL}/u/${params.userId}`,
-      type: 'website',
-    }),
-  }),
-  pendingComponent: () => (
-    <FeedLayout header={<div className="mb-6 h-56 animate-pulse rounded-card bg-surface shadow-card" />}>
-      <FeedSkeleton />
-    </FeedLayout>
-  ),
-  notFoundComponent: () => (
-    <Card className="mx-auto max-w-xl">
-      <EmptyState
-        icon={<UserRound />}
-        title="Nobody here"
-        description="This profile doesn’t exist, or this person hasn’t posted yet."
-        action={
-          <Button asChild variant="primary" size="md">
-            <Link to="/">Back to top stories</Link>
-          </Button>
-        }
-      />
-    </Card>
-  ),
-  component: ProfilePage,
-})
+export type ProfileTab = 'stories' | 'comments' | 'followers' | 'following'
 
-function ProfilePage() {
-  const { userId } = Route.useParams()
-  const { tab, page } = Route.useLoaderDeps()
-  const { user } = Route.useRouteContext()
-  const navigate = useNavigate({ from: Route.fullPath })
-  const viewerId = user?.id ?? null
-  const { data: profile } = useSuspenseQuery(profileQuery(userId, viewerId))
+/** Inside the column the column is the card; lists render flat. */
+export const COLUMN_LIST = 'rounded-none bg-transparent shadow-none'
 
+export function firstName(profile: Pick<Profile, 'name'>) {
+  return profile.name.split(' ')[0]
+}
+
+/** Head tags for a profile page. Follower lists are thin, so they stay out of search. */
+export function profileMeta(
+  loaderData: { name: string; bio: string } | undefined,
+  userId: string,
+  tab: ProfileTab,
+) {
+  const name = loaderData?.name ?? 'this person'
+  const path = tab === 'stories' ? '' : `/${tab}`
+  const titles: Record<ProfileTab, string> = {
+    stories: loaderData ? `${name} - Refetch` : 'Profile - Refetch',
+    comments: `Comments by ${name} - Refetch`,
+    followers: `People following ${name} - Refetch`,
+    following: `People ${name} follows - Refetch`,
+  }
+  return seo({
+    title: titles[tab],
+    description: loaderData?.bio || `Stories and comments by ${name} on Refetch.`,
+    url: `${SITE_URL}/users/${userId}${path}`,
+    noindex: tab === 'followers' || tab === 'following',
+  })
+}
+
+/** The card and rail around every tab. Rendered by the layout route, so it stays put while tabs change. */
+export function ProfileFrame({ profile, children }: { profile: Profile; children: React.ReactNode }) {
   return (
     <FeedLayout
       header={<ProfileHeader profile={profile} />}
       railLabel={`About ${profile.name}`}
       rail={<ProfileRail profile={profile} />}
     >
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <SegmentedControl<Tab>
-          aria-label="Show"
-          size="sm"
-          className="w-56"
-          value={tab}
-          onValueChange={(value) =>
-            navigate({
-              search: { tab: value === 'stories' ? undefined : value, page: undefined },
-              resetScroll: false,
-            })
-          }
-          options={[
-            { value: 'stories', label: `Stories ${compactNumber(profile.stats.stories)}` },
-            { value: 'comments', label: `Comments ${compactNumber(profile.stats.comments)}` },
-          ]}
-        />
-      </div>
-      {tab === 'stories' ? (
-        <UserStories userId={userId} page={page} viewerId={viewerId} name={profile.name} />
-      ) : (
-        <UserComments userId={userId} page={page} name={profile.name} />
-      )}
+      {children}
     </FeedLayout>
   )
 }
+
+/** A tab's column: the sticky tabs, the tab's list, and its pagination below the card. */
+export function ProfileColumn({
+  profile,
+  tab,
+  feed,
+  children,
+}: {
+  profile: Profile
+  tab: ProfileTab
+  feed?: { posts: ReadonlyArray<unknown>; page: number; hasMore: boolean } | null
+  children: React.ReactNode
+}) {
+  return (
+    <FeedColumnSection column={<ProfileTabs profile={profile} tab={tab} />} feed={feed}>
+      {children}
+    </FeedColumnSection>
+  )
+}
+
+function ProfileTabs({ profile, tab }: { profile: Profile; tab: ProfileTab }) {
+  const params = { userId: profile.id }
+  return (
+    <ColumnTabs
+      label={`${profile.name}’s profile`}
+      tabs={[
+        {
+          key: 'stories',
+          label: 'Stories',
+          count: compactNumber(profile.stats.stories),
+          active: tab === 'stories',
+          link: linkOptions({ to: '/users/$userId', params }),
+        },
+        {
+          key: 'comments',
+          label: 'Comments',
+          count: compactNumber(profile.stats.comments),
+          active: tab === 'comments',
+          link: linkOptions({ to: '/users/$userId/comments', params }),
+        },
+        {
+          key: 'followers',
+          label: 'Followers',
+          count: compactNumber(profile.stats.followers),
+          active: tab === 'followers',
+          link: linkOptions({ to: '/users/$userId/followers', params }),
+        },
+        {
+          key: 'following',
+          label: 'Following',
+          count: compactNumber(profile.stats.following),
+          active: tab === 'following',
+          link: linkOptions({ to: '/users/$userId/following', params }),
+        },
+      ]}
+    />
+  )
+}
+
+/** Pending state for a tab: the card and rail stay put, the tabs move, and only the list waits. */
+export function profilePending(tab: ProfileTab) {
+  return function ProfilePending() {
+    const { userId } = useParams({ from: '/_app/users/$userId' })
+    const { user } = useRouteContext({ from: '/_app/users/$userId' })
+    const { data: profile } = useSuspenseQuery(profileQuery(userId, user?.id ?? null))
+    return (
+      <ProfileColumn profile={profile} tab={tab}>
+        {tab === 'followers' || tab === 'following' ? <PeopleSkeleton /> : <FeedSkeleton rows={8} />}
+      </ProfileColumn>
+    )
+  }
+}
+
+/* ──────────────────────────────── Header ──────────────────────────────── */
 
 function ProfileHeader({ profile }: { profile: Profile }) {
   const [editing, setEditing] = React.useState(false)
@@ -163,12 +196,6 @@ function ProfileHeader({ profile }: { profile: Profile }) {
     }
   }
 
-  const stats = [
-    { label: 'Karma', value: profile.stats.karma },
-    { label: 'Followers', value: profile.stats.followers },
-    { label: 'Following', value: profile.stats.following },
-  ]
-
   return (
     <Card className="mb-5 animate-rise-in p-5 sm:mb-6 sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
@@ -177,6 +204,7 @@ function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-title-1 text-label">{profile.name}</h1>
             {profile.isBot && <BotBadge />}
+            {viewer?.blocked && <Badge variant="danger">Blocked</Badge>}
           </div>
           {profile.bio && (
             <p className="mt-1.5 max-w-xl text-subhead text-pretty whitespace-pre-line text-label-secondary">
@@ -205,14 +233,25 @@ function ProfileHeader({ profile }: { profile: Profile }) {
               </span>
             )}
           </div>
-          <dl className="mt-4 flex gap-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col-reverse">
-                <dt className="text-caption-1 text-label-tertiary">{stat.label}</dt>
-                <dd className="font-rounded text-headline text-label tabular">{compactNumber(stat.value)}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mt-4 flex gap-6">
+            <KarmaStat profile={profile} />
+            <Link
+              to="/users/$userId/followers"
+              params={{ userId: profile.id }}
+              className="group flex flex-col"
+            >
+              <StatValue value={profile.stats.followers} />
+              <StatLabel>{profile.stats.followers === 1 ? 'Follower' : 'Followers'}</StatLabel>
+            </Link>
+            <Link
+              to="/users/$userId/following"
+              params={{ userId: profile.id }}
+              className="group flex flex-col"
+            >
+              <StatValue value={profile.stats.following} />
+              <StatLabel>Following</StatLabel>
+            </Link>
+          </div>
         </div>
 
         {viewer?.isSelf ? (
@@ -245,7 +284,7 @@ function ProfileHeader({ profile }: { profile: Profile }) {
                   <MenuContent align="end" className="w-52">
                     <MenuItem destructive={!viewer.blocked} onSelect={() => setConfirmBlock(true)}>
                       <Ban className="!text-current" />
-                      {viewer.blocked ? 'Unblock' : 'Block'} {profile.name.split(' ')[0]}
+                      {viewer.blocked ? 'Unblock' : 'Block'} {firstName(profile)}
                     </MenuItem>
                   </MenuContent>
                 </Menu>
@@ -274,68 +313,129 @@ function ProfileHeader({ profile }: { profile: Profile }) {
   )
 }
 
-function UserStories({
-  userId,
-  page,
-  viewerId,
-  name,
-}: {
-  userId: string
-  page: number
-  viewerId: string | null
-  name: string
-}) {
-  const { data } = useSuspenseQuery(userStoriesQuery(userId, page, viewerId))
+function StatValue({ value }: { value: number }) {
   return (
-    <FeedList
-      page={data}
-      empty={{ title: 'No stories yet', description: `${name} hasn’t shared a story yet.` }}
-    />
+    <span className="font-rounded text-headline text-label tabular group-hover:text-brand-text">
+      {compactNumber(value)}
+    </span>
   )
 }
 
-function UserComments({ userId, page, name }: { userId: string; page: number; name: string }) {
-  const { data } = useQuery(userCommentsQuery(userId, page))
-  if (!data) return <FeedSkeleton rows={5} />
-  if (data.comments.length === 0) {
-    return (
-      <Card>
-        <EmptyState
-          icon={<MessageCircle />}
-          title="No comments yet"
-          description={`${name} hasn’t commented yet.`}
-        />
-      </Card>
-    )
-  }
-  return (
+function StatLabel({ children }: { children: React.ReactNode }) {
+  return <span className="inline-flex items-center gap-1 text-caption-1 text-label-tertiary">{children}</span>
+}
+
+/** Karma with how it's counted. Opens on hover and focus, and on tap where there's no hover. */
+function KarmaStat({ profile }: { profile: Profile }) {
+  const [open, setOpen] = React.useState(false)
+  const whose = profile.viewer?.isSelf ? 'your' : `${firstName(profile)}’s`
+  const explanation = (
     <>
-      <List>
-        {data.comments.map((comment) => (
-          <li key={comment.id} className="px-4 py-3.5 sm:px-5">
-            <p className="text-footnote text-label-tertiary">
-              On{' '}
-              <Link
-                to="/threads/$threadId"
-                params={{ threadId: comment.postId }}
-                className="font-semibold text-label hover:text-brand-text"
-              >
-                {comment.postTitle}
-              </Link>{' '}
-              · {timeAgo(comment.createdAt)}
-            </p>
-            <p className="mt-1 line-clamp-4 text-subhead whitespace-pre-line text-label">{comment.content}</p>
-          </li>
-        ))}
-      </List>
-      <FeedPagination page={data.page} hasMore={data.hasMore} />
+      <span className="block font-semibold">Karma</span>
+      <span className="mt-0.5 block text-label-secondary">
+        The net score of {whose} stories: every upvote adds a point and every downvote takes one away. Votes
+        on comments don’t count.
+      </span>
     </>
   )
+  return (
+    <Tooltip content={explanation} side="bottom" open={open} onOpenChange={setOpen} className="max-w-64">
+      <button
+        type="button"
+        className="group flex flex-col text-left"
+        onClick={(event) => {
+          // Radix closes tooltips on click; toggle instead so taps work on touch screens.
+          event.preventDefault()
+          setOpen((value) => !value)
+        }}
+      >
+        <StatValue value={profile.stats.karma} />
+        <StatLabel>
+          Karma
+          <Info className="size-3" aria-hidden />
+        </StatLabel>
+      </button>
+    </Tooltip>
+  )
 }
+
+/* ──────────────────────────────── People lists ──────────────────────────────── */
+
+/** Followers or following: name, bio and a Follow button for everyone but you. */
+export function PeopleList({
+  data,
+  empty,
+}: {
+  data: PeoplePage
+  empty: { title: string; description: string; action?: React.ReactNode }
+}) {
+  const { user } = useSession()
+  const { data: followed } = useQuery({ ...followedIdsQuery(user?.id ?? ''), enabled: Boolean(user) })
+  if (data.people.length === 0) return <EmptyState icon={<Users />} {...empty} />
+  const following = new Set(followed ?? [])
+
+  return (
+    <List className={COLUMN_LIST} style={{ '--list-inset': '0px' } as React.CSSProperties}>
+      {data.people.map((person) => (
+        <ListItem key={person.id} className="flex items-center gap-3 px-4 py-3 sm:px-5">
+          <Link
+            to="/users/$userId"
+            params={{ userId: person.id }}
+            className="group flex min-w-0 flex-1 items-center gap-3"
+          >
+            <Avatar name={person.name} userId={person.id} size={44} />
+            <span className="min-w-0">
+              <span className="block truncate text-subhead font-semibold text-label group-hover:text-brand-text">
+                {person.name}
+              </span>
+              {person.bio && (
+                <span className="line-clamp-2 text-footnote text-pretty text-label-secondary">
+                  {person.bio}
+                </span>
+              )}
+            </span>
+          </Link>
+          {person.id !== user?.id && (
+            <FollowButton
+              userId={person.id}
+              name={person.name}
+              following={following.has(person.id)}
+              size="sm"
+              className="shrink-0"
+            />
+          )}
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+export function PeopleSkeleton({ rows = 8 }: { rows?: number }) {
+  return (
+    <List
+      className={COLUMN_LIST}
+      aria-busy="true"
+      aria-label="Loading people"
+      style={{ '--list-inset': '0px' } as React.CSSProperties}
+    >
+      {Array.from({ length: rows }, (_, i) => (
+        <ListItem key={i} className="flex items-center gap-3 px-4 py-3 sm:px-5">
+          <Skeleton className="size-11 shrink-0 rounded-full" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-3.5 rounded-full" style={{ width: `${30 + ((i * 17) % 30)}%` }} />
+            <Skeleton className="h-3 w-3/5 rounded-full" />
+          </div>
+          <Skeleton className="h-8 w-[6.5rem] shrink-0 rounded-full" />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+/* ──────────────────────────────── Rail ──────────────────────────────── */
 
 function ProfileRail({ profile }: { profile: Profile }) {
   const { data: insights } = useQuery(profileInsightsQuery(profile.id))
-  const first = profile.name.split(' ')[0]
 
   if (!insights) {
     return (
@@ -353,7 +453,7 @@ function ProfileRail({ profile }: { profile: Profile }) {
       {insights.channels.length > 0 && <PostsInCard channels={insights.channels} />}
       {insights.topStories.length > 0 && <TopStoriesCard stories={insights.topStories} />}
       {insights.following.length > 0 && (
-        <FollowingCard name={first} people={insights.following} total={insights.followingTotal} />
+        <FollowingCard profile={profile} people={insights.following} total={insights.followingTotal} />
       )}
       <SponsorCard />
     </>
@@ -436,7 +536,7 @@ function PostsInCard({ channels }: { channels: ProfileInsights['channels'] }) {
         {rows.map(({ channel, stories }) => (
           <li key={channel.id}>
             <Link
-              to="/c/$channelId"
+              to="/channels/$channelId"
               params={{ channelId: channel.id }}
               className="group flex items-center gap-3 px-4 py-2 transition-colors hover:bg-fill-secondary"
             >
@@ -487,25 +587,33 @@ function TopStoriesCard({ stories }: { stories: ProfileInsights['topStories'] })
 }
 
 function FollowingCard({
-  name,
+  profile,
   people,
   total,
 }: {
-  name: string
+  profile: Profile
   people: ProfileInsights['following']
   total: number
 }) {
   return (
     <Card className="p-4">
       <div className="flex items-baseline justify-between">
-        <SectionLabel className="px-0">{name} follows</SectionLabel>
-        <span className="text-caption-1 text-label-tertiary tabular">{compactNumber(total)}</span>
+        <SectionLabel className="px-0">
+          {profile.viewer?.isSelf ? 'You follow' : `${firstName(profile)} follows`}
+        </SectionLabel>
+        <Link
+          to="/users/$userId/following"
+          params={{ userId: profile.id }}
+          className="text-caption-1 font-semibold text-brand-text hover:underline"
+        >
+          See all {compactNumber(total)}
+        </Link>
       </div>
       <ul role="list" className="mt-3 grid grid-cols-4 gap-x-2 gap-y-3">
         {people.map((person) => (
           <li key={person.id}>
             <Link
-              to="/u/$userId"
+              to="/users/$userId"
               params={{ userId: person.id }}
               className="group flex flex-col items-center gap-1.5 text-center"
             >

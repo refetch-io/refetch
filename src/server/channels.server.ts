@@ -285,7 +285,8 @@ function channelFilter(channels: Array<Channel>) {
   return keywords.length > 0 ? Query.or([byTag, Query.containsAny('topics', keywords)]) : byTag
 }
 
-async function queryPosts(
+/** A page of on-topic, enhanced stories matching `filters`, with votes and channels. */
+export async function queryPosts(
   filters: Array<string>,
   order: Array<string>,
   page: number,

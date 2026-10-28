@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { Hash, Search, X } from 'lucide-react'
-import { channelDirectoryQuery } from '@/lib/queries'
-import { SITE_URL, seo } from '@/lib/seo'
+import { channelDirectoryQuery, configQuery } from '@/lib/queries'
+import { SITE_URL, breadcrumbs, collectionPage, seo } from '@/lib/seo'
 import type { Channel } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { FeedHeader } from '@/components/feed/feed-view'
@@ -22,16 +22,43 @@ import { EmptyState, Skeleton } from '@/components/ui/misc'
 
 const JOINED = 'Joined'
 
-export const Route = createFileRoute('/_app/channels')({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
-  head: () => ({
-    meta: seo({
-      title: 'Channels - Refetch',
-      description: 'Join channels for the languages, platforms and topics you care about.',
-      url: `${SITE_URL}/channels`,
-    }),
-  }),
+export const Route = createFileRoute('/_app/channels/')({
+  loader: async ({ context }) => {
+    const [directory, config] = await Promise.all([
+      context.queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
+      context.queryClient.ensureQueryData(configQuery()),
+    ])
+    return {
+      siteUrl: config.siteUrl,
+      channels: directory.channels.map((channel) => ({ id: channel.id, name: channel.name })),
+    }
+  },
+  head: ({ loaderData }) => {
+    const siteUrl = loaderData?.siteUrl ?? SITE_URL
+    const url = `${siteUrl}/channels`
+    const description =
+      'Tech news channels for the languages, platforms and topics you care about: AI, web, mobile, Rust, Python, security and more. Join them to fill your Following feed.'
+    return {
+      meta: seo({ title: 'Tech news channels by language, platform and topic | Refetch', description, url }),
+      links: [{ rel: 'canonical', href: url }],
+      scripts: [
+        collectionPage({
+          siteUrl,
+          url,
+          name: 'Channels on Refetch',
+          description,
+          items: (loaderData?.channels ?? []).map((channel) => ({
+            name: channel.name,
+            url: `${siteUrl}/channels/${channel.id}`,
+          })),
+        }),
+        breadcrumbs([
+          { name: 'Refetch', url: `${siteUrl}/` },
+          { name: 'Channels', url },
+        ]),
+      ],
+    }
+  },
   component: ChannelsPage,
 })
 
@@ -223,7 +250,7 @@ function ChannelCard({ channel, index }: { channel: Channel; index: number }) {
   return (
     <li className="animate-rise-in" style={{ animationDelay: `${Math.min(index, 12) * 25}ms` }}>
       <Link
-        to="/c/$channelId"
+        to="/channels/$channelId"
         params={{ channelId: channel.id }}
         className="group flex h-full flex-col rounded-card bg-surface p-4 shadow-card transition-shadow hover:shadow-raised"
       >

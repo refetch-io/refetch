@@ -7,7 +7,6 @@ import {
   BookOpen,
   ChevronLeft,
   Clock3,
-  Hash,
   Link2,
   Share,
   TextAlignStart,
@@ -32,6 +31,7 @@ import { BotBadge } from '../bot-badge'
 import { Favicon } from '../favicon'
 import { VoteControl } from '../vote-control'
 import { ChannelTag } from '../channels/channel-parts'
+import { TopicChip } from '../topics/topic-parts'
 import { ShareDialog } from '../messages/share-dialog'
 import { FollowButton } from '../people/follow-button'
 import { useJoinGate } from '../auth/join-gate'
@@ -124,7 +124,7 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
             <span className="inline-flex items-center gap-1.5">
               by{' '}
               <Link
-                to="/u/$userId"
+                to="/users/$userId"
                 params={{ userId: post.userId }}
                 className="inline-flex items-center gap-1.5 font-medium text-label hover:text-brand-text"
               >
@@ -251,10 +251,7 @@ export function StorySummary({ post }: { post: PostDetail }) {
         >
           {post.topics.map((topic) => (
             <li key={topic}>
-              <Badge variant="neutral" size="md" className="gap-0.5 font-medium">
-                <Hash className="!size-3 text-label-tertiary" aria-hidden />
-                {topic}
-              </Badge>
+              <TopicChip label={topic} />
             </li>
           ))}
         </ul>

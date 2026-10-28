@@ -2,9 +2,10 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Hash, PenLine } from 'lucide-react'
 import { z } from 'zod'
-import { FEED_MAX_PAGES } from '@/lib/constants'
-import { channelFeedQuery } from '@/lib/queries'
-import { SITE_URL, seo } from '@/lib/seo'
+import { FEED_MAX_PAGES, FEED_PAGE_SIZE } from '@/lib/constants'
+import { channelFeedQuery, configQuery } from '@/lib/queries'
+import { breadcrumbs, clampDescription, collectionPage, seo } from '@/lib/seo'
+import { topicKey } from '@/lib/topics'
 import type { Channel, ChannelAbout, ChannelSort } from '@/lib/types'
 import { compactNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -17,28 +18,64 @@ import { FeedLayout } from '@/components/feed/feed-layout'
 import { Favicon } from '@/components/favicon'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { ChannelIcon, JoinButton, memberLabel, useChannels } from '@/components/channels/channel-parts'
+import { TopicChips } from '@/components/topics/topic-parts'
 
 const searchSchema = z.object({
   sort: z.enum(['hot', 'new']).optional().catch(undefined),
   page: z.number().int().min(2).max(FEED_MAX_PAGES).optional().catch(undefined),
 })
 
-export const Route = createFileRoute('/_app/c/$channelId')({
+export const Route = createFileRoute('/_app/channels/$channelId')({
   validateSearch: searchSchema,
   loaderDeps: ({ search }) => ({ sort: (search.sort ?? 'hot') as ChannelSort, page: search.page ?? 1 }),
   loader: async ({ context, params, deps }) => {
-    const data = await context.queryClient.ensureQueryData(
-      channelFeedQuery(params.channelId, deps.sort, deps.page, context.user?.id ?? null),
-    )
-    return { name: data.channel.name, description: data.channel.description }
+    const [data, config] = await Promise.all([
+      context.queryClient.ensureQueryData(
+        channelFeedQuery(params.channelId, deps.sort, deps.page, context.user?.id ?? null),
+      ),
+      context.queryClient.ensureQueryData(configQuery()),
+    ])
+    return {
+      name: data.channel.name,
+      description: data.channel.description,
+      stories: data.feed.posts.map((post) => ({ id: post.id, title: post.title })),
+      siteUrl: config.siteUrl,
+      ...deps,
+    }
   },
-  head: ({ loaderData, params }) => ({
-    meta: seo({
-      title: loaderData ? `${loaderData.name} - Refetch` : 'Channel - Refetch',
-      description: loaderData?.description,
-      url: `${SITE_URL}/c/${params.channelId}`,
-    }),
-  }),
+  head: ({ loaderData, params }) => {
+    if (!loaderData) return { meta: seo({ title: 'Channel | Refetch', noindex: true }) }
+    const { sort, page } = loaderData
+    const base = `${loaderData.siteUrl}/channels/${params.channelId}`
+    // Each page of the default (hot) feed is its own page; the New sort folds into the channel.
+    const url = sort === 'hot' && page > 1 ? `${base}?page=${page}` : base
+    const title = `${loaderData.name} news and discussions${page > 1 ? ` (page ${page})` : ''} | Refetch`
+    const description = clampDescription(
+      `${loaderData.description || `The latest ${loaderData.name} stories.`} Hand-picked ${loaderData.name} news, releases and discussions from the Refetch community.`,
+    )
+    return {
+      meta: seo({ title, description, url }),
+      links: [{ rel: 'canonical', href: url }],
+      scripts: [
+        collectionPage({
+          siteUrl: loaderData.siteUrl,
+          url,
+          name: `${loaderData.name} on Refetch`,
+          description,
+          items: loaderData.stories.map((story) => ({
+            name: story.title,
+            url: `${loaderData.siteUrl}/threads/${story.id}`,
+          })),
+          offset: (page - 1) * FEED_PAGE_SIZE,
+        }),
+        breadcrumbs([
+          { name: 'Refetch', url: `${loaderData.siteUrl}/` },
+          { name: 'Channels', url: `${loaderData.siteUrl}/channels` },
+          { name: loaderData.name, url: base },
+        ]),
+      ],
+    }
+  },
   pendingComponent: () => (
     <FeedLayout header={<div className="mb-6 h-40 animate-pulse rounded-card bg-surface shadow-card" />}>
       <FeedSkeleton ranked />
@@ -143,6 +180,12 @@ function ChannelRail({ channel, about }: { channel: Channel; about: ChannelAbout
   const related = channels
     .filter((item) => item.category === channel.category && item.id !== channel.id)
     .slice(0, 5)
+  // Keywords are the topics the channel collects; one chip per topic page, first spelling wins.
+  const topics = new Map<string, { key: string; label: string }>()
+  for (const keyword of channel.keywords) {
+    const key = topicKey(keyword)
+    if (key && !topics.has(key)) topics.set(key, { key, label: keyword })
+  }
 
   return (
     <>
@@ -194,6 +237,13 @@ function ChannelRail({ channel, about }: { channel: Channel; about: ChannelAbout
         </Card>
       )}
 
+      {topics.size > 0 && (
+        <Card className="p-4">
+          <SectionLabel className="px-0 pb-3">Topics</SectionLabel>
+          <TopicChips topics={[...topics.values()]} label={`${channel.name} topics`} />
+        </Card>
+      )}
+
       {related.length > 0 && (
         <Card className="py-3">
           <SectionLabel className="px-4 pb-1">More in {channel.category}</SectionLabel>
@@ -201,7 +251,7 @@ function ChannelRail({ channel, about }: { channel: Channel; about: ChannelAbout
             {related.map((item) => (
               <li key={item.id} className="flex items-center gap-3 px-4 py-2">
                 <Link
-                  to="/c/$channelId"
+                  to="/channels/$channelId"
                   params={{ channelId: item.id }}
                   className="group flex min-w-0 flex-1 items-center gap-3"
                 >

@@ -3,6 +3,7 @@ import type {
   ActionResult,
   MessagePrivacy,
   OnboardingSuggestions,
+  PeoplePage,
   PersonSummary,
   Profile,
   SessionUser,
@@ -391,6 +392,58 @@ export async function getFollowedIds(followerId: string): Promise<Array<string>>
     })
     .catch(() => ({ rows: [] as Array<Row> }))
   return (result.rows as Array<Row>).map((row) => String(row.userId))
+}
+
+/** A page of someone's followers, or of the people they follow, most recent first. */
+export async function listFollows(
+  userId: string,
+  direction: 'followers' | 'following',
+  page: number,
+): Promise<PeoplePage> {
+  const { tables, ids } = db()
+  // A follow row reads "followerId follows userId".
+  const [match, other] = direction === 'followers' ? ['userId', 'followerId'] : ['followerId', 'userId']
+  const result = await tables.listRows({
+    databaseId: ids.databaseId,
+    tableId: ids.follows,
+    queries: [
+      Query.equal(match, userId),
+      Query.orderDesc('$createdAt'),
+      Query.limit(FEED_PAGE_SIZE + 1),
+      Query.offset((page - 1) * FEED_PAGE_SIZE),
+      Query.select([other]),
+    ],
+    total: false,
+  })
+  const personIds = (result.rows as Array<Row>).slice(0, FEED_PAGE_SIZE).map((row) => String(row[other]))
+  const [people, bios] = await Promise.all([
+    getPeople(personIds),
+    personIds.length === 0
+      ? Promise.resolve([] as Array<Row>)
+      : tables
+          .listRows({
+            databaseId: ids.databaseId,
+            tableId: ids.profiles,
+            queries: [
+              Query.equal('$id', personIds),
+              Query.limit(personIds.length),
+              Query.select(['$id', 'bio']),
+            ],
+            total: false,
+          })
+          .then((rows) => rows.rows as Array<Row>)
+          .catch(() => [] as Array<Row>),
+  ])
+  const bioById = new Map(bios.map((row) => [row.$id, String(row.bio ?? '')]))
+  return {
+    people: personIds.map((id) => ({
+      id,
+      name: people.get(id)?.name ?? 'Refetch user',
+      bio: isBotUser(id) ? BOT_PROFILE.bio : (bioById.get(id) ?? ''),
+    })),
+    page,
+    hasMore: result.rows.length > FEED_PAGE_SIZE,
+  }
 }
 
 export async function setFollowing(

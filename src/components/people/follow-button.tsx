@@ -46,6 +46,8 @@ export function FollowButton({
       if (next) toast.success(`Following ${name}`, { description: 'Their stories now show up in Following.' })
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['profile', userId] }),
+        // Your own Following count and list.
+        queryClient.invalidateQueries({ queryKey: ['profile', user.id] }),
         queryClient.invalidateQueries({ queryKey: ['following'] }),
         queryClient.invalidateQueries({ queryKey: ['followed'] }),
       ])

@@ -53,6 +53,7 @@ export function getTableIds() {
     comments: required('APPWRITE_COMMENTS_COLLECTION_ID'),
     votes: required('APPWRITE_VOTES_COLLECTION_ID'),
     dailyTopics: read('APPWRITE_DAILY_TOPICS_COLLECTION_ID') ?? 'daily_topics',
+    topics: read('APPWRITE_TOPICS_COLLECTION_ID') ?? 'topics',
     channels: read('APPWRITE_CHANNELS_COLLECTION_ID') ?? 'channels',
     channelMembers: read('APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID') ?? 'channel_members',
     profiles: read('APPWRITE_PROFILES_COLLECTION_ID') ?? 'profiles',

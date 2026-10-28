@@ -22,7 +22,8 @@ const CHANNELS: NavItem = {
   to: '/channels',
   label: 'Channels',
   icon: Hash,
-  isActive: (pathname) => pathname === '/channels' || pathname.startsWith('/c/'),
+  isActive: (pathname) =>
+    pathname === '/channels' || pathname.startsWith('/channels/') || pathname.startsWith('/topics'),
 }
 const MESSAGES: NavItem = {
   to: '/messages',
@@ -36,7 +37,8 @@ const PROFILE: NavItem = {
   label: 'Profile',
   icon: CircleUserRound,
   requiresAuth: true,
-  isActive: (pathname, userId) => Boolean(userId) && pathname === `/u/${userId}`,
+  isActive: (pathname, userId) =>
+    Boolean(userId) && (pathname === `/users/${userId}` || pathname.startsWith(`/users/${userId}/`)),
 }
 
 /** Desktop sidebar and the phone tab bar share the same four sections. */

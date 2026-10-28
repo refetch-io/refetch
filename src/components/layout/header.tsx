@@ -193,7 +193,7 @@ function UserMenu({ user }: { user: SessionUser }) {
         </MenuLabel>
         <MenuSeparator />
         <MenuItem asChild>
-          <Link to="/u/$userId" params={{ userId: user.id }}>
+          <Link to="/users/$userId" params={{ userId: user.id }}>
             <CircleUserRound />
             Your profile
           </Link>
