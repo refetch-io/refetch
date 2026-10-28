@@ -214,6 +214,13 @@ export default async function ({ req, res, log, error }) {
     return posted;
   }
 
+  // There are more channels than stories per run, so visit them in a fresh random
+  // order each time; otherwise the ones at the end of the catalog would starve.
+  for (let i = channels.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [channels[i], channels[j]] = [channels[j], channels[i]];
+  }
+
   for (const channel of channels) {
     if (created >= MAX_PER_RUN) break;
     try {

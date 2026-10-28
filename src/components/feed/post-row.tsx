@@ -59,7 +59,10 @@ export function PostRow({
       />
 
       <div className="min-w-0 flex-1 py-0.5">
-        <h2 className="text-[15px] leading-[1.35] font-semibold tracking-[-0.01em] text-pretty sm:text-callout sm:leading-[1.35]">
+        <h2
+          title={post.title}
+          className="truncate text-[15px] leading-[1.35] font-semibold tracking-[-0.01em] sm:text-callout sm:leading-[1.35]"
+        >
           {post.type === 'show' && (
             <Badge variant="brand" size="xs" className="mr-1.5 -translate-y-px align-middle">
               Show RF

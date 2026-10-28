@@ -49,8 +49,8 @@
     "category": "Companies",
     "glyph": "G",
     "color": "#4285F4",
-    "description": "Gemini, Google Cloud, Chrome and research news from Google and DeepMind.",
-    "keywords": ["Google", "google", "Gemini", "Google Cloud", "DeepMind", "Chrome"],
+    "description": "Search, Gemini, Chrome and research news from Google.",
+    "keywords": ["Google", "google", "Gemini", "Chrome"],
     "sources": ["https://blog.google/rss/", "https://research.google/blog/rss/"],
     "communitySources": ["https://dev.to/feed/tag/google"]
   },
@@ -71,8 +71,8 @@
     "category": "Companies",
     "glyph": "MS",
     "color": "#0078D4",
-    "description": "Azure, Windows, Copilot and developer tools news from Microsoft.",
-    "keywords": ["Microsoft", "microsoft", "Azure", "Windows", "Copilot", "Visual Studio Code"],
+    "description": "Windows, Copilot and developer tools news from Microsoft.",
+    "keywords": ["Microsoft", "microsoft", "Windows", "Copilot", "Visual Studio Code"],
     "sources": ["https://blogs.microsoft.com/feed/", "https://devblogs.microsoft.com/landingpage/"],
     "communitySources": ["https://dev.to/feed/tag/microsoft"]
   },
@@ -93,10 +93,10 @@
     "category": "Companies",
     "glyph": "Am",
     "color": "#FF9900",
-    "description": "AWS launches, Amazon Science research and company news from Amazon.",
-    "keywords": ["Amazon", "amazon", "AWS", "Amazon Web Services", "Alexa"],
-    "sources": ["https://aws.amazon.com/blogs/aws/feed/", "https://www.amazon.science/index.rss", "https://www.aboutamazon.com/rss"],
-    "communitySources": ["https://dev.to/feed/tag/aws"]
+    "description": "Devices, Alexa, Amazon Science research and company news from Amazon.",
+    "keywords": ["Amazon", "amazon", "Alexa"],
+    "sources": ["https://www.amazon.science/index.rss", "https://www.aboutamazon.com/rss"],
+    "communitySources": ["https://dev.to/feed/tag/amazon"]
   },
   {
     "id": "nvidia",
@@ -108,6 +108,138 @@
     "keywords": ["NVIDIA", "Nvidia", "CUDA"],
     "sources": ["https://nvidianews.nvidia.com/releases.xml", "https://blogs.nvidia.com/feed/", "https://developer.nvidia.com/blog/feed/"],
     "communitySources": ["https://dev.to/feed/tag/nvidia"]
+  },
+  {
+    "id": "aws",
+    "name": "AWS",
+    "category": "Cloud",
+    "glyph": "AWS",
+    "color": "#232F3E",
+    "description": "Launches, updates and guides from Amazon Web Services.",
+    "keywords": ["AWS", "Amazon Web Services", "Lambda", "Amazon S3"],
+    "sources": ["https://aws.amazon.com/blogs/aws/feed/", "https://aws.amazon.com/about-aws/whats-new/recent/feed/"],
+    "communitySources": ["https://dev.to/feed/tag/aws"]
+  },
+  {
+    "id": "googlecloud",
+    "name": "Google Cloud",
+    "category": "Cloud",
+    "glyph": "GC",
+    "color": "#4285F4",
+    "description": "Launches, release notes and guides from Google Cloud.",
+    "keywords": ["Google Cloud", "GCP", "Google Cloud Platform", "BigQuery", "Cloud Run"],
+    "sources": ["https://cloudblog.withgoogle.com/rss/", "https://cloud.google.com/feeds/gcp-release-notes.xml"],
+    "communitySources": ["https://dev.to/feed/tag/googlecloud"]
+  },
+  {
+    "id": "azure",
+    "name": "Azure",
+    "category": "Cloud",
+    "glyph": "Az",
+    "color": "#0089D6",
+    "description": "Launches, updates and guides from Microsoft Azure.",
+    "keywords": ["Azure", "Microsoft Azure"],
+    "sources": ["https://azure.microsoft.com/en-us/blog/feed/", "https://www.microsoft.com/releasecommunications/api/v2/azure/rss"],
+    "communitySources": ["https://dev.to/feed/tag/azure"]
+  },
+  {
+    "id": "cloudflare",
+    "name": "Cloudflare",
+    "category": "Cloud",
+    "glyph": "CF",
+    "color": "#F38020",
+    "description": "Workers, networking, security and the changelog from Cloudflare.",
+    "keywords": ["Cloudflare", "Cloudflare Workers"],
+    "sources": ["https://blog.cloudflare.com/rss/", "https://developers.cloudflare.com/changelog/rss/index.xml"],
+    "communitySources": ["https://dev.to/feed/tag/cloudflare"]
+  },
+  {
+    "id": "digitalocean",
+    "name": "DigitalOcean",
+    "category": "Cloud",
+    "glyph": "DO",
+    "color": "#0080FF",
+    "description": "Droplets, managed services and release notes from DigitalOcean.",
+    "keywords": ["DigitalOcean"],
+    "sources": ["https://www.digitalocean.com/blog/rss", "https://docs.digitalocean.com/release-notes/index.xml"],
+    "communitySources": ["https://dev.to/feed/tag/digitalocean"]
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel",
+    "category": "Cloud",
+    "glyph": "Vc",
+    "color": "#000000",
+    "description": "Next.js, the AI SDK and platform updates from Vercel.",
+    "keywords": ["Vercel", "Next.js"],
+    "sources": ["https://vercel.com/atom"],
+    "communitySources": ["https://dev.to/feed/tag/vercel"]
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "category": "AI Labs",
+    "glyph": "OAI",
+    "color": "#000000",
+    "description": "Models, research and product news from OpenAI.",
+    "keywords": ["OpenAI", "ChatGPT", "GPT", "Codex", "Sora"],
+    "sources": ["https://openai.com/news/rss.xml"],
+    "communitySources": ["https://dev.to/feed/tag/openai"]
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "category": "AI Labs",
+    "glyph": "An",
+    "color": "#D97757",
+    "description": "Claude models, research and developer news from Anthropic.",
+    "keywords": ["Anthropic", "Claude", "Claude Code"],
+    "sources": [],
+    "communitySources": ["https://dev.to/feed/tag/anthropic", "https://dev.to/feed/tag/claude"]
+  },
+  {
+    "id": "deepmind",
+    "name": "Google DeepMind",
+    "category": "AI Labs",
+    "glyph": "DM",
+    "color": "#1A73E8",
+    "description": "Gemini models and research from Google DeepMind.",
+    "keywords": ["DeepMind", "Google DeepMind", "Gemini"],
+    "sources": ["https://deepmind.google/blog/rss.xml"],
+    "communitySources": ["https://dev.to/feed/tag/gemini"]
+  },
+  {
+    "id": "mistral",
+    "name": "Mistral AI",
+    "category": "AI Labs",
+    "glyph": "Mi",
+    "color": "#FA520F",
+    "description": "Open and commercial models from Mistral AI.",
+    "keywords": ["Mistral", "Mistral AI"],
+    "sources": ["https://mistral.ai/rss.xml"],
+    "communitySources": ["https://dev.to/feed/tag/mistral"]
+  },
+  {
+    "id": "huggingface",
+    "name": "Hugging Face",
+    "category": "AI Labs",
+    "glyph": "HF",
+    "color": "#FFD21E",
+    "description": "Open models, datasets and libraries from Hugging Face.",
+    "keywords": ["Hugging Face", "Transformers"],
+    "sources": ["https://huggingface.co/blog/feed.xml"],
+    "communitySources": ["https://dev.to/feed/tag/huggingface"]
+  },
+  {
+    "id": "xai",
+    "name": "xAI",
+    "category": "AI Labs",
+    "glyph": "xAI",
+    "color": "#000000",
+    "description": "Grok models and news from xAI.",
+    "keywords": ["xAI", "Grok"],
+    "sources": [],
+    "communitySources": ["https://dev.to/feed/tag/grok"]
   },
   {
     "id": "javascript",

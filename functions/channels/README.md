@@ -7,7 +7,7 @@ Scheduled Appwrite function that keeps every channel stocked with fresh stories.
 3. Keeps items published in the last **72 hours** whose link isn't on Refetch yet, and posts the newest one as **Scout** (`userId` `0`), with `channel` set to the channel ID.
 4. New posts go through the regular pipeline (Enhancement → Algorithm) like any other story.
 
-Limits are constants at the top of `index.js`: **1** story per channel per run, **25** per run overall. GitHub release feeds keep version tags only and name the project (`1.7.4` becomes `Appwrite 1.7.4 released`), skipping package tags and other noise.
+Limits are constants at the top of `index.js`: **1** story per channel per run, **25** per run overall. Channels are visited in a random order each run so none starve once there are more channels than that. GitHub release feeds keep version tags only and name the project (`1.7.4` becomes `Appwrite 1.7.4 released`), skipping package tags and other noise.
 
 ## Schedule
 
