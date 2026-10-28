@@ -28,7 +28,11 @@ export function FeedColumn({ header, children }: { header: React.ReactNode; chil
  * Sticky header of a column. It stays where it rests below the app header
  * instead of sliding up to meet it: a strip of page background fills the gap
  * above it and two corner pieces keep its rounded corners clear of the list
- * scrolling underneath. The offsets match the top padding of `main`.
+ * scrolling underneath. The corner pieces reach past the column's edges to
+ * also hide its outline ring as it scrolls by, and overlap the strip by a
+ * pixel so no seam opens between them. A last piece redraws that outline
+ * around the rounded top, where the column's own sides leave off. The offsets
+ * match the top padding of `main`.
  */
 function StickyColumnHeader({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
@@ -39,11 +43,15 @@ function StickyColumnHeader({ className, children }: { className?: string; child
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute top-0 left-0 size-(--radius-card) bg-[radial-gradient(circle_at_100%_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
+        className="pointer-events-none absolute -top-px -left-2 h-[calc(var(--radius-card)+1px)] w-[calc(var(--radius-card)+0.5rem)] bg-[radial-gradient(circle_at_100%_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute top-0 right-0 size-(--radius-card) bg-[radial-gradient(circle_at_0_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
+        className="pointer-events-none absolute -top-px -right-2 h-[calc(var(--radius-card)+1px)] w-[calc(var(--radius-card)+0.5rem)] bg-[radial-gradient(circle_at_0_100%,transparent_calc(var(--radius-card)-0.5px),var(--bg)_var(--radius-card))]"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-(--radius-card) rounded-t-card shadow-card [clip-path:inset(-0.5rem_-0.5rem_0_-0.5rem)]"
       />
       <div className={cn('rounded-t-card border-b border-separator glass', className)}>{children}</div>
     </div>
