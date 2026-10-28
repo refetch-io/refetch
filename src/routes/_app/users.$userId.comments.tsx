@@ -5,7 +5,13 @@ import { MessageCircle } from 'lucide-react'
 import { profileQuery, userCommentsQuery } from '@/lib/queries'
 import { timeAgo } from '@/lib/utils'
 import { feedSearchSchema } from '@/components/feed/feed-layout'
-import { COLUMN_LIST, ProfileColumn, profileMeta, profilePending } from '@/components/people/profile-shell'
+import {
+  COLUMN_LIST,
+  ProfileColumn,
+  profileHead,
+  profileHeadData,
+  profilePending,
+} from '@/components/people/profile-shell'
 import { List, ListItem } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/misc'
 
@@ -17,9 +23,9 @@ export const Route = createFileRoute('/_app/users/$userId/comments')({
       context.queryClient.ensureQueryData(profileQuery(params.userId, context.user?.id ?? null)),
       context.queryClient.ensureQueryData(userCommentsQuery(params.userId, deps.page)),
     ])
-    return { name: profile.name, bio: profile.bio }
+    return profileHeadData(profile)
   },
-  head: ({ loaderData, params }) => ({ meta: profileMeta(loaderData, params.userId, 'comments') }),
+  head: ({ loaderData, params }) => profileHead(loaderData, params.userId, 'comments'),
   pendingComponent: profilePending('comments'),
   component: CommentsPage,
 })

@@ -1,16 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+/** The sitemap index; each file it lists is served by `/sitemaps/$file`. */
 export const Route = createFileRoute('/sitemap.xml')({
   server: {
     handlers: {
       GET: async () => {
-        const { renderSitemap } = await import('@/server/sitemap.server')
-        return new Response(await renderSitemap(), {
-          headers: {
-            'Content-Type': 'application/xml; charset=utf-8',
-            'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-          },
-        })
+        const { renderSitemapIndex, sitemapResponse } = await import('@/server/sitemap.server')
+        return sitemapResponse(renderSitemapIndex)
       },
     },
   },

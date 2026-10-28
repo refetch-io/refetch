@@ -30,6 +30,7 @@ import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as CSplatRouteImport } from './routes/c.$'
+import { Route as SitemapsFileRouteImport } from './routes/sitemaps.$file'
 import { Route as USplatRouteImport } from './routes/u.$'
 import { Route as AppChannelsIndexRouteImport } from './routes/_app/channels.index'
 import { Route as AppChannelsChannelIdRouteImport } from './routes/_app/channels.$channelId'
@@ -148,6 +149,11 @@ const CSplatRoute = CSplatRouteImport.update({
   path: '/c/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapsFileRoute = SitemapsFileRouteImport.update({
+  id: '/sitemaps/$file',
+  path: '/sitemaps/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const USplatRoute = USplatRouteImport.update({
   id: '/u/$',
   path: '/u/$',
@@ -240,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/channels/$channelId': typeof AppChannelsChannelIdRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/channels/$channelId': typeof AppChannelsChannelIdRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
@@ -310,6 +318,7 @@ export interface FileRoutesById {
   '/_auth/signup': typeof AuthSignupRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/_app/': typeof AppIndexRoute
   '/_app/channels/$channelId': typeof AppChannelsChannelIdRoute
@@ -348,6 +357,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/auth/callback'
     | '/c/$'
+    | '/sitemaps/$file'
     | '/u/$'
     | '/channels/$channelId'
     | '/messages/$conversationId'
@@ -382,6 +392,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/auth/callback'
     | '/c/$'
+    | '/sitemaps/$file'
     | '/u/$'
     | '/channels/$channelId'
     | '/messages/$conversationId'
@@ -417,6 +428,7 @@ export interface FileRouteTypes {
     | '/_auth/signup'
     | '/auth/callback'
     | '/c/$'
+    | '/sitemaps/$file'
     | '/u/$'
     | '/_app/'
     | '/_app/channels/$channelId'
@@ -442,6 +454,7 @@ export interface RootRouteChildren {
   WelcomeRoute: typeof WelcomeRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   CSplatRoute: typeof CSplatRoute
+  SitemapsFileRoute: typeof SitemapsFileRoute
   USplatRoute: typeof USplatRoute
   ApiOgThreadIdRoute: typeof ApiOgThreadIdRoute
 }
@@ -593,6 +606,13 @@ declare module '@tanstack/react-router' {
       path: '/c/$'
       fullPath: '/c/$'
       preLoaderRoute: typeof CSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemaps/$file': {
+      id: '/sitemaps/$file'
+      path: '/sitemaps/$file'
+      fullPath: '/sitemaps/$file'
+      preLoaderRoute: typeof SitemapsFileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/u/$': {
@@ -792,6 +812,7 @@ const rootRouteChildren: RootRouteChildren = {
   WelcomeRoute: WelcomeRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   CSplatRoute: CSplatRoute,
+  SitemapsFileRoute: SitemapsFileRoute,
   USplatRoute: USplatRoute,
   ApiOgThreadIdRoute: ApiOgThreadIdRoute,
 }

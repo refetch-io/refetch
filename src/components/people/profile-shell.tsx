@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { createConversation } from '@/api/messages'
 import { setUserBlocked } from '@/api/profiles'
 import { followedIdsQuery, profileInsightsQuery, profileQuery } from '@/lib/queries'
-import { SITE_URL, seo } from '@/lib/seo'
+import { SITE_URL, breadcrumbs, profilePage, seo } from '@/lib/seo'
 import { useSession } from '@/lib/session'
 import type { PeoplePage, Profile, ProfileInsights } from '@/lib/types'
 import { compactNumber, pluralize } from '@/lib/utils'
@@ -43,26 +43,52 @@ export function firstName(profile: Pick<Profile, 'name'>) {
   return profile.name.split(' ')[0]
 }
 
-/** Head tags for a profile page. Follower lists are thin, so they stay out of search. */
-export function profileMeta(
-  loaderData: { name: string; bio: string } | undefined,
+/** What a profile tab's loader hands to `profileHead`. */
+export function profileHeadData(profile: Profile) {
+  const { id, name, bio, website, joinedAt, isBot, stats } = profile
+  return { id, name, bio, website, joinedAt, isBot, stats }
+}
+
+/**
+ * Head tags for a profile page. Follower lists are thin, and so are profiles
+ * (or comment tabs) with nothing on them yet, so those stay out of search.
+ */
+export function profileHead(
+  loaderData: ReturnType<typeof profileHeadData> | undefined,
   userId: string,
   tab: ProfileTab,
 ) {
   const name = loaderData?.name ?? 'this person'
   const path = tab === 'stories' ? '' : `/${tab}`
+  const url = `${SITE_URL}/users/${userId}${path}`
   const titles: Record<ProfileTab, string> = {
     stories: loaderData ? `${name} - Refetch` : 'Profile - Refetch',
     comments: `Comments by ${name} - Refetch`,
     followers: `People following ${name} - Refetch`,
     following: `People ${name} follows - Refetch`,
   }
-  return seo({
+  const stats = loaderData?.stats
+  const empty = !stats || (tab === 'comments' ? stats.comments === 0 : stats.stories + stats.comments === 0)
+  const meta = seo({
     title: titles[tab],
     description: loaderData?.bio || `Stories and comments by ${name} on Refetch.`,
-    url: `${SITE_URL}/users/${userId}${path}`,
-    noindex: tab === 'followers' || tab === 'following',
+    url,
+    type: 'profile',
+    noindex: tab === 'followers' || tab === 'following' || empty,
   })
+  if (!loaderData) return { meta }
+  return {
+    meta,
+    links: [{ rel: 'canonical', href: url }],
+    scripts: [
+      profilePage({ siteUrl: SITE_URL, url, person: loaderData }),
+      breadcrumbs([
+        { name: 'Refetch', url: `${SITE_URL}/` },
+        { name, url: `${SITE_URL}/users/${userId}` },
+        ...(tab === 'stories' ? [] : [{ name: titles[tab].replace(/ - Refetch$/, ''), url }]),
+      ]),
+    ],
+  }
 }
 
 /** The card and rail around every tab. Rendered by the layout route, so it stays put while tabs change. */

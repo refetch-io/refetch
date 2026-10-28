@@ -5,7 +5,12 @@ import { z } from 'zod'
 import { FEED_MAX_PAGES } from '@/lib/constants'
 import { profileQuery, userStoriesQuery } from '@/lib/queries'
 import { FeedList } from '@/components/feed/feed-view'
-import { ProfileColumn, profileMeta, profilePending } from '@/components/people/profile-shell'
+import {
+  ProfileColumn,
+  profileHead,
+  profileHeadData,
+  profilePending,
+} from '@/components/people/profile-shell'
 import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/_app/users/$userId/')({
@@ -31,9 +36,9 @@ export const Route = createFileRoute('/_app/users/$userId/')({
       context.queryClient.ensureQueryData(profileQuery(params.userId, viewerId)),
       context.queryClient.ensureQueryData(userStoriesQuery(params.userId, deps.page, viewerId)),
     ])
-    return { name: profile.name, bio: profile.bio }
+    return profileHeadData(profile)
   },
-  head: ({ loaderData, params }) => ({ meta: profileMeta(loaderData, params.userId, 'stories') }),
+  head: ({ loaderData, params }) => profileHead(loaderData, params.userId, 'stories'),
   pendingComponent: profilePending('stories'),
   component: StoriesPage,
 })

@@ -2,7 +2,13 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { followsQuery, profileQuery } from '@/lib/queries'
 import { feedSearchSchema } from '@/components/feed/feed-layout'
-import { PeopleList, ProfileColumn, profileMeta, profilePending } from '@/components/people/profile-shell'
+import {
+  PeopleList,
+  ProfileColumn,
+  profileHead,
+  profileHeadData,
+  profilePending,
+} from '@/components/people/profile-shell'
 export const Route = createFileRoute('/_app/users/$userId/following')({
   validateSearch: feedSearchSchema,
   loaderDeps: ({ search }) => ({ page: search.page ?? 1 }),
@@ -11,9 +17,9 @@ export const Route = createFileRoute('/_app/users/$userId/following')({
       context.queryClient.ensureQueryData(profileQuery(params.userId, context.user?.id ?? null)),
       context.queryClient.ensureQueryData(followsQuery(params.userId, 'following', deps.page)),
     ])
-    return { name: profile.name, bio: profile.bio }
+    return profileHeadData(profile)
   },
-  head: ({ loaderData, params }) => ({ meta: profileMeta(loaderData, params.userId, 'following') }),
+  head: ({ loaderData, params }) => profileHead(loaderData, params.userId, 'following'),
   pendingComponent: profilePending('following'),
   component: FollowingPage,
 })

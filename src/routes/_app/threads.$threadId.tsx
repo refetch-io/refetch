@@ -3,10 +3,11 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { MessageCircleOff } from 'lucide-react'
 import { preloadWithin } from '@/lib/preload'
-import { configQuery, threadQuery, threadStatsQuery } from '@/lib/queries'
-import type { CommentNode } from '@/lib/comments'
-import { seo } from '@/lib/seo'
+import { channelDirectoryQuery, configQuery, threadQuery, threadStatsQuery } from '@/lib/queries'
+import { buildCommentTree, type CommentNode } from '@/lib/comments'
+import { type StructuredComment, breadcrumbs, discussionForumPosting, seo } from '@/lib/seo'
 import type { Comment } from '@/lib/types'
+import { isBotUser } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { EmptyState, Skeleton } from '@/components/ui/misc'
@@ -18,34 +19,105 @@ import { ThreadStatsCard } from '@/components/thread/thread-stats'
 
 /** Longest the page waits for its stats, so they usually render with it but never hold it up. */
 const STATS_WAIT_MS = 300
+/** Comments described in the page's structured data, best first, and how much of each. */
+const STRUCTURED_COMMENTS = 50
+const STRUCTURED_COMMENT_CHARS = 1000
+
+/** The thread's best comments (and their replies) for search engines, kept small for the page payload. */
+function structuredComments(comments: Array<Comment>): Array<StructuredComment> {
+  let budget = STRUCTURED_COMMENTS
+  const convert = (nodes: Array<CommentNode>): Array<StructuredComment> => {
+    const out: Array<StructuredComment> = []
+    for (const node of nodes) {
+      const text = node.content.trim()
+      if (budget <= 0) break
+      if (!text) continue
+      budget--
+      out.push({
+        id: node.id,
+        author: { id: node.userId, name: node.userName, bot: isBotUser(node.userId) },
+        text:
+          text.length > STRUCTURED_COMMENT_CHARS ? `${text.slice(0, STRUCTURED_COMMENT_CHARS - 1)}…` : text,
+        createdAt: node.createdAt,
+        editedAt: node.editedAt,
+        votes: node.count,
+        replies: convert(node.children),
+      })
+    }
+    return out
+  }
+  return convert(buildCommentTree(comments, 'top'))
+}
 
 export const Route = createFileRoute('/_app/threads/$threadId')({
   loader: async ({ context, params }) => {
-    const [thread, config] = await Promise.all([
+    const [thread, config, directory] = await Promise.all([
       context.queryClient.ensureQueryData(threadQuery(params.threadId, context.user?.id ?? null)),
       context.queryClient.ensureQueryData(configQuery()),
+      context.queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
       preloadWithin(context.queryClient, threadStatsQuery(params.threadId), STATS_WAIT_MS),
     ])
+    const { post } = thread
+    const channel = directory.channels.find((candidate) => candidate.id === post.channel)
     return {
-      title: thread.post.title,
-      description: thread.post.tldr ?? thread.post.description,
+      title: post.title,
+      description: post.tldr ?? post.description,
       siteUrl: config.siteUrl,
+      structured: {
+        createdAt: post.createdAt,
+        author: { id: post.userId, name: post.userName, bot: isBotUser(post.userId) },
+        votes: post.count,
+        commentCount: post.countComments,
+        link: post.link,
+        topics: post.topics,
+        channel: channel ? { id: channel.id, name: channel.name } : null,
+        comments: structuredComments(thread.comments),
+      },
     }
   },
   head: ({ loaderData, params }) => {
     if (!loaderData) return { meta: seo({ title: 'Thread | Refetch', noindex: true }) }
-    const url = `${loaderData.siteUrl}/threads/${params.threadId}`
+    const { siteUrl, title, structured } = loaderData
+    const url = `${siteUrl}/threads/${params.threadId}`
+    const image = `${siteUrl}/api/og/thread/${params.threadId}`
+    const description =
+      loaderData.description ||
+      `Discussion about ${title}. Join the conversation on Refetch, the open-source alternative to YC-controlled HN.`
+    const channel = structured.channel
+      ? { name: structured.channel.name, url: `${siteUrl}/channels/${structured.channel.id}` }
+      : null
     return {
       meta: seo({
-        title: `${loaderData.title} | Refetch`,
-        description:
-          loaderData.description ||
-          `Discussion about ${loaderData.title}. Join the conversation on Refetch, the open-source alternative to YC-controlled HN.`,
-        image: `${loaderData.siteUrl}/api/og/thread/${params.threadId}`,
+        title: `${title} | Refetch`,
+        description,
+        image,
         url,
         type: 'article',
+        publishedTime: structured.createdAt,
       }),
       links: [{ rel: 'canonical', href: url }],
+      scripts: [
+        discussionForumPosting({
+          siteUrl,
+          url,
+          headline: title,
+          text: loaderData.description || title,
+          image,
+          createdAt: structured.createdAt,
+          author: structured.author,
+          votes: structured.votes,
+          commentCount: structured.commentCount,
+          link: structured.link,
+          keywords: structured.topics,
+          channel,
+          comments: structured.comments,
+        }),
+        breadcrumbs([
+          { name: 'Refetch', url: `${siteUrl}/` },
+          ...(channel ? [channel] : []),
+          { name: title, url },
+        ]),
+      ],
     }
   },
   pendingComponent: ThreadPending,
