@@ -96,7 +96,10 @@ export function ChannelIcon({
   )
 }
 
-/** Inline "Python" tag with the channel's color dot, linking to the channel. */
+/**
+ * Quiet "Python" pill linking to the channel. Text only: it sits next to the
+ * source favicon in meta rows, and two icons side by side read as noise.
+ */
 export function ChannelTag({ channelId, className }: { channelId: string | null; className?: string }) {
   const { byId } = useChannels()
   const channel = channelId ? byId.get(channelId) : undefined
@@ -106,15 +109,10 @@ export function ChannelTag({ channelId, className }: { channelId: string | null;
       to="/channels/$channelId"
       params={{ channelId: channel.id }}
       className={cn(
-        'inline-flex shrink-0 items-center gap-1.5 font-semibold text-label transition-colors hover:text-brand-text',
+        '-my-0.5 inline-flex h-5 shrink-0 items-center rounded-full bg-fill px-2 text-caption-1 font-semibold text-label-secondary transition-colors hover:bg-brand-tint hover:text-brand-text',
         className,
       )}
     >
-      {channel.icon ? (
-        <ChannelIcon channel={channel} size={16} />
-      ) : (
-        <span aria-hidden className="size-2 rounded-full" style={{ backgroundColor: channel.color }} />
-      )}
       {channel.name}
     </Link>
   )

@@ -104,12 +104,6 @@ export function PostRow({
         </h2>
 
         <div className="mt-1.5 flex min-w-0 items-center gap-1.5 text-footnote text-label-secondary">
-          {hasChannel && (
-            <>
-              <ChannelTag channelId={post.channel} />
-              <Dot />
-            </>
-          )}
           <Favicon domain={post.domain} size={16} />
           <span className="truncate">{post.domain ?? 'refetch.io'}</span>
           <Dot />
@@ -129,6 +123,12 @@ export function PostRow({
           >
             {post.userName}
           </Link>
+          {hasChannel && (
+            <>
+              <Dot />
+              <ChannelTag channelId={post.channel} />
+            </>
+          )}
           <Dot className="sm:hidden" />
           <Link
             to="/threads/$threadId"

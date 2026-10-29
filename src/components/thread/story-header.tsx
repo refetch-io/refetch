@@ -108,12 +108,6 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
           <h1 className="text-title-2 text-balance text-label sm:text-title-1">{post.title}</h1>
 
           <div className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-footnote text-label-secondary">
-            {post.channel && (
-              <>
-                <ChannelTag channelId={post.channel} />
-                <Dot />
-              </>
-            )}
             <Favicon domain={post.domain} size={18} />
             <span className="font-medium text-label">{post.domain ?? 'refetch.io'}</span>
             <Dot />
@@ -149,6 +143,12 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
                   <Clock3 className="size-3.5" aria-hidden />
                   {post.readingTime} min read
                 </span>
+              </>
+            )}
+            {post.channel && (
+              <>
+                <Dot />
+                <ChannelTag channelId={post.channel} />
               </>
             )}
           </div>

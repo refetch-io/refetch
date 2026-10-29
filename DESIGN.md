@@ -165,7 +165,7 @@ Product components built on top: `VoteControl`, `PostRow`, `Favicon`, `Logo`, `R
 **Channels** (`src/components/channels/channel-parts.tsx`):
 
 - `ChannelIcon` — the channel's PNG icon (Storage bucket `channel-icons`) clipped to a rounded tile. Icons are 256×256, full bleed, a brand mark or Lucide glyph on the channel color. Without an icon it falls back to a two-letter glyph on the channel color.
-- `ChannelTag` — a 16px icon (or colored dot) + name, first in a story's meta row. Hide it (`hideChannel`) inside that channel's own feed.
+- `ChannelTag` — a quiet text pill (`fill`, caption-1, semibold), last in a story's meta row. No icon, so it never sits icon-to-icon with the source favicon. Hide it (`hideChannel`) inside that channel's own feed.
 - `JoinButton` — optimistic join/leave; signed-out people go to sign-in.
 
 **People**: `Avatar` takes a `userId` and shows the Appwrite Avatars photo over the gradient monogram (the monogram shows while loading and for Scout). Call `refreshAvatar(userId)` after a photo changes. `FollowButton` mirrors `JoinButton`.
