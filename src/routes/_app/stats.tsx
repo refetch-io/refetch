@@ -20,6 +20,7 @@ import {
   BarList,
   BarListSkeleton,
   ColumnChart,
+  CountryFlag,
   MiniStats,
   ShareBar,
   StatTile,
@@ -95,12 +96,6 @@ function countryName(code: string) {
   } catch {
     return code
   }
-}
-
-/** "US" → 🇺🇸 (regional indicator letters). */
-function flag(code: string) {
-  if (!/^[a-z]{2}$/i.test(code)) return null
-  return String.fromCodePoint(...[...code.toUpperCase()].map((letter) => 0x1f1a5 + letter.charCodeAt(0)))
 }
 
 /* ─────────────────────────────────── Page ─────────────────────────────────── */
@@ -439,11 +434,7 @@ function Readers({ stats }: { stats: TrafficStats }) {
               key: country.label,
               label: countryName(country.label),
               value: country.count,
-              icon: (
-                <span aria-hidden className="text-[15px] leading-none">
-                  {flag(country.label)}
-                </span>
-              ),
+              icon: <CountryFlag code={country.label} />,
             }))}
           />
         </StatsCard>

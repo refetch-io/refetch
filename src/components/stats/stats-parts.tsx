@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { configQuery } from '@/lib/queries'
 import { useCountUp } from '@/lib/use-count-up'
 import { cn, compactNumber } from '@/lib/utils'
 import { Card, SectionLabel } from '../ui/card'
@@ -114,6 +116,28 @@ export function MiniStats({ items }: { items: Array<{ label: string; value: stri
         </div>
       ))}
     </dl>
+  )
+}
+
+/** A country's flag from Appwrite Avatars (ISO 3166-1 alpha-2 code), drawn at 2x for sharp edges. */
+export function CountryFlag({ code, width = 20 }: { code: string; width?: number }) {
+  const { data: config } = useSuspenseQuery(configQuery())
+  const [failed, setFailed] = React.useState(false)
+  const height = Math.round(width * 0.75)
+  if (failed || !/^[a-z]{2}$/i.test(code)) return <span aria-hidden style={{ width, height }} />
+  const src = `${config.appwriteEndpoint}/avatars/flags/${code.toLowerCase()}?width=${width * 2}&height=${height * 2}&project=${config.appwriteProjectId}`
+  return (
+    <img
+      src={src}
+      alt=""
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+      className="block rounded-[3px] object-cover ring-[0.5px] ring-black/10 dark:ring-white/10"
+      style={{ width, height }}
+    />
   )
 }
 
