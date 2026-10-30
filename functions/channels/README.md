@@ -4,7 +4,7 @@ Scheduled Appwrite function that keeps every channel stocked with fresh stories.
 
 1. Loads the channel catalog from the **`channels`** table (seeded from [`scripts/channels.json`](../../scripts/channels.json) by `npm run appwrite:setup`).
 2. For each channel, fetches its **official** RSS/Atom feeds (`sources`: blogs, release notes, GitHub releases). Only when those have nothing new does it try the **community** feeds (`communitySources`, mostly DEV tags).
-3. Keeps items published in the last **72 hours** whose link isn't on Refetch yet, and posts the newest one as **Scout** (`userId` `0`), with `channel` set to the channel ID.
+3. Keeps items published in the last **72 hours** whose link isn't on Refetch yet (and whose title wasn't posted in the last 7 days, or earlier in the same run, since several channels share feeds), and posts the newest one as **Scout** (`userId` `0`), with `channel` set to the channel ID.
 4. New posts go through the regular pipeline (Enhancement → Algorithm) like any other story.
 
 Limits are constants at the top of `index.js`: **1** story per channel per run, **25** per run overall. Channels are visited in a random order each run so none starve once there are more channels than that. GitHub release feeds keep version tags only and name the project (`1.7.4` becomes `Appwrite 1.7.4 released`), skipping package tags and other noise.

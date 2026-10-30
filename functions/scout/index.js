@@ -883,20 +883,26 @@ async function checkDuplicateUrlsBulk(urls) {
     
     console.log(`  🔍 Checking ${cleanUrls.length} URLs for duplicates using array query...`);
     
-    // Use Appwrite's array query to find existing posts with matching links
-    // This is much more efficient than fetching all documents
-    const existingPosts = await tablesDB.listRows(
-      process.env.APPWRITE_DATABASE_ID || '',
-      process.env.APPWRITE_POSTS_COLLECTION_ID || '',
-      [
-        Query.equal('link', cleanUrls)
-      ]
-    );
-    
-    // Extract the duplicate URLs from the results
-    const duplicateUrls = new Set(
-      existingPosts.rows.map(post => post.link)
-    );
+    // Use Appwrite's array query to find existing posts with matching links.
+    // Page through every match: a link posted more than once returns several rows,
+    // and a single page would hide the rest of the links.
+    const duplicateUrls = new Set();
+    let cursor;
+    for (;;) {
+      const existingPosts = await tablesDB.listRows(
+        process.env.APPWRITE_DATABASE_ID || '',
+        process.env.APPWRITE_POSTS_COLLECTION_ID || '',
+        [
+          Query.equal('link', cleanUrls),
+          Query.select(['$id', 'link']),
+          Query.limit(500),
+          ...(cursor ? [Query.cursorAfter(cursor)] : [])
+        ]
+      );
+      existingPosts.rows.forEach(post => duplicateUrls.add(post.link));
+      if (existingPosts.rows.length < 500) break;
+      cursor = existingPosts.rows[existingPosts.rows.length - 1].$id;
+    }
     
     console.log(`  ✅ Found ${duplicateUrls.size} duplicate URLs out of ${cleanUrls.length} total URLs`);
     return duplicateUrls;
@@ -915,13 +921,14 @@ async function checkDuplicateUrl(url) {
     const existingPosts = await tablesDB.listRows(
       process.env.APPWRITE_DATABASE_ID || '',
       process.env.APPWRITE_POSTS_COLLECTION_ID || '',
-      [Query.equal('link', cleanUrlString)]
+      [Query.equal('link', cleanUrlString), Query.select(['$id']), Query.limit(1)]
     );
     
     return existingPosts.rows.length > 0;
   } catch (error) {
+    // Skip the article rather than risk posting it twice
     console.error(`❌ Duplicate check failed: ${error.message}`);
-    return false;
+    return true;
   }
 }
 

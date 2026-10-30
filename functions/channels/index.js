@@ -22,6 +22,9 @@ const FEED_TIMEOUT_MS = 10_000;
 /** Newest items checked against existing posts, and the link budget per lookup query (limit 4096 chars). */
 const MAX_CANDIDATES = 30;
 const LINK_BATCH_CHARS = 3000;
+const PAGE_SIZE = 500;
+/** A story with the same title as one posted within this window is a duplicate. */
+const TITLE_WINDOW_DAYS = 7;
 const USER_AGENT = 'RefetchBot/1.0 (+https://refetch.io)';
 
 function env(...names) {
@@ -113,6 +116,14 @@ function cleanUrl(url) {
   }
 }
 
+/** Lowercase letters and digits only, so punctuation and spacing don't hide a repeat. */
+export function normalizeTitle(title) {
+  return String(title ?? '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+}
+
 /* ───────────────────────────────── Function ───────────────────────────────── */
 
 export default async function ({ req, res, log, error }) {
@@ -139,7 +150,11 @@ export default async function ({ req, res, log, error }) {
   const summary = [];
   let created = 0;
 
-  /** Links already posted. Queries are capped at 4096 characters, so check in batches. */
+  /**
+   * Links already posted. Queries are capped at 4096 characters, so check in batches,
+   * and page through every match: a link posted more than once returns several rows,
+   * so one page sized to the batch would push other links out and repost them.
+   */
   async function existingLinks(links) {
     const batches = [[]];
     for (const link of new Set(links)) {
@@ -150,16 +165,56 @@ export default async function ({ req, res, log, error }) {
     const seen = new Set();
     for (const batch of batches) {
       if (batch.length === 0) continue;
-      const existing = await tablesDB.listRows({
-        databaseId,
-        tableId: postsTable,
-        queries: [Query.equal('link', batch), Query.select(['link']), Query.limit(batch.length)],
-        total: false,
-      });
-      for (const row of existing.rows) seen.add(row.link);
+      let cursor;
+      for (;;) {
+        const existing = await tablesDB.listRows({
+          databaseId,
+          tableId: postsTable,
+          queries: [
+            Query.equal('link', batch),
+            Query.select(['$id', 'link']),
+            Query.limit(PAGE_SIZE),
+            ...(cursor ? [Query.cursorAfter(cursor)] : []),
+          ],
+          total: false,
+        });
+        for (const row of existing.rows) seen.add(row.link);
+        if (existing.rows.length < PAGE_SIZE) break;
+        cursor = existing.rows[existing.rows.length - 1].$id;
+      }
     }
     return seen;
   }
+
+  // Titles and links posted recently, and everything posted during this run. Several
+  // channels share feeds (Planet PostgreSQL feeds PostgreSQL, Supabase and Databases),
+  // and the same story can arrive through a short link and its real URL.
+  const recentLinks = new Set();
+  const recentTitles = new Set();
+  {
+    const recentSince = new Date(Date.now() - TITLE_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    let cursor;
+    for (;;) {
+      const page = await tablesDB.listRows({
+        databaseId,
+        tableId: postsTable,
+        queries: [
+          Query.greaterThan('$createdAt', recentSince),
+          Query.select(['$id', 'link', 'title']),
+          Query.limit(PAGE_SIZE),
+          ...(cursor ? [Query.cursorAfter(cursor)] : []),
+        ],
+        total: false,
+      });
+      for (const row of page.rows) {
+        if (row.link) recentLinks.add(row.link);
+        recentTitles.add(normalizeTitle(row.title));
+      }
+      if (page.rows.length < PAGE_SIZE) break;
+      cursor = page.rows[page.rows.length - 1].$id;
+    }
+  }
+  const isRecent = (item) => recentLinks.has(item.link) || recentTitles.has(normalizeTitle(item.title));
 
   async function stockChannel(channel) {
     const pools = [channel.sources ?? [], channel.communitySources ?? []];
@@ -176,7 +231,7 @@ export default async function ({ req, res, log, error }) {
         .sort((a, b) => b.published - a.published);
 
       // Drop stories that are already on Refetch.
-      candidates = candidates.slice(0, MAX_CANDIDATES);
+      candidates = candidates.filter((item) => !isRecent(item)).slice(0, MAX_CANDIDATES);
       const seen = await existingLinks(candidates.map((item) => item.link));
       candidates = candidates.filter((item) => !seen.has(item.link));
       if (candidates.length > 0) break; // official sources had something new
@@ -185,6 +240,7 @@ export default async function ({ req, res, log, error }) {
     let posted = 0;
     for (const item of candidates) {
       if (posted >= MAX_PER_CHANNEL || created + posted >= MAX_PER_RUN) break;
+      if (isRecent(item)) continue; // another channel posted it earlier in this run
       try {
         await tablesDB.createRow({
           databaseId,
@@ -206,6 +262,8 @@ export default async function ({ req, res, log, error }) {
           },
         });
         posted++;
+        recentLinks.add(item.link);
+        recentTitles.add(normalizeTitle(item.title));
         summary.push(`${channel.$id}: ${item.title}`);
       } catch (e) {
         error(`[${channel.$id}] failed to create "${item.title}": ${e.message}`);
