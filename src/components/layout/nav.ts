@@ -1,7 +1,14 @@
-import { CircleUserRound, Hash, House, MessagesSquare, type LucideIcon } from 'lucide-react'
+import {
+  ChartNoAxesColumn,
+  CircleUserRound,
+  Hash,
+  House,
+  MessagesSquare,
+  type LucideIcon,
+} from 'lucide-react'
 
 export interface NavItem {
-  to: '/' | '/channels' | '/messages' | '/me'
+  to: '/' | '/channels' | '/stats' | '/messages' | '/me'
   label: string
   icon: LucideIcon
   requiresAuth?: boolean
@@ -25,6 +32,12 @@ const CHANNELS: NavItem = {
   isActive: (pathname) =>
     pathname === '/channels' || pathname.startsWith('/channels/') || pathname.startsWith('/topics'),
 }
+const STATS: NavItem = {
+  to: '/stats',
+  label: 'Stats',
+  icon: ChartNoAxesColumn,
+  isActive: (pathname) => pathname === '/stats',
+}
 const MESSAGES: NavItem = {
   to: '/messages',
   label: 'Messages',
@@ -41,6 +54,6 @@ const PROFILE: NavItem = {
     Boolean(userId) && (pathname === `/users/${userId}` || pathname.startsWith(`/users/${userId}/`)),
 }
 
-/** Desktop sidebar and the phone tab bar share the same four sections. */
-export const NAV_ITEMS: ReadonlyArray<NavItem> = [HOME, CHANNELS, MESSAGES, PROFILE]
-export const TAB_ITEMS = NAV_ITEMS
+/** The desktop sidebar adds Stats; the phone tab bar keeps to four sections (Stats is in Search). */
+export const NAV_ITEMS: ReadonlyArray<NavItem> = [HOME, CHANNELS, MESSAGES, PROFILE, STATS]
+export const TAB_ITEMS: ReadonlyArray<NavItem> = [HOME, CHANNELS, MESSAGES, PROFILE]

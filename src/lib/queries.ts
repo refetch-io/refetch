@@ -12,6 +12,7 @@ import {
   fetchVisitorSeries,
 } from '@/api/insights'
 import { fetchPublicConfig, fetchSession } from '@/api/session'
+import { fetchCommunityStats, fetchTrafficStats } from '@/api/stats'
 import { fetchConversation, fetchInbox, fetchMessages, fetchUnreadCount } from '@/api/messages'
 import { fetchNotificationCount, fetchNotificationSettings, fetchNotifications } from '@/api/notifications'
 import { fetchSavedIds, fetchSavedStories } from '@/api/saves'
@@ -106,6 +107,22 @@ export const todayStatsQuery = () =>
     queryFn: () => fetchTodayStats(),
     staleTime: 2 * 60_000,
     refetchInterval: 2 * 60_000,
+  })
+
+/** The /stats page's database numbers (cached on the server for half an hour). */
+export const communityStatsQuery = () =>
+  queryOptions({
+    queryKey: ['stats', 'community'],
+    queryFn: () => fetchCommunityStats(),
+    staleTime: 10 * 60_000,
+  })
+
+/** The /stats page's analytics (cached on the server for 15 minutes). */
+export const trafficStatsQuery = () =>
+  queryOptions({
+    queryKey: ['stats', 'traffic'],
+    queryFn: () => fetchTrafficStats(),
+    staleTime: 10 * 60_000,
   })
 
 export const githubStarsQuery = () =>

@@ -233,6 +233,7 @@ async function pageEntries(): Promise<Array<SitemapEntry>> {
     { loc: `${site}/show`, lastmod: now, changefreq: 'daily', priority: 0.6 },
     { loc: `${site}/channels`, changefreq: 'weekly', priority: 0.6 },
     { loc: `${site}/topics`, lastmod: now, changefreq: 'daily', priority: 0.6 },
+    { loc: `${site}/stats`, lastmod: now, changefreq: 'daily', priority: 0.4 },
     ...channels.map((channel) => ({
       loc: `${site}/channels/${channel.id}`,
       lastmod: now,

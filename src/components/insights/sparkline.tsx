@@ -26,9 +26,11 @@ interface SparklineProps {
   points: Array<VisitorPoint>
   formatLabel: (label: string) => string
   className?: string
+  /** Rendered height in pixels (the drawing stretches to fit). */
+  height?: number
 }
 
-export function Sparkline({ points, formatLabel, className }: SparklineProps) {
+export function Sparkline({ points, formatLabel, className, height = HEIGHT }: SparklineProps) {
   const id = React.useId()
   const [hover, setHover] = React.useState<number | null>(null)
   // The line draws in from the left on mount and whenever the data changes (a new range).
@@ -69,11 +71,9 @@ export function Sparkline({ points, formatLabel, className }: SparklineProps) {
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         preserveAspectRatio="none"
         // Only the reveal transitions; hiding again is instant so a new range starts from the left.
-        className={cn(
-          'block h-[72px] w-full overflow-visible',
-          revealed && 'transition-[clip-path] duration-1000',
-        )}
+        className={cn('block w-full overflow-visible', revealed && 'transition-[clip-path] duration-1000')}
         style={{
+          height,
           clipPath: revealed ? 'inset(-12px 0 -12px 0)' : 'inset(-12px 100% -12px 0)',
           transitionTimingFunction: 'var(--ease-out-expo)',
         }}

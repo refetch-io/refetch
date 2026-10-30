@@ -25,6 +25,7 @@ import { Route as AppNewRouteImport } from './routes/_app/new'
 import { Route as AppNotificationsRouteImport } from './routes/_app/notifications'
 import { Route as AppSavedRouteImport } from './routes/_app/saved'
 import { Route as AppShowRouteImport } from './routes/_app/show'
+import { Route as AppStatsRouteImport } from './routes/_app/stats'
 import { Route as AppSubmitRouteImport } from './routes/_app/submit'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
@@ -122,6 +123,11 @@ const AppSavedRoute = AppSavedRouteImport.update({
 const AppShowRoute = AppShowRouteImport.update({
   id: '/show',
   path: '/show',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStatsRoute = AppStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSubmitRoute = AppSubmitRouteImport.update({
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AppNotificationsRoute
   '/saved': typeof AppSavedRoute
   '/show': typeof AppShowRoute
+  '/stats': typeof AppStatsRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
@@ -276,6 +283,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AppNotificationsRoute
   '/saved': typeof AppSavedRoute
   '/show': typeof AppShowRoute
+  '/stats': typeof AppStatsRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
@@ -313,6 +321,7 @@ export interface FileRoutesById {
   '/_app/notifications': typeof AppNotificationsRoute
   '/_app/saved': typeof AppSavedRoute
   '/_app/show': typeof AppShowRoute
+  '/_app/stats': typeof AppStatsRoute
   '/_app/submit': typeof AppSubmitRoute
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
@@ -352,6 +361,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/saved'
     | '/show'
+    | '/stats'
     | '/submit'
     | '/signin'
     | '/signup'
@@ -387,6 +397,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/saved'
     | '/show'
+    | '/stats'
     | '/submit'
     | '/signin'
     | '/signup'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/_app/notifications'
     | '/_app/saved'
     | '/_app/show'
+    | '/_app/stats'
     | '/_app/submit'
     | '/_auth/signin'
     | '/_auth/signup'
@@ -571,6 +583,13 @@ declare module '@tanstack/react-router' {
       path: '/show'
       fullPath: '/show'
       preLoaderRoute: typeof AppShowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/stats': {
+      id: '/_app/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof AppStatsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/submit': {
@@ -759,6 +778,7 @@ interface AppRouteChildren {
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppSavedRoute: typeof AppSavedRoute
   AppShowRoute: typeof AppShowRoute
+  AppStatsRoute: typeof AppStatsRoute
   AppSubmitRoute: typeof AppSubmitRoute
   AppIndexRoute: typeof AppIndexRoute
   AppChannelsChannelIdRoute: typeof AppChannelsChannelIdRoute
@@ -780,6 +800,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppNotificationsRoute: AppNotificationsRoute,
   AppSavedRoute: AppSavedRoute,
   AppShowRoute: AppShowRoute,
+  AppStatsRoute: AppStatsRoute,
   AppSubmitRoute: AppSubmitRoute,
   AppIndexRoute: AppIndexRoute,
   AppChannelsChannelIdRoute: AppChannelsChannelIdRoute,

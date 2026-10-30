@@ -69,6 +69,12 @@ export interface MetricRow {
   visitors?: number | null
   pageviews?: number | null
   events?: number | null
+  /** Only on totals (no dimension or interval). */
+  visits?: number | null
+  visitDuration?: number | null
+  bounceRate?: number | null
+  scrollDepth?: number | null
+  viewsPerVisit?: number | null
 }
 
 export interface ThreadStatsRaw {

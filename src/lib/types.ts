@@ -123,6 +123,83 @@ export interface TodayStats {
   channels: number
 }
 
+/** A label and how many times it came up, for ranked breakdowns. */
+export interface Tally {
+  label: string
+  count: number
+}
+
+/** A story ranked on the /stats page by `count` (comments or votes). */
+export interface StatsStory {
+  id: string
+  title: string
+  count: number
+}
+
+/** The /stats page's database half: what's been shared and who's around. */
+export interface CommunityStats {
+  /** All time. */
+  stories: number
+  comments: number
+  votes: number
+  members: number
+  channels: number
+  follows: number
+  channelJoins: number
+  /** When the first story landed (ISO). */
+  since: string | null
+  /** Stories and comments per calendar month (UTC), oldest first. */
+  months: Array<{ month: string; stories: number; comments: number }>
+  /** Feeds Scout reads, across every channel. */
+  feeds: number
+  /** The last 30 days. */
+  recent: {
+    stories: number
+    showStories: number
+    /** Distinct sites linked to. */
+    siteCount: number
+    /** Average minutes to read a linked article. */
+    readingTime: number | null
+    readingLevels: Array<Tally>
+    /** Stories per day, oldest first. */
+    days: Array<VisitorPoint>
+    /** Sites linked to most. */
+    sites: Array<Tally>
+    channels: Array<Tally>
+  }
+  /** All time. */
+  mostDiscussed: Array<StatsStory>
+  mostUpvoted: Array<StatsStory>
+  /** Most covered topics, all time. */
+  topics: Array<TrendingTopic>
+}
+
+/** The /stats page's Appwrite Analytics half (last 30 days, people only unless noted). */
+export interface TrafficStats {
+  visitors: number
+  pageviews: number
+  visits: number
+  /** Seconds. */
+  visitDuration: number
+  bounceRate: number
+  scrollDepth: number
+  viewsPerVisit: number
+  /** Daily visitors, oldest first. */
+  days: Array<VisitorPoint>
+  /** Visitors by weekday (Monday first) and UTC hour, over the last two weeks. */
+  week: Array<Array<number>>
+  countries: Array<Tally>
+  devices: Array<Tally>
+  browsers: Array<Tally>
+  systems: Array<Tally>
+  referrers: Array<Tally>
+  /** Article clicks out to publishers. */
+  outbound: number
+  /** Crawlers and agents, which the other numbers leave out. */
+  bots: { visitors: number; share: number; top: Array<Tally> }
+  mostRead: Array<{ id: string; title: string; views: number }>
+}
+
 /** A thread's Appwrite Analytics totals since it was posted. */
 export interface ThreadStats {
   views: number

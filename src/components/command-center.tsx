@@ -7,6 +7,7 @@ import {
   ArrowRight,
   Bell,
   Bookmark,
+  ChartNoAxesColumn,
   CircleUserRound,
   Clock3,
   CornerDownLeft,
@@ -98,6 +99,7 @@ interface PageItem {
     | '/following'
     | '/channels'
     | '/topics'
+    | '/stats'
     | '/mines'
     | '/submit'
     | '/messages'
@@ -121,6 +123,12 @@ const PAGES: Array<PageItem> = [
   },
   { label: 'All channels', to: '/channels', icon: Hash, keywords: 'topics communities browse join' },
   { label: 'All topics', to: '/topics', icon: Hash, keywords: 'tags subjects browse trending' },
+  {
+    label: 'Stats',
+    to: '/stats',
+    icon: ChartNoAxesColumn,
+    keywords: 'numbers analytics metrics traffic sources',
+  },
   {
     label: 'Messages',
     to: '/messages',

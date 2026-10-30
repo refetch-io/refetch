@@ -5,7 +5,7 @@ import { Query, db, listPostRows, type Row } from './db.server'
 import { getAppwriteConfig, getPublicConfig } from './env.server'
 
 /** Tiny TTL cache that serves stale data when the upstream fails. Oldest keys go past `maxEntries`. */
-function createCache<T>(maxEntries = Infinity) {
+export function createCache<T>(maxEntries = Infinity) {
   const entries = new Map<string, { value: T; expires: number }>()
   return async (key: string, ttl: number, load: () => Promise<T>, fallback: T): Promise<T> => {
     const hit = entries.get(key)
@@ -25,18 +25,18 @@ function createCache<T>(maxEntries = Infinity) {
 
 /* ───────────────────────────── Appwrite Analytics ───────────────────────────── */
 
-type Interval = '1h' | '1d' | '1m'
+export type Interval = '1h' | '1d' | '1m'
 
 interface MetricsResult {
   metrics: Array<MetricRow>
 }
 
 /** `equal` filter in Appwrite's JSON query syntax. */
-const equal = (attribute: string, value: string) =>
+export const equal = (attribute: string, value: string) =>
   JSON.stringify({ method: 'equal', attribute, values: [value] })
 
 /** Reads the property's metrics with the server key (needs the `analytics.read` scope). */
-async function analytics(params: {
+export async function analytics(params: {
   startAt: Date
   endAt: Date
   interval?: Interval
