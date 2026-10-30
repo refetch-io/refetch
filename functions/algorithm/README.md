@@ -52,6 +52,14 @@ finalScore = (timeScore × 0.35) + (spellingScore × 0.15) +
 
 Note: Spam score is inverted (100 - spamScore) so that lower spam scores result in higher final scores.
 
+### 5. Source Balancing
+Applied after the weighted sum, in `source-balance.js`, so no single source can take over the feed by volume:
+
+- Posts in the scoring window are grouped by domain (`www.` stripped) and ranked by score.
+- The top post per domain gets a diversity score of 100; the rest get 0.
+- The first `freePerDomain` (3) posts per domain keep their score. Each extra post is multiplied by `decay` (0.85), compounding, down to `floor` (0.4).
+- `SOURCE_WEIGHTS` sets a fixed multiplier for lower-quality sources (currently `dev.to: 0.9`).
+
 ## Configuration
 
 ### Environment Variables

@@ -24,9 +24,15 @@
  * - Spam Score: 1% - Content legitimacy (inverted - lower spam = higher score) (low weight)
  * 
  * Total Weight: 100% (1.0)
+ *
+ * SOURCE BALANCING (applied after the weighted sum, see source-balance.js):
+ * - Diversity is computed per domain within the scoring window
+ * - Domains with many posts in the window get compounding score multipliers
+ * - Some sources carry a fixed quality weight (e.g. dev.to)
  */
 
 import { Client, TablesDB, Query } from 'node-appwrite';
+import { balanceSources, SATURATION_CONFIG } from './source-balance.js';
 
 // ============================================================================
 // CONFIGURATION
@@ -113,47 +119,19 @@ export default async function ({ req, res, log, error }) {
     }
     
     log(`📊 Found ${posts.length} posts to process`);
-    
-    // Calculate diversity scores for top 100 articles first
-    let diversityScores;
-    try {
-      log('🌐 Starting diversity score calculation...');
-      diversityScores = await calculateDiversityScores(tablesDB, DATABASE_ID, COLLECTION_ID, log);
-      log(`✅ Diversity scores calculated successfully for ${diversityScores.size} articles`);
-      
-      // Log some sample diversity scores for debugging
-      let sampleCount = 0;
-      for (const [postId, score] of diversityScores) {
-        if (sampleCount < 5) {
-          log(`   Sample: Post ${postId} → Diversity Score: ${score}`);
-          sampleCount++;
-        }
-      }
-      
-    } catch (diversityError) {
-      log(`⚠️ Warning: Failed to calculate diversity scores: ${diversityError.message}`);
-      log(`   Error stack: ${diversityError.stack}`);
-      log(`   Continuing with default diversity scores (all posts get 0)`);
-      diversityScores = new Map(); // Empty map means all posts get 0 diversity score
-    }
-    
-    // Ensure diversityScores is properly initialized
-    if (!diversityScores || !(diversityScores instanceof Map)) {
-      log(`⚠️ Warning: diversityScores is not a valid Map, creating empty Map`);
-      diversityScores = new Map();
-    }
-    
-    log(`🔍 Final diversityScores size: ${diversityScores.size}, type: ${typeof diversityScores}`);
-    
-    // Process posts and calculate scores with diversity scores
+
+    // Balance sources across the scoring window (diversity + volume saturation)
+    const sourceBalance = calculateSourceBalance(posts, log);
+
+    // Process posts and calculate scores with source balancing applied
     const processingResults = await processPostsInBatches(
-      posts, 
-      tablesDB, 
-      DATABASE_ID, 
-      COLLECTION_ID, 
+      posts,
+      tablesDB,
+      DATABASE_ID,
+      COLLECTION_ID,
       log,
       error,
-      diversityScores
+      sourceBalance
     );
     
     // Generate final summary
@@ -332,103 +310,59 @@ function calculateFinalScore(post, newTimeScore, diversityScore = 0) {
 }
 
 /**
- * Calculate diversity score based on domain uniqueness
- * This function analyzes the top 100 articles and assigns diversity scores
+ * Group the scoring window by domain and work out each post's diversity score
+ * and source multiplier (see source-balance.js). Ranking inside a domain uses
+ * the score without diversity, so the result doesn't depend on itself.
  */
-async function calculateDiversityScores(tablesDB, databaseId, collectionId, log) {
-  try {
-    log('🌐 Calculating diversity scores for top 100 articles...');
-    
-    // Fetch top 100 articles by current score
-    const topPosts = await tablesDB.listRows(
-      databaseId,
-      collectionId,
-      [
-        Query.orderDesc('score'),
-        Query.limit(100),
-        Query.select(['$id', 'link', 'score'])
-      ]
-    );
-    
-    const domainMap = new Map(); // domain -> array of post IDs
-    const diversityScores = new Map(); // post ID -> diversity score
-    
-    // Group posts by domain
-    topPosts.rows.forEach(post => {
-      if (post.link) {
-        try {
-          const domain = new URL(post.link).hostname;
-          if (!domainMap.has(domain)) {
-            domainMap.set(domain, []);
-          }
-          domainMap.get(domain).push({
-            id: post.$id,
-            score: post.score || 0
-          });
-        } catch (error) {
-          // If URL parsing fails, treat as unique domain
-          const uniqueDomain = `unknown-${post.$id}`;
-          domainMap.set(uniqueDomain, [{
-            id: post.$id,
-            score: post.score || 0
-          }]);
-        }
-      } else {
-        // Posts without links get unique domain treatment
-        const uniqueDomain = `no-link-${post.$id}`;
-        domainMap.set(uniqueDomain, [{
-          id: post.$id,
-          score: post.score || 0
-        }]);
-      }
-    });
-    
-    // Calculate diversity scores
-    domainMap.forEach((posts, domain) => {
-      if (posts.length === 1) {
-        // Only article from this domain - give 100 diversity score
-        diversityScores.set(posts[0].id, 100);
-        log(`🌐 Domain ${domain}: Single article - Diversity Score: 100`);
-      } else {
-        // Multiple articles from same domain - sort by score and assign scores
-        posts.sort((a, b) => b.score - a.score); // Highest score first
-        
-        // Give 100 to the highest scoring article, 0 to others
-        diversityScores.set(posts[0].id, 100);
-        for (let i = 1; i < posts.length; i++) {
-          diversityScores.set(posts[i].id, 0);
-        }
-        
-        log(`🌐 Domain ${domain}: ${posts.length} articles - Top article gets 100, others get 0`);
-      }
-    });
-    
-    log(`✅ Diversity scores calculated for ${diversityScores.size} articles`);
-    return diversityScores;
-    
-  } catch (error) {
-    log(`❌ Error calculating diversity scores: ${error.message}`);
-    return new Map(); // Return empty map on error
+function calculateSourceBalance(posts, log) {
+  const balance = balanceSources(posts.map(post => ({
+    id: post.$id,
+    link: post.link,
+    baseScore: calculateFinalScore(post, calculateTimeDecayScore(post.$createdAt, post.timeScore || 100))
+  })));
+
+  // Log the sources that are being held back the most
+  const perDomain = new Map();
+  for (const { domain, multiplier } of balance.values()) {
+    if (!domain) continue;
+    const stats = perDomain.get(domain) ?? { count: 0, penalized: 0 };
+    stats.count++;
+    if (multiplier < 1) stats.penalized++;
+    perDomain.set(domain, stats);
   }
+  [...perDomain.entries()]
+    .filter(([, stats]) => stats.penalized > 0)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 10)
+    .forEach(([domain, stats]) => {
+      log(`🌐 Domain ${domain}: ${stats.count} posts in window, ${stats.penalized} penalized`);
+    });
+
+  return balance;
 }
 
 /**
  * Apply scoring algorithm to a single post
  */
-function applyScoringAlgorithm(post, diversityScore = 0) {
+function applyScoringAlgorithm(post, balance) {
+  const diversityScore = balance?.diversityScore ?? 0;
+  const multiplier = balance?.multiplier ?? 1;
+
   // Calculate new time score based on decay
   const newTimeScore = calculateTimeDecayScore(post.$createdAt, post.timeScore || 100);
-  
-  // Calculate final ranking score
-  const finalScore = calculateFinalScore(post, newTimeScore, diversityScore);
-  
+
+  // Calculate final ranking score, then apply the source multiplier
+  const unbalancedScore = calculateFinalScore(post, newTimeScore, diversityScore);
+  const finalScore = Math.max(0, Math.min(100, Math.round(unbalancedScore * multiplier)));
+
   // Log scoring details for debugging (only for first few posts to avoid spam)
   if (Math.random() < 0.1) { // Log ~10% of posts for debugging
     console.log(`🔍 Post scoring debug - ID: ${post.$id}, Title: "${post.title?.substring(0, 50)}..."`);
     console.log(`   Relevancy Score: ${post.relevancyScore || 50} (Weight: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}%)`);
     console.log(`   Time Score: ${post.timeScore || 100} → ${newTimeScore}`);
     console.log(`   Diversity Score: ${diversityScore}`);
-    console.log(`   Final Score: ${finalScore}`);
+    console.log(`   Source: ${balance?.domain ?? 'unknown'} #${(balance?.rank ?? 0) + 1}, multiplier ${multiplier.toFixed(2)}`);
+    console.log(`   Final Score: ${unbalancedScore} → ${finalScore}`);
   }
   
   // Return updated data for batch update
@@ -447,15 +381,7 @@ function applyScoringAlgorithm(post, diversityScore = 0) {
  * Process posts in batches for efficient database updates
  * Uses Appwrite's batch update with 1000 posts per batch
  */
-async function processPostsInBatches(posts, tablesDB, databaseId, collectionId, log, error, diversityScores) {
-  // Ensure diversityScores is properly initialized
-  if (!diversityScores || !(diversityScores instanceof Map)) {
-    log(`⚠️ Warning: diversityScores is not a valid Map in processPostsInBatches, creating empty Map`);
-    diversityScores = new Map();
-  }
-  
-  log(`🔍 Processing posts with diversityScores size: ${diversityScores.size}`);
-  
+async function processPostsInBatches(posts, tablesDB, databaseId, collectionId, log, error, sourceBalance) {
   const results = {
     totalPosts: posts.length,
     processed: 0,
@@ -477,14 +403,8 @@ async function processPostsInBatches(posts, tablesDB, databaseId, collectionId, 
       // Apply scoring algorithm to all posts in the batch
       // Create batch updates with only the fields we want to update
       const batchUpdates = batch.map(post => {
-        const diversityScore = diversityScores.get(post.$id) || 0;
-        const updatedData = applyScoringAlgorithm(post, diversityScore);
-        
-        // Log diversity score assignment for first few posts
-        if (results.batches === 1 && batch.indexOf(post) < 3) {
-          log(`🔍 Post ${post.$id}: diversityScore = ${diversityScore} (from map: ${diversityScores.has(post.$id)})`);
-        }
-        
+        const updatedData = applyScoringAlgorithm(post, sourceBalance.get(post.$id));
+
         return {
           $id: post.$id,
           timeScore: updatedData.timeScore,
@@ -580,7 +500,7 @@ function generateFinalSummary(results, startTime, log) {
         log(`📈 Success rate: ${successRate}%`);
         log(`📦 Batches processed: ${results.batches}`);
         log(`⏱️  Total processing time: ${processingTime}ms`);
-        log(`🌐 Diversity scores calculated for top 100 articles`);
+        log(`🌐 Source balancing: ${SATURATION_CONFIG.freePerDomain} free posts per domain, then ×${SATURATION_CONFIG.decay} each (floor ${SATURATION_CONFIG.floor})`);
         log(`⚖️  Scoring weights used (Percentage Importance):`);
         log(`   🎯 Relevancy Score: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}% (Tech audience relevance - HIGHEST PRIORITY)`);
         Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
@@ -618,6 +538,7 @@ function generateFinalSummary(results, startTime, log) {
     },
     algorithm: {
       weights: SCORING_WEIGHTS,
+      saturation: SATURATION_CONFIG,
       timeDecayHours: PROCESSING_CONFIG.timeScoreDecayHours,
       batchSize: PROCESSING_CONFIG.batchSize
     }

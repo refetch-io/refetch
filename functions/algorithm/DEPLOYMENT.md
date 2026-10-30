@@ -46,7 +46,8 @@ APPWRITE_POSTS_COLLECTION_ID=your-posts-collection-id
 
 Upload the following files to your function:
 
-- `index.js` - Main function logic (contains everything)
+- `index.js` - Main function logic
+- `source-balance.js` - Per-source diversity and saturation (imported by `index.js`)
 - `package.json` - Dependencies
 - `README.md` - Documentation
 
@@ -259,7 +260,7 @@ Here's a complete example of deploying the function:
 # 1. Create function in Appwrite dashboard
 # 2. Set runtime to Node.js 18
 # 3. Set timeout to 300 seconds
-# 4. Upload function files (index.js, package.json, README.md)
+# 4. Upload function files (index.js, source-balance.js, package.json, README.md)
 # 5. Set environment variables
 # 6. Deploy function
 # 7. Test with sample request
