@@ -28,6 +28,7 @@ const USER_SCOPED = new Set([
   'saved',
   'saved-ids',
   'moderation',
+  'moderation-count',
 ])
 
 export function useSession(): { user: SessionUser | null } {

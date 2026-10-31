@@ -162,6 +162,28 @@ export async function listModerationQueue(): Promise<Array<ModerationItem>> {
   })
 }
 
+/** Stories and comments with open reports: the length of the moderation queue. */
+export async function countModerationQueue(): Promise<number> {
+  const { tables, ids } = db()
+  const reports = await tables
+    .listRows({
+      databaseId: ids.databaseId,
+      tableId: ids.reports,
+      queries: [
+        Query.equal('status', 'open'),
+        Query.limit(QUEUE_LIMIT),
+        Query.select(['resourceType', 'resourceId']),
+      ],
+      total: false,
+    })
+    .then((result) => result.rows as Array<Row>)
+    .catch((error: unknown) => {
+      if (isNotFound(error)) return [] as Array<Row>
+      throw error
+    })
+  return new Set(reports.map((row) => `${row.resourceType}:${row.resourceId}`)).size
+}
+
 export type ModerationAction = 'dismiss' | 'remove'
 
 /** Remove the content (or keep it) and close every open report about it. */

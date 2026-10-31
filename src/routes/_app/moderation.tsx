@@ -52,6 +52,7 @@ function ModerationPage() {
         current?.filter((other) => other.resourceId !== item.resourceId),
       )
       toast.success(action === 'remove' ? 'Removed' : 'Reports dismissed')
+      void queryClient.invalidateQueries({ queryKey: ['moderation-count'] })
       if (action === 'remove') {
         void queryClient.invalidateQueries({ queryKey: ['thread', item.postId] })
         void queryClient.invalidateQueries({ queryKey: ['feed'] })

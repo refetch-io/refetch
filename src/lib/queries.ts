@@ -16,7 +16,7 @@ import { fetchCommunityStats, fetchTrafficStats } from '@/api/stats'
 import { fetchConversation, fetchInbox, fetchMessages, fetchUnreadCount } from '@/api/messages'
 import { fetchNotificationCount, fetchNotificationSettings, fetchNotifications } from '@/api/notifications'
 import { fetchSavedIds, fetchSavedStories } from '@/api/saves'
-import { fetchModerationQueue } from '@/api/moderation'
+import { fetchModerationCount, fetchModerationQueue } from '@/api/moderation'
 import {
   fetchOnboarding,
   fetchFollows,
@@ -341,4 +341,12 @@ export const moderationQuery = (userId: string) =>
     queryKey: ['moderation', userId],
     queryFn: () => fetchModerationQueue(),
     staleTime: 10_000,
+  })
+
+export const moderationCountQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['moderation-count', userId],
+    queryFn: () => fetchModerationCount(),
+    staleTime: 30_000,
+    refetchInterval: 60_000,
   })

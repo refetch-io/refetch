@@ -45,7 +45,16 @@ export function useUnreadCount() {
   return user ? (data ?? 0) : 0
 }
 
-export function UnreadBadge({ count, className }: { count: number; className?: string }) {
+export function UnreadBadge({
+  count,
+  label = 'unread',
+  className,
+}: {
+  count: number
+  /** Read after the count by screen readers. */
+  label?: string
+  className?: string
+}) {
   if (count <= 0) return null
   return (
     <span
@@ -56,7 +65,7 @@ export function UnreadBadge({ count, className }: { count: number; className?: s
     >
       <span className="sr-only">, </span>
       {count > 99 ? '99+' : count}
-      <span className="sr-only"> unread</span>
+      <span className="sr-only"> {label}</span>
     </span>
   )
 }

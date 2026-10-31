@@ -17,7 +17,7 @@ import {
   Sun,
   UserRound,
 } from 'lucide-react'
-import { githubStarsQuery } from '@/lib/queries'
+import { githubStarsQuery, moderationCountQuery } from '@/lib/queries'
 import { LINKS } from '@/lib/constants'
 import { useSession, useSignOut } from '@/lib/session'
 import { useTheme, type ThemePreference } from '@/lib/theme'
@@ -32,6 +32,7 @@ import { Logo } from '../logo'
 import { useCommandCenter, useModKey } from '../command-center'
 import { Kbd } from '../ui/misc'
 import { NotificationBell } from '../notifications/notification-parts'
+import { UnreadBadge } from '../messages/parts'
 
 const THEME_OPTIONS: Array<{ value: ThemePreference; label: string; icon: typeof Sun }> = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -166,16 +167,33 @@ function UserMenu({ user }: { user: SessionUser }) {
   const signOut = useSignOut()
   const { preference, setPreference } = useTheme()
   const displayName = user.name?.trim() || user.email || 'Your account'
+  // Moderators see how many reported items wait for review.
+  const { data: reports = 0 } = useQuery({
+    ...moderationCountQuery(user.id),
+    enabled: user.moderator === true,
+  })
+  const reportsLabel = reports === 1 ? 'item to review' : 'items to review'
 
   return (
     <Menu>
       <MenuTrigger asChild>
         <button
           type="button"
-          aria-label={`Account menu for ${displayName}`}
+          aria-label={
+            reports > 0
+              ? `Account menu for ${displayName}, ${reports} ${reportsLabel}`
+              : `Account menu for ${displayName}`
+          }
           className="flex pressable items-center gap-2 rounded-full p-0.5 pr-0.5 hover:bg-fill-secondary sm:pr-2.5"
         >
-          <Avatar name={displayName} userId={user.id} size={28} />
+          <span className="relative flex">
+            <Avatar name={displayName} userId={user.id} size={28} />
+            <UnreadBadge
+              count={reports}
+              label={reportsLabel}
+              className="absolute -top-1.5 -right-2 ring-2 ring-bg"
+            />
+          </span>
           <span className="hidden max-w-36 truncate text-footnote font-semibold text-label sm:block">
             {displayName.split(' ')[0]}
           </span>
@@ -226,7 +244,8 @@ function UserMenu({ user }: { user: SessionUser }) {
           <MenuItem asChild>
             <Link to="/moderation">
               <ShieldCheck />
-              Moderation
+              <span className="flex-1">Moderation</span>
+              <UnreadBadge count={reports} label={reportsLabel} />
             </Link>
           </MenuItem>
         )}
