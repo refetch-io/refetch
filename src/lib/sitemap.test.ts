@@ -122,6 +122,11 @@ describe('buildRobots', () => {
     expect(robots).toContain('Sitemap: https://refetch.io/sitemap.xml')
   })
 
+  it('allows social card images ahead of the /api/ block, for first-match crawlers', () => {
+    expect(robots.indexOf('Allow: /api/og/')).toBeGreaterThan(-1)
+    expect(robots.indexOf('Allow: /api/og/')).toBeLessThan(robots.indexOf('Disallow: /api/'))
+  })
+
   it('lets stories, channels, topics and profiles be crawled', () => {
     for (const path of ['/threads/', '/channels/', '/users/', '/topics/']) {
       expect(PRIVATE_PATHS.some((blocked) => path.startsWith(blocked))).toBe(false)

@@ -149,9 +149,10 @@ export function buildRobots(siteUrl: string): string {
   return [
     'User-agent: *',
     'Allow: /',
-    ...PRIVATE_PATHS.map((path) => `Disallow: ${path}`),
-    // Story previews used for social cards are fine to fetch.
+    // Story previews used for social cards are fine to fetch. Listed before `Disallow: /api/`
+    // because some crawlers (X's card fetcher among them) take the first matching rule.
     'Allow: /api/og/',
+    ...PRIVATE_PATHS.map((path) => `Disallow: ${path}`),
     '',
     `Sitemap: ${siteUrl}/sitemap.xml`,
     '',

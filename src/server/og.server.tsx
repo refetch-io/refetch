@@ -50,7 +50,7 @@ function loadRenderer(origin: string) {
   return renderer
 }
 
-async function renderPng(element: ReactNode, cacheControl: string, origin: string): Promise<Response> {
+async function rasterize(element: ReactNode, origin: string): Promise<Uint8Array> {
   const { satori, Resvg } = await loadRenderer(origin)
   const svg = await satori(element, { width: WIDTH, height: HEIGHT, fonts })
   // resvg's objects live in WASM memory, which the garbage collector can't reclaim. Free both,
@@ -67,9 +67,57 @@ async function renderPng(element: ReactNode, cacheControl: string, origin: strin
   } finally {
     resvg.free()
   }
-  return new Response(new Uint8Array(png), {
+  return png
+}
+
+async function renderPng(element: ReactNode, cacheControl: string, origin: string): Promise<Response> {
+  return new Response(new Uint8Array(await rasterize(element, origin)), {
     headers: { 'Content-Type': 'image/png', 'Cache-Control': cacheControl },
   })
+}
+
+/** Where the white card sits on a thread image, below the logo row. */
+const CARD_BOX = { top: 132, left: 64, right: 64, bottom: 56 }
+
+let backdrop: Promise<string> | null = null
+
+/**
+ * The page gradient and the card with its soft shadow, rasterized once and reused as an image.
+ * Blurring that shadow was ~80% of resvg's work on every thread image (seconds in production,
+ * long enough for X's card crawler to give up), and it's the same on all of them.
+ */
+function loadBackdrop(origin: string) {
+  backdrop ??= rasterize(
+    <div
+      style={{
+        width: WIDTH,
+        height: HEIGHT,
+        display: 'flex',
+        position: 'relative',
+        backgroundColor: '#f5f5f7',
+        backgroundImage:
+          'radial-gradient(circle at 100% 0%, rgba(124,58,237,0.20) 0%, rgba(245,245,247,0) 46%), radial-gradient(circle at 0% 100%, rgba(78,28,179,0.10) 0%, rgba(245,245,247,0) 40%)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          ...CARD_BOX,
+          display: 'flex',
+          borderRadius: 40,
+          backgroundColor: '#ffffff',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.04), 0 24px 60px rgba(30,7,82,0.10)',
+        }}
+      />
+    </div>,
+    origin,
+  )
+    .then((png) => `data:image/png;base64,${Buffer.from(png).toString('base64')}`)
+    .catch((error) => {
+      backdrop = null
+      throw error
+    })
+  return backdrop
 }
 
 /** Site icon as a data URL (PNG/JPEG only — what the renderer supports). */
@@ -164,7 +212,7 @@ export async function renderThreadImage(post: PostDetail | null, origin: string)
     )
   }
 
-  const favicon = await faviconDataUrl(post.domain)
+  const [favicon, background] = await Promise.all([faviconDataUrl(post.domain), loadBackdrop(origin)])
   const title = post.title.length > 140 ? `${post.title.slice(0, 137).trimEnd()}…` : post.title
   const titleSize = title.length > 90 ? 50 : title.length > 55 ? 58 : 66
 
@@ -176,94 +224,87 @@ export async function renderThreadImage(post: PostDetail | null, origin: string)
         display: 'flex',
         position: 'relative',
         fontFamily: 'Inter',
-        backgroundColor: '#f5f5f7',
-        backgroundImage:
-          'radial-gradient(circle at 100% 0%, rgba(124,58,237,0.20) 0%, rgba(245,245,247,0) 46%), radial-gradient(circle at 0% 100%, rgba(78,28,179,0.10) 0%, rgba(245,245,247,0) 40%)',
       }}
     >
+      <img src={background} width={WIDTH} height={HEIGHT} style={{ position: 'absolute', top: 0, left: 0 }} />
       <div
         style={{
           position: 'absolute',
           top: 52,
           left: 64,
           right: 64,
-          bottom: 56,
           display: 'flex',
-          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <LogoLockup />
-          <div style={{ display: 'flex', fontSize: 24, fontWeight: 500, color: '#6e6e73' }}>refetch.io</div>
+        <LogoLockup />
+        <div style={{ display: 'flex', fontSize: 24, fontWeight: 500, color: '#6e6e73' }}>refetch.io</div>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          ...CARD_BOX,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '44px 52px',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            fontSize: 26,
+            color: '#6e6e73',
+            fontWeight: 500,
+          }}
+        >
+          {favicon ? (
+            <img src={favicon} width={40} height={40} style={{ borderRadius: 10 }} />
+          ) : (
+            <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#ede7ff' }} />
+          )}
+          <span style={{ color: '#1d1d1f' }}>{post.domain ?? 'refetch.io'}</span>
+          <span>·</span>
+          <span>{timeAgo(post.createdAt)}</span>
+          {post.type === 'show' && (
+            <span
+              style={{
+                marginLeft: 6,
+                padding: '6px 16px',
+                borderRadius: 999,
+                backgroundColor: '#f3eeff',
+                color: '#4e1cb3',
+                fontSize: 22,
+                fontWeight: 700,
+              }}
+            >
+              Show RF
+            </span>
+          )}
         </div>
 
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            marginTop: 36,
-            padding: '44px 52px',
-            borderRadius: 40,
-            backgroundColor: '#ffffff',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.04), 0 24px 60px rgba(30,7,82,0.10)',
+            marginTop: 26,
+            fontFamily: 'Poppins',
+            fontSize: titleSize,
+            fontWeight: 700,
+            lineHeight: 1.12,
+            letterSpacing: '-0.02em',
+            color: '#1d1d1f',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              fontSize: 26,
-              color: '#6e6e73',
-              fontWeight: 500,
-            }}
-          >
-            {favicon ? (
-              <img src={favicon} width={40} height={40} style={{ borderRadius: 10 }} />
-            ) : (
-              <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#ede7ff' }} />
-            )}
-            <span style={{ color: '#1d1d1f' }}>{post.domain ?? 'refetch.io'}</span>
-            <span>·</span>
-            <span>{timeAgo(post.createdAt)}</span>
-            {post.type === 'show' && (
-              <span
-                style={{
-                  marginLeft: 6,
-                  padding: '6px 16px',
-                  borderRadius: 999,
-                  backgroundColor: '#f3eeff',
-                  color: '#4e1cb3',
-                  fontSize: 22,
-                  fontWeight: 700,
-                }}
-              >
-                Show RF
-              </span>
-            )}
-          </div>
+          {title}
+        </div>
 
-          <div
-            style={{
-              display: 'flex',
-              marginTop: 26,
-              fontFamily: 'Poppins',
-              fontSize: titleSize,
-              fontWeight: 700,
-              lineHeight: 1.12,
-              letterSpacing: '-0.02em',
-              color: '#1d1d1f',
-            }}
-          >
-            {title}
-          </div>
-
-          <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
-            <Pill icon="up">{`${post.count} ${Math.abs(post.count) === 1 ? 'point' : 'points'}`}</Pill>
-            <Pill icon="comment">{`${post.countComments} ${post.countComments === 1 ? 'comment' : 'comments'}`}</Pill>
-            {post.readingTime ? <Pill icon="clock">{`${post.readingTime} min read`}</Pill> : null}
-          </div>
+        <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
+          <Pill icon="up">{`${post.count} ${Math.abs(post.count) === 1 ? 'point' : 'points'}`}</Pill>
+          <Pill icon="comment">{`${post.countComments} ${post.countComments === 1 ? 'comment' : 'comments'}`}</Pill>
+          {post.readingTime ? <Pill icon="clock">{`${post.readingTime} min read`}</Pill> : null}
         </div>
       </div>
     </div>,
