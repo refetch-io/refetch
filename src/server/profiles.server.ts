@@ -9,6 +9,8 @@ import type {
   SessionUser,
   SuggestedPerson,
   UserCommentsPage,
+  Verification,
+  VerifiedPeople,
 } from '@/lib/types'
 import { FEATURED_PEOPLE, FEED_PAGE_SIZE, ONBOARDING_CHANNELS } from '@/lib/constants'
 import { isBotUser } from '@/lib/utils'
@@ -26,6 +28,15 @@ import { notify } from './notifications.server'
 const BOT_PROFILE = {
   name: 'Scout',
   bio: 'Refetch’s scout. Finds stories from across the web, around the clock.',
+}
+
+/** Scout's user ID ("0") can't be a row ID, so its badge lives here with the rest of its profile. */
+const BOT_VERIFICATION: Verification = { kind: 'bot', org: null }
+
+function toVerification(row: Row | null): Verification | null {
+  const kind = row?.verified
+  if (kind !== 'bot' && kind !== 'refetcher') return null
+  return { kind, org: typeof row?.org === 'string' && row.org ? row.org : null }
 }
 
 function toPrivacy(value: unknown): MessagePrivacy {
@@ -97,6 +108,33 @@ export async function syncProfile(user: SessionUser, registeredAt?: string) {
 }
 
 /* ──────────────────────────────────── Reads ──────────────────────────────────── */
+
+const VERIFIED_TTL = 60_000
+let verified: { people: VerifiedPeople; expires: number } | null = null
+
+/** Everyone with a badge (a handful, set by hand in the database), cached briefly. */
+export async function listVerifiedPeople(): Promise<VerifiedPeople> {
+  if (verified && verified.expires > Date.now()) return verified.people
+  const { tables, ids } = db()
+  try {
+    const result = await tables.listRows({
+      databaseId: ids.databaseId,
+      tableId: ids.profiles,
+      queries: [Query.isNotNull('verified'), Query.limit(500), Query.select(['$id', 'verified', 'org'])],
+      total: false,
+    })
+    const people: VerifiedPeople = { '0': BOT_VERIFICATION }
+    for (const row of result.rows as Array<Row>) {
+      const badge = toVerification(row)
+      if (badge) people[row.$id] = badge
+    }
+    verified = { people, expires: Date.now() + VERIFIED_TTL }
+    return people
+  } catch (error) {
+    console.error('[profiles] failed to load verified people', error)
+    return verified?.people ?? { '0': BOT_VERIFICATION }
+  }
+}
 
 /** Names for a set of people, from profiles first, then their latest post or comment. */
 export async function getPeople(userIds: Array<string>): Promise<Map<string, PersonSummary>> {
@@ -241,6 +279,7 @@ export async function getProfile(userId: string, viewer: SessionUser | null): Pr
     joinedAt: typeof row?.joinedAt === 'string' ? row.joinedAt : null,
     allowMessages,
     isBot: bot,
+    verified: bot ? BOT_VERIFICATION : toVerification(row),
     stats: { karma, stories, comments, followers, following },
     viewer: viewerState,
   }

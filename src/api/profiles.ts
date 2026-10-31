@@ -11,6 +11,7 @@ import type {
   ProfileInsights,
   SuggestedPerson,
   UserCommentsPage,
+  VerifiedPeople,
 } from '@/lib/types'
 import { FEED_MAX_PAGES, LIMITS } from '@/lib/constants'
 import { isHttpUrl, isValidId } from '@/lib/url'
@@ -26,6 +27,7 @@ import {
   setFollowing,
   listFollows,
   listUserComments,
+  listVerifiedPeople,
   searchPeople,
   setBlocked,
   updateProfile,
@@ -152,4 +154,8 @@ export const fetchFollowedIds = createServerFn({ method: 'GET' }).handler(
     const user = await getSessionUser()
     return user ? getFollowedIds(user.id) : []
   },
+)
+
+export const fetchVerifiedPeople = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<VerifiedPeople> => listVerifiedPeople(),
 )

@@ -4,7 +4,13 @@ import { Sidebar, TabBar } from '@/components/layout/navigation'
 import { CommandCenterProvider } from '@/components/command-center'
 import { KeyboardShortcutsProvider } from '@/components/keyboard-shortcuts'
 import { preloadWithin } from '@/lib/preload'
-import { channelDirectoryQuery, githubStarsQuery, trendingTopicsQuery, whoToFollowQuery } from '@/lib/queries'
+import {
+  channelDirectoryQuery,
+  githubStarsQuery,
+  trendingTopicsQuery,
+  verifiedPeopleQuery,
+  whoToFollowQuery,
+} from '@/lib/queries'
 
 /** Longest the first render waits for shell widgets. */
 const WIDGET_WAIT_MS = 300
@@ -17,6 +23,8 @@ export const Route = createFileRoute('/_app')({
     await Promise.all([
       // Channel names and memberships are used across the shell (sidebar, post tags).
       queryClient.ensureQueryData(channelDirectoryQuery(context.user?.id ?? null)),
+      // Badges next to names, so they render with the page instead of popping in.
+      queryClient.ensureQueryData(verifiedPeopleQuery()),
       preloadWithin(queryClient, githubStarsQuery(), WIDGET_WAIT_MS),
       preloadWithin(queryClient, trendingTopicsQuery(), WIDGET_WAIT_MS),
       preloadWithin(queryClient, whoToFollowQuery(context.user?.id ?? ''), WIDGET_WAIT_MS),

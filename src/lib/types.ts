@@ -232,6 +232,8 @@ export interface Channel {
   description: string
   keywords: Array<string>
   memberCount: number
+  /** Gold verified badge (set by hand in the database). */
+  verified: boolean
 }
 
 export interface ChannelSource {
@@ -274,6 +276,19 @@ export interface PersonSummary {
   name: string
 }
 
+/** Grey for official bots, purple for verified refetchers. */
+export type VerifiedKind = 'bot' | 'refetcher'
+
+/** A verified badge, set by hand in the database. */
+export interface Verification {
+  kind: VerifiedKind
+  /** Channel ID of the organization they're affiliated with. */
+  org: string | null
+}
+
+/** User ID → badge, for everyone verified. */
+export type VerifiedPeople = Record<string, Verification>
+
 export interface Profile extends PersonSummary {
   bio: string
   website: string | null
@@ -281,6 +296,7 @@ export interface Profile extends PersonSummary {
   joinedAt: string | null
   allowMessages: MessagePrivacy
   isBot: boolean
+  verified: Verification | null
   stats: { karma: number; stories: number; comments: number; followers: number; following: number }
   /** How the signed-in viewer relates to this person (null when signed out). */
   viewer: { isSelf: boolean; blocked: boolean; canMessage: boolean; following: boolean } | null

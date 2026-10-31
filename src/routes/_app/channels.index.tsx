@@ -7,6 +7,7 @@ import type { Channel } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { FeedHeader } from '@/components/feed/feed-view'
 import { SiteFooter } from '@/components/layout/footer'
+import { VerifiedBadge } from '@/components/verified-badge'
 import {
   ChannelIcon,
   JoinButton,
@@ -257,7 +258,10 @@ function ChannelCard({ channel, index }: { channel: Channel; index: number }) {
         <div className="flex items-center gap-3">
           <ChannelIcon channel={channel} size={44} />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-headline text-label group-hover:text-brand-text">{channel.name}</p>
+            <p className="flex items-center gap-1 text-headline text-label group-hover:text-brand-text">
+              <span className="truncate">{channel.name}</span>
+              {channel.verified && <VerifiedBadge kind="channel" size={15} plain />}
+            </p>
             <p className="text-caption-1 text-label-tertiary tabular">{memberLabel(channel.memberCount)}</p>
           </div>
           <JoinButton channel={channel} size="xs" />

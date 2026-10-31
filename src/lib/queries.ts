@@ -26,6 +26,7 @@ import {
   fetchWhoToFollow,
   fetchUserComments,
   fetchUserStories,
+  fetchVerifiedPeople,
   findPeople,
 } from '@/api/profiles'
 
@@ -275,6 +276,14 @@ export const whoToFollowQuery = (userId: string) =>
   queryOptions({
     queryKey: ['who-to-follow', userId],
     queryFn: () => fetchWhoToFollow(),
+    staleTime: 10 * 60_000,
+  })
+
+/** Badges are set by hand and rarely change. */
+export const verifiedPeopleQuery = () =>
+  queryOptions({
+    queryKey: ['verified-people'],
+    queryFn: () => fetchVerifiedPeople(),
     staleTime: 10 * 60_000,
   })
 

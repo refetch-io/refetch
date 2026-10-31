@@ -44,6 +44,7 @@ function toChannel(row: Pick<Row, '$id'> & Record<string, any>): Channel {
     description: String(row.description ?? ''),
     keywords: Array.isArray(row.keywords) ? row.keywords.filter((k: unknown) => typeof k === 'string') : [],
     memberCount: typeof row.memberCount === 'number' ? Math.max(0, row.memberCount) : 0,
+    verified: row.verified === true,
   }
 }
 
@@ -68,6 +69,7 @@ export async function listChannels(): Promise<Array<Channel>> {
           'description',
           'keywords',
           'memberCount',
+          'verified',
         ]),
       ],
       total: false,

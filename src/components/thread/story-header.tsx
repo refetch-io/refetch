@@ -28,6 +28,8 @@ import { Card } from '../ui/card'
 import { ConfirmDialog } from '../ui/confirm-dialog'
 import { Dot } from '../ui/misc'
 import { BotBadge } from '../bot-badge'
+import { PersonBadges } from '../verified-badge'
+import { PersonHoverCard } from '../people/person-hover-card'
 import { Favicon } from '../favicon'
 import { VoteControl } from '../vote-control'
 import { ChannelTag } from '../channels/channel-parts'
@@ -117,14 +119,17 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
             <Dot />
             <span className="inline-flex items-center gap-1.5">
               by{' '}
-              <Link
-                to="/users/$userId"
-                params={{ userId: post.userId }}
-                className="inline-flex items-center gap-1.5 font-medium text-label hover:text-brand-text"
-              >
-                <Avatar name={post.userName} userId={post.userId} size={18} />
-                {post.userName}
-              </Link>
+              <PersonHoverCard userId={post.userId} name={post.userName}>
+                <Link
+                  to="/users/$userId"
+                  params={{ userId: post.userId }}
+                  className="inline-flex items-center gap-1.5 font-medium text-label hover:text-brand-text"
+                >
+                  <Avatar name={post.userName} userId={post.userId} size={18} />
+                  {post.userName}
+                </Link>
+              </PersonHoverCard>
+              <PersonBadges userId={post.userId} size={15} />
               {isBotUser(post.userId) && <BotBadge />}
             </span>
             {!isBotUser(post.userId) && post.userId !== user?.id && (

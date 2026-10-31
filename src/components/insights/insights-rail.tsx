@@ -16,6 +16,7 @@ import { followedIdsQuery, whoToFollowQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
 import { FollowButton } from '../people/follow-button'
 import { Avatar } from '../ui/avatar'
+import { PersonBadges } from '../verified-badge'
 
 const RANGES: Array<{ value: VisitorRange; label: string; caption: string }> = [
   { value: '24h', label: '24H', caption: 'Last 24 hours' },
@@ -257,8 +258,9 @@ export function WhoToFollow() {
             >
               <Avatar name={person.name} userId={person.id} size={36} />
               <span className="min-w-0">
-                <span className="block truncate text-subhead font-semibold text-label group-hover:text-brand-text">
-                  {person.name}
+                <span className="flex items-center gap-1 text-subhead font-semibold text-label group-hover:text-brand-text">
+                  <span className="truncate">{person.name}</span>
+                  <PersonBadges userId={person.id} size={14} plain />
                 </span>
                 <span className="block truncate text-caption-1 text-label-tertiary">{person.reason}</span>
               </span>

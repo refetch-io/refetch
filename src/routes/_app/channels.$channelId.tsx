@@ -19,6 +19,7 @@ import { Favicon } from '@/components/favicon'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { ChannelIcon, JoinButton, memberLabel, useChannels } from '@/components/channels/channel-parts'
 import { TopicChips } from '@/components/topics/topic-parts'
+import { VerifiedBadge } from '@/components/verified-badge'
 
 const searchSchema = z.object({
   sort: z.enum(['hot', 'new']).optional().catch(undefined),
@@ -123,7 +124,10 @@ function ChannelPage() {
           {/* The rail has its own Join button on wide screens. */}
           <JoinButton channel={channel} size="md" className="mb-1 xl:hidden" />
         </div>
-        <h1 className="mt-4 text-title-1 text-label">{channel.name}</h1>
+        <h1 className="mt-4 flex items-center gap-2 text-title-1 text-label">
+          {channel.name}
+          {channel.verified && <VerifiedBadge kind="channel" size={22} />}
+        </h1>
         <p className="mt-1 max-w-2xl text-subhead text-pretty text-label-secondary">{channel.description}</p>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="text-footnote text-label-tertiary tabular">{memberLabel(channel.memberCount)}</p>

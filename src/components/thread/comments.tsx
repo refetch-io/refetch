@@ -19,6 +19,8 @@ import { Dot, EmptyState } from '../ui/misc'
 import { Textarea } from '../ui/input'
 import { SegmentedControl } from '../ui/segmented-control'
 import { BotBadge } from '../bot-badge'
+import { PersonBadges } from '../verified-badge'
+import { PersonHoverCard } from '../people/person-hover-card'
 import { RichText } from '../rich-text'
 import { VoteControl } from '../vote-control'
 import { ReportButton } from '../moderation/report-dialog'
@@ -211,13 +213,16 @@ function CommentItem({
             )}
           >
             <header className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-footnote">
-              <Link
-                to="/users/$userId"
-                params={{ userId: node.userId }}
-                className="font-semibold text-label hover:text-brand-text"
-              >
-                {node.userName}
-              </Link>
+              <PersonHoverCard userId={node.userId} name={node.userName}>
+                <Link
+                  to="/users/$userId"
+                  params={{ userId: node.userId }}
+                  className="font-semibold text-label hover:text-brand-text"
+                >
+                  {node.userName}
+                </Link>
+              </PersonHoverCard>
+              <PersonBadges userId={node.userId} size={14} />
               {isBot && <BotBadge />}
               {!isBot && node.userId === opUserId && (
                 <Badge variant="brand" size="xs" title="Original poster">

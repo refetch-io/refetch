@@ -57,6 +57,11 @@
   --warning: #c2410c;
   --warning-tint: #fff4e5;
 
+  /* Verified badges: official bot, verified refetcher, verified channel */
+  --verified-bot: #8e8e93;
+  --verified-refetcher: #4e1cb3;
+  --verified-channel: #e0a100;
+
   /* Materials */
   --glass: rgb(255 255 255 / 0.72);
   --glass-strong: rgb(255 255 255 / 0.86);
@@ -136,6 +141,10 @@
   --warning: #ff9f0a;
   --warning-tint: rgb(255 159 10 / 0.14);
 
+  --verified-bot: #8e8c9c;
+  --verified-refetcher: #7c3aed;
+  --verified-channel: #f2b92b;
+
   --glass: rgb(23 22 30 / 0.66);
   --glass-strong: rgb(31 30 40 / 0.86);
   --glass-border: rgb(255 255 255 / 0.07);
@@ -196,6 +205,9 @@
   --color-down-tint: var(--down-tint);
   --color-warning: var(--warning);
   --color-warning-tint: var(--warning-tint);
+  --color-verified-bot: var(--verified-bot);
+  --color-verified-refetcher: var(--verified-refetcher);
+  --color-verified-channel: var(--verified-channel);
   --color-glass: var(--glass);
   --color-glass-strong: var(--glass-strong);
   --color-glass-border: var(--glass-border);

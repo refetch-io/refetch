@@ -12,6 +12,8 @@ import { VoteControl } from '../vote-control'
 import { ChannelTag, useChannels } from '../channels/channel-parts'
 import { useJoinGate } from '../auth/join-gate'
 import { SaveButton } from '../saved/save-button'
+import { PersonBadges } from '../verified-badge'
+import { PersonHoverCard } from '../people/person-hover-card'
 
 export function PostRow({
   post,
@@ -116,13 +118,18 @@ export function PostRow({
             {timeAgo(post.createdAt)}
           </time>
           <Dot className="max-sm:hidden" />
-          <Link
-            to="/users/$userId"
-            params={{ userId: post.userId }}
-            className="truncate hover:text-brand-text max-sm:hidden"
-          >
-            {post.userName}
-          </Link>
+          <PersonHoverCard userId={post.userId} name={post.userName}>
+            <Link
+              to="/users/$userId"
+              params={{ userId: post.userId }}
+              className="truncate hover:text-brand-text max-sm:hidden"
+            >
+              {post.userName}
+            </Link>
+          </PersonHoverCard>
+          <span className="-ml-0.5 inline-flex shrink-0 max-sm:hidden">
+            <PersonBadges userId={post.userId} size={13} plain />
+          </span>
           {hasChannel && (
             <>
               <Dot />

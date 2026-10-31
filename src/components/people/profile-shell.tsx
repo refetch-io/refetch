@@ -12,6 +12,7 @@ import { useSession } from '@/lib/session'
 import type { PeoplePage, Profile, ProfileInsights } from '@/lib/types'
 import { compactNumber, pluralize } from '@/lib/utils'
 import { BotBadge } from '@/components/bot-badge'
+import { PersonBadges } from '@/components/verified-badge'
 import { ChannelIcon, useChannels } from '@/components/channels/channel-parts'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { ColumnTabs } from '@/components/feed/feed-column'
@@ -45,8 +46,8 @@ export function firstName(profile: Pick<Profile, 'name'>) {
 
 /** What a profile tab's loader hands to `profileHead`. */
 export function profileHeadData(profile: Profile) {
-  const { id, name, bio, website, joinedAt, isBot, stats } = profile
-  return { id, name, bio, website, joinedAt, isBot, stats }
+  const { id, name, bio, website, joinedAt, isBot, verified, stats } = profile
+  return { id, name, bio, website, joinedAt, isBot, verified, stats }
 }
 
 /**
@@ -229,6 +230,7 @@ function ProfileHeader({ profile }: { profile: Profile }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-title-1 text-label">{profile.name}</h1>
+            <PersonBadges userId={profile.id} verification={profile.verified} size={22} />
             {profile.isBot && <BotBadge />}
             {viewer?.blocked && <Badge variant="danger">Blocked</Badge>}
           </div>
