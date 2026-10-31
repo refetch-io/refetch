@@ -37,6 +37,9 @@ const DEBUG_URL_EXTRACTION = false;
 const YOUTUBE_MAX_VIDEOS_PER_CHANNEL = 2;
 const YOUTUBE_MAX_AGE_HOURS = 48;
 
+/** Link budget per duplicate lookup query (Appwrite caps a query at 4096 characters). */
+const DUPLICATE_CHECK_BATCH_CHARS = 3000;
+
 /** Channel IDs per Data API request (the API maximum). */
 const YOUTUBE_API_BATCH_SIZE = 50;
 
@@ -1012,29 +1015,40 @@ async function checkDuplicateUrlsBulk(urls) {
       return new Set();
     }
     
-    const cleanUrls = urls.map(url => cleanUrl(url));
+    const cleanUrls = [...new Set(urls.map(url => cleanUrl(url)))];
+
+    // A query holds at most 4096 characters, so look the links up in batches
+    const batches = [[]];
+    for (const url of cleanUrls) {
+      const current = batches[batches.length - 1];
+      if (current.length > 0 && JSON.stringify([...current, url]).length > DUPLICATE_CHECK_BATCH_CHARS) batches.push([url]);
+      else current.push(url);
+    }
     
-    console.log(`  🔍 Checking ${cleanUrls.length} URLs for duplicates using array query...`);
+    console.log(`  🔍 Checking ${cleanUrls.length} URLs for duplicates in ${batches.length} queries...`);
     
     // Use Appwrite's array query to find existing posts with matching links.
     // Page through every match: a link posted more than once returns several rows,
     // and a single page would hide the rest of the links.
     const duplicateUrls = new Set();
-    let cursor;
-    for (;;) {
-      const existingPosts = await tablesDB.listRows(
-        process.env.APPWRITE_DATABASE_ID || '',
-        process.env.APPWRITE_POSTS_COLLECTION_ID || '',
-        [
-          Query.equal('link', cleanUrls),
-          Query.select(['$id', 'link']),
-          Query.limit(500),
-          ...(cursor ? [Query.cursorAfter(cursor)] : [])
-        ]
-      );
-      existingPosts.rows.forEach(post => duplicateUrls.add(post.link));
-      if (existingPosts.rows.length < 500) break;
-      cursor = existingPosts.rows[existingPosts.rows.length - 1].$id;
+    for (const batch of batches) {
+      if (batch.length === 0) continue;
+      let cursor;
+      for (;;) {
+        const existingPosts = await tablesDB.listRows(
+          process.env.APPWRITE_DATABASE_ID || '',
+          process.env.APPWRITE_POSTS_COLLECTION_ID || '',
+          [
+            Query.equal('link', batch),
+            Query.select(['$id', 'link']),
+            Query.limit(500),
+            ...(cursor ? [Query.cursorAfter(cursor)] : [])
+          ]
+        );
+        existingPosts.rows.forEach(post => duplicateUrls.add(post.link));
+        if (existingPosts.rows.length < 500) break;
+        cursor = existingPosts.rows[existingPosts.rows.length - 1].$id;
+      }
     }
     
     console.log(`  ✅ Found ${duplicateUrls.size} duplicate URLs out of ${cleanUrls.length} total URLs`);
