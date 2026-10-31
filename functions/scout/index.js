@@ -9,6 +9,7 @@ import { Client, TablesDB, ID, Query } from 'node-appwrite';
 import OpenAI from 'openai';
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
+import { readFileSync } from 'node:fs';
 
 /** Appwrite user ID used for automated posts and comments (set per deployment). */
 const SCOUT_USER_ID = '0';
@@ -31,6 +32,13 @@ const MAX_ARTICLES_PER_RUN = 1000;
 
 /** Verbose HTML / anchor logging during URL extraction. */
 const DEBUG_URL_EXTRACTION = false;
+
+/** Recent uploads considered per YouTube channel, and how far back to look. */
+const YOUTUBE_MAX_VIDEOS_PER_CHANNEL = 2;
+const YOUTUBE_MAX_AGE_HOURS = 48;
+
+/** Channel IDs per Data API request (the API maximum). */
+const YOUTUBE_API_BATCH_SIZE = 50;
 
 // Target websites to scout
 function getTargetWebsites() {
@@ -60,6 +68,20 @@ function getTargetWebsites() {
   }
 }
 
+// YouTube channels to scout, read through their public Atom feeds (see youtube-channels.json)
+function getYouTubeChannels() {
+  try {
+    const channels = JSON.parse(readFileSync(new URL('./youtube-channels.json', import.meta.url), 'utf8'));
+    return channels.map(channel => ({
+      ...channel,
+      source: `https://www.youtube.com/channel/${channel.channelId}`
+    }));
+  } catch (error) {
+    console.error(`❌ Could not read youtube-channels.json: ${error.message}`);
+    return [];
+  }
+}
+
 // System prompt for AI content analysis
 const SYSTEM_PROMPT = `You are an expert content analyst for a tech news platform called "refetch" (similar to Hacker News but an open source alternative). 
 
@@ -86,7 +108,8 @@ CRITICAL GUIDELINES:
 - Look for articles with substantial content potential, not just headlines or minimal text
 - If you cannot analyze the content properly, return an empty articles array
 - The discussionStarter should be the kind of comment that would start a good conversation on HN or refetch
-- Skip URLs that are clearly not articles (about, contact, privacy, terms, etc.)`;
+- Skip URLs that are clearly not articles (about, contact, privacy, terms, etc.)
+- YouTube videos count as articles when the topic is valuable to a tech audience; skip sponsor spots, livestream notices, merch and off-topic uploads`;
 
 // Initialize clients
 let appwriteClient, tablesDB, openai;
@@ -122,8 +145,28 @@ function initializeClients() {
   }
 }
 
-// Helper function to clean URLs
+// Video ID of a YouTube watch, shorts, live, embed or youtu.be link
+function youTubeVideoId(url) {
+  try {
+    const urlObj = new URL(url);
+    const host = urlObj.hostname.replace(/^(www|m)\./, '');
+    let id = null;
+    if (host === 'youtu.be') id = urlObj.pathname.slice(1);
+    else if (host === 'youtube.com') {
+      id = urlObj.pathname === '/watch'
+        ? urlObj.searchParams.get('v')
+        : urlObj.pathname.match(/^\/(?:shorts|live|embed)\/([^/]+)/)?.[1] ?? null;
+    }
+    return id && /^[\w-]{11}$/.test(id) ? id : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+// Helper function to clean URLs (same normalization as the web app; YouTube keeps its video ID)
 function cleanUrl(url) {
+  const videoId = youTubeVideoId(url);
+  if (videoId) return `https://www.youtube.com/watch?v=${videoId}`;
   try {
     const urlObj = new URL(url);
     return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
@@ -702,6 +745,96 @@ function extractArticleUrlsWithLabels(html, baseUrl) {
   }
 }
 
+function decodeXml(text) {
+  return text
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
+// Parse a YouTube channel Atom feed into its videos
+function parseYouTubeFeed(xml) {
+  return [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].map(([, entry]) => {
+    const text = (name) => decodeXml(entry.match(new RegExp(`<${name}>([\\s\\S]*?)</${name}>`))?.[1] ?? '').trim();
+    return {
+      title: text('title'),
+      link: entry.match(/<link rel="alternate" href="([^"]+)"/)?.[1] ?? '',
+      published: Date.parse(text('published')),
+      description: text('media:description')
+    };
+  });
+}
+
+// Video descriptions are mostly links (sponsors, socials, merch); keep the prose
+function summarizeVideoDescription(description) {
+  return description
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line && !/https?:\/\//i.test(line))
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .slice(0, 500);
+}
+
+// Fetch a channel's recent uploads (Shorts excluded) as scout candidates
+async function fetchYouTubeVideos(channel) {
+  try {
+    const response = await axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`, {
+      headers: { 'User-Agent': 'RefetchBot/1.0 (+https://refetch.io)' },
+      timeout: 15000,
+      responseType: 'text'
+    });
+    const since = Date.now() - YOUTUBE_MAX_AGE_HOURS * 60 * 60 * 1000;
+    return parseYouTubeFeed(response.data)
+      .filter(video => video.title && youTubeVideoId(video.link) && !video.link.includes('/shorts/'))
+      .filter(video => video.published >= since)
+      .slice(0, YOUTUBE_MAX_VIDEOS_PER_CHANNEL)
+      .map(video => ({
+        url: cleanUrl(video.link),
+        label: video.title,
+        source: channel.source,
+        description: summarizeVideoDescription(video.description)
+      }));
+  } catch (error) {
+    console.error(`❌ ${channel.name} (YouTube): ${error.message}`);
+    return [];
+  }
+}
+
+// Subscriber counts by channel ID. Needs YOUTUBE_API_KEY (YouTube Data API v3); without it
+// videos are still posted, just without the audience signal in ranking.
+async function fetchYouTubeSubscribers(channelIds) {
+  const subscribers = new Map();
+  const apiKey = process.env.YOUTUBE_API_KEY;
+  if (!apiKey || channelIds.length === 0) return subscribers;
+
+  for (let i = 0; i < channelIds.length; i += YOUTUBE_API_BATCH_SIZE) {
+    try {
+      const response = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
+        params: {
+          part: 'statistics',
+          id: channelIds.slice(i, i + YOUTUBE_API_BATCH_SIZE).join(','),
+          maxResults: YOUTUBE_API_BATCH_SIZE,
+          key: apiKey
+        },
+        timeout: 10000
+      });
+      for (const item of response.data.items ?? []) {
+        if (item.statistics && !item.statistics.hiddenSubscriberCount) {
+          subscribers.set(item.id, Number(item.statistics.subscriberCount) || 0);
+        }
+      }
+    } catch (error) {
+      console.error(`❌ YouTube subscriber lookup failed: ${error.response?.data?.error?.message ?? error.message}`);
+    }
+  }
+  return subscribers;
+}
+
 // Helper function to estimate token count for a batch
 function estimateTokenCount(urlsWithLabels) {
   // Rough estimation: each URL + label is about 50-100 tokens
@@ -734,7 +867,7 @@ function calculateOptimalBatchSize(urlsWithLabels) {
 }
 
 // Helper function to analyze URLs with AI in batches
-async function analyzeUrlsWithAI(urlsWithLabels, sourceUrl) {
+async function analyzeUrlsWithAI(urlsWithLabels, sourceUrl, sourceDescription = 'a tech website') {
   try {
     if (urlsWithLabels.length === 0) {
       console.log(`  ⚠️ No URLs to analyze for ${sourceUrl}`);
@@ -765,7 +898,7 @@ async function analyzeUrlsWithAI(urlsWithLabels, sourceUrl) {
       
       const urlList = batch.map(item => `${item.label} -> ${item.url}`).join('\n');
       
-      const prompt = `Please analyze this batch of URLs and their link text labels from a tech website and identify the best articles for a tech news platform called "refetch".
+      const prompt = `Please analyze this batch of URLs and their link text labels from ${sourceDescription} and identify the best articles for a tech news platform called "refetch".
 
 Source: ${sourceUrl}
 Batch: ${batchIndex + 1}/${batches.length}
@@ -933,7 +1066,7 @@ async function checkDuplicateUrl(url) {
 }
 
 // Helper function to add article to database
-async function addArticleToDatabase(article) {
+async function addArticleToDatabase(article, extraData = {}) {
   try {
     // Check for duplicates
     const isDuplicate = await checkDuplicateUrl(article.url);
@@ -953,7 +1086,8 @@ async function addArticleToDatabase(article) {
       type: 'link', // Default to 'link' type
       enhanced: false, // Will be enhanced by the enhancement function later
       timeScore: 100,
-      link: cleanUrl(article.url)
+      link: cleanUrl(article.url),
+      ...extraData
     };
     
     // Create the document
@@ -1025,6 +1159,7 @@ async function scoutArticles() {
   const startTime = Date.now();
   const results = {
     websitesScraped: 0,
+    youtubeChannelsScraped: 0,
     articlesAnalyzed: 0,
     articlesAdded: 0,
     duplicatesSkipped: 0,
@@ -1083,7 +1218,27 @@ async function scoutArticles() {
       await delay(SCRAPING_DELAY_MS);
     }
     
-    console.log(`✅ Found ${allArticlesData.length} total URLs from ${results.websitesScraped} websites`);
+    // Step 1b: Recent uploads from YouTube channels
+    const youtubeChannels = getYouTubeChannels();
+    const youtubeChannelsBySource = new Map(youtubeChannels.map(channel => [channel.source, channel]));
+    if (youtubeChannels.length > 0) {
+      console.log(`\n📺 Step 1b: Reading ${youtubeChannels.length} YouTube channel feeds...`);
+      for (const channel of youtubeChannels) {
+        const videos = await fetchYouTubeVideos(channel);
+        allArticlesData.push(...videos);
+        results.youtubeChannelsScraped++;
+        results.urlBreakdown.totalUrlsFound += videos.length;
+        if (videos.length > 0) console.log(`  ${channel.name}: ${videos.length} recent videos`);
+        await delay(500);
+      }
+    }
+
+    // Video descriptions, posted with the story so Enhancement has more than a title to go on
+    const videoDescriptions = new Map(
+      allArticlesData.filter(article => article.description).map(article => [article.url, article.description])
+    );
+
+    console.log(`✅ Found ${allArticlesData.length} total URLs from ${results.websitesScraped} websites and ${results.youtubeChannelsScraped} YouTube channels`);
     
     // Show breakdown by source
     const sourceBreakdown = {};
@@ -1133,9 +1288,11 @@ async function scoutArticles() {
     let totalBatchesSuccessful = 0;
     let totalBatchesFailed = 0;
     
-    // Process each website's URLs separately for better context
-    for (let i = 0; i < targetWebsites.length; i++) {
-      const sourceUrl = targetWebsites[i];
+    // Process each source's URLs separately for better context
+    const sourceUrls = [...targetWebsites, ...youtubeChannels.map(channel => channel.source)];
+    for (let i = 0; i < sourceUrls.length; i++) {
+      const sourceUrl = sourceUrls[i];
+      const youtubeChannel = youtubeChannelsBySource.get(sourceUrl);
       
       const sourceArticles = uniqueArticlesData.filter(article => {
         // Use the source field we tracked during extraction
@@ -1157,7 +1314,11 @@ async function scoutArticles() {
       console.log(`  📤 Sending ${limitedSourceArticles.length} URLs to LLM from ${sourceUrl}`);
       
       try {
-        const analyzedSourceArticles = await analyzeUrlsWithAI(limitedSourceArticles, sourceUrl);
+        const analyzedSourceArticles = await analyzeUrlsWithAI(
+          limitedSourceArticles,
+          sourceUrl,
+          youtubeChannel ? `the YouTube channel "${youtubeChannel.name}" (titles of its latest videos)` : undefined
+        );
         analyzedArticles.push(...analyzedSourceArticles);
         results.urlBreakdown.urlsAnalyzed += analyzedSourceArticles.length;
         
@@ -1179,7 +1340,7 @@ async function scoutArticles() {
       }
       
       // Add delay between websites to avoid overwhelming the API
-      if (i < targetWebsites.length - 1) {
+      if (i < sourceUrls.length - 1) {
         console.log(`  ⏳ Waiting 3 seconds before processing next website...`);
         await delay(3000);
       }
@@ -1213,8 +1374,28 @@ async function scoutArticles() {
       console.log(`  ${shortSource}: ${count} articles`);
     });
     
+    // Subscriber counts for the channels that made it this far
+    const youtubeChannelIds = [...new Set(
+      articlesToProcess
+        .map(article => youtubeChannelsBySource.get(article.source)?.channelId)
+        .filter(Boolean)
+    )];
+    const subscribers = await fetchYouTubeSubscribers(youtubeChannelIds);
+    if (youtubeChannelIds.length > 0) {
+      console.log(`📺 Subscriber counts for ${subscribers.size}/${youtubeChannelIds.length} YouTube channels${process.env.YOUTUBE_API_KEY ? '' : ' (YOUTUBE_API_KEY not set)'}`);
+    }
+
     for (const article of articlesToProcess) {
-      const result = await addArticleToDatabase(article);
+      const youtubeChannel = youtubeChannelsBySource.get(article.source);
+      const extraData = {};
+      if (youtubeChannel) {
+        extraData.source = youtubeChannel.source;
+        extraData.description = videoDescriptions.get(cleanUrl(article.url)) ?? '';
+        if (subscribers.has(youtubeChannel.channelId)) {
+          extraData.sourceFollowers = subscribers.get(youtubeChannel.channelId);
+        }
+      }
+      const result = await addArticleToDatabase(article, extraData);
       
       if (result.success) {
         results.articlesAdded++;

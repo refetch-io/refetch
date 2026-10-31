@@ -48,6 +48,21 @@ The `SCOUT_TARGET_WEBSITES` environment variable is required and must contain a 
 ### Emerging Tech & Research
 - **MIT Technology Review** — Emerging technologies and their impact
 
+## YouTube Channels
+
+Scout also reads the public Atom feed of every channel in [`youtube-channels.json`](./youtube-channels.json) (Fireship, Theo, Computerphile, Two Minute Papers, ByteByteGo and more). Each run takes up to 2 long-form videos per channel from the last 48 hours (Shorts are skipped), runs them through the same AI pass as articles, and posts them with:
+
+- `link` set to `https://www.youtube.com/watch?v=<id>` (YouTube links keep their video ID through URL cleaning)
+- `description` set to the prose part of the video description, so Enhancement has more than a title
+- `source` set to the channel URL, so the Algorithm balances each channel on its own instead of all of youtube.com together
+- `sourceFollowers` set to the channel's subscriber count when `YOUTUBE_API_KEY` is set
+
+To add a channel, append `{ "name", "handle", "channelId" }` to the JSON. The channel ID (`UC…`) is in the `<link rel="canonical">` of the channel page.
+
+### Subscriber counts
+
+Set `YOUTUBE_API_KEY` (a Google Cloud API key with the **YouTube Data API v3** enabled) to fetch subscriber counts. One request covers 50 channels, so a run costs 1 unit of the 10,000 free daily quota. Without the key, videos are still posted, just without the audience signal. The Algorithm turns the count into a multiplier around 100k subscribers (1M → ×1.07, 10M → ×1.14, 10k → ×0.93, capped at 0.85 to 1.2); see `AUDIENCE_CONFIG` in `functions/algorithm/source-balance.js`.
+
 ## Features
 
 - **Simple HTML Scraping**: Scrapes full HTML from target websites without complex selectors
@@ -84,6 +99,9 @@ OPENAI_MODEL=gpt-4o-mini  # Optional; prefer global project variable (default gp
 # Target Websites (comma-separated URLs)
 # This should be a comma-separated list of URLs
 SCOUT_TARGET_WEBSITES=https://techcrunch.com,https://theverge.com,https://arstechnica.com,https://wired.com,https://venturebeat.com,https://engadget.com,https://infoq.com,https://news.ycombinator.com,https://lobste.rs,https://reddit.com/r/programming,https://sciencedaily.com,https://nature.com/nature/technology,https://9to5mac.com,https://9to5google.com,https://theregister.com,https://zdnet.com,https://www.technologyreview.com/tag/the-algorithm
+
+# YouTube Data API v3 key for channel subscriber counts (optional)
+YOUTUBE_API_KEY=your_youtube_api_key
 ```
 
 Scout user ID, display name, LLM batch sizes, scraping delay, per-run limits, and debug flags are **constants** at the top of `index.js` (edit there per deployment).

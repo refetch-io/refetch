@@ -169,6 +169,10 @@ function buildCollectionDefinitions() {
         { key: 'relevancyScore', type: 'integer', required: false, array: false, default: null },
         { key: 'channel', type: 'string', size: 64, required: false, array: false, default: null },
         { key: 'countReports', type: 'integer', required: false, array: false, default: null },
+        // Publisher a story came from when the domain alone doesn't say (a YouTube channel URL).
+        { key: 'source', type: 'string', size: 256, required: false, array: false, default: null },
+        // Audience of that publisher (YouTube subscribers), used as a ranking signal.
+        { key: 'sourceFollowers', type: 'integer', required: false, array: false, default: null },
       ],
       indexes: [
         { key: 'index_1', type: 'key', columns: ['userId'], orders: ['ASC'] },

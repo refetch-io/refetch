@@ -106,8 +106,28 @@ async function fetchFeed(url) {
   return parseFeed(await response.text(), url);
 }
 
-/** Same normalization as the web app's duplicate check. */
+/** Video ID of a YouTube watch, shorts, live, embed or youtu.be link. */
+function youTubeVideoId(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^(www|m)\./, '');
+    let id = null;
+    if (host === 'youtu.be') id = parsed.pathname.slice(1);
+    else if (host === 'youtube.com') {
+      id = parsed.pathname === '/watch'
+        ? parsed.searchParams.get('v')
+        : parsed.pathname.match(/^\/(?:shorts|live|embed)\/([^/]+)/)?.[1] ?? null;
+    }
+    return id && /^[\w-]{11}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Same normalization as the web app's duplicate check (YouTube keeps its video ID). */
 function cleanUrl(url) {
+  const videoId = youTubeVideoId(url);
+  if (videoId) return `https://www.youtube.com/watch?v=${videoId}`;
   try {
     const parsed = new URL(url);
     return `${parsed.protocol}//${parsed.host}${parsed.pathname}`;

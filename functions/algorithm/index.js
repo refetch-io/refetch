@@ -26,13 +26,14 @@
  * Total Weight: 100% (1.0)
  *
  * SOURCE BALANCING (applied after the weighted sum, see source-balance.js):
- * - Diversity is computed per domain within the scoring window
- * - Domains with many posts in the window get compounding score multipliers
+ * - Diversity is computed per source (YouTube channel, otherwise domain) within the scoring window
+ * - Sources with many posts in the window get compounding score multipliers
  * - Some sources carry a fixed quality weight (e.g. dev.to)
+ * - Sources with a known audience (YouTube subscribers) get a log-scaled boost or penalty
  */
 
 import { Client, TablesDB, Query } from 'node-appwrite';
-import { balanceSources, SATURATION_CONFIG } from './source-balance.js';
+import { balanceSources, AUDIENCE_CONFIG, SATURATION_CONFIG } from './source-balance.js';
 
 // ============================================================================
 // CONFIGURATION
@@ -318,24 +319,26 @@ function calculateSourceBalance(posts, log) {
   const balance = balanceSources(posts.map(post => ({
     id: post.$id,
     link: post.link,
+    source: post.source,
+    sourceFollowers: post.sourceFollowers,
     baseScore: calculateFinalScore(post, calculateTimeDecayScore(post.$createdAt, post.timeScore || 100))
   })));
 
   // Log the sources that are being held back the most
-  const perDomain = new Map();
-  for (const { domain, multiplier } of balance.values()) {
-    if (!domain) continue;
-    const stats = perDomain.get(domain) ?? { count: 0, penalized: 0 };
+  const perSource = new Map();
+  for (const { source, multiplier } of balance.values()) {
+    if (!source) continue;
+    const stats = perSource.get(source) ?? { count: 0, penalized: 0 };
     stats.count++;
     if (multiplier < 1) stats.penalized++;
-    perDomain.set(domain, stats);
+    perSource.set(source, stats);
   }
-  [...perDomain.entries()]
+  [...perSource.entries()]
     .filter(([, stats]) => stats.penalized > 0)
     .sort((a, b) => b[1].count - a[1].count)
     .slice(0, 10)
-    .forEach(([domain, stats]) => {
-      log(`🌐 Domain ${domain}: ${stats.count} posts in window, ${stats.penalized} penalized`);
+    .forEach(([source, stats]) => {
+      log(`🌐 Source ${source}: ${stats.count} posts in window, ${stats.penalized} penalized`);
     });
 
   return balance;
@@ -361,7 +364,7 @@ function applyScoringAlgorithm(post, balance) {
     console.log(`   Relevancy Score: ${post.relevancyScore || 50} (Weight: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}%)`);
     console.log(`   Time Score: ${post.timeScore || 100} → ${newTimeScore}`);
     console.log(`   Diversity Score: ${diversityScore}`);
-    console.log(`   Source: ${balance?.domain ?? 'unknown'} #${(balance?.rank ?? 0) + 1}, multiplier ${multiplier.toFixed(2)}`);
+    console.log(`   Source: ${balance?.source ?? 'unknown'} #${(balance?.rank ?? 0) + 1}, followers ${post.sourceFollowers ?? 'n/a'}, multiplier ${multiplier.toFixed(2)}`);
     console.log(`   Final Score: ${unbalancedScore} → ${finalScore}`);
   }
   
@@ -500,7 +503,8 @@ function generateFinalSummary(results, startTime, log) {
         log(`📈 Success rate: ${successRate}%`);
         log(`📦 Batches processed: ${results.batches}`);
         log(`⏱️  Total processing time: ${processingTime}ms`);
-        log(`🌐 Source balancing: ${SATURATION_CONFIG.freePerDomain} free posts per domain, then ×${SATURATION_CONFIG.decay} each (floor ${SATURATION_CONFIG.floor})`);
+        log(`🌐 Source balancing: ${SATURATION_CONFIG.freePerDomain} free posts per source, then ×${SATURATION_CONFIG.decay} each (floor ${SATURATION_CONFIG.floor})`);
+        log(`📺 Audience: ×${AUDIENCE_CONFIG.perDecade} per 10× followers around ${AUDIENCE_CONFIG.pivot} (${AUDIENCE_CONFIG.min}-${AUDIENCE_CONFIG.max})`);
         log(`⚖️  Scoring weights used (Percentage Importance):`);
         log(`   🎯 Relevancy Score: ${(SCORING_WEIGHTS.relevancyScore * 100).toFixed(0)}% (Tech audience relevance - HIGHEST PRIORITY)`);
         Object.entries(SCORING_WEIGHTS).forEach(([factor, weight]) => {
@@ -539,6 +543,7 @@ function generateFinalSummary(results, startTime, log) {
     algorithm: {
       weights: SCORING_WEIGHTS,
       saturation: SATURATION_CONFIG,
+      audience: AUDIENCE_CONFIG,
       timeDecayHours: PROCESSING_CONFIG.timeScoreDecayHours,
       batchSize: PROCESSING_CONFIG.batchSize
     }

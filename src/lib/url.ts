@@ -1,5 +1,29 @@
-/** Strip query strings and fragments: `https://a.com/p?x=1#y` → `https://a.com/p`. */
+/** Video ID of a YouTube watch, shorts, live, embed or youtu.be link. */
+export function youTubeVideoId(url: string): string | null {
+  try {
+    const parsed = new URL(url)
+    const host = parsed.hostname.replace(/^(www|m)\./, '')
+    let id: string | null = null
+    if (host === 'youtu.be') id = parsed.pathname.slice(1)
+    else if (host === 'youtube.com') {
+      id =
+        parsed.pathname === '/watch'
+          ? parsed.searchParams.get('v')
+          : (parsed.pathname.match(/^\/(?:shorts|live|embed)\/([^/]+)/)?.[1] ?? null)
+    }
+    return id && /^[\w-]{11}$/.test(id) ? id : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Strip query strings and fragments: `https://a.com/p?x=1#y` → `https://a.com/p`.
+ * YouTube videos live in the query string, so they become `https://www.youtube.com/watch?v=<id>`.
+ */
 export function cleanUrl(url: string): string {
+  const videoId = youTubeVideoId(url)
+  if (videoId) return `https://www.youtube.com/watch?v=${videoId}`
   try {
     const parsed = new URL(url)
     return `${parsed.protocol}//${parsed.host}${parsed.pathname}`

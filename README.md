@@ -220,6 +220,7 @@ Actor identity, LLM batching, scraping delays, and per-run limits are **constant
 | Variable | Description |
 | --- | --- |
 | `SCOUT_TARGET_WEBSITES` | Comma-separated site roots to crawl (can be very long). |
+| `YOUTUBE_API_KEY` | Optional. YouTube Data API v3 key; Scout uses it to fetch subscriber counts for the channels in `functions/scout/youtube-channels.json`, which feed ranking. |
 
 **Bootstrap (`scripts/appwrite-setup.mjs`):** `npm run build` runs this first; it uses the same **Appwrite connection** and **data IDs** to create or update the database, tables, indexes, and function shells (not deployments or function env).
 

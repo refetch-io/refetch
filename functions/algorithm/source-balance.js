@@ -1,13 +1,16 @@
 /**
  * Source balancing
  *
- * Keeps any single source from flooding the feed. Posts are grouped by domain
+ * Keeps any single source from flooding the feed. Posts are grouped by source
+ * (the post's `source` when set, e.g. a YouTube channel, otherwise its domain)
  * within the current scoring window and ranked by their base score:
- * - The top post per domain earns the full diversity score, the rest get 0.
+ * - The top post per source earns the full diversity score, the rest get 0.
  * - Past a small free allowance, each extra post from the same domain is
  *   multiplied down further, so a source that publishes 300 posts a day can't
  *   take over the top of the feed by volume alone.
  * - Some sources also carry a fixed quality weight on top of that.
+ * - Sources with a known audience (YouTube subscribers) get a small boost or
+ *   penalty around a typical channel size, on a log scale.
  *
  * Kept free of Appwrite imports so it can be unit tested on its own.
  */
@@ -27,6 +30,17 @@ export const SATURATION_CONFIG = {
  */
 export const SOURCE_WEIGHTS = {
   'dev.to': 0.9
+};
+
+/**
+ * Audience settings: the multiplier moves `perDecade` for every 10× in
+ * followers away from `pivot`, clamped to [min, max]
+ */
+export const AUDIENCE_CONFIG = {
+  pivot: 100_000,     // Followers that count as neutral (multiplier 1)
+  perDecade: 0.07,    // 1M → 1.07, 10M → 1.14, 10k → 0.93
+  min: 0.85,
+  max: 1.2
 };
 
 /**
@@ -51,32 +65,43 @@ export function saturationMultiplier(rank, config = SATURATION_CONFIG) {
 }
 
 /**
+ * Multiplier for a source's audience size; 1 when unknown
+ */
+export function audienceMultiplier(followers, config = AUDIENCE_CONFIG) {
+  if (!Number.isFinite(followers) || followers <= 0) return 1;
+  const decades = Math.log10(followers) - Math.log10(config.pivot);
+  return Math.min(config.max, Math.max(config.min, 1 + decades * config.perDecade));
+}
+
+/**
  * Compute diversity score and score multiplier for every post in the window
  *
- * @param {Array<{ id: string, link?: string, baseScore: number }>} posts
- * @returns {Map<string, { domain: string|null, rank: number, diversityScore: number, multiplier: number }>}
+ * @param {Array<{ id: string, link?: string, source?: string, sourceFollowers?: number, baseScore: number }>} posts
+ * @returns {Map<string, { domain: string|null, source: string|null, rank: number, diversityScore: number, multiplier: number }>}
  */
-export function balanceSources(posts, config = SATURATION_CONFIG, weights = SOURCE_WEIGHTS) {
-  const byDomain = new Map();
+export function balanceSources(posts, config = SATURATION_CONFIG, weights = SOURCE_WEIGHTS, audience = AUDIENCE_CONFIG) {
+  const bySource = new Map();
   const result = new Map();
 
   for (const post of posts) {
     const domain = domainOf(post.link);
+    const source = post.source || domain;
     // Posts without a parsable link are treated as their own source
-    const key = domain ?? `no-domain-${post.id}`;
-    if (!byDomain.has(key)) byDomain.set(key, []);
-    byDomain.get(key).push({ ...post, domain });
+    const key = source ?? `no-domain-${post.id}`;
+    if (!bySource.has(key)) bySource.set(key, []);
+    bySource.get(key).push({ ...post, domain, source });
   }
 
-  for (const group of byDomain.values()) {
+  for (const group of bySource.values()) {
     group.sort((a, b) => b.baseScore - a.baseScore);
     group.forEach((post, rank) => {
       const weight = (post.domain && weights[post.domain]) ?? 1;
       result.set(post.id, {
         domain: post.domain,
+        source: post.source,
         rank,
         diversityScore: rank === 0 ? 100 : 0,
-        multiplier: saturationMultiplier(rank, config) * weight
+        multiplier: saturationMultiplier(rank, config) * weight * audienceMultiplier(post.sourceFollowers, audience)
       });
     });
   }

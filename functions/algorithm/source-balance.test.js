@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { balanceSources, domainOf, saturationMultiplier } from './source-balance.js'
+import { audienceMultiplier, balanceSources, domainOf, saturationMultiplier } from './source-balance.js'
 
 const config = { freePerDomain: 2, decay: 0.5, floor: 0.2 }
 
@@ -19,6 +19,23 @@ describe('saturationMultiplier', () => {
     expect([0, 1, 2, 3, 4, 5].map((rank) => saturationMultiplier(rank, config))).toEqual([
       1, 1, 0.5, 0.25, 0.2, 0.2,
     ])
+  })
+})
+
+describe('audienceMultiplier', () => {
+  const audience = { pivot: 100_000, perDecade: 0.1, min: 0.8, max: 1.2 }
+
+  it('is neutral when the audience is unknown or at the pivot', () => {
+    expect(audienceMultiplier(undefined, audience)).toBe(1)
+    expect(audienceMultiplier(0, audience)).toBe(1)
+    expect(audienceMultiplier(100_000, audience)).toBe(1)
+  })
+
+  it('moves per 10× followers and stays within bounds', () => {
+    expect(audienceMultiplier(1_000_000, audience)).toBeCloseTo(1.1)
+    expect(audienceMultiplier(10_000, audience)).toBeCloseTo(0.9)
+    expect(audienceMultiplier(1e12, audience)).toBe(1.2)
+    expect(audienceMultiplier(10, audience)).toBe(0.8)
   })
 })
 
@@ -65,5 +82,23 @@ describe('balanceSources', () => {
     )
     expect(balance.get('a')).toMatchObject({ domain: null, rank: 0, diversityScore: 100 })
     expect(balance.get('b')).toMatchObject({ domain: null, rank: 0, diversityScore: 100 })
+  })
+
+  it('groups by source before domain and applies the audience multiplier', () => {
+    const fireship = 'https://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA'
+    const balance = balanceSources(
+      [
+        { id: 'a', link: 'https://www.youtube.com/watch?v=aaaaaaaaaaa', source: fireship, sourceFollowers: 1_000_000, baseScore: 60 },
+        { id: 'b', link: 'https://www.youtube.com/watch?v=bbbbbbbbbbb', source: fireship, sourceFollowers: 1_000_000, baseScore: 50 },
+        { id: 'c', link: 'https://www.youtube.com/watch?v=ccccccccccc', source: 'https://www.youtube.com/channel/other', baseScore: 40 },
+      ],
+      config,
+      {},
+      { pivot: 100_000, perDecade: 0.1, min: 0.8, max: 1.2 },
+    )
+    expect(balance.get('a')).toMatchObject({ source: fireship, rank: 0, diversityScore: 100 })
+    expect(balance.get('a')?.multiplier).toBeCloseTo(1.1)
+    expect(balance.get('b')).toMatchObject({ rank: 1, diversityScore: 0 })
+    expect(balance.get('c')).toMatchObject({ domain: 'youtube.com', rank: 0, diversityScore: 100, multiplier: 1 })
   })
 })
