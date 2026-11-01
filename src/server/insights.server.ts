@@ -152,16 +152,25 @@ export function getVisitorSeries(range: VisitorRange) {
 
 const threadStatsCache = createCache<ThreadStats | null>(1_000)
 
-async function postCreatedAt(postId: string): Promise<Date | null> {
+async function postBasics(postId: string): Promise<{ createdAt: Date; link: URL | null } | null> {
   const { tables, ids } = db()
   try {
     const row = await tables.getRow({
       databaseId: ids.databaseId,
       tableId: ids.posts,
       rowId: postId,
-      queries: [Query.select(['$createdAt'])],
+      queries: [Query.select(['$createdAt', 'link'])],
     })
-    return new Date(String(row.$createdAt))
+    return { createdAt: new Date(String(row.$createdAt)), link: parseLink(row.link) }
+  } catch {
+    return null
+  }
+}
+
+function parseLink(link: unknown): URL | null {
+  if (typeof link !== 'string' || !link) return null
+  try {
+    return new URL(link)
   } catch {
     return null
   }
@@ -170,7 +179,8 @@ async function postCreatedAt(postId: string): Promise<Date | null> {
 /**
  * Views, unique viewers, article opens, shares, a views chart and top sources
  * for one thread. Views and viewers count pageviews only, since article opens
- * from the feed are recorded against the thread's URL too.
+ * from the feed are recorded against the thread's URL too. Outbound clicks are
+ * recorded against the article's URL, so they're read from there.
  */
 export function getThreadStats(postId: string): Promise<ThreadStats | null> {
   return threadStatsCache(
@@ -178,14 +188,15 @@ export function getThreadStats(postId: string): Promise<ThreadStats | null> {
     5 * 60_000,
     async () => {
       if (!getPublicConfig().analyticsPropertyId) return null
-      const createdAt = await postCreatedAt(postId)
-      if (!createdAt) return null
-      const window = threadStatsWindow(createdAt, new Date())
+      const post = await postBasics(postId)
+      if (!post) return null
+      const { link } = post
+      const window = threadStatsWindow(post.createdAt, new Date())
       const page = equal('page', `/threads/${postId}`)
       const pageviews = [page, equal('eventName', 'pageview')]
       const span = { startAt: window.startAt, endAt: window.endAt }
 
-      const [byEvent, byHostname, series, bySource] = await Promise.all([
+      const [byEvent, byHostname, series, bySource, byArticleEvent] = await Promise.all([
         analytics({ ...span, dimension: 'eventName', queries: [page], limit: 50 }),
         analytics({ ...span, dimension: 'hostname', queries: pageviews }),
         analytics({
@@ -195,6 +206,13 @@ export function getThreadStats(postId: string): Promise<ThreadStats | null> {
           queries: pageviews,
         }),
         analytics({ ...span, dimension: 'referrerSource', queries: pageviews, limit: 5 }),
+        link
+          ? analytics({
+              ...span,
+              dimension: 'eventName',
+              queries: [equal('hostname', link.hostname), equal('page', link.pathname)],
+            })
+          : { metrics: [] },
       ])
       return buildThreadStats({
         window,
@@ -202,6 +220,7 @@ export function getThreadStats(postId: string): Promise<ThreadStats | null> {
         byHostname: byHostname.metrics,
         series: series.metrics,
         bySource: bySource.metrics,
+        byArticleEvent: byArticleEvent.metrics,
       })
     },
     null,

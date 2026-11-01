@@ -166,12 +166,13 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(event) => {
-                    if (!gate(event, post)) return
-                    trackPostClick(post.id, post.title, true)
-                    trackArticleOpen(post.id, 'thread')
+                    const allowed = gate(event, post)
+                    trackArticleOpen(post.id, 'thread', !allowed)
+                    if (allowed) trackPostClick(post.id, post.title, true)
                   }}
                   onAuxClick={(event) => {
-                    if (gate(event, post) && event.button === 1) trackArticleOpen(post.id, 'thread')
+                    const allowed = gate(event, post)
+                    if (event.button === 1) trackArticleOpen(post.id, 'thread', !allowed)
                   }}
                   data-kb-action="open"
                 >

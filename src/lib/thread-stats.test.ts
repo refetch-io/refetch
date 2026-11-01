@@ -39,7 +39,6 @@ describe('buildThreadStats', () => {
         { value: 'pageview', events: 42 },
         { value: 'engagement_time', events: 30 },
         { value: THREAD_EVENTS.articleOpen, events: 9 },
-        { value: 'outbound_link', events: 4 },
         { value: THREAD_EVENTS.share, events: 2 },
       ],
       byHostname: [
@@ -57,6 +56,7 @@ describe('buildThreadStats', () => {
         { value: 'reddit.com', visitors: 2 },
         { value: 'duckduckgo.com', visitors: 1 },
       ],
+      byArticleEvent: [{ value: 'outbound_link', events: 4 }],
     })
 
     expect(stats).toMatchObject({ views: 42, visitors: 31, articleOpens: 9, shares: 2, interval: '1d' })
@@ -68,15 +68,32 @@ describe('buildThreadStats', () => {
     ])
   })
 
-  it('falls back to outbound-link events for article opens and zeros when empty', () => {
+  it("falls back to outbound clicks on the article's URL and zeros when empty", () => {
     const stats = buildThreadStats({
       window,
-      byEvent: [{ value: 'outbound_link', events: 3 }],
+      // Outbound clicks only count where the article is the page (not the thread).
+      byEvent: [{ value: 'outbound_link', events: 7 }],
       byHostname: [],
       series: [],
       bySource: [],
+      byArticleEvent: [
+        { value: 'outbound_link', events: 3 },
+        { value: 'pageview', events: 50 },
+      ],
     })
     expect(stats).toMatchObject({ views: 0, visitors: 0, articleOpens: 3, shares: 0, sources: [] })
     expect(stats.points).toHaveLength(3)
+  })
+
+  it('reads zero article opens for text posts', () => {
+    const stats = buildThreadStats({
+      window,
+      byEvent: [],
+      byHostname: [],
+      series: [],
+      bySource: [],
+      byArticleEvent: [],
+    })
+    expect(stats.articleOpens).toBe(0)
   })
 })

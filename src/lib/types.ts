@@ -205,7 +205,7 @@ export interface ThreadStats {
   views: number
   /** Unique people who viewed the thread. */
   visitors: number
-  /** Times the linked article was opened, from a feed or from the thread. */
+  /** Clicks on the linked article, from a feed or from the thread (visitors sent to sign up included). */
   articleOpens: number
   shares: number
   /** Chart buckets: hourly for the first two days, then daily (30 days at most). */

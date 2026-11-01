@@ -87,6 +87,8 @@ export interface ThreadStatsRaw {
   series: Array<MetricRow>
   /** Pageviews by referrer source. */
   bySource: Array<MetricRow>
+  /** Breakdown by event name, filtered to the linked article's own URL (empty for text posts). */
+  byArticleEvent: Array<MetricRow>
 }
 
 const count = (value: number | null | undefined) => Number(value ?? 0) || 0
@@ -96,6 +98,7 @@ export const DIRECT_SOURCE = 'Direct'
 
 export function buildThreadStats(raw: ThreadStatsRaw, sourceLimit = 3): ThreadStats {
   const events = new Map(raw.byEvent.map((row) => [row.value ?? '', count(row.events)]))
+  const outboundClicks = count(raw.byArticleEvent.find((row) => row.value === 'outbound_link')?.events)
   const perBucket = new Map<number, number>()
   for (const row of raw.series) {
     if (!row.date) continue
@@ -106,8 +109,9 @@ export function buildThreadStats(raw: ThreadStatsRaw, sourceLimit = 3): ThreadSt
   return {
     views: events.get('pageview') ?? 0,
     visitors: raw.byHostname.reduce((sum, row) => sum + count(row.visitors), 0),
-    // Before `article_open` existed, only the automatic outbound-link event saw these.
-    articleOpens: Math.max(events.get(THREAD_EVENTS.articleOpen) ?? 0, events.get('outbound_link') ?? 0),
+    // The automatic outbound-link event is recorded against the article's URL and covers
+    // left clicks since tracking began, so it fills in threads from before `article_open`.
+    articleOpens: Math.max(events.get(THREAD_EVENTS.articleOpen) ?? 0, outboundClicks),
     shares: events.get(THREAD_EVENTS.share) ?? 0,
     interval: raw.window.interval,
     points: raw.window.buckets.map((start) => ({

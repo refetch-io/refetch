@@ -24,9 +24,12 @@ function trackThreadEvent(postId: string, name: string, props: Props) {
   trackAppwriteEvent(name, { url: `${window.location.origin}/threads/${postId}`, props })
 }
 
-/** The story's article was opened (clicks and middle clicks, from a feed or the thread). */
-export function trackArticleOpen(postId: string, source: 'feed' | 'thread') {
-  trackThreadEvent(postId, THREAD_EVENTS.articleOpen, { source })
+/**
+ * The story's article link was clicked (clicks and middle clicks, from a feed or the thread).
+ * `gated` marks visitors who were sent to sign up instead, so they still count.
+ */
+export function trackArticleOpen(postId: string, source: 'feed' | 'thread', gated: boolean) {
+  trackThreadEvent(postId, THREAD_EVENTS.articleOpen, { source, gated })
 }
 
 /** The story was shared: link copied, native share sheet, or sent in messages. */
