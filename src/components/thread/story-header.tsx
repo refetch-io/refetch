@@ -39,6 +39,7 @@ import { FollowButton } from '../people/follow-button'
 import { useJoinGate } from '../auth/join-gate'
 import { SaveButton } from '../saved/save-button'
 import { ReportButton } from '../moderation/report-dialog'
+import { StoryMuteMenu } from '../mutes/mute-parts'
 
 export function BackButton() {
   const router = useRouter()
@@ -111,7 +112,18 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
 
           <div className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-footnote text-label-secondary">
             <Favicon domain={post.domain} size={18} />
-            <span className="font-medium text-label">{post.domain ?? 'refetch.io'}</span>
+            {post.domain ? (
+              <Link
+                to="/from/$domain"
+                params={{ domain: post.domain }}
+                title={`More from ${post.domain}`}
+                className="font-medium text-label hover:text-brand-text"
+              >
+                {post.domain}
+              </Link>
+            ) : (
+              <span className="font-medium text-label">refetch.io</span>
+            )}
             <Dot />
             <time dateTime={post.createdAt} title={formatDateTime(post.createdAt)} suppressHydrationWarning>
               {timeAgo(post.createdAt)}
@@ -200,21 +212,20 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
             >
               <Link2 />
             </Button>
+            <StoryMuteMenu post={post} topics={post.topics} size="icon" className="ml-auto" />
             {isOwner && (
               <Button
                 variant="ghost"
                 size="icon"
                 aria-label="Delete story"
                 title="Delete story"
-                className="ml-auto hover:bg-down-tint hover:text-down"
+                className="hover:bg-down-tint hover:text-down"
                 onClick={() => setConfirming(true)}
               >
                 <Trash2 />
               </Button>
             )}
-            {!isOwner && (
-              <ReportButton resourceType="post" resourceId={post.id} size="md" className="ml-auto" />
-            )}
+            {!isOwner && <ReportButton resourceType="post" resourceId={post.id} size="md" />}
           </div>
         </div>
       </div>
@@ -268,7 +279,21 @@ export function StorySummary({ post }: { post: PostDetail }) {
 
 export function StoryRailCard({ post }: { post: PostDetail }) {
   const rows: Array<[string, React.ReactNode]> = [
-    ['Source', post.domain ?? 'refetch.io'],
+    [
+      'Source',
+      post.domain ? (
+        <Link
+          key="source"
+          to="/from/$domain"
+          params={{ domain: post.domain }}
+          className="hover:text-brand-text"
+        >
+          {post.domain}
+        </Link>
+      ) : (
+        'refetch.io'
+      ),
+    ],
     [
       'Posted',
       <span key="posted" suppressHydrationWarning>

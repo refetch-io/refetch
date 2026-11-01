@@ -12,7 +12,8 @@
  *   APPWRITE_POSTS_COLLECTION_ID, APPWRITE_COMMENTS_COLLECTION_ID, APPWRITE_VOTES_COLLECTION_ID,
  *   APPWRITE_KEYS_COLLECTION_ID, APPWRITE_DAILY_TOPICS_COLLECTION_ID, APPWRITE_TOPICS_COLLECTION_ID,
  *   APPWRITE_CHANNELS_COLLECTION_ID, APPWRITE_CHANNEL_MEMBERS_COLLECTION_ID,
- *   APPWRITE_NOTIFICATIONS_COLLECTION_ID, APPWRITE_SAVES_COLLECTION_ID, APPWRITE_REPORTS_COLLECTION_ID
+ *   APPWRITE_NOTIFICATIONS_COLLECTION_ID, APPWRITE_SAVES_COLLECTION_ID, APPWRITE_REPORTS_COLLECTION_ID,
+ *   APPWRITE_MUTES_COLLECTION_ID
  *
  * Channels are seeded from scripts/channels.json (name, sources, keywords…);
  * member counts are never overwritten. Channel icons are PNGs in scripts/channel-icons/<id>.png,
@@ -77,6 +78,7 @@ const COLLECTION_IDS = {
   notifications: process.env.APPWRITE_NOTIFICATIONS_COLLECTION_ID || 'notifications',
   saves: process.env.APPWRITE_SAVES_COLLECTION_ID || 'saves',
   reports: process.env.APPWRITE_REPORTS_COLLECTION_ID || 'reports',
+  mutes: process.env.APPWRITE_MUTES_COLLECTION_ID || 'mutes',
 };
 
 /**
@@ -187,6 +189,8 @@ function buildCollectionDefinitions() {
         },
         { key: 'index_title', type: 'fulltext', columns: ['title'], orders: undefined, lengths: [191] },
         { key: 'index_channel', type: 'key', columns: ['channel'], orders: ['ASC'] },
+        // Duplicate checks and domain pages (`/from/github.com`) match links by prefix.
+        { key: 'index_link', type: 'key', columns: ['link'], orders: ['ASC'], lengths: [191] },
       ],
     },
     {
@@ -205,6 +209,8 @@ function buildCollectionDefinitions() {
         { key: 'countUp', type: 'integer', required: false, array: false, default: null },
         { key: 'countDown', type: 'integer', required: false, array: false, default: null },
         { key: 'editedAt', type: 'datetime', required: false, array: false, default: null },
+        // User IDs of the people @mentioned (the text keeps their names).
+        { key: 'mentions', type: 'string', size: 64, required: false, array: true, default: null },
       ],
       indexes: [
         { key: 'index_1', type: 'key', columns: ['postId'], orders: ['ASC'] },
@@ -347,11 +353,19 @@ function buildCollectionDefinitions() {
         { key: 'verified', type: 'string', size: 16, required: false, array: false, default: null },
         // Channel ID of the organization a verified person is affiliated with.
         { key: 'org', type: 'string', size: 64, required: false, array: false, default: null },
+        // Email digest: 'off' | 'daily' | 'weekly'. Empty means not chosen yet (weekly, unless
+        // emailNotifications is off); the Digest function writes the choice on its first pass.
+        { key: 'digest', type: 'string', size: 16, required: false, array: false, default: null },
+        // When the next digest is due (8 AM in `timezone`); empty until the first scheduling pass.
+        { key: 'digestNextAt', type: 'datetime', required: false, array: false, default: null },
+        // IANA time zone from the browser at sign-in, or picked in Settings.
+        { key: 'timezone', type: 'string', size: 64, required: false, array: false, default: null },
       ],
       indexes: [
         { key: 'index_name', type: 'fulltext', columns: ['name'], orders: undefined },
         { key: 'index_allowMessages', type: 'key', columns: ['allowMessages'], orders: ['ASC'] },
         { key: 'index_verified', type: 'key', columns: ['verified'], orders: ['ASC'] },
+        { key: 'index_digest', type: 'key', columns: ['digest', 'digestNextAt'], orders: ['ASC', 'ASC'] },
       ],
     },
     {
@@ -472,7 +486,7 @@ function buildCollectionDefinitions() {
       rowSecurity: false,
       attributes: [
         { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
-        // 'comment' | 'reply' | 'follow' | 'milestone'
+        // 'comment' | 'reply' | 'mention' | 'follow' | 'milestone'
         { key: 'type', type: 'string', size: 16, required: true, array: false, default: null },
         { key: 'actorId', type: 'string', size: 64, required: false, array: false, default: null },
         { key: 'actorName', type: 'string', size: 128, required: false, array: false, default: null },
@@ -530,6 +544,28 @@ function buildCollectionDefinitions() {
         },
         { key: 'index_status', type: 'key', columns: ['status'], orders: ['ASC'] },
         { key: 'index_resourceId', type: 'key', columns: ['resourceId'], orders: ['ASC'] },
+      ],
+    },
+    // Channels, topics, sites and title words people hid from their feeds and digests.
+    {
+      id: COLLECTION_IDS.mutes,
+      name: 'Mutes',
+      permissions: SERVER_ONLY_PERMS,
+      rowSecurity: false,
+      attributes: [
+        { key: 'userId', type: 'string', size: 64, required: true, array: false, default: null },
+        // 'channel' | 'topic' | 'domain' | 'keyword'
+        { key: 'kind', type: 'string', size: 16, required: true, array: false, default: null },
+        // Channel ID, topic key, domain or lowercase keyword (100 keeps the unique index in budget).
+        { key: 'value', type: 'string', size: 100, required: true, array: false, default: null },
+      ],
+      indexes: [
+        {
+          key: 'uniq_mute',
+          type: 'unique',
+          columns: ['userId', 'kind', 'value'],
+          orders: ['ASC', 'ASC', 'ASC'],
+        },
       ],
     },
   ];
@@ -669,6 +705,19 @@ function refetchFunctionDefinitions() {
       scopes: ['databases.read', 'tables.read', 'rows.read', 'rows.write'],
       schedule: '15 */2 * * *',
       execute: [], // scheduled only; nobody can trigger it from outside
+    },
+    {
+      // Calls the site's POST /api/digest, which sends the digests that are due.
+      // Needs SITE_URL and DIGEST_SECRET variables (set in the Console).
+      folder: 'digest',
+      name: 'Digest',
+      runtime: Runtime.Node22,
+      timeout: 900,
+      entrypoint: 'index.js',
+      commands: '',
+      scopes: [],
+      schedule: '0 * * * *',
+      execute: [], // scheduled only
     },
     {
       folder: 'topic-stats',
@@ -970,6 +1019,7 @@ export async function setupAppwrite() {
   log(`  APPWRITE_NOTIFICATIONS_COLLECTION_ID=${COLLECTION_IDS.notifications}`, 'info');
   log(`  APPWRITE_SAVES_COLLECTION_ID=${COLLECTION_IDS.saves}`, 'info');
   log(`  APPWRITE_REPORTS_COLLECTION_ID=${COLLECTION_IDS.reports}`, 'info');
+  log(`  APPWRITE_MUTES_COLLECTION_ID=${COLLECTION_IDS.mutes}`, 'info');
 }
 
 const isMain =

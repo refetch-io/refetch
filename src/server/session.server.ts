@@ -31,6 +31,20 @@ function sign(payload: string) {
   return createHmac('sha256', signingKey()).update(payload).digest('base64url')
 }
 
+/**
+ * A signature for links that act without signing in (email unsubscribe).
+ * `purpose` keeps signatures for one use from working for another.
+ */
+export function signLink(purpose: string, value: string): string {
+  return sign(`link:${purpose}:${value}`).slice(0, 32)
+}
+
+export function verifyLink(purpose: string, value: string, signature: string): boolean {
+  const expected = Buffer.from(signLink(purpose, value))
+  const given = Buffer.from(signature)
+  return expected.length === given.length && timingSafeEqual(expected, given)
+}
+
 function cookieOptions() {
   return {
     httpOnly: true,

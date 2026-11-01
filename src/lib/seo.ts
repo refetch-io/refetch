@@ -1,4 +1,5 @@
 import { FEED_PAGE_SIZE, LINKS } from './constants'
+import { type FeedSource, feedLinks } from './feeds'
 
 export const SITE_NAME = 'Refetch'
 export const SITE_URL = 'https://refetch.io'
@@ -298,6 +299,8 @@ export function feedHead({
   name,
   stories,
   home,
+  feed,
+  noindex,
 }: {
   siteUrl: string
   path: string
@@ -307,6 +310,9 @@ export function feedHead({
   name: string
   stories: Array<{ id: string; title: string }>
   home?: boolean
+  /** The list's RSS/Atom feed, advertised to feed readers. */
+  feed?: { source: FeedSource; title: string }
+  noindex?: boolean
 }) {
   const base = `${siteUrl}${path}`
   const url = page > 1 ? `${base}?page=${page}` : base
@@ -329,8 +335,8 @@ export function feedHead({
     )
   else if (page === 1) scripts.unshift(siteIdentity(siteUrl))
   return {
-    meta: seo({ title: page > 1 ? `${title} (page ${page})` : title, description, url }),
-    links: [{ rel: 'canonical', href: url }],
+    meta: seo({ title: page > 1 ? `${title} (page ${page})` : title, description, url, noindex }),
+    links: [{ rel: 'canonical', href: url }, ...(feed ? feedLinks(siteUrl, feed.source, feed.title) : [])],
     scripts,
   }
 }

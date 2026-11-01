@@ -1,0 +1,12 @@
+{
+  "name": "digest-function",
+  "version": "1.0.0",
+  "description": "Hourly trigger that has the Refetch site send the daily and weekly email digests that are due",
+  "main": "index.js",
+  "type": "module",
+  "keywords": ["appwrite", "function", "email", "digest"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

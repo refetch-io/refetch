@@ -23,7 +23,7 @@ const HOME: NavItem = {
   to: '/',
   label: 'Home',
   icon: House,
-  isActive: (pathname) => FEED_PATHS.includes(pathname),
+  isActive: (pathname) => FEED_PATHS.includes(pathname) || pathname.startsWith('/past'),
 }
 const CHANNELS: NavItem = {
   to: '/channels',

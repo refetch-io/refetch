@@ -16,6 +16,7 @@ import bundled from '../../scripts/channels.json'
 import { POST_LIST_FIELDS, Query, db, getUserVotes, listPostRows, toPost, type Row } from './db.server'
 import { getBucketIds, getPublicConfig } from './env.server'
 import { getFollowedIds } from './profiles.server'
+import { withoutMuted } from './mutes.server'
 
 const HOUR = 60 * 60 * 1000
 const QUALITY = { maxSpamScore: 70, minRelevancyScore: 30 }
@@ -278,7 +279,7 @@ export async function leaveChannel(user: SessionUser, channelId: string): Promis
 /* ─────────────────────────────────── Feeds ─────────────────────────────────── */
 
 /** Stories tagged with any of the channels, or whose AI topics match them. */
-function channelFilter(channels: Array<Channel>) {
+export function channelFilter(channels: Array<Channel>) {
   const keywords = [...new Set(channels.flatMap((channel) => channel.keywords))]
   const byTag = Query.equal(
     'channel',
@@ -287,12 +288,16 @@ function channelFilter(channels: Array<Channel>) {
   return keywords.length > 0 ? Query.or([byTag, Query.containsAny('topics', keywords)]) : byTag
 }
 
-/** A page of on-topic, enhanced stories matching `filters`, with votes and channels. */
+/**
+ * A page of on-topic, enhanced stories matching `filters`, with votes and
+ * channels. With `muted`, the viewer's muted stories are left out.
+ */
 export async function queryPosts(
   filters: Array<string>,
   order: Array<string>,
   page: number,
   userId?: string,
+  { muted = false }: { muted?: boolean } = {},
 ): Promise<FeedPage> {
   const all = await listPostRows([
     ...filters,
@@ -316,7 +321,11 @@ export async function queryPosts(
     rows,
     rows.map((row) => toPost(row, votes?.get(row.$id) ?? null)),
   )
-  return { posts, page, hasMore: all.length > FEED_PAGE_SIZE && page < FEED_MAX_PAGES }
+  return {
+    posts: muted ? (await withoutMuted(userId, rows, posts)).posts : posts,
+    page,
+    hasMore: all.length > FEED_PAGE_SIZE && page < FEED_MAX_PAGES,
+  }
 }
 
 export async function listChannelFeed(
@@ -362,6 +371,7 @@ export async function listFollowingFeed(
     [Query.orderDesc('score'), Query.orderDesc('$createdAt')],
     page,
     user.id,
+    { muted: true },
   )
   return { ...feed, joined: total }
 }

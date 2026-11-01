@@ -3,12 +3,15 @@ import { notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import type { ActionResult, Comment, FeedPage, PostDetail, Thread, VoteState } from '@/lib/types'
 import { FEED_MAX_PAGES, LIMITS } from '@/lib/constants'
+import { MAX_MENTIONS } from '@/lib/mentions'
+import { isPastDay } from '@/lib/past'
 import { isHttpUrl, isValidId } from '@/lib/url'
 import { createComment, editComment, removeComment } from '@/server/comments.server'
 import {
   createPost,
   getPostById,
   getThread,
+  listDayFeed,
   listFeed,
   listUserPosts,
   removePost,
@@ -28,6 +31,15 @@ export const fetchFeed = createServerFn({ method: 'GET' })
   .handler(async ({ data }): Promise<FeedPage> => {
     const user = await getSessionUser()
     return listFeed(data.sort, data.page, user?.id)
+  })
+
+/** A past front page (`/past/2026-10-31`). */
+export const fetchDayFeed = createServerFn({ method: 'GET' })
+  .validator(z.object({ day: z.string().max(10), page }))
+  .handler(async ({ data }): Promise<FeedPage> => {
+    if (!isPastDay(data.day)) throw notFound()
+    const user = await getSessionUser()
+    return listDayFeed(data.day, data.page, user?.id)
   })
 
 export const fetchMyPosts = createServerFn({ method: 'GET' })
@@ -78,6 +90,10 @@ export const addComment = createServerFn({ method: 'POST' })
       postId: id,
       content: z.string().trim().min(1, 'Write something first.').max(LIMITS.commentMax),
       replyId: id.optional(),
+      mentions: z
+        .array(id)
+        .max(MAX_MENTIONS * 2)
+        .optional(),
     }),
   )
   .handler(async ({ data }): Promise<ActionResult<Comment>> => {
@@ -91,12 +107,16 @@ export const updateComment = createServerFn({ method: 'POST' })
     z.object({
       id,
       content: z.string().trim().min(1, 'Write something first.').max(LIMITS.commentMax),
+      mentions: z
+        .array(id)
+        .max(MAX_MENTIONS * 2)
+        .optional(),
     }),
   )
   .handler(async ({ data }): Promise<ActionResult<Comment>> => {
     const user = await getSessionUser({ fresh: true })
     if (!user) return UNAUTHORIZED
-    return editComment(user, data.id, data.content)
+    return editComment(user, data.id, data.content, data.mentions)
   })
 
 export const deleteComment = createServerFn({ method: 'POST' })

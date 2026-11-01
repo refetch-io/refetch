@@ -16,10 +16,19 @@ export type SignedIn = ActionResult<{ user: SessionUser; isNew: boolean }>
 const OAUTH_STATE_KEY = 'refetch:oauth-state'
 const OAUTH_REDIRECT_KEY = 'refetch:oauth-redirect'
 
+/** The browser's IANA time zone, so digests arrive in the morning. */
+function browserTimeZone(): string | undefined {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined
+  } catch {
+    return undefined
+  }
+}
+
 async function handOff(config: BrowserConfig): Promise<SignedIn> {
   const { account } = await appwriteBrowser(config)
   const { jwt } = await account.createJWT()
-  return establishSession({ data: { jwt } })
+  return establishSession({ data: { jwt, timezone: browserTimeZone() } })
 }
 
 /** Start a fresh Appwrite session, replacing one left over in this browser. */

@@ -568,6 +568,14 @@
   & a:hover {
     text-decoration-color: currentColor;
   }
+  /* @mentions read as names, not links, until hovered. */
+  & a.mention {
+    font-weight: 600;
+    text-decoration-color: transparent;
+  }
+  & a.mention:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 @keyframes flash {

@@ -34,6 +34,7 @@ export const Route = createFileRoute('/_app/')({
         'Discover the latest technology news, startup updates, and programming discussions on Refetch. An open-source community-driven platform for tech enthusiasts.',
       name: 'Top tech stories on Refetch',
       stories: loaderData?.stories ?? [],
+      feed: { source: { kind: 'top' }, title: 'Refetch: Top stories' },
       home: true,
     }),
   pendingComponent: () => <FeedPending title={TITLE} ranked />,

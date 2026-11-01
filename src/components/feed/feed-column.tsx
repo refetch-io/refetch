@@ -62,6 +62,8 @@ const FEED_TABS = [
   { to: '/', label: 'Top' },
   { to: '/new', label: 'New' },
   { to: '/show', label: 'Show' },
+  // Phones fit four tabs; Past shows there only while open (search reaches it too).
+  { to: '/past', label: 'Past', compact: true },
   { to: '/following', label: 'Following', requiresAuth: true },
 ] as const
 
@@ -76,7 +78,9 @@ export function FeedTabs({ title }: { title: string }) {
       tabs={FEED_TABS.map((tab) => ({
         key: tab.to,
         label: tab.label,
-        active: pathname === tab.to,
+        // Past covers every day's page (`/past/2026-10-31`).
+        active: tab.to === '/past' ? pathname.startsWith('/past') : pathname === tab.to,
+        hideOnPhones: 'compact' in tab && !pathname.startsWith(tab.to),
         link:
           'requiresAuth' in tab && !user
             ? linkOptions({ to: '/signin', search: { redirect: tab.to } })
@@ -91,6 +95,8 @@ export interface ColumnTab {
   label: string
   /** Shown next to the label from the `sm` breakpoint up. */
   count?: string
+  /** Leave the tab out below the `sm` breakpoint. */
+  hideOnPhones?: boolean
   active: boolean
   link: LinkOptions
 }
@@ -120,6 +126,7 @@ export function ColumnTabs({
             className={cn(
               'relative flex h-[52px] min-w-0 flex-1 items-center justify-center gap-1.5 px-1 text-subhead transition-colors first:rounded-tl-card last:rounded-tr-card hover:bg-fill-secondary/70',
               tab.active ? 'font-bold text-label' : 'font-medium text-label-secondary hover:text-label',
+              tab.hideOnPhones && 'max-sm:hidden',
             )}
           >
             <span className="truncate">{tab.label}</span>

@@ -3,6 +3,7 @@ import { Account, Client } from 'node-appwrite'
 import { z } from 'zod'
 import type { ActionResult, SessionUser } from '@/lib/types'
 import { getModeratorIds, getPublicConfig } from '@/server/env.server'
+import { rememberTimeZone } from '@/server/email-settings.server'
 import { isNewMember, syncProfile } from '@/server/profiles.server'
 import { MODERATOR_LABELS, clearSessionCookie, getSessionUser, issueSession } from '@/server/session.server'
 
@@ -15,7 +16,7 @@ export const fetchSession = createServerFn({ method: 'GET' }).handler(async () =
  * with Appwrite, then issue the server session cookie.
  */
 export const establishSession = createServerFn({ method: 'POST' })
-  .validator(z.object({ jwt: z.string().min(16).max(4096) }))
+  .validator(z.object({ jwt: z.string().min(16).max(4096), timezone: z.string().max(64).optional() }))
   .handler(async ({ data }): Promise<ActionResult<{ user: SessionUser; isNew: boolean }>> => {
     const { appwriteEndpoint, appwriteProjectId } = getPublicConfig()
     let account
@@ -28,6 +29,7 @@ export const establishSession = createServerFn({ method: 'POST' })
     const user: SessionUser = { id: account.$id, name: account.name, email: account.email }
     const isNew = await isNewMember(user.id)
     await syncProfile(user, account.registration)
+    await rememberTimeZone(user.id, data.timezone)
     const mod = account.labels.some((label) => MODERATOR_LABELS.includes(label))
     issueSession(user, { mod })
     if (mod || getModeratorIds().has(user.id)) user.moderator = true

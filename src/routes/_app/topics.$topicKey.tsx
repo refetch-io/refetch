@@ -3,6 +3,7 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Hash } from 'lucide-react'
 import { z } from 'zod'
 import { FEED_MAX_PAGES, FEED_PAGE_SIZE } from '@/lib/constants'
+import { feedLinks } from '@/lib/feeds'
 import { configQuery, topicFeedQuery } from '@/lib/queries'
 import { breadcrumbs, clampDescription, collectionPage, seo } from '@/lib/seo'
 import type { Topic, TopicAbout, TopicSort } from '@/lib/types'
@@ -13,6 +14,8 @@ import { EmptyState } from '@/components/ui/misc'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { FeedList, FeedSkeleton } from '@/components/feed/feed-view'
 import { FeedLayout } from '@/components/feed/feed-layout'
+import { RssButton } from '@/components/feed/rss-button'
+import { MuteButton } from '@/components/mutes/mute-parts'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { ChannelIcon, JoinButton, memberLabel, useChannels } from '@/components/channels/channel-parts'
 import { TopicChips } from '@/components/topics/topic-parts'
@@ -57,7 +60,10 @@ export const Route = createFileRoute('/_app/topics/$topicKey')({
     )
     return {
       meta: seo({ title, description, url, noindex: articleCount < MIN_INDEXED_STORIES }),
-      links: [{ rel: 'canonical', href: url }],
+      links: [
+        { rel: 'canonical', href: url },
+        ...feedLinks(siteUrl, { kind: 'topic', key: params.topicKey }, `Refetch: ${label}`),
+      ],
       scripts: [
         collectionPage({
           siteUrl,
@@ -112,13 +118,14 @@ function TopicPage() {
     <Card className="mb-5 animate-rise-in overflow-hidden sm:mb-6">
       <div className="h-16 bg-[linear-gradient(120deg,var(--brand),color-mix(in_oklab,var(--brand)_30%,transparent))] opacity-90 sm:h-20" />
       <div className="px-4 pb-4 sm:px-6 sm:pb-5">
-        <div className="-mt-10 flex items-end">
+        <div className="-mt-10 flex items-end justify-between gap-3">
           {/* Surface frame lifts the icon off the banner, like a channel's. */}
           <span className="relative rounded-[23px] bg-surface p-1 shadow-card">
             <span className="grid size-[68px] place-items-center rounded-[19px] bg-brand-tint text-brand-text">
               <Hash className="size-8" strokeWidth={2.4} aria-hidden />
             </span>
           </span>
+          <MuteButton kind="topic" value={topic.key} label={topic.label} size="md" className="mb-1" />
         </div>
         <h1 className="mt-4 text-title-1 text-label">{topic.label}</h1>
         <p className="mt-1 max-w-2xl text-subhead text-pretty text-label-secondary">
@@ -130,22 +137,25 @@ function TopicPage() {
               ? `${compactNumber(topic.articleCount)} ${topic.articleCount === 1 ? 'story' : 'stories'}`
               : 'New topic'}
           </p>
-          <SegmentedControl<TopicSort>
-            aria-label="Sort stories"
-            size="sm"
-            className="w-44"
-            value={sort}
-            onValueChange={(value) =>
-              navigate({
-                search: { sort: value === 'new' ? undefined : value, page: undefined },
-                resetScroll: false,
-              })
-            }
-            options={[
-              { value: 'new', label: 'New' },
-              { value: 'top', label: 'Top' },
-            ]}
-          />
+          <div className="flex items-center gap-1.5">
+            <RssButton source={{ kind: 'topic', key: topic.key }} name={topic.label} />
+            <SegmentedControl<TopicSort>
+              aria-label="Sort stories"
+              size="sm"
+              className="w-44"
+              value={sort}
+              onValueChange={(value) =>
+                navigate({
+                  search: { sort: value === 'new' ? undefined : value, page: undefined },
+                  resetScroll: false,
+                })
+              }
+              options={[
+                { value: 'new', label: 'New' },
+                { value: 'top', label: 'Top' },
+              ]}
+            />
+          </div>
         </div>
         {about.related.length > 0 && (
           // The rail carries these on wide screens.

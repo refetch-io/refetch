@@ -33,6 +33,7 @@ export const Route = createFileRoute('/_app/new')({
       description: 'Latest technology news and discussions sorted by newest first.',
       name: 'Newest tech stories on Refetch',
       stories: loaderData?.stories ?? [],
+      feed: { source: { kind: 'new' }, title: 'Refetch: Newest' },
     }),
   pendingComponent: () => <FeedPending title={TITLE} />,
   component: NewPage,

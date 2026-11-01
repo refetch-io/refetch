@@ -1,4 +1,7 @@
 import * as React from 'react'
+import { Link } from '@tanstack/react-router'
+import { splitMentions } from '@/lib/mentions'
+import type { PersonSummary } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
 const URL_PATTERN = /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi
@@ -33,11 +36,8 @@ function prettyUrl(url: string) {
   return display.length > 64 ? `${display.slice(0, 61)}…` : display
 }
 
-/**
- * Renders user-written text with URLs and emails turned into links.
- * Everything else stays plain text — React escapes it, so no HTML injection.
- */
-export function RichText({ text, className }: { text: string; className?: string }) {
+/** URLs and emails in a run of text, as links. */
+function linkify(text: string, key: string): Array<React.ReactNode> {
   const nodes: Array<React.ReactNode> = []
   let cursor = 0
 
@@ -50,7 +50,13 @@ export function RichText({ text, className }: { text: string; className?: string
       value = trimUrl(value)
       if (isSafeHttpUrl(value)) {
         nodes.push(
-          <a key={index} href={value} target="_blank" rel="noopener noreferrer nofollow ugc" title={value}>
+          <a
+            key={`${key}-${index}`}
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer nofollow ugc"
+            title={value}
+          >
             {prettyUrl(value)}
           </a>,
         )
@@ -59,7 +65,7 @@ export function RichText({ text, className }: { text: string; className?: string
       }
     } else {
       nodes.push(
-        <a key={index} href={`mailto:${value}`}>
+        <a key={`${key}-${index}`} href={`mailto:${value}`}>
           {value}
         </a>,
       )
@@ -67,6 +73,33 @@ export function RichText({ text, className }: { text: string; className?: string
     cursor = index + value.length
   }
   if (cursor < text.length) nodes.push(text.slice(cursor))
+  return nodes
+}
+
+/**
+ * Renders user-written text with URLs and emails turned into links, and
+ * `@Name` linked to the people in `mentions`. Everything else stays plain
+ * text — React escapes it, so no HTML injection.
+ */
+export function RichText({
+  text,
+  mentions,
+  className,
+}: {
+  text: string
+  mentions?: ReadonlyArray<PersonSummary>
+  className?: string
+}) {
+  const segments = mentions?.length ? splitMentions(text, mentions) : [{ text }]
+  const nodes = segments.flatMap((segment, i) =>
+    'person' in segment ? (
+      <Link key={`m${i}`} to="/users/$userId" params={{ userId: segment.person.id }} className="mention">
+        {segment.text}
+      </Link>
+    ) : (
+      linkify(segment.text, `t${i}`)
+    ),
+  )
 
   return <div className={cn('prose-comment break-words whitespace-pre-wrap', className)}>{nodes}</div>
 }

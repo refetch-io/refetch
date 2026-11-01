@@ -66,6 +66,7 @@ export function getTableIds() {
     notifications: read('APPWRITE_NOTIFICATIONS_COLLECTION_ID') ?? 'notifications',
     saves: read('APPWRITE_SAVES_COLLECTION_ID') ?? 'saves',
     reports: read('APPWRITE_REPORTS_COLLECTION_ID') ?? 'reports',
+    mutes: read('APPWRITE_MUTES_COLLECTION_ID') ?? 'mutes',
   }
 }
 
@@ -95,6 +96,14 @@ export function getModeratorIds(): Set<string> {
       .map((id) => id.trim())
       .filter(Boolean),
   )
+}
+
+/**
+ * Shared secret the hourly Digest function sends to `POST /api/digest`.
+ * Unset disables the endpoint (digests don't go out).
+ */
+export function getDigestSecret(): string | null {
+  return read('DIGEST_SECRET') ?? null
 }
 
 export const isProduction = process.env.NODE_ENV === 'production'

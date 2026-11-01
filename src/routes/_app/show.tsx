@@ -33,6 +33,7 @@ export const Route = createFileRoute('/_app/show')({
       description: 'Show and tell posts from the Refetch community.',
       name: 'Show Refetch',
       stories: loaderData?.stories ?? [],
+      feed: { source: { kind: 'show' }, title: 'Refetch: Show Refetch' },
     }),
   pendingComponent: () => <FeedPending title={TITLE} ranked />,
   component: ShowPage,

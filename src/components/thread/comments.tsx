@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import * as React from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useServerFn } from '@tanstack/react-start'
-import { ChevronDown, MessageCircle, Pencil, Reply, Trash2 } from 'lucide-react'
+import { ArrowDown, ChevronDown, MessageCircle, Pencil, Reply, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { deleteComment, updateComment } from '@/api/content'
 import { buildCommentTree, countDescendants, type CommentNode, type CommentSort } from '@/lib/comments'
@@ -24,6 +24,7 @@ import { PersonHoverCard } from '../people/person-hover-card'
 import { RichText } from '../rich-text'
 import { VoteControl } from '../vote-control'
 import { ReportButton } from '../moderation/report-dialog'
+import { useMentions } from './mention-menu'
 
 const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
@@ -35,10 +36,34 @@ interface CommentsSectionProps {
   thread: Thread
   queryKey: ReadonlyArray<unknown>
   highlightId: string | null
+  /** Comments posted since your last visit. */
+  newIds: ReadonlySet<string>
+  /** Called with the new comment scrolled to, so the page can flash it. */
+  onJump: (commentId: string) => void
   onReply: (comment: CommentNode) => void
 }
 
-export function CommentsSection({ thread, queryKey, highlightId, onReply }: CommentsSectionProps) {
+/**
+ * Scroll to the next new comment below the middle of the screen, wrapping to
+ * the first. Collapsed replies aren't in the page, so they're skipped.
+ */
+function scrollToNextNew(): string | null {
+  const nodes = [...document.querySelectorAll<HTMLElement>('[data-new-comment]')]
+  if (nodes.length === 0) return null
+  const middle = window.innerHeight / 2
+  const next = nodes.find((node) => node.getBoundingClientRect().top > middle + 1) ?? nodes[0]
+  next.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  return next.dataset.newComment ?? null
+}
+
+export function CommentsSection({
+  thread,
+  queryKey,
+  highlightId,
+  newIds,
+  onJump,
+  onReply,
+}: CommentsSectionProps) {
   const [sort, setSort] = React.useState<CommentSort>('oldest')
   const [pendingDelete, setPendingDelete] = React.useState<CommentNode | null>(null)
   const [deleting, setDeleting] = React.useState(false)
@@ -101,6 +126,23 @@ export function CommentsSection({ thread, queryKey, highlightId, onReply }: Comm
             {thread.comments.length}
           </span>
         </h2>
+        {newIds.size > 0 && (
+          // `n` presses this too (it's the page's "next").
+          <Button
+            variant="tinted"
+            size="xs"
+            data-kb-page="next"
+            className="mr-auto"
+            title="Jump to the next new comment (n)"
+            onClick={() => {
+              const id = scrollToNextNew()
+              if (id) onJump(id)
+            }}
+          >
+            <ArrowDown />
+            {newIds.size} new
+          </Button>
+        )}
         {thread.comments.length > 1 && (
           <SegmentedControl
             aria-label="Sort comments"
@@ -130,6 +172,7 @@ export function CommentsSection({ thread, queryKey, highlightId, onReply }: Comm
                 opUserId={thread.post.userId}
                 currentUserId={user?.id ?? null}
                 highlightId={highlightId}
+                newIds={newIds}
                 onReply={onReply}
                 onDelete={setPendingDelete}
                 onEdited={onEdited}
@@ -158,6 +201,7 @@ interface CommentItemProps {
   opUserId: string
   currentUserId: string | null
   highlightId: string | null
+  newIds: ReadonlySet<string>
   onReply: (comment: CommentNode) => void
   onDelete: (comment: CommentNode) => void
   onEdited: (comment: Comment) => void
@@ -182,6 +226,7 @@ function CommentItem({
   opUserId,
   currentUserId,
   highlightId,
+  newIds,
   onReply,
   onDelete,
   onEdited,
@@ -193,9 +238,15 @@ function CommentItem({
   const hiddenCount = collapsed ? countDescendants(node) : 0
   const isBot = isBotUser(node.userId)
   const isRoot = node.depth === 0
+  const isNew = newIds.has(node.id)
 
   return (
-    <article id={`comment-${node.id}`} data-kb-item className={cn('scroll-mt-24', isRoot ? 'py-4' : 'pt-4')}>
+    <article
+      id={`comment-${node.id}`}
+      data-kb-item
+      data-new-comment={isNew ? node.id : undefined}
+      className={cn('scroll-mt-24', isRoot ? 'py-4' : 'pt-4')}
+    >
       <div className="flex gap-3">
         <Link
           to="/users/$userId"
@@ -247,6 +298,11 @@ function CommentItem({
                   (edited)
                 </span>
               )}
+              {isNew && (
+                <Badge variant="solid" size="xs" title="Posted since your last visit">
+                  New
+                </Badge>
+              )}
             </header>
             {editing ? (
               <CommentEditor
@@ -258,7 +314,11 @@ function CommentItem({
                 }}
               />
             ) : (
-              <RichText text={node.content} className="mt-1 text-subhead leading-[1.55] text-label" />
+              <RichText
+                text={node.content}
+                mentions={node.mentions}
+                className="mt-1 text-subhead leading-[1.55] text-label"
+              />
             )}
           </div>
 
@@ -316,6 +376,7 @@ function CommentItem({
                   opUserId={opUserId}
                   currentUserId={currentUserId}
                   highlightId={highlightId}
+                  newIds={newIds}
                   onReply={onReply}
                   onDelete={onDelete}
                   onEdited={onEdited}
@@ -339,8 +400,10 @@ function CommentEditor({
   onSaved: (comment: Comment) => void
 }) {
   const save = useServerFn(updateComment)
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const [text, setText] = React.useState(comment.content)
   const [saving, setSaving] = React.useState(false)
+  const mentions = useMentions({ text, setText, textareaRef })
   const unchanged = text.trim() === comment.content.trim()
 
   const submit = async () => {
@@ -348,7 +411,9 @@ function CommentEditor({
     if (unchanged) return onCancel()
     setSaving(true)
     try {
-      const result = await save({ data: { id: comment.id, content: text } })
+      const result = await save({
+        data: { id: comment.id, content: text, mentions: mentions.mentionIds(text) },
+      })
       if (!result.ok) {
         toast.error(result.error)
         return
@@ -364,21 +429,28 @@ function CommentEditor({
 
   return (
     <form
-      className="mt-2"
+      className="relative mt-2"
       onSubmit={(event) => {
         event.preventDefault()
         void submit()
       }}
     >
       <Textarea
+        ref={textareaRef}
         aria-label="Edit your comment"
         autoFocus
         rows={3}
         maxRows={12}
         maxLength={LIMITS.commentMax}
         value={text}
-        onChange={(event) => setText(event.target.value)}
+        {...mentions.textareaProps}
+        onChange={(event) => {
+          setText(event.target.value)
+          mentions.sync()
+        }}
+        onSelect={mentions.sync}
         onKeyDown={(event) => {
+          if (mentions.onKeyDown(event)) return
           if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
             void submit()
@@ -387,6 +459,7 @@ function CommentEditor({
         }}
         className="py-2.5 text-subhead"
       />
+      {mentions.menu('below')}
       <div className="mt-2 flex justify-end gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
           Cancel

@@ -3,12 +3,17 @@ import { z } from 'zod'
 import type { ActionResult } from '@/lib/types'
 import type { NotificationPage } from '@/lib/notifications'
 import { isValidId } from '@/lib/url'
+import { DIGEST_FREQUENCIES, type DigestFrequency, type EmailSettings, isTimeZone } from '@/lib/digest'
+import {
+  getEmailSettings,
+  unsubscribe,
+  updateEmailSettings,
+  verifyUnsubscribe,
+} from '@/server/email-settings.server'
 import {
   countUnreadNotifications,
-  getEmailNotifications,
   listNotifications,
   markNotificationsRead,
-  setEmailNotifications,
 } from '@/server/notifications.server'
 import { getSessionUser } from '@/server/session.server'
 
@@ -39,16 +44,55 @@ export const readNotifications = createServerFn({ method: 'POST' })
   })
 
 export const fetchNotificationSettings = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<{ email: boolean } | null> => {
+  async (): Promise<EmailSettings | null> => {
     const user = await getSessionUser()
-    return user ? { email: await getEmailNotifications(user.id) } : null
+    return user ? getEmailSettings(user.id) : null
   },
 )
 
 export const saveNotificationSettings = createServerFn({ method: 'POST' })
-  .validator(z.object({ email: z.boolean() }))
-  .handler(async ({ data }): Promise<ActionResult> => {
+  .validator(
+    z.object({
+      email: z.boolean().optional(),
+      digest: z.enum(DIGEST_FREQUENCIES as [DigestFrequency, ...Array<DigestFrequency>]).optional(),
+      timezone: z.string().max(64).refine(isTimeZone, 'Unknown time zone').optional(),
+    }),
+  )
+  .handler(async ({ data }): Promise<ActionResult<EmailSettings>> => {
     const user = await getSessionUser()
     if (!user) return UNAUTHORIZED
-    return setEmailNotifications(user.id, data.email)
+    return updateEmailSettings(user.id, data)
+  })
+
+/* ─────────────────────────── Unsubscribe links (no sign-in) ─────────────────────────── */
+
+const unsubscribeLink = z.object({
+  u: id,
+  l: z.enum(['digest', 'activity']),
+  t: z.string().max(64),
+})
+
+export const fetchUnsubscribe = createServerFn({ method: 'GET' })
+  .validator(unsubscribeLink)
+  .handler(async ({ data }): Promise<EmailSettings | null> => {
+    if (!verifyUnsubscribe(data.u, data.l, data.t)) return null
+    return getEmailSettings(data.u)
+  })
+
+/** What the unsubscribe page's buttons do: turn the list off, back on, or change the digest. */
+export const confirmUnsubscribe = createServerFn({ method: 'POST' })
+  .validator(unsubscribeLink.extend({ action: z.enum(['unsubscribe', 'resubscribe', 'daily', 'weekly']) }))
+  .handler(async ({ data }): Promise<ActionResult<EmailSettings>> => {
+    if (!verifyUnsubscribe(data.u, data.l, data.t)) {
+      return { ok: false, error: 'This link isn’t valid anymore. Change your emails in Settings instead.' }
+    }
+    switch (data.action) {
+      case 'unsubscribe':
+        return unsubscribe(data.u, data.l)
+      case 'resubscribe':
+        return updateEmailSettings(data.u, data.l === 'digest' ? { digest: 'weekly' } : { email: true })
+      case 'daily':
+      case 'weekly':
+        return updateEmailSettings(data.u, { digest: data.action })
+    }
   })

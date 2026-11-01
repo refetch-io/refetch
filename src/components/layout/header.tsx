@@ -12,6 +12,7 @@ import {
   PenLine,
   Plus,
   Search,
+  Settings2,
   ShieldCheck,
   Star,
   Sun,
@@ -253,6 +254,12 @@ function UserMenu({ user }: { user: SessionUser }) {
           <Link to="/submit">
             <PenLine />
             Submit a story
+          </Link>
+        </MenuItem>
+        <MenuItem asChild>
+          <Link to="/settings">
+            <Settings2 />
+            Settings
           </Link>
         </MenuItem>
         <MenuSeparator className="sm:hidden" />

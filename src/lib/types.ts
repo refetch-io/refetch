@@ -54,6 +54,8 @@ export interface Comment {
   createdAt: string
   /** Set once the author edits it. */
   editedAt: string | null
+  /** People mentioned with `@Name` (names resolved when the thread loads). */
+  mentions: Array<PersonSummary>
   vote: Vote
 }
 
@@ -90,6 +92,14 @@ export interface Topic {
 
 /** Newest first, or the best of the last 30 days. */
 export type TopicSort = 'new' | 'top'
+export type DomainSort = 'new' | 'top'
+
+export interface DomainAbout {
+  /** Stories linking to the site, all time. */
+  stories: number
+  /** Of those, posted in the last seven days. */
+  weeklyStories: number
+}
 
 export interface TopicAbout {
   /** Topics that show up on the same stories, most often first. */

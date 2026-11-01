@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { AppwriteException, ID } from 'node-appwrite'
-import type { ActionResult, PersonSummary } from '@/lib/types'
+import type { PersonSummary } from '@/lib/types'
 import { renderNotificationEmail } from '@/lib/email'
 import {
   excerpt,
@@ -13,6 +13,7 @@ import {
 import { isBotUser } from '@/lib/utils'
 import { createAdminClient, isNotFound } from './appwrite.server'
 import { Query, db, type Row } from './db.server'
+import { settingsUrl, unsubscribeUrl } from './email-settings.server'
 import { getSiteUrl } from './env.server'
 import { isBlocked } from './profiles.server'
 
@@ -26,7 +27,7 @@ import { isBlocked } from './profiles.server'
 
 const PAGE_SIZE = 30
 /** Emailed types; milestones stay in the app. */
-const EMAILED: ReadonlySet<NotificationType> = new Set(['comment', 'reply', 'follow'])
+const EMAILED: ReadonlySet<NotificationType> = new Set(['comment', 'reply', 'mention', 'follow'])
 /** At most one email per person in this window, so a busy thread isn't an inbox flood. */
 const EMAIL_COOLDOWN_MS = 10 * 60_000
 const lastEmailAt = new Map<string, number>()
@@ -129,7 +130,8 @@ async function sendEmail(input: NotifyInput) {
         quote: input.preview ? excerpt(input.preview, 400) : undefined,
         url: `${site}${path}`,
         action: input.type === 'follow' ? 'View profile' : 'Open the discussion',
-        settingsUrl: `${site}/notifications`,
+        settingsUrl: settingsUrl(),
+        unsubscribeUrl: unsubscribeUrl(input.recipientId, 'activity'),
       }),
       users: [input.recipientId],
       html: true,
@@ -211,26 +213,4 @@ export async function markNotificationsRead(userId: string, notificationIds?: Ar
       ...(notificationIds?.length ? [Query.equal('$id', notificationIds)] : []),
     ],
   })
-}
-
-/* ─────────────────────────────────── Settings ────────────────────────────────── */
-
-export async function getEmailNotifications(userId: string): Promise<boolean> {
-  return wantsEmail(userId)
-}
-
-export async function setEmailNotifications(userId: string, enabled: boolean): Promise<ActionResult> {
-  const { tables, ids } = db()
-  try {
-    await tables.updateRow({
-      databaseId: ids.databaseId,
-      tableId: ids.profiles,
-      rowId: userId,
-      data: { emailNotifications: enabled },
-    })
-  } catch (error) {
-    if (isNotFound(error)) return { ok: false, error: 'Sign out and back in, then try again.' }
-    throw error
-  }
-  return { ok: true, data: undefined }
 }

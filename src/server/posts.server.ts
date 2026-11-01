@@ -1,6 +1,7 @@
 import { ID } from 'node-appwrite'
 import type { ActionResult, FeedPage, FeedSort, SessionUser, Thread } from '@/lib/types'
 import { FEED_MAX_PAGES, FEED_PAGE_SIZE } from '@/lib/constants'
+import { dayRange } from '@/lib/past'
 import { cleanUrl } from '@/lib/url'
 import { isNotFound } from './appwrite.server'
 import {
@@ -15,7 +16,9 @@ import {
   toPostDetail,
   type Row,
 } from './db.server'
-import { listChannels, matchChannel, withChannels } from './channels.server'
+import { listChannels, matchChannel, queryPosts, withChannels } from './channels.server'
+import { withMentionNames } from './comments.server'
+import { withoutMuted } from './mutes.server'
 
 /** Quality gates shared with the ranking + topic-stats functions. */
 const QUALITY = {
@@ -67,17 +70,26 @@ export async function listFeed(sort: FeedSort, page: number, userId?: string): P
         rows.map((row) => row.$id),
       )
     : null
-  return {
-    posts: await withChannels(
-      rows,
-      rows.map((row) => toPost(row, votes?.get(row.$id) ?? null)),
-    ),
-    page,
-    hasMore,
-  }
+  const posts = await withChannels(
+    rows,
+    rows.map((row) => toPost(row, votes?.get(row.$id) ?? null)),
+  )
+  // Pages keep their place in the unfiltered list, so a page can come up a little short.
+  return { posts: (await withoutMuted(userId, rows, posts)).posts, page, hasMore }
 }
 
-/** Everything the signed-in user has submitted, newest first (no time window). */
+/** A past front page: the day's stories (UTC), most upvoted first. */
+export function listDayFeed(day: string, page: number, userId?: string): Promise<FeedPage> {
+  const { start, end } = dayRange(day)
+  return queryPosts(
+    [Query.greaterThanEqual('$createdAt', start), Query.lessThan('$createdAt', end)],
+    [Query.orderDesc('count'), Query.orderDesc('score'), Query.orderDesc('$createdAt')],
+    page,
+    userId,
+    { muted: true },
+  )
+}
+
 /** Stories by `authorId`, with the viewer's votes (the author's own by default). */
 export async function listUserPosts(
   authorId: string,
@@ -144,7 +156,9 @@ export async function getThread(postId: string, userId?: string): Promise<Thread
       postRow as Row,
       toPostDetail(postRow as Row, postVotes?.get(postId) ?? null),
     ),
-    comments: commentRows.map((row) => toComment(row, commentVotes?.get(row.$id) ?? null)),
+    comments: await withMentionNames(
+      commentRows.map((row) => toComment(row, commentVotes?.get(row.$id) ?? null)),
+    ),
   }
 }
 

@@ -1,8 +1,10 @@
 import { infiniteQueryOptions, keepPreviousData, queryOptions } from '@tanstack/react-query'
-import type { ChannelSort, FeedSort, TopicSort, VisitorRange } from './types'
+import type { ChannelSort, DomainSort, FeedSort, TopicSort, VisitorRange } from './types'
 import { fetchChannelDirectory, fetchChannelFeed, fetchFollowingFeed, searchRefetch } from '@/api/channels'
-import { fetchFeed, fetchMyPosts, fetchThread } from '@/api/content'
+import { fetchDayFeed, fetchFeed, fetchMyPosts, fetchThread } from '@/api/content'
 import { fetchTopicDirectory, fetchTopicFeed } from '@/api/topics'
+import { fetchDomainFeed } from '@/api/domains'
+import { fetchMutes } from '@/api/mutes'
 import {
   fetchGitHubStars,
   fetchLiveVisitors,
@@ -27,6 +29,7 @@ import {
   fetchUserComments,
   fetchUserStories,
   fetchVerifiedPeople,
+  findMentionable,
   findPeople,
 } from '@/api/profiles'
 
@@ -56,6 +59,14 @@ export const feedQuery = (sort: FeedSort, page: number, userId: string | null) =
     queryKey: ['feed', sort, page, userId],
     queryFn: () => fetchFeed({ data: { sort, page } }),
     staleTime: 30_000,
+  })
+
+export const dayFeedQuery = (day: string, page: number, userId: string | null) =>
+  queryOptions({
+    queryKey: ['past', day, page, userId],
+    queryFn: () => fetchDayFeed({ data: { day, page } }),
+    // Past days barely change.
+    staleTime: 5 * 60_000,
   })
 
 export const myPostsQuery = (page: number, userId: string | null) =>
@@ -154,6 +165,13 @@ export const topicFeedQuery = (key: string, sort: TopicSort, page: number, userI
     staleTime: 30_000,
   })
 
+export const domainFeedQuery = (domain: string, sort: DomainSort, page: number, userId: string | null) =>
+  queryOptions({
+    queryKey: ['domain', domain, sort, page, userId],
+    queryFn: () => fetchDomainFeed({ data: { domain, sort, page } }),
+    staleTime: 30_000,
+  })
+
 export const topicDirectoryQuery = () =>
   queryOptions({
     queryKey: ['topics'],
@@ -219,6 +237,15 @@ export const peopleQuery = (q: string) =>
   queryOptions({
     queryKey: ['people', q],
     queryFn: () => findPeople({ data: { q } }),
+    staleTime: 60_000,
+    enabled: q.trim().length >= 2,
+    placeholderData: keepPreviousData,
+  })
+
+export const mentionableQuery = (q: string) =>
+  queryOptions({
+    queryKey: ['mentionable', q],
+    queryFn: () => findMentionable({ data: { q } }),
     staleTime: 60_000,
     enabled: q.trim().length >= 2,
     placeholderData: keepPreviousData,
@@ -317,6 +344,15 @@ export const notificationSettingsQuery = (userId: string) =>
   queryOptions({
     queryKey: ['notifications', userId, 'settings'],
     queryFn: () => fetchNotificationSettings(),
+    staleTime: 5 * 60_000,
+  })
+
+/* ──────────────────────────────── Mutes ──────────────────────────────── */
+
+export const mutesQuery = (userId: string) =>
+  queryOptions({
+    queryKey: ['mutes', userId],
+    queryFn: () => fetchMutes(),
     staleTime: 5 * 60_000,
   })
 

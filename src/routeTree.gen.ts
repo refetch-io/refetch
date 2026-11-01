@@ -24,23 +24,31 @@ import { Route as AppModerationRouteImport } from './routes/_app/moderation'
 import { Route as AppNewRouteImport } from './routes/_app/new'
 import { Route as AppNotificationsRouteImport } from './routes/_app/notifications'
 import { Route as AppSavedRouteImport } from './routes/_app/saved'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppShowRouteImport } from './routes/_app/show'
 import { Route as AppStatsRouteImport } from './routes/_app/stats'
 import { Route as AppSubmitRouteImport } from './routes/_app/submit'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
+import { Route as ApiDigestRouteImport } from './routes/api/digest'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as CSplatRouteImport } from './routes/c.$'
+import { Route as FeedsSplatRouteImport } from './routes/feeds.$'
 import { Route as SitemapsFileRouteImport } from './routes/sitemaps.$file'
 import { Route as USplatRouteImport } from './routes/u.$'
 import { Route as AppChannelsIndexRouteImport } from './routes/_app/channels.index'
 import { Route as AppChannelsChannelIdRouteImport } from './routes/_app/channels.$channelId'
+import { Route as AppEmailUnsubscribeRouteImport } from './routes/_app/email.unsubscribe'
+import { Route as AppFromDomainRouteImport } from './routes/_app/from.$domain'
 import { Route as AppMessagesIndexRouteImport } from './routes/_app/messages.index'
 import { Route as AppMessagesConversationIdRouteImport } from './routes/_app/messages.$conversationId'
+import { Route as AppPastIndexRouteImport } from './routes/_app/past.index'
+import { Route as AppPastDayRouteImport } from './routes/_app/past.$day'
 import { Route as AppThreadsThreadIdRouteImport } from './routes/_app/threads.$threadId'
 import { Route as AppTopicsIndexRouteImport } from './routes/_app/topics.index'
 import { Route as AppTopicsTopicKeyRouteImport } from './routes/_app/topics.$topicKey'
 import { Route as AppUsersUserIdRouteImport } from './routes/_app/users.$userId'
+import { Route as ApiDigestPreviewRouteImport } from './routes/api/digest.preview'
 import { Route as AppUsersUserIdIndexRouteImport } from './routes/_app/users.$userId.index'
 import { Route as AppUsersUserIdCommentsRouteImport } from './routes/_app/users.$userId.comments'
 import { Route as AppUsersUserIdFollowersRouteImport } from './routes/_app/users.$userId.followers'
@@ -120,6 +128,11 @@ const AppSavedRoute = AppSavedRouteImport.update({
   path: '/saved',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppShowRoute = AppShowRouteImport.update({
   id: '/show',
   path: '/show',
@@ -145,6 +158,11 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => AuthRoute,
 } as any)
+const ApiDigestRoute = ApiDigestRouteImport.update({
+  id: '/api/digest',
+  path: '/api/digest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
@@ -153,6 +171,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
 const CSplatRoute = CSplatRouteImport.update({
   id: '/c/$',
   path: '/c/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedsSplatRoute = FeedsSplatRouteImport.update({
+  id: '/feeds/$',
+  path: '/feeds/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapsFileRoute = SitemapsFileRouteImport.update({
@@ -175,6 +198,16 @@ const AppChannelsChannelIdRoute = AppChannelsChannelIdRouteImport.update({
   path: '/channels/$channelId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEmailUnsubscribeRoute = AppEmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFromDomainRoute = AppFromDomainRouteImport.update({
+  id: '/from/$domain',
+  path: '/from/$domain',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMessagesIndexRoute = AppMessagesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -186,6 +219,16 @@ const AppMessagesConversationIdRoute =
     path: '/$conversationId',
     getParentRoute: () => AppMessagesRoute,
   } as any)
+const AppPastIndexRoute = AppPastIndexRouteImport.update({
+  id: '/past/',
+  path: '/past/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPastDayRoute = AppPastDayRouteImport.update({
+  id: '/past/$day',
+  path: '/past/$day',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppThreadsThreadIdRoute = AppThreadsThreadIdRouteImport.update({
   id: '/threads/$threadId',
   path: '/threads/$threadId',
@@ -205,6 +248,11 @@ const AppUsersUserIdRoute = AppUsersUserIdRouteImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
   getParentRoute: () => AppRoute,
+} as any)
+const ApiDigestPreviewRoute = ApiDigestPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => ApiDigestRoute,
 } as any)
 const AppUsersUserIdIndexRoute = AppUsersUserIdIndexRouteImport.update({
   id: '/',
@@ -246,22 +294,30 @@ export interface FileRoutesByFullPath {
   '/new': typeof AppNewRoute
   '/notifications': typeof AppNotificationsRoute
   '/saved': typeof AppSavedRoute
+  '/settings': typeof AppSettingsRoute
   '/show': typeof AppShowRoute
   '/stats': typeof AppStatsRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
+  '/api/digest': typeof ApiDigestRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/feeds/$': typeof FeedsSplatRoute
   '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/channels/$channelId': typeof AppChannelsChannelIdRoute
+  '/email/unsubscribe': typeof AppEmailUnsubscribeRoute
+  '/from/$domain': typeof AppFromDomainRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/past/$day': typeof AppPastDayRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
   '/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/channels/': typeof AppChannelsIndexRoute
   '/messages/': typeof AppMessagesIndexRoute
+  '/past/': typeof AppPastIndexRoute
   '/topics/': typeof AppTopicsIndexRoute
   '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
@@ -282,21 +338,29 @@ export interface FileRoutesByTo {
   '/new': typeof AppNewRoute
   '/notifications': typeof AppNotificationsRoute
   '/saved': typeof AppSavedRoute
+  '/settings': typeof AppSettingsRoute
   '/show': typeof AppShowRoute
   '/stats': typeof AppStatsRoute
   '/submit': typeof AppSubmitRoute
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
+  '/api/digest': typeof ApiDigestRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/feeds/$': typeof FeedsSplatRoute
   '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/channels/$channelId': typeof AppChannelsChannelIdRoute
+  '/email/unsubscribe': typeof AppEmailUnsubscribeRoute
+  '/from/$domain': typeof AppFromDomainRoute
   '/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/past/$day': typeof AppPastDayRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
+  '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/channels': typeof AppChannelsIndexRoute
   '/messages': typeof AppMessagesIndexRoute
+  '/past': typeof AppPastIndexRoute
   '/topics': typeof AppTopicsIndexRoute
   '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
@@ -320,23 +384,31 @@ export interface FileRoutesById {
   '/_app/new': typeof AppNewRoute
   '/_app/notifications': typeof AppNotificationsRoute
   '/_app/saved': typeof AppSavedRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/show': typeof AppShowRoute
   '/_app/stats': typeof AppStatsRoute
   '/_app/submit': typeof AppSubmitRoute
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
+  '/api/digest': typeof ApiDigestRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/c/$': typeof CSplatRoute
+  '/feeds/$': typeof FeedsSplatRoute
   '/sitemaps/$file': typeof SitemapsFileRoute
   '/u/$': typeof USplatRoute
   '/_app/': typeof AppIndexRoute
   '/_app/channels/$channelId': typeof AppChannelsChannelIdRoute
+  '/_app/email/unsubscribe': typeof AppEmailUnsubscribeRoute
+  '/_app/from/$domain': typeof AppFromDomainRoute
   '/_app/messages/$conversationId': typeof AppMessagesConversationIdRoute
+  '/_app/past/$day': typeof AppPastDayRoute
   '/_app/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/_app/topics/$topicKey': typeof AppTopicsTopicKeyRoute
   '/_app/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/_app/channels/': typeof AppChannelsIndexRoute
   '/_app/messages/': typeof AppMessagesIndexRoute
+  '/_app/past/': typeof AppPastIndexRoute
   '/_app/topics/': typeof AppTopicsIndexRoute
   '/_app/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/_app/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
@@ -360,22 +432,30 @@ export interface FileRouteTypes {
     | '/new'
     | '/notifications'
     | '/saved'
+    | '/settings'
     | '/show'
     | '/stats'
     | '/submit'
     | '/signin'
     | '/signup'
+    | '/api/digest'
     | '/auth/callback'
     | '/c/$'
+    | '/feeds/$'
     | '/sitemaps/$file'
     | '/u/$'
     | '/channels/$channelId'
+    | '/email/unsubscribe'
+    | '/from/$domain'
     | '/messages/$conversationId'
+    | '/past/$day'
     | '/threads/$threadId'
     | '/topics/$topicKey'
     | '/users/$userId'
+    | '/api/digest/preview'
     | '/channels/'
     | '/messages/'
+    | '/past/'
     | '/topics/'
     | '/users/$userId/comments'
     | '/users/$userId/followers'
@@ -396,21 +476,29 @@ export interface FileRouteTypes {
     | '/new'
     | '/notifications'
     | '/saved'
+    | '/settings'
     | '/show'
     | '/stats'
     | '/submit'
     | '/signin'
     | '/signup'
+    | '/api/digest'
     | '/auth/callback'
     | '/c/$'
+    | '/feeds/$'
     | '/sitemaps/$file'
     | '/u/$'
     | '/channels/$channelId'
+    | '/email/unsubscribe'
+    | '/from/$domain'
     | '/messages/$conversationId'
+    | '/past/$day'
     | '/threads/$threadId'
     | '/topics/$topicKey'
+    | '/api/digest/preview'
     | '/channels'
     | '/messages'
+    | '/past'
     | '/topics'
     | '/users/$userId/comments'
     | '/users/$userId/followers'
@@ -433,23 +521,31 @@ export interface FileRouteTypes {
     | '/_app/new'
     | '/_app/notifications'
     | '/_app/saved'
+    | '/_app/settings'
     | '/_app/show'
     | '/_app/stats'
     | '/_app/submit'
     | '/_auth/signin'
     | '/_auth/signup'
+    | '/api/digest'
     | '/auth/callback'
     | '/c/$'
+    | '/feeds/$'
     | '/sitemaps/$file'
     | '/u/$'
     | '/_app/'
     | '/_app/channels/$channelId'
+    | '/_app/email/unsubscribe'
+    | '/_app/from/$domain'
     | '/_app/messages/$conversationId'
+    | '/_app/past/$day'
     | '/_app/threads/$threadId'
     | '/_app/topics/$topicKey'
     | '/_app/users/$userId'
+    | '/api/digest/preview'
     | '/_app/channels/'
     | '/_app/messages/'
+    | '/_app/past/'
     | '/_app/topics/'
     | '/_app/users/$userId/comments'
     | '/_app/users/$userId/followers'
@@ -464,8 +560,10 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WelcomeRoute: typeof WelcomeRoute
+  ApiDigestRoute: typeof ApiDigestRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
   CSplatRoute: typeof CSplatRoute
+  FeedsSplatRoute: typeof FeedsSplatRoute
   SitemapsFileRoute: typeof SitemapsFileRoute
   USplatRoute: typeof USplatRoute
   ApiOgThreadIdRoute: typeof ApiOgThreadIdRoute
@@ -578,6 +676,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSavedRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/show': {
       id: '/_app/show'
       path: '/show'
@@ -613,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/api/digest': {
+      id: '/api/digest'
+      path: '/api/digest'
+      fullPath: '/api/digest'
+      preLoaderRoute: typeof ApiDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/callback': {
       id: '/auth/callback'
       path: '/auth/callback'
@@ -625,6 +737,13 @@ declare module '@tanstack/react-router' {
       path: '/c/$'
       fullPath: '/c/$'
       preLoaderRoute: typeof CSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feeds/$': {
+      id: '/feeds/$'
+      path: '/feeds/$'
+      fullPath: '/feeds/$'
+      preLoaderRoute: typeof FeedsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemaps/$file': {
@@ -655,6 +774,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChannelsChannelIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/email/unsubscribe': {
+      id: '/_app/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof AppEmailUnsubscribeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/from/$domain': {
+      id: '/_app/from/$domain'
+      path: '/from/$domain'
+      fullPath: '/from/$domain'
+      preLoaderRoute: typeof AppFromDomainRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/messages/': {
       id: '/_app/messages/'
       path: '/'
@@ -668,6 +801,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/messages/$conversationId'
       preLoaderRoute: typeof AppMessagesConversationIdRouteImport
       parentRoute: typeof AppMessagesRoute
+    }
+    '/_app/past/': {
+      id: '/_app/past/'
+      path: '/past'
+      fullPath: '/past/'
+      preLoaderRoute: typeof AppPastIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/past/$day': {
+      id: '/_app/past/$day'
+      path: '/past/$day'
+      fullPath: '/past/$day'
+      preLoaderRoute: typeof AppPastDayRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/threads/$threadId': {
       id: '/_app/threads/$threadId'
@@ -696,6 +843,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/users/$userId'
       preLoaderRoute: typeof AppUsersUserIdRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/api/digest/preview': {
+      id: '/api/digest/preview'
+      path: '/preview'
+      fullPath: '/api/digest/preview'
+      preLoaderRoute: typeof ApiDigestPreviewRouteImport
+      parentRoute: typeof ApiDigestRoute
     }
     '/_app/users/$userId/': {
       id: '/_app/users/$userId/'
@@ -777,15 +931,20 @@ interface AppRouteChildren {
   AppNewRoute: typeof AppNewRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppSavedRoute: typeof AppSavedRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppShowRoute: typeof AppShowRoute
   AppStatsRoute: typeof AppStatsRoute
   AppSubmitRoute: typeof AppSubmitRoute
   AppIndexRoute: typeof AppIndexRoute
   AppChannelsChannelIdRoute: typeof AppChannelsChannelIdRoute
+  AppEmailUnsubscribeRoute: typeof AppEmailUnsubscribeRoute
+  AppFromDomainRoute: typeof AppFromDomainRoute
+  AppPastDayRoute: typeof AppPastDayRoute
   AppThreadsThreadIdRoute: typeof AppThreadsThreadIdRoute
   AppTopicsTopicKeyRoute: typeof AppTopicsTopicKeyRoute
   AppUsersUserIdRoute: typeof AppUsersUserIdRouteWithChildren
   AppChannelsIndexRoute: typeof AppChannelsIndexRoute
+  AppPastIndexRoute: typeof AppPastIndexRoute
   AppTopicsIndexRoute: typeof AppTopicsIndexRoute
 }
 
@@ -799,15 +958,20 @@ const AppRouteChildren: AppRouteChildren = {
   AppNewRoute: AppNewRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppSavedRoute: AppSavedRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppShowRoute: AppShowRoute,
   AppStatsRoute: AppStatsRoute,
   AppSubmitRoute: AppSubmitRoute,
   AppIndexRoute: AppIndexRoute,
   AppChannelsChannelIdRoute: AppChannelsChannelIdRoute,
+  AppEmailUnsubscribeRoute: AppEmailUnsubscribeRoute,
+  AppFromDomainRoute: AppFromDomainRoute,
+  AppPastDayRoute: AppPastDayRoute,
   AppThreadsThreadIdRoute: AppThreadsThreadIdRoute,
   AppTopicsTopicKeyRoute: AppTopicsTopicKeyRoute,
   AppUsersUserIdRoute: AppUsersUserIdRouteWithChildren,
   AppChannelsIndexRoute: AppChannelsIndexRoute,
+  AppPastIndexRoute: AppPastIndexRoute,
   AppTopicsIndexRoute: AppTopicsIndexRoute,
 }
 
@@ -825,14 +989,28 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface ApiDigestRouteChildren {
+  ApiDigestPreviewRoute: typeof ApiDigestPreviewRoute
+}
+
+const ApiDigestRouteChildren: ApiDigestRouteChildren = {
+  ApiDigestPreviewRoute: ApiDigestPreviewRoute,
+}
+
+const ApiDigestRouteWithChildren = ApiDigestRoute._addFileChildren(
+  ApiDigestRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WelcomeRoute: WelcomeRoute,
+  ApiDigestRoute: ApiDigestRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
   CSplatRoute: CSplatRoute,
+  FeedsSplatRoute: FeedsSplatRoute,
   SitemapsFileRoute: SitemapsFileRoute,
   USplatRoute: USplatRoute,
   ApiOgThreadIdRoute: ApiOgThreadIdRoute,

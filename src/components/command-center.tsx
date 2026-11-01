@@ -13,6 +13,7 @@ import {
   CornerDownLeft,
   FileText,
   Hash,
+  History,
   Keyboard,
   MessageCircle,
   MessagesSquare,
@@ -21,6 +22,7 @@ import {
   PenLine,
   Rss,
   Search,
+  Settings2,
   Sun,
   TrendingUp,
   type LucideIcon,
@@ -96,6 +98,7 @@ interface PageItem {
     | '/'
     | '/new'
     | '/show'
+    | '/past'
     | '/following'
     | '/channels'
     | '/topics'
@@ -105,6 +108,7 @@ interface PageItem {
     | '/messages'
     | '/notifications'
     | '/saved'
+    | '/settings'
   icon: LucideIcon
   keywords: string
   requiresAuth?: boolean
@@ -114,6 +118,7 @@ const PAGES: Array<PageItem> = [
   { label: 'Top stories', to: '/', icon: TrendingUp, keywords: 'home front page best' },
   { label: 'Newest', to: '/new', icon: Clock3, keywords: 'latest recent' },
   { label: 'Show Refetch', to: '/show', icon: Monitor, keywords: 'launches projects show rf' },
+  { label: 'Past front pages', to: '/past', icon: History, keywords: 'yesterday archive history day' },
   {
     label: 'Following',
     to: '/following',
@@ -155,6 +160,13 @@ const PAGES: Array<PageItem> = [
     to: '/mines',
     icon: CircleUserRound,
     keywords: 'mine my submissions',
+    requiresAuth: true,
+  },
+  {
+    label: 'Settings',
+    to: '/settings',
+    icon: Settings2,
+    keywords: 'email digest daily weekly unsubscribe mute muted hide preferences',
     requiresAuth: true,
   },
   { label: 'Submit a story', to: '/submit', icon: PenLine, keywords: 'post share link new' },

@@ -82,7 +82,8 @@ export function KeyboardShortcutsProvider({ children }: { children: React.ReactN
         if (isGoToKey(key)) {
           event.preventDefault()
           const { to } = GO_TO[key]
-          const needsAuth = to !== '/' && to !== '/new' && to !== '/show' && to !== '/channels'
+          const needsAuth =
+            to !== '/' && to !== '/new' && to !== '/show' && to !== '/past' && to !== '/channels'
           void navigate(needsAuth && !user ? { to: '/signin', search: { redirect: to } } : { to })
         }
         return

@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 import { Avatar } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { Kbd } from '../ui/misc'
+import { useMentions } from './mention-menu'
 
 interface ComposerProps {
   postId: string
@@ -31,6 +32,7 @@ export function Composer({ postId, queryKey, replyingTo, onCancelReply, onPosted
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const [text, setText] = React.useState('')
   const [submitting, setSubmitting] = React.useState(false)
+  const mentions = useMentions({ text, setText, textareaRef })
 
   React.useEffect(() => {
     if (replyingTo) textareaRef.current?.focus()
@@ -77,7 +79,9 @@ export function Composer({ postId, queryKey, replyingTo, onCancelReply, onPosted
     if (!content || submitting) return
     setSubmitting(true)
     try {
-      const result = await postComment({ data: { postId, content, replyId: replyingTo?.id } })
+      const result = await postComment({
+        data: { postId, content, replyId: replyingTo?.id, mentions: mentions.mentionIds(content) },
+      })
       if (!result.ok) {
         toast.error(result.error)
         return
@@ -92,6 +96,7 @@ export function Composer({ postId, queryKey, replyingTo, onCancelReply, onPosted
           : current,
       )
       setText('')
+      mentions.reset()
       onCancelReply()
       onPosted(result.data)
     } catch {
@@ -105,60 +110,74 @@ export function Composer({ postId, queryKey, replyingTo, onCancelReply, onPosted
 
   return (
     <div className={wrapper}>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          void submit()
-        }}
-        className="overflow-hidden rounded-[22px] bg-surface/85 shadow-raised ring-1 ring-separator backdrop-blur-xl transition-[box-shadow] focus-within:ring-brand/40"
-      >
-        {replyingTo && (
-          <div className="flex animate-fade-in items-center gap-2 border-b border-separator py-2 pr-2 pl-4 text-footnote text-label-secondary">
-            <CornerDownRight className="size-4 shrink-0 text-brand-text" aria-hidden />
-            <p className="min-w-0 flex-1 truncate">
-              Replying to <span className="font-semibold text-label">{replyingTo.userName}</span>
-              <span className="text-label-tertiary">: “{replyingTo.content.slice(0, 80)}”</span>
-            </p>
-            <Button variant="ghost" size="icon-xs" aria-label="Cancel reply" onClick={onCancelReply}>
-              <X />
+      <div className="relative">
+        {mentions.menu('above')}
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            void submit()
+          }}
+          className="overflow-hidden rounded-[22px] bg-surface/85 shadow-raised ring-1 ring-separator backdrop-blur-xl transition-[box-shadow] focus-within:ring-brand/40"
+        >
+          {replyingTo && (
+            <div className="flex animate-fade-in items-center gap-2 border-b border-separator py-2 pr-2 pl-4 text-footnote text-label-secondary">
+              <CornerDownRight className="size-4 shrink-0 text-brand-text" aria-hidden />
+              <p className="min-w-0 flex-1 truncate">
+                Replying to <span className="font-semibold text-label">{replyingTo.userName}</span>
+                <span className="text-label-tertiary">: “{replyingTo.content.slice(0, 80)}”</span>
+              </p>
+              <Button variant="ghost" size="icon-xs" aria-label="Cancel reply" onClick={onCancelReply}>
+                <X />
+              </Button>
+            </div>
+          )}
+          <div className="flex items-end gap-2 p-2 pl-3">
+            <Avatar
+              name={user.name || user.email}
+              userId={user.id}
+              size={28}
+              className="mb-1 max-sm:hidden"
+            />
+            <label htmlFor="composer" className="sr-only">
+              {replyingTo ? `Reply to ${replyingTo.userName}` : 'Write a comment'}
+            </label>
+            <textarea
+              id="composer"
+              ref={textareaRef}
+              rows={1}
+              value={text}
+              maxLength={LIMITS.commentMax}
+              {...mentions.textareaProps}
+              onChange={(event) => {
+                setText(event.target.value)
+                mentions.sync()
+              }}
+              onSelect={mentions.sync}
+              onKeyDown={(event) => {
+                if (mentions.onKeyDown(event)) return
+                if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+                  event.preventDefault()
+                  void submit()
+                }
+                if (event.key === 'Escape' && replyingTo) onCancelReply()
+              }}
+              placeholder={replyingTo ? `Reply to ${replyingTo.userName}…` : 'Add to the discussion…'}
+              className="max-h-[200px] min-h-9 flex-1 resize-none bg-transparent px-1 py-[7px] text-callout text-label outline-none placeholder:text-label-tertiary"
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              size="icon"
+              loading={submitting}
+              disabled={!text.trim()}
+              aria-label={replyingTo ? 'Post reply' : 'Post comment'}
+              className="disabled:bg-fill-strong disabled:text-label-tertiary disabled:opacity-100"
+            >
+              <ArrowUp strokeWidth={2.75} />
             </Button>
           </div>
-        )}
-        <div className="flex items-end gap-2 p-2 pl-3">
-          <Avatar name={user.name || user.email} userId={user.id} size={28} className="mb-1 max-sm:hidden" />
-          <label htmlFor="composer" className="sr-only">
-            {replyingTo ? `Reply to ${replyingTo.userName}` : 'Write a comment'}
-          </label>
-          <textarea
-            id="composer"
-            ref={textareaRef}
-            rows={1}
-            value={text}
-            maxLength={LIMITS.commentMax}
-            onChange={(event) => setText(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-                event.preventDefault()
-                void submit()
-              }
-              if (event.key === 'Escape' && replyingTo) onCancelReply()
-            }}
-            placeholder={replyingTo ? `Reply to ${replyingTo.userName}…` : 'Add to the discussion…'}
-            className="max-h-[200px] min-h-9 flex-1 resize-none bg-transparent px-1 py-[7px] text-callout text-label outline-none placeholder:text-label-tertiary"
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            size="icon"
-            loading={submitting}
-            disabled={!text.trim()}
-            aria-label={replyingTo ? 'Post reply' : 'Post comment'}
-            className="disabled:bg-fill-strong disabled:text-label-tertiary disabled:opacity-100"
-          >
-            <ArrowUp strokeWidth={2.75} />
-          </Button>
-        </div>
-      </form>
+        </form>
+      </div>
       <div
         className={cn(
           'mt-1.5 flex justify-end gap-3 px-3 text-caption-1 text-label-tertiary transition-opacity max-sm:hidden',
@@ -167,6 +186,10 @@ export function Composer({ postId, queryKey, replyingTo, onCancelReply, onPosted
         aria-hidden={!text}
       >
         {remaining < 500 && <span className="tabular">{remaining} left</span>}
+        <span className="inline-flex items-center gap-1">
+          <Kbd>@</Kbd>
+          to mention
+        </span>
         <span className="inline-flex items-center gap-1">
           <Kbd>⌘</Kbd>
           <Kbd>↩</Kbd>

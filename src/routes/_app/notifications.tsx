@@ -1,15 +1,13 @@
 import * as React from 'react'
-import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
-import { Bell, CheckCheck } from 'lucide-react'
-import { toast } from 'sonner'
-import { readNotifications, saveNotificationSettings } from '@/api/notifications'
-import { notificationCountQuery, notificationSettingsQuery, notificationsQuery } from '@/lib/queries'
+import { Bell, CheckCheck, Settings2 } from 'lucide-react'
+import { readNotifications } from '@/api/notifications'
+import { notificationCountQuery, notificationsQuery } from '@/lib/queries'
 import { SITE_URL, seo } from '@/lib/seo'
 import { Button } from '@/components/ui/button'
 import { EmptyState, Skeleton } from '@/components/ui/misc'
-import { SegmentedControl } from '@/components/ui/segmented-control'
 import { ColumnTitle } from '@/components/feed/feed-column'
 import { FeedLayout } from '@/components/feed/feed-layout'
 import { NotificationRow } from '@/components/notifications/notification-parts'
@@ -64,7 +62,7 @@ function NotificationsPage() {
       column={
         <ColumnTitle
           title={TITLE}
-          subtitle="Replies, comments on your stories, new followers and milestones."
+          subtitle="Replies, mentions, comments on your stories, new followers and milestones."
           actions={
             hasUnread && (
               <Button variant="ghost" size="sm" onClick={markAllRead}>
@@ -80,7 +78,7 @@ function NotificationsPage() {
         <EmptyState
           icon={<Bell />}
           title="Nothing yet"
-          description="When people reply to you, comment on your stories or follow you, you’ll see it here."
+          description="When people reply to you, mention you, comment on your stories or follow you, you’ll see it here."
         />
       ) : (
         <ul className="divide-y divide-separator">
@@ -101,54 +99,27 @@ function NotificationsPage() {
           </Button>
         </div>
       )}
-      <EmailSettings userId={user.id} />
+      <EmailSettingsLink />
     </FeedLayout>
   )
 }
 
-function EmailSettings({ userId }: { userId: string }) {
-  const queryClient = useQueryClient()
-  const save = useServerFn(saveNotificationSettings)
-  const settings = notificationSettingsQuery(userId)
-  const { data } = useQuery(settings)
-  const [saving, setSaving] = React.useState(false)
-  if (!data) return null
-
-  const onChange = async (value: 'on' | 'off') => {
-    const email = value === 'on'
-    setSaving(true)
-    queryClient.setQueryData(settings.queryKey, () => ({ email }))
-    try {
-      const result = await save({ data: { email } })
-      if (!result.ok) throw new Error(result.error)
-      toast.success(email ? 'Email notifications on' : 'Email notifications off')
-    } catch (error) {
-      queryClient.setQueryData(settings.queryKey, () => ({ email: !email }))
-      toast.error(error instanceof Error && error.message ? error.message : 'Couldn’t save that.')
-    } finally {
-      setSaving(false)
-    }
-  }
-
+/** Email preferences live in Settings; point there from the bottom of the list. */
+function EmailSettingsLink() {
   return (
-    <div className="flex flex-col gap-3 border-t border-separator px-4 py-4 sm:flex-row sm:items-center sm:px-5">
+    <div className="flex items-center gap-3 border-t border-separator px-4 py-4 sm:px-5">
       <div className="min-w-0 flex-1">
-        <h2 className="text-subhead font-semibold text-label">Email notifications</h2>
+        <h2 className="text-subhead font-semibold text-label">Emails and digests</h2>
         <p className="text-footnote text-label-secondary">
-          Replies, comments on your stories and new followers. At most one email every 10 minutes.
+          Activity emails, the daily or weekly digest, and what you’ve muted.
         </p>
       </div>
-      <SegmentedControl
-        aria-label="Email notifications"
-        size="sm"
-        className="w-40 shrink-0"
-        value={data.email ? 'on' : 'off'}
-        onValueChange={(value) => !saving && void onChange(value)}
-        options={[
-          { value: 'on', label: 'On' },
-          { value: 'off', label: 'Off' },
-        ]}
-      />
+      <Button asChild variant="secondary" size="sm">
+        <Link to="/settings" hash="email">
+          <Settings2 />
+          Settings
+        </Link>
+      </Button>
     </div>
   )
 }

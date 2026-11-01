@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { Bell, MessageCircle, Reply, TrendingUp, UserPlus } from 'lucide-react'
+import { AtSign, Bell, MessageCircle, Reply, TrendingUp, UserPlus } from 'lucide-react'
 import { notificationCountQuery } from '@/lib/queries'
 import { useSession } from '@/lib/session'
 import { notificationAction, notificationSentence, type AppNotification } from '@/lib/notifications'
@@ -38,6 +38,7 @@ export function NotificationBell() {
 const TYPE_ICON = {
   comment: { icon: MessageCircle, className: 'bg-brand text-on-brand' },
   reply: { icon: Reply, className: 'bg-brand text-on-brand' },
+  mention: { icon: AtSign, className: 'bg-brand text-on-brand' },
   follow: { icon: UserPlus, className: 'bg-[#34c759] text-white' },
   milestone: { icon: TrendingUp, className: 'bg-up text-white' },
 } as const
@@ -93,12 +94,12 @@ export function NotificationRow({ notification }: { notification: AppNotificatio
             {notificationAction(notification)}
             {notification.postTitle && notification.type !== 'follow' && (
               <>
-                {notification.type === 'milestone' ? ': ' : ' on '}
+                {notification.type === 'milestone' ? ': ' : notification.type === 'mention' ? ' in ' : ' on '}
                 <span className="font-medium">{notification.postTitle}</span>
               </>
             )}
           </span>
-          {notification.preview && (notification.type === 'comment' || notification.type === 'reply') && (
+          {notification.preview && notification.type !== 'follow' && notification.type !== 'milestone' && (
             <span className="mt-1 line-clamp-2 block text-footnote text-label-secondary">
               {notification.preview}
             </span>

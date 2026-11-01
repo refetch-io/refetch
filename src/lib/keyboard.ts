@@ -24,6 +24,7 @@ export const GO_TO = {
   h: { to: '/', label: 'Top stories' },
   n: { to: '/new', label: 'Newest' },
   w: { to: '/show', label: 'Show Refetch' },
+  a: { to: '/past', label: 'Past front pages' },
   f: { to: '/following', label: 'Following' },
   c: { to: '/channels', label: 'Channels' },
   m: { to: '/messages', label: 'Messages' },
@@ -66,7 +67,7 @@ export const SHORTCUT_GROUPS: Array<ShortcutGroup> = [
     title: 'Pages',
     shortcuts: [
       ...Object.entries(GO_TO).map(([key, page]) => ({ keys: ['g', key], label: page.label })),
-      { keys: ['n'], label: 'Next page' },
+      { keys: ['n'], label: 'Next page, or the next new comment in a thread' },
       { keys: ['p'], label: 'Previous page' },
     ],
   },

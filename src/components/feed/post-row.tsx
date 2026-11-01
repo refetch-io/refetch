@@ -4,6 +4,7 @@ import { trackArticleOpen, trackPostClick } from '@/lib/analytics'
 import type { Post } from '@/lib/types'
 import { withRef } from '@/lib/url'
 import { cn, formatDateTime, timeAgo } from '@/lib/utils'
+import { newCommentCount, useVisit } from '@/lib/visits'
 import { Badge } from '../ui/badge'
 import { ListItem } from '../ui/card'
 import { Dot } from '../ui/misc'
@@ -12,6 +13,7 @@ import { VoteControl } from '../vote-control'
 import { ChannelTag, useChannels } from '../channels/channel-parts'
 import { useJoinGate } from '../auth/join-gate'
 import { SaveButton } from '../saved/save-button'
+import { StoryMuteMenu } from '../mutes/mute-parts'
 import { PersonBadges } from '../verified-badge'
 import { PersonHoverCard } from '../people/person-hover-card'
 
@@ -31,6 +33,9 @@ export function PostRow({
   const { byId } = useChannels()
   const gate = useJoinGate()
   const hasChannel = !hideChannel && Boolean(post.channel && byId.has(post.channel))
+  // Comments since you last opened the thread (this browser only).
+  const fresh = newCommentCount(useVisit(post.id), post.countComments)
+  const commentsLabel = `${post.countComments} comments${fresh > 0 ? `, ${fresh} new` : ''} on “${post.title}”`
   const titleClass =
     'text-label decoration-brand-text/30 underline-offset-[3px] transition-colors hover:text-brand-text focus-visible:rounded-sm'
 
@@ -108,7 +113,18 @@ export function PostRow({
 
         <div className="mt-1.5 flex min-w-0 items-center gap-1.5 text-footnote text-label-secondary">
           <Favicon domain={post.domain} size={16} />
-          <span className="truncate">{post.domain ?? 'refetch.io'}</span>
+          {post.domain ? (
+            <Link
+              to="/from/$domain"
+              params={{ domain: post.domain }}
+              title={`More from ${post.domain}`}
+              className="truncate hover:text-brand-text"
+            >
+              {post.domain}
+            </Link>
+          ) : (
+            <span className="truncate">refetch.io</span>
+          )}
           <Dot />
           <time
             dateTime={post.createdAt}
@@ -142,26 +158,36 @@ export function PostRow({
             to="/threads/$threadId"
             params={{ threadId: post.id }}
             onClick={() => trackPostClick(post.id, post.title, false)}
-            aria-label={`${post.countComments} comments on “${post.title}”`}
-            className="inline-flex shrink-0 items-center gap-1 font-medium tabular sm:hidden"
+            aria-label={commentsLabel}
+            className={cn(
+              'inline-flex shrink-0 items-center gap-1 font-medium tabular sm:hidden',
+              fresh > 0 && 'text-brand-text',
+            )}
           >
             <MessageCircle className="size-3.5" strokeWidth={2.2} aria-hidden />
             {post.countComments}
+            {fresh > 0 && <span className="font-semibold">+{fresh}</span>}
           </Link>
         </div>
       </div>
 
+      {!demo && <StoryMuteMenu post={post} quiet className="-mr-1.5 max-sm:hidden" />}
       {!demo && <SaveButton postId={post.id} quiet className="max-sm:hidden" />}
       <Link
         to="/threads/$threadId"
         params={{ threadId: post.id }}
         onClick={() => trackPostClick(post.id, post.title, false)}
-        aria-label={`${post.countComments} comments on “${post.title}”`}
+        aria-label={commentsLabel}
+        title={fresh > 0 ? `${fresh} new since your last visit` : undefined}
         data-kb-action="comments"
-        className="inline-flex h-7 shrink-0 pressable items-center gap-1 rounded-full bg-fill-secondary px-2.5 text-footnote font-semibold text-label-secondary tabular hover:bg-brand-tint hover:text-brand-text max-sm:hidden"
+        className={cn(
+          'inline-flex h-7 shrink-0 pressable items-center gap-1 rounded-full px-2.5 text-footnote font-semibold tabular hover:bg-brand-tint hover:text-brand-text max-sm:hidden',
+          fresh > 0 ? 'bg-brand-tint text-brand-text' : 'bg-fill-secondary text-label-secondary',
+        )}
       >
         <MessageCircle className="size-3.5" strokeWidth={2.2} aria-hidden />
         {post.countComments}
+        {fresh > 0 && <span className="text-caption-1 opacity-80">+{fresh}</span>}
       </Link>
     </ListItem>
   )

@@ -6,14 +6,16 @@ import { preloadWithin } from '@/lib/preload'
 import { channelDirectoryQuery, configQuery, threadQuery, threadStatsQuery } from '@/lib/queries'
 import { buildCommentTree, type CommentNode } from '@/lib/comments'
 import { type StructuredComment, breadcrumbs, discussionForumPosting, seo } from '@/lib/seo'
-import type { Comment } from '@/lib/types'
+import type { Comment, PersonSummary } from '@/lib/types'
 import { isBotUser } from '@/lib/utils'
+import { newCommentIds, readVisit, recordVisit } from '@/lib/visits'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { EmptyState, Skeleton } from '@/components/ui/misc'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { CommentsSection } from '@/components/thread/comments'
 import { Composer } from '@/components/thread/composer'
+import { MentionParticipants } from '@/components/thread/mention-menu'
 import { BackButton, StoryHeader, StoryRailCard, StorySummary } from '@/components/thread/story-header'
 import { ThreadStatsCard } from '@/components/thread/thread-stats'
 
@@ -22,6 +24,8 @@ const STATS_WAIT_MS = 300
 /** Comments described in the page's structured data, best first, and how much of each. */
 const STRUCTURED_COMMENTS = 50
 const STRUCTURED_COMMENT_CHARS = 1000
+/** How long a thread has to be open before it counts as read. */
+const VISIT_DELAY_MS = 3000
 
 /** The thread's best comments (and their replies) for search engines, kept small for the page payload. */
 function structuredComments(comments: Array<Comment>): Array<StructuredComment> {
@@ -133,6 +137,38 @@ function ThreadPage() {
   const { data: config } = useSuspenseQuery(configQuery())
   const [replyingTo, setReplyingTo] = React.useState<CommentNode | null>(null)
   const [highlightId, setHighlightId] = React.useState<string | null>(null)
+  // When you were last here; comments posted since stay marked new until you leave.
+  const [since, setSince] = React.useState<number | null>(null)
+
+  React.useEffect(() => {
+    setSince(readVisit(threadId)?.at ?? null)
+  }, [threadId])
+
+  // The visit counts once you've been here a moment, so a page that mounts
+  // twice while loading still reads the previous visit. Again as comments arrive (yours too).
+  React.useEffect(() => {
+    const timer = setTimeout(() => recordVisit(threadId, thread.post.countComments), VISIT_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [threadId, thread.post.countComments])
+
+  // People to offer first for @mentions: recent commenters, then the story's author.
+  const participants = React.useMemo(() => {
+    const people = new Map<string, PersonSummary>()
+    const add = (person: PersonSummary) => {
+      if (person.id !== user?.id && !isBotUser(person.id) && !people.has(person.id))
+        people.set(person.id, person)
+    }
+    const newest = [...thread.comments].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    for (const comment of newest) add({ id: comment.userId, name: comment.userName })
+    add({ id: thread.post.userId, name: thread.post.userName })
+    for (const comment of newest) comment.mentions.forEach(add)
+    return [...people.values()]
+  }, [thread.comments, thread.post.userId, thread.post.userName, user?.id])
+
+  const newIds = React.useMemo(
+    () => newCommentIds(thread.comments, since, user?.id ?? null),
+    [thread.comments, since, user?.id],
+  )
 
   // Links to a comment (from notifications) land on it and flash it.
   React.useEffect(() => {
@@ -154,36 +190,40 @@ function ThreadPage() {
   }, [])
 
   return (
-    <div className="flex gap-8">
-      <div className="mx-auto w-full max-w-3xl min-w-0 flex-1">
-        <BackButton />
-        <StoryHeader post={thread.post} siteUrl={config.siteUrl} />
-        <StorySummary post={thread.post} />
-        {/* Wide screens show the full card in the rail. */}
-        <ThreadStatsCard postId={thread.post.id} compact className="mt-3 xl:hidden" />
-        <CommentsSection
-          thread={thread}
-          queryKey={query.queryKey}
-          highlightId={highlightId}
-          onReply={setReplyingTo}
-        />
-        <Composer
-          postId={thread.post.id}
-          queryKey={query.queryKey}
-          replyingTo={replyingTo}
-          onCancelReply={() => setReplyingTo(null)}
-          onPosted={onPosted}
-        />
+    <MentionParticipants value={participants}>
+      <div className="flex gap-8">
+        <div className="mx-auto w-full max-w-3xl min-w-0 flex-1">
+          <BackButton />
+          <StoryHeader post={thread.post} siteUrl={config.siteUrl} />
+          <StorySummary post={thread.post} />
+          {/* Wide screens show the full card in the rail. */}
+          <ThreadStatsCard postId={thread.post.id} compact className="mt-3 xl:hidden" />
+          <CommentsSection
+            thread={thread}
+            queryKey={query.queryKey}
+            highlightId={highlightId}
+            newIds={newIds}
+            onJump={setHighlightId}
+            onReply={setReplyingTo}
+          />
+          <Composer
+            postId={thread.post.id}
+            queryKey={query.queryKey}
+            replyingTo={replyingTo}
+            onCancelReply={() => setReplyingTo(null)}
+            onPosted={onPosted}
+          />
+        </div>
+        <aside
+          aria-label="Story details"
+          className="sticky top-[76px] hidden w-[300px] shrink-0 space-y-4 self-start xl:block"
+        >
+          <StoryRailCard post={thread.post} />
+          <ThreadStatsCard postId={thread.post.id} />
+          <SponsorCard />
+        </aside>
       </div>
-      <aside
-        aria-label="Story details"
-        className="sticky top-[76px] hidden w-[300px] shrink-0 space-y-4 self-start xl:block"
-      >
-        <StoryRailCard post={thread.post} />
-        <ThreadStatsCard postId={thread.post.id} />
-        <SponsorCard />
-      </aside>
-    </div>
+    </MentionParticipants>
   )
 }
 

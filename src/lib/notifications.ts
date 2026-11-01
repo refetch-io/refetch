@@ -1,6 +1,6 @@
 import type { PersonSummary } from './types'
 
-export type NotificationType = 'comment' | 'reply' | 'follow' | 'milestone'
+export type NotificationType = 'comment' | 'reply' | 'mention' | 'follow' | 'milestone'
 
 export interface AppNotification {
   id: string
@@ -41,6 +41,8 @@ export function notificationAction(notification: Pick<AppNotification, 'type' | 
       return 'commented on your story'
     case 'reply':
       return 'replied to your comment'
+    case 'mention':
+      return 'mentioned you'
     case 'follow':
       return 'started following you'
     case 'milestone':
@@ -59,6 +61,8 @@ export function notificationSentence(
       return `${notification.actor?.name ?? 'Someone'} commented on${title || ' your story'}`
     case 'reply':
       return `${notification.actor?.name ?? 'Someone'} ${action}${title ? ` on${title}` : ''}`
+    case 'mention':
+      return `${notification.actor?.name ?? 'Someone'} ${action}${title ? ` in${title}` : ''}`
     case 'follow':
       return `${notification.actor?.name ?? 'Someone'} ${action}`
     case 'milestone':

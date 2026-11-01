@@ -40,6 +40,9 @@ export function SiteFooter({
         <a href={LINKS.security} target="_blank" rel="noopener noreferrer" className={linkClass}>
           Security
         </a>
+        <a href="/feeds/top.xml" className={linkClass}>
+          RSS
+        </a>
       </nav>
 
       <div className={cn('mt-4 flex items-center gap-2', centered && 'justify-center')}>

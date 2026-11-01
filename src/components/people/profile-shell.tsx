@@ -8,6 +8,7 @@ import { createConversation } from '@/api/messages'
 import { setUserBlocked } from '@/api/profiles'
 import { followedIdsQuery, profileInsightsQuery, profileQuery } from '@/lib/queries'
 import { SITE_URL, breadcrumbs, profilePage, seo } from '@/lib/seo'
+import { feedLinks } from '@/lib/feeds'
 import { useSession } from '@/lib/session'
 import type { PeoplePage, Profile, ProfileInsights } from '@/lib/types'
 import { compactNumber, pluralize } from '@/lib/utils'
@@ -80,7 +81,10 @@ export function profileHead(
   if (!loaderData) return { meta }
   return {
     meta,
-    links: [{ rel: 'canonical', href: url }],
+    links: [
+      { rel: 'canonical', href: url },
+      ...feedLinks(SITE_URL, { kind: 'user', id: userId }, `Refetch: Stories shared by ${name}`),
+    ],
     scripts: [
       profilePage({ siteUrl: SITE_URL, url, person: loaderData }),
       breadcrumbs([

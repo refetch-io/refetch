@@ -329,8 +329,15 @@ export async function listUserComments(userId: string, page: number): Promise<Us
   }
 }
 
-/** Search people by name for the "new message" picker. */
-export async function searchPeople(term: string, viewerId: string): Promise<Array<PersonSummary>> {
+/**
+ * Search people by name: for the "new message" picker (only people who take
+ * messages) or for @mentions (anyone).
+ */
+export async function searchPeople(
+  term: string,
+  viewerId: string,
+  { messageable = true }: { messageable?: boolean } = {},
+): Promise<Array<PersonSummary>> {
   const query = term.trim()
   if (query.length < 2) return []
   const { tables, ids } = db()
@@ -340,7 +347,7 @@ export async function searchPeople(term: string, viewerId: string): Promise<Arra
       tableId: ids.profiles,
       queries: [
         Query.search('name', query),
-        Query.equal('allowMessages', 'everyone'),
+        ...(messageable ? [Query.equal('allowMessages', 'everyone')] : []),
         Query.notEqual('$id', viewerId),
         Query.limit(10),
         Query.select(['$id', 'name']),

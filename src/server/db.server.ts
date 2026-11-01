@@ -103,19 +103,42 @@ export const COMMENT_FIELDS = [
   'replyId',
   'count',
   'editedAt',
+  'mentions',
 ]
 
 /**
- * `comments.editedAt` arrives with `appwrite:setup`; until then, select without
- * it. Checked again every minute, so a running server picks the column up.
+ * Columns that arrive with `appwrite:setup` (`comments.editedAt`, `comments.mentions`);
+ * until then, select without them. Checked again every minute, so a running
+ * server picks them up.
  */
 const RECHECK_MS = 60_000
-let editedAtMissingAt = 0
+const OPTIONAL_COMMENT_COLUMNS = ['editedAt', 'mentions']
+const commentColumnMissingAt = new Map<string, number>()
+
+export function missingCommentColumns(): Set<string> {
+  const now = Date.now()
+  return new Set(
+    OPTIONAL_COMMENT_COLUMNS.filter((column) => now - (commentColumnMissingAt.get(column) ?? 0) < RECHECK_MS),
+  )
+}
+
+/** The optional comment column an Appwrite error complains about, if any. */
+export function missingCommentColumn(error: unknown): string | null {
+  if (!(error instanceof Error)) return null
+  return OPTIONAL_COMMENT_COLUMNS.find((column) => error.message.includes(column)) ?? null
+}
+
+export function markCommentColumnMissing(column: string) {
+  if (!missingCommentColumns().has(column)) {
+    console.warn(`[db] comments.${column} is missing, run \`npm run appwrite:setup\``)
+  }
+  commentColumnMissingAt.set(column, Date.now())
+}
 
 export async function listCommentRows(queries: Array<string>): Promise<Array<Row>> {
   const { tables, ids } = db()
-  const skip = Date.now() - editedAtMissingAt < RECHECK_MS
-  const fields = skip ? COMMENT_FIELDS.filter((field) => field !== 'editedAt') : COMMENT_FIELDS
+  const missing = missingCommentColumns()
+  const fields = COMMENT_FIELDS.filter((field) => !missing.has(field))
   try {
     const result = await tables.listRows({
       databaseId: ids.databaseId,
@@ -125,9 +148,9 @@ export async function listCommentRows(queries: Array<string>): Promise<Array<Row
     })
     return result.rows as Array<Row>
   } catch (error) {
-    if (skip || !(error instanceof Error) || !/editedAt/.test(error.message)) throw error
-    console.warn('[db] comments.editedAt is missing, run `npm run appwrite:setup` to enable comment edits')
-    editedAtMissingAt = Date.now()
+    const column = missingCommentColumn(error)
+    if (!column || missing.has(column)) throw error
+    markCommentColumnMissing(column)
     return listCommentRows(queries)
   }
 }
@@ -176,6 +199,12 @@ export function toComment(row: Row, vote: Vote = null): Comment {
     count: number(row.count),
     createdAt: row.$createdAt,
     editedAt: typeof row.editedAt === 'string' && row.editedAt ? row.editedAt : null,
+    // Names are filled in by withMentionNames.
+    mentions: Array.isArray(row.mentions)
+      ? row.mentions
+          .filter((id: unknown): id is string => typeof id === 'string' && Boolean(id))
+          .map((id: string) => ({ id, name: '' }))
+      : [],
     vote,
   }
 }

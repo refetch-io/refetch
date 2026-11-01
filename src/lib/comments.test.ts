@@ -13,6 +13,7 @@ function comment(id: string, overrides: Partial<Comment> = {}): Comment {
     count: 0,
     createdAt: '2026-01-01T00:00:00.000Z',
     editedAt: null,
+    mentions: [],
     vote: null,
     ...overrides,
   }

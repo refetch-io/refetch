@@ -1,9 +1,20 @@
 import { ID } from 'node-appwrite'
-import type { ActionResult, Comment, SessionUser } from '@/lib/types'
+import type { ActionResult, Comment, PersonSummary, SessionUser } from '@/lib/types'
 import { COMMENT_EDIT_WINDOW_MS, MAX_COMMENT_DEPTH } from '@/lib/constants'
+import { MAX_MENTIONS, presentMentions } from '@/lib/mentions'
+import { isBotUser } from '@/lib/utils'
 import { isNotFound } from './appwrite.server'
-import { Query, db, toComment, type Row } from './db.server'
+import {
+  Query,
+  db,
+  markCommentColumnMissing,
+  missingCommentColumn,
+  missingCommentColumns,
+  toComment,
+  type Row,
+} from './db.server'
 import { notify } from './notifications.server'
+import { getPeople } from './profiles.server'
 
 /** Abuse protection, unchanged from the original API. */
 const MAX_COMMENTS_PER_HOUR = 50
@@ -12,6 +23,55 @@ export interface NewComment {
   postId: string
   content: string
   replyId?: string
+  /** People picked from the @ list; kept only if their `@Name` is in the text. */
+  mentions?: Array<string>
+}
+
+/** The people a comment really mentions: picked IDs whose `@Name` appears in it. */
+async function resolveMentions(
+  authorId: string,
+  content: string,
+  ids: Array<string> | undefined,
+): Promise<Array<PersonSummary>> {
+  const candidates = [...new Set(ids ?? [])]
+    .filter((id) => id !== authorId && !isBotUser(id))
+    .slice(0, MAX_MENTIONS * 2)
+  if (candidates.length === 0) return []
+  const people = await getPeople(candidates).catch(() => new Map<string, PersonSummary>())
+  return presentMentions(content, [...people.values()])
+}
+
+/** Fill in the names of the people comments mention (one lookup for the whole thread). */
+export async function withMentionNames(comments: Array<Comment>): Promise<Array<Comment>> {
+  const ids = [...new Set(comments.flatMap((comment) => comment.mentions.map((person) => person.id)))]
+  if (ids.length === 0) return comments
+  const people = await getPeople(ids).catch(() => new Map<string, PersonSummary>())
+  return comments.map((comment) =>
+    comment.mentions.length === 0
+      ? comment
+      : { ...comment, mentions: comment.mentions.flatMap((person) => people.get(person.id) ?? []) },
+  )
+}
+
+/**
+ * Write a comment row, leaving out `mentions` while the column doesn't exist
+ * yet (before `appwrite:setup`); the mention notifications still go out.
+ */
+async function writeComment(
+  write: (data: Record<string, unknown>) => Promise<unknown>,
+  data: Record<string, unknown>,
+  mentions: Array<PersonSummary>,
+): Promise<Row> {
+  const withMentions = missingCommentColumns().has('mentions')
+    ? data
+    : { ...data, mentions: mentions.map((person) => person.id) }
+  try {
+    return (await write(withMentions)) as Row
+  } catch (error) {
+    if (withMentions === data || missingCommentColumn(error) !== 'mentions') throw error
+    markCommentColumnMissing('mentions')
+    return (await write(data)) as Row
+  }
 }
 
 async function commentDepth(commentId: string): Promise<number | null> {
@@ -100,11 +160,11 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
     return { ok: false, error: 'This thread is too deep to reply to.' }
   }
 
-  const row = await tables.createRow({
-    databaseId: ids.databaseId,
-    tableId: ids.comments,
-    rowId: ID.unique(),
-    data: {
+  const mentions = await resolveMentions(user.id, content, input.mentions)
+  const rowId = ID.unique()
+  const row = await writeComment(
+    (data) => tables.createRow({ databaseId: ids.databaseId, tableId: ids.comments, rowId, data }),
+    {
       postId: input.postId,
       userId: user.id,
       userName: user.name || 'Anonymous',
@@ -112,7 +172,8 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
       replyId: input.replyId ?? '',
       countReports: 0,
     },
-  })
+    mentions,
+  )
 
   try {
     await tables.incrementRowColumn({
@@ -128,17 +189,18 @@ export async function createComment(user: SessionUser, input: NewComment): Promi
   }
 
   // Replies notify the parent's author; top-level comments notify the story's.
-  await notify({
-    recipientId: String((parent ?? post).userId ?? ''),
-    type: parent ? 'reply' : 'comment',
-    actor: { id: user.id, name: user.name || 'Anonymous' },
-    postId: input.postId,
-    postTitle: String(post.title ?? ''),
-    commentId: row.$id,
-    preview: content,
-  })
+  const actor = { id: user.id, name: user.name || 'Anonymous' }
+  const recipientId = String((parent ?? post).userId ?? '')
+  const event = { actor, postId: input.postId, postTitle: String(post.title ?? ''), commentId: row.$id }
+  await notify({ ...event, recipientId, type: parent ? 'reply' : 'comment', preview: content })
+  // Mentioned people hear about it too, unless that notification already covers them.
+  await Promise.all(
+    mentions
+      .filter((person) => person.id !== recipientId)
+      .map((person) => notify({ ...event, recipientId: person.id, type: 'mention', preview: content })),
+  )
 
-  return { ok: true, data: toComment(row as Row) }
+  return { ok: true, data: { ...toComment(row), mentions } }
 }
 
 export async function removeComment(user: SessionUser, commentId: string): Promise<ActionResult> {
@@ -182,6 +244,7 @@ export async function editComment(
   user: SessionUser,
   commentId: string,
   content: string,
+  mentionIds: Array<string> = [],
 ): Promise<ActionResult<Comment>> {
   const { tables, ids } = db()
   const text = content.trim()
@@ -203,13 +266,43 @@ export async function editComment(
   if (Date.now() - new Date(comment.$createdAt).getTime() > COMMENT_EDIT_WINDOW_MS) {
     return { ok: false, error: 'Comments can only be edited during the first hour.' }
   }
-  if (text === comment.content) return { ok: true, data: toComment(comment) }
+  const before = toComment(comment).mentions.map((person) => person.id)
+  if (text === comment.content) {
+    return { ok: true, data: (await withMentionNames([toComment(comment)]))[0] }
+  }
 
-  const row = await tables.updateRow({
-    databaseId: ids.databaseId,
-    tableId: ids.comments,
-    rowId: commentId,
-    data: { content: text, editedAt: new Date().toISOString() },
-  })
-  return { ok: true, data: toComment(row as Row) }
+  const mentions = await resolveMentions(user.id, text, [...before, ...mentionIds])
+  const row = await writeComment(
+    (data) => tables.updateRow({ databaseId: ids.databaseId, tableId: ids.comments, rowId: commentId, data }),
+    { content: text, editedAt: new Date().toISOString() },
+    mentions,
+  )
+
+  // Only people added by this edit get a notification.
+  const added = mentions.filter((person) => !before.includes(person.id))
+  if (added.length > 0) {
+    const post = await tables
+      .getRow({
+        databaseId: ids.databaseId,
+        tableId: ids.posts,
+        rowId: String(comment.postId),
+        queries: [Query.select(['$id', 'title'])],
+      })
+      .then((found) => found as Row)
+      .catch(() => null)
+    await Promise.all(
+      added.map((person) =>
+        notify({
+          recipientId: person.id,
+          type: 'mention',
+          actor: { id: user.id, name: user.name || 'Anonymous' },
+          postId: String(comment.postId),
+          postTitle: String(post?.title ?? ''),
+          commentId,
+          preview: text,
+        }),
+      ),
+    )
+  }
+  return { ok: true, data: { ...toComment(row), mentions } }
 }

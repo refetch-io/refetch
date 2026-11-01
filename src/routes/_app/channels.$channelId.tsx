@@ -3,6 +3,7 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Hash, PenLine } from 'lucide-react'
 import { z } from 'zod'
 import { FEED_MAX_PAGES, FEED_PAGE_SIZE } from '@/lib/constants'
+import { feedLinks } from '@/lib/feeds'
 import { channelFeedQuery, configQuery } from '@/lib/queries'
 import { breadcrumbs, clampDescription, collectionPage, seo } from '@/lib/seo'
 import { topicKey } from '@/lib/topics'
@@ -15,6 +16,8 @@ import { EmptyState } from '@/components/ui/misc'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { FeedList, FeedSkeleton } from '@/components/feed/feed-view'
 import { FeedLayout } from '@/components/feed/feed-layout'
+import { RssButton } from '@/components/feed/rss-button'
+import { MuteButton } from '@/components/mutes/mute-parts'
 import { Favicon } from '@/components/favicon'
 import { SponsorCard } from '@/components/insights/insights-rail'
 import { ChannelIcon, JoinButton, memberLabel, useChannels } from '@/components/channels/channel-parts'
@@ -56,7 +59,14 @@ export const Route = createFileRoute('/_app/channels/$channelId')({
     )
     return {
       meta: seo({ title, description, url }),
-      links: [{ rel: 'canonical', href: url }],
+      links: [
+        { rel: 'canonical', href: url },
+        ...feedLinks(
+          loaderData.siteUrl,
+          { kind: 'channel', id: params.channelId },
+          `Refetch: ${loaderData.name}`,
+        ),
+      ],
       scripts: [
         collectionPage({
           siteUrl: loaderData.siteUrl,
@@ -121,8 +131,11 @@ function ChannelPage() {
           <span className="relative rounded-[23px] bg-surface p-1 shadow-card">
             <ChannelIcon channel={channel} size={68} className="block" />
           </span>
-          {/* The rail has its own Join button on wide screens. */}
-          <JoinButton channel={channel} size="md" className="mb-1 xl:hidden" />
+          {/* The rail has its own Join and Mute buttons on wide screens. */}
+          <div className="mb-1 flex gap-2 xl:hidden">
+            <MuteButton kind="channel" value={channel.id} label={channel.name} size="md" />
+            <JoinButton channel={channel} size="md" />
+          </div>
         </div>
         <h1 className="mt-4 flex items-center gap-2 text-title-1 text-label">
           {channel.name}
@@ -131,22 +144,25 @@ function ChannelPage() {
         <p className="mt-1 max-w-2xl text-subhead text-pretty text-label-secondary">{channel.description}</p>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <p className="text-footnote text-label-tertiary tabular">{memberLabel(channel.memberCount)}</p>
-          <SegmentedControl<ChannelSort>
-            aria-label="Sort stories"
-            size="sm"
-            className="w-44"
-            value={sort}
-            onValueChange={(value) =>
-              navigate({
-                search: { sort: value === 'hot' ? undefined : value, page: undefined },
-                resetScroll: false,
-              })
-            }
-            options={[
-              { value: 'hot', label: 'Hot' },
-              { value: 'new', label: 'New' },
-            ]}
-          />
+          <div className="flex items-center gap-1.5">
+            <RssButton source={{ kind: 'channel', id: channel.id }} name={channel.name} />
+            <SegmentedControl<ChannelSort>
+              aria-label="Sort stories"
+              size="sm"
+              className="w-44"
+              value={sort}
+              onValueChange={(value) =>
+                navigate({
+                  search: { sort: value === 'hot' ? undefined : value, page: undefined },
+                  resetScroll: false,
+                })
+              }
+              options={[
+                { value: 'hot', label: 'Hot' },
+                { value: 'new', label: 'New' },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </Card>
@@ -210,6 +226,13 @@ function ChannelRail({ channel, about }: { channel: Channel; about: ChannelAbout
             </Link>
           </Button>
         </div>
+        <MuteButton
+          kind="channel"
+          value={channel.id}
+          label={channel.name}
+          size="sm"
+          className="mt-2 w-full"
+        />
       </Card>
 
       {about.sources.length > 0 && (

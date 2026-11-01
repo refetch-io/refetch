@@ -71,6 +71,15 @@ export const findPeople = createServerFn({ method: 'GET' })
     return searchPeople(data.q, user.id)
   })
 
+/** People to @mention in a comment. */
+export const findMentionable = createServerFn({ method: 'GET' })
+  .validator(z.object({ q: z.string().max(64) }))
+  .handler(async ({ data }): Promise<Array<PersonSummary>> => {
+    const user = await getSessionUser()
+    if (!user) return []
+    return searchPeople(data.q, user.id, { messageable: false })
+  })
+
 export const saveProfile = createServerFn({ method: 'POST' })
   .validator(
     z.object({
