@@ -66,7 +66,11 @@ function SidebarChannels({ pathname }: { pathname: string }) {
           {mine.length > 0 ? 'Your channels' : list.length > 0 ? 'Popular channels' : 'Channels'}
         </h2>
       </div>
-      <nav aria-label="Channels" className="-mr-2 min-h-0 space-y-0.5 overflow-y-auto pr-2">
+      {/* Negative margin + padding leaves room for focus rings inside the scroll clip. */}
+      <nav
+        aria-label="Channels"
+        className="-mx-2 -my-1 min-h-0 space-y-0.5 overflow-y-auto px-2 py-1"
+      >
         {list.map((channel) => {
           const active = pathname === `/channels/${channel.id}`
           return (
