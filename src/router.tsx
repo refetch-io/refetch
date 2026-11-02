@@ -31,8 +31,33 @@ export function getRouter() {
     defaultErrorComponent: RouteError,
   })
 
+  observeViewTransitions(router)
   setupRouterSsrQueryIntegration({ router, queryClient })
   return router
+}
+
+/**
+ * The router keeps only `updateCallbackDone` from each view transition, so when a newer
+ * navigation skips one (or the tab hides mid-way) its `ready` promise rejects unobserved:
+ * "Transition was skipped/aborted" in the console. Observe them; navigation is unaffected.
+ */
+function observeViewTransitions(router: { startViewTransition: (fn: () => Promise<void>) => unknown }) {
+  if (typeof document === 'undefined' || typeof document.startViewTransition !== 'function') return
+  const startViewTransition = router.startViewTransition
+  router.startViewTransition = (fn) => {
+    const start = document.startViewTransition
+    document.startViewTransition = function (this: Document, ...args: Parameters<typeof start>) {
+      const transition = start.apply(this, args)
+      transition.ready.catch(() => {})
+      transition.finished.catch(() => {})
+      return transition
+    }
+    try {
+      return startViewTransition(fn)
+    } finally {
+      document.startViewTransition = start
+    }
+  }
 }
 
 declare module '@tanstack/react-router' {
