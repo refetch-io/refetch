@@ -56,8 +56,8 @@ importers:
         specifier: ^1.169.4
         version: 1.169.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.15)(vite@8.3.5(@types/node@22.20.5)(jiti@2.7.0))
       appwrite:
-        specifier: 28.2.0-rc.7
-        version: 28.2.0-rc.7
+        specifier: 29.3.0-rc.1
+        version: 29.3.0-rc.1
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1489,9 +1489,9 @@ packages:
     resolution: {integrity: sha512-9k3v7xcHwgdO/DruxGIg4HtjvlAZlcnsX/mzqUb1t3NkYnl9kK2UJ+Gq0io+vQf7iT//BD/HB/NBkUR1LWxoeA==}
     engines: {node: '>=14'}
 
-  appwrite@28.2.0-rc.7:
-    resolution: {integrity: sha512-GC4JB+ozfbHpD+sKvPdFDRlz4ONMGiaD9apUw/1rT5lY1U4C9Uj4nMqBRaa/nxWgNmx6arc8zeNDMjNux3SW7w==}
-    engines: {node: '>=18.0.0'}
+  appwrite@29.3.0-rc.1:
+    resolution: {integrity: sha512-k+FXdpOd4sADaMbeN7ESmh6lX6IwayrcjC7rGONSy6ynLzDc5oxbLc353zsul0WmgA1cdLVwmuwe7TDvoIlf6w==}
+    engines: {node: '>=20.0.0'}
 
   argparse@3.0.4:
     resolution: {integrity: sha512-fwWK3Zq22l4XJJjx5mcBHGikIk+hJqO+32dPm0Jur7+rtG5x1scOjSfdT9ZKeWHPpsya/l0HHK4tDImBkTrtvA==}
@@ -1724,9 +1724,6 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  js-sdsl@4.3.0:
-    resolution: {integrity: sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==}
-
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -1917,8 +1914,8 @@ packages:
   mqtt-packet@9.0.2:
     resolution: {integrity: sha512-MvIY0B8/qjq7bKxdN1eD+nrljoeaai+qjLJgfRn3TiMuz0pamsIWY2bFODPZMSNmabsLANXsLl4EMoWvlaTZWA==}
 
-  mqtt@5.15.2:
-    resolution: {integrity: sha512-VWZU2CSUY3U3oN0PSBRDE5SNsFi4zqqNeQ/uv3pZWqY3CrBXD/dhd0ZLjlsk5YnebGlrapi4lRVNJPUNQ5aZ3w==}
+  mqtt@5.16.1:
+    resolution: {integrity: sha512-9aEaiR/mLblsMAiynD8quhcGTaINdta2bdyknAtfVzESfoe6Ncdh/uEs5p+3zqcTEtgYErwL4pNk0QkAynXxlg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -1937,9 +1934,6 @@ packages:
   node-releases@2.0.60:
     resolution: {integrity: sha512-OmO8+GM1JUZqXET720VrJCwkjUCXmCMQm0Z3UDDRbfNLHS4NEAvY60j5jiFv0tkKw2PNNlqOLhahVmwJIOLDIQ==}
     engines: {node: '>=18'}
-
-  number-allocator@1.0.14:
-    resolution: {integrity: sha512-OrL44UTVAvkKdOdRQZIJpLkAdjXGTRda052sN4sO77bKEzYYqWKMBjQvrJFzqygI99gL6Z4u2xctPW1tB8ErvA==}
 
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
@@ -3812,11 +3806,11 @@ snapshots:
 
   ansis@4.4.0: {}
 
-  appwrite@28.2.0-rc.7:
+  appwrite@29.3.0-rc.1:
     dependencies:
       buffer: 6.0.3
       json-bigint: 1.0.0
-      mqtt: 5.15.2
+      mqtt: 5.16.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4010,8 +4004,6 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  js-sdsl@4.3.0: {}
-
   js-tokens@4.0.0: {}
 
   js-yaml@5.5.0:
@@ -4159,7 +4151,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mqtt@5.15.2:
+  mqtt@5.16.1:
     dependencies:
       '@types/readable-stream': 4.0.25
       '@types/ws': 8.18.2
@@ -4170,7 +4162,6 @@ snapshots:
       lru-cache: 10.4.3
       minimist: 1.2.8
       mqtt-packet: 9.0.2
-      number-allocator: 1.0.14
       readable-stream: 4.8.0
       rfdc: 1.4.1
       socks: 2.8.10
@@ -4192,13 +4183,6 @@ snapshots:
       undici: 6.29.1
 
   node-releases@2.0.60: {}
-
-  number-allocator@1.0.14:
-    dependencies:
-      debug: 4.4.3
-      js-sdsl: 4.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   obug@3.0.0: {}
 
