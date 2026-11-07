@@ -11,6 +11,17 @@
     "communitySources": ["https://dev.to/feed/tag/appwrite", "https://dev.to/feed/appwrite"]
   },
   {
+    "id": "mcp1",
+    "name": "MCP1",
+    "category": "Platforms",
+    "glyph": "1",
+    "color": "#FFB3D9",
+    "description": "Releases, guides and news from the MCP gateway for teams, by Appwrite.",
+    "keywords": ["MCP1", "MCP1 by Appwrite"],
+    "sources": ["https://mcp1.com/blog/rss.xml"],
+    "communitySources": []
+  },
+  {
     "id": "resend",
     "name": "Resend",
     "category": "Platforms",
