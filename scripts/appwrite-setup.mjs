@@ -349,7 +349,7 @@ function buildCollectionDefinitions() {
         { key: 'joinedAt', type: 'datetime', required: false, array: false, default: null },
         // Email about replies and new followers (sent with Appwrite Messaging).
         { key: 'emailNotifications', type: 'boolean', required: false, array: false, default: true },
-        // Verified badge, set by hand in the database: 'bot' (grey) | 'refetcher' (purple).
+        // Verified badge, set by hand in the database: 'refetcher' (purple). Scout's grey badge is hardcoded.
         { key: 'verified', type: 'string', size: 16, required: false, array: false, default: null },
         // Channel ID of the organization a verified person is affiliated with.
         { key: 'org', type: 'string', size: 64, required: false, array: false, default: null },

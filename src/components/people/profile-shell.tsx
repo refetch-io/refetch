@@ -12,7 +12,6 @@ import { feedLinks } from '@/lib/feeds'
 import { useSession } from '@/lib/session'
 import type { PeoplePage, Profile, ProfileInsights } from '@/lib/types'
 import { compactNumber, pluralize } from '@/lib/utils'
-import { BotBadge } from '@/components/bot-badge'
 import { PersonBadges } from '@/components/verified-badge'
 import { ChannelIcon, useChannels } from '@/components/channels/channel-parts'
 import { SponsorCard } from '@/components/insights/insights-rail'
@@ -235,7 +234,6 @@ function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-title-1 text-label">{profile.name}</h1>
             <PersonBadges userId={profile.id} verification={profile.verified} size={22} />
-            {profile.isBot && <BotBadge />}
             {viewer?.blocked && <Badge variant="danger">Blocked</Badge>}
           </div>
           {profile.bio && (

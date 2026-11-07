@@ -160,7 +160,7 @@ All primitives live in `src/components/ui` and accept `className` (merged with `
 | `Toaster` | `toaster.tsx` | Frosted notification banners (via `sonner`'s `toast()`). |
 | `Spinner`, `Skeleton`, `EmptyState`, `Kbd`, `Dot`, `Separator` | `spinner.tsx`, `misc.tsx` | Loading, empty and small inline helpers. |
 
-Product components built on top: `VoteControl`, `PostRow`, `Favicon`, `Logo`, `RichText`, `BotBadge`, the insights widgets and the app chrome (`AppHeader`, `Sidebar`, `TabBar`).
+Product components built on top: `VoteControl`, `PostRow`, `Favicon`, `Logo`, `RichText`, the insights widgets and the app chrome (`AppHeader`, `Sidebar`, `TabBar`).
 
 **Channels** (`src/components/channels/channel-parts.tsx`):
 

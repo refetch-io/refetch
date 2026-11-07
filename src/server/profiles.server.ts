@@ -35,7 +35,7 @@ const BOT_VERIFICATION: Verification = { kind: 'bot', org: null }
 
 function toVerification(row: Row | null): Verification | null {
   const kind = row?.verified
-  if (kind !== 'bot' && kind !== 'refetcher') return null
+  if (kind !== 'refetcher') return null
   return { kind, org: typeof row?.org === 'string' && row.org ? row.org : null }
 }
 

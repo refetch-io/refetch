@@ -18,7 +18,6 @@ import { ConfirmDialog } from '../ui/confirm-dialog'
 import { Dot, EmptyState } from '../ui/misc'
 import { Textarea } from '../ui/input'
 import { SegmentedControl } from '../ui/segmented-control'
-import { BotBadge } from '../bot-badge'
 import { PersonBadges } from '../verified-badge'
 import { PersonHoverCard } from '../people/person-hover-card'
 import { RichText } from '../rich-text'
@@ -274,7 +273,6 @@ function CommentItem({
                 </Link>
               </PersonHoverCard>
               <PersonBadges userId={node.userId} size={14} />
-              {isBot && <BotBadge />}
               {!isBot && node.userId === opUserId && (
                 <Badge variant="brand" size="xs" title="Original poster">
                   OP

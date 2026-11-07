@@ -9,7 +9,7 @@ import { Tooltip } from './ui/tooltip'
 type BadgeKind = VerifiedKind | 'channel'
 
 const BADGES: Record<BadgeKind, { label: string; color: string }> = {
-  bot: { label: 'Official bot', color: 'text-verified-bot' },
+  bot: { label: 'Refetch’s scout', color: 'text-verified-bot' },
   refetcher: { label: 'Verified refetcher', color: 'text-verified-refetcher' },
   channel: { label: 'Verified channel', color: 'text-verified-channel' },
 }
@@ -19,7 +19,7 @@ const SEAL =
   'M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z'
 
 /**
- * A seal with a check: grey for official bots, purple for verified refetchers,
+ * A seal with a check: grey for Scout, purple for verified refetchers,
  * gold for verified channels. `plain` drops the tooltip for badges inside links.
  */
 export function VerifiedBadge({

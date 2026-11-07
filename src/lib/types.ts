@@ -286,7 +286,7 @@ export interface PersonSummary {
   name: string
 }
 
-/** Grey for official bots, purple for verified refetchers. */
+/** Grey for Scout, purple for verified refetchers. */
 export type VerifiedKind = 'bot' | 'refetcher'
 
 /** A verified badge, set by hand in the database. */

@@ -27,7 +27,6 @@ import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { ConfirmDialog } from '../ui/confirm-dialog'
 import { Dot } from '../ui/misc'
-import { BotBadge } from '../bot-badge'
 import { PersonBadges } from '../verified-badge'
 import { PersonHoverCard } from '../people/person-hover-card'
 import { Favicon } from '../favicon'
@@ -142,7 +141,6 @@ export function StoryHeader({ post, siteUrl }: { post: PostDetail; siteUrl: stri
                 </Link>
               </PersonHoverCard>
               <PersonBadges userId={post.userId} size={15} />
-              {isBotUser(post.userId) && <BotBadge />}
             </span>
             {!isBotUser(post.userId) && post.userId !== user?.id && (
               <FollowButton
