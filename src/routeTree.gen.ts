@@ -48,11 +48,17 @@ import { Route as AppThreadsThreadIdRouteImport } from './routes/_app/threads.$t
 import { Route as AppTopicsIndexRouteImport } from './routes/_app/topics.index'
 import { Route as AppTopicsTopicKeyRouteImport } from './routes/_app/topics.$topicKey'
 import { Route as AppUsersUserIdRouteImport } from './routes/_app/users.$userId'
+import { Route as ApiAppCommentsRouteImport } from './routes/api/app.comments'
+import { Route as ApiAppSessionRouteImport } from './routes/api/app.session'
+import { Route as ApiAppSubmitRouteImport } from './routes/api/app.submit'
+import { Route as ApiAppVoteRouteImport } from './routes/api/app.vote'
+import { Route as ApiAppVotesRouteImport } from './routes/api/app.votes'
 import { Route as ApiDigestPreviewRouteImport } from './routes/api/digest.preview'
 import { Route as AppUsersUserIdIndexRouteImport } from './routes/_app/users.$userId.index'
 import { Route as AppUsersUserIdCommentsRouteImport } from './routes/_app/users.$userId.comments'
 import { Route as AppUsersUserIdFollowersRouteImport } from './routes/_app/users.$userId.followers'
 import { Route as AppUsersUserIdFollowingRouteImport } from './routes/_app/users.$userId.following'
+import { Route as ApiAppCommentsIdRouteImport } from './routes/api/app.comments.$id'
 import { Route as ApiOgThreadIdRouteImport } from './routes/api/og/thread.$id'
 
 const AppRoute = AppRouteImport.update({
@@ -249,6 +255,31 @@ const AppUsersUserIdRoute = AppUsersUserIdRouteImport.update({
   path: '/users/$userId',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiAppCommentsRoute = ApiAppCommentsRouteImport.update({
+  id: '/api/app/comments',
+  path: '/api/app/comments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAppSessionRoute = ApiAppSessionRouteImport.update({
+  id: '/api/app/session',
+  path: '/api/app/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAppSubmitRoute = ApiAppSubmitRouteImport.update({
+  id: '/api/app/submit',
+  path: '/api/app/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAppVoteRoute = ApiAppVoteRouteImport.update({
+  id: '/api/app/vote',
+  path: '/api/app/vote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAppVotesRoute = ApiAppVotesRouteImport.update({
+  id: '/api/app/votes',
+  path: '/api/app/votes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiDigestPreviewRoute = ApiDigestPreviewRouteImport.update({
   id: '/preview',
   path: '/preview',
@@ -273,6 +304,11 @@ const AppUsersUserIdFollowingRoute = AppUsersUserIdFollowingRouteImport.update({
   id: '/following',
   path: '/following',
   getParentRoute: () => AppUsersUserIdRoute,
+} as any)
+const ApiAppCommentsIdRoute = ApiAppCommentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAppCommentsRoute,
 } as any)
 const ApiOgThreadIdRoute = ApiOgThreadIdRouteImport.update({
   id: '/api/og/thread/$id',
@@ -314,6 +350,11 @@ export interface FileRoutesByFullPath {
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
   '/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/api/app/comments': typeof ApiAppCommentsRouteWithChildren
+  '/api/app/session': typeof ApiAppSessionRoute
+  '/api/app/submit': typeof ApiAppSubmitRoute
+  '/api/app/vote': typeof ApiAppVoteRoute
+  '/api/app/votes': typeof ApiAppVotesRoute
   '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/channels/': typeof AppChannelsIndexRoute
   '/messages/': typeof AppMessagesIndexRoute
@@ -322,6 +363,7 @@ export interface FileRoutesByFullPath {
   '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
   '/users/$userId/following': typeof AppUsersUserIdFollowingRoute
+  '/api/app/comments/$id': typeof ApiAppCommentsIdRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
   '/users/$userId/': typeof AppUsersUserIdIndexRoute
 }
@@ -357,6 +399,11 @@ export interface FileRoutesByTo {
   '/past/$day': typeof AppPastDayRoute
   '/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/topics/$topicKey': typeof AppTopicsTopicKeyRoute
+  '/api/app/comments': typeof ApiAppCommentsRouteWithChildren
+  '/api/app/session': typeof ApiAppSessionRoute
+  '/api/app/submit': typeof ApiAppSubmitRoute
+  '/api/app/vote': typeof ApiAppVoteRoute
+  '/api/app/votes': typeof ApiAppVotesRoute
   '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/channels': typeof AppChannelsIndexRoute
   '/messages': typeof AppMessagesIndexRoute
@@ -365,6 +412,7 @@ export interface FileRoutesByTo {
   '/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
   '/users/$userId/following': typeof AppUsersUserIdFollowingRoute
+  '/api/app/comments/$id': typeof ApiAppCommentsIdRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
   '/users/$userId': typeof AppUsersUserIdIndexRoute
 }
@@ -405,6 +453,11 @@ export interface FileRoutesById {
   '/_app/threads/$threadId': typeof AppThreadsThreadIdRoute
   '/_app/topics/$topicKey': typeof AppTopicsTopicKeyRoute
   '/_app/users/$userId': typeof AppUsersUserIdRouteWithChildren
+  '/api/app/comments': typeof ApiAppCommentsRouteWithChildren
+  '/api/app/session': typeof ApiAppSessionRoute
+  '/api/app/submit': typeof ApiAppSubmitRoute
+  '/api/app/vote': typeof ApiAppVoteRoute
+  '/api/app/votes': typeof ApiAppVotesRoute
   '/api/digest/preview': typeof ApiDigestPreviewRoute
   '/_app/channels/': typeof AppChannelsIndexRoute
   '/_app/messages/': typeof AppMessagesIndexRoute
@@ -413,6 +466,7 @@ export interface FileRoutesById {
   '/_app/users/$userId/comments': typeof AppUsersUserIdCommentsRoute
   '/_app/users/$userId/followers': typeof AppUsersUserIdFollowersRoute
   '/_app/users/$userId/following': typeof AppUsersUserIdFollowingRoute
+  '/api/app/comments/$id': typeof ApiAppCommentsIdRoute
   '/api/og/thread/$id': typeof ApiOgThreadIdRoute
   '/_app/users/$userId/': typeof AppUsersUserIdIndexRoute
 }
@@ -452,6 +506,11 @@ export interface FileRouteTypes {
     | '/threads/$threadId'
     | '/topics/$topicKey'
     | '/users/$userId'
+    | '/api/app/comments'
+    | '/api/app/session'
+    | '/api/app/submit'
+    | '/api/app/vote'
+    | '/api/app/votes'
     | '/api/digest/preview'
     | '/channels/'
     | '/messages/'
@@ -460,6 +519,7 @@ export interface FileRouteTypes {
     | '/users/$userId/comments'
     | '/users/$userId/followers'
     | '/users/$userId/following'
+    | '/api/app/comments/$id'
     | '/api/og/thread/$id'
     | '/users/$userId/'
   fileRoutesByTo: FileRoutesByTo
@@ -495,6 +555,11 @@ export interface FileRouteTypes {
     | '/past/$day'
     | '/threads/$threadId'
     | '/topics/$topicKey'
+    | '/api/app/comments'
+    | '/api/app/session'
+    | '/api/app/submit'
+    | '/api/app/vote'
+    | '/api/app/votes'
     | '/api/digest/preview'
     | '/channels'
     | '/messages'
@@ -503,6 +568,7 @@ export interface FileRouteTypes {
     | '/users/$userId/comments'
     | '/users/$userId/followers'
     | '/users/$userId/following'
+    | '/api/app/comments/$id'
     | '/api/og/thread/$id'
     | '/users/$userId'
   id:
@@ -542,6 +608,11 @@ export interface FileRouteTypes {
     | '/_app/threads/$threadId'
     | '/_app/topics/$topicKey'
     | '/_app/users/$userId'
+    | '/api/app/comments'
+    | '/api/app/session'
+    | '/api/app/submit'
+    | '/api/app/vote'
+    | '/api/app/votes'
     | '/api/digest/preview'
     | '/_app/channels/'
     | '/_app/messages/'
@@ -550,6 +621,7 @@ export interface FileRouteTypes {
     | '/_app/users/$userId/comments'
     | '/_app/users/$userId/followers'
     | '/_app/users/$userId/following'
+    | '/api/app/comments/$id'
     | '/api/og/thread/$id'
     | '/_app/users/$userId/'
   fileRoutesById: FileRoutesById
@@ -566,6 +638,11 @@ export interface RootRouteChildren {
   FeedsSplatRoute: typeof FeedsSplatRoute
   SitemapsFileRoute: typeof SitemapsFileRoute
   USplatRoute: typeof USplatRoute
+  ApiAppCommentsRoute: typeof ApiAppCommentsRouteWithChildren
+  ApiAppSessionRoute: typeof ApiAppSessionRoute
+  ApiAppSubmitRoute: typeof ApiAppSubmitRoute
+  ApiAppVoteRoute: typeof ApiAppVoteRoute
+  ApiAppVotesRoute: typeof ApiAppVotesRoute
   ApiOgThreadIdRoute: typeof ApiOgThreadIdRoute
 }
 
@@ -844,6 +921,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppUsersUserIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/app/comments': {
+      id: '/api/app/comments'
+      path: '/api/app/comments'
+      fullPath: '/api/app/comments'
+      preLoaderRoute: typeof ApiAppCommentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/app/session': {
+      id: '/api/app/session'
+      path: '/api/app/session'
+      fullPath: '/api/app/session'
+      preLoaderRoute: typeof ApiAppSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/app/submit': {
+      id: '/api/app/submit'
+      path: '/api/app/submit'
+      fullPath: '/api/app/submit'
+      preLoaderRoute: typeof ApiAppSubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/app/vote': {
+      id: '/api/app/vote'
+      path: '/api/app/vote'
+      fullPath: '/api/app/vote'
+      preLoaderRoute: typeof ApiAppVoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/app/votes': {
+      id: '/api/app/votes'
+      path: '/api/app/votes'
+      fullPath: '/api/app/votes'
+      preLoaderRoute: typeof ApiAppVotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/digest/preview': {
       id: '/api/digest/preview'
       path: '/preview'
@@ -878,6 +990,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/users/$userId/following'
       preLoaderRoute: typeof AppUsersUserIdFollowingRouteImport
       parentRoute: typeof AppUsersUserIdRoute
+    }
+    '/api/app/comments/$id': {
+      id: '/api/app/comments/$id'
+      path: '/$id'
+      fullPath: '/api/app/comments/$id'
+      preLoaderRoute: typeof ApiAppCommentsIdRouteImport
+      parentRoute: typeof ApiAppCommentsRoute
     }
     '/api/og/thread/$id': {
       id: '/api/og/thread/$id'
@@ -1001,6 +1120,18 @@ const ApiDigestRouteWithChildren = ApiDigestRoute._addFileChildren(
   ApiDigestRouteChildren,
 )
 
+interface ApiAppCommentsRouteChildren {
+  ApiAppCommentsIdRoute: typeof ApiAppCommentsIdRoute
+}
+
+const ApiAppCommentsRouteChildren: ApiAppCommentsRouteChildren = {
+  ApiAppCommentsIdRoute: ApiAppCommentsIdRoute,
+}
+
+const ApiAppCommentsRouteWithChildren = ApiAppCommentsRoute._addFileChildren(
+  ApiAppCommentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
@@ -1013,6 +1144,11 @@ const rootRouteChildren: RootRouteChildren = {
   FeedsSplatRoute: FeedsSplatRoute,
   SitemapsFileRoute: SitemapsFileRoute,
   USplatRoute: USplatRoute,
+  ApiAppCommentsRoute: ApiAppCommentsRouteWithChildren,
+  ApiAppSessionRoute: ApiAppSessionRoute,
+  ApiAppSubmitRoute: ApiAppSubmitRoute,
+  ApiAppVoteRoute: ApiAppVoteRoute,
+  ApiAppVotesRoute: ApiAppVotesRoute,
   ApiOgThreadIdRoute: ApiOgThreadIdRoute,
 }
 export const routeTree = rootRouteImport
