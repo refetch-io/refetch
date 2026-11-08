@@ -5,10 +5,10 @@ import { isHttpUrl, isValidId } from '@/lib/url'
 
 /*
  * The JSON API the mobile and desktop apps call (`/api/app/*`). The apps sign
- * in with Appwrite themselves and send a short-lived Appwrite JWT as a bearer
- * token; the routes verify it and then run the same server code the website's
- * server functions run, so the rules (rate limits, duplicates, counters,
- * notifications) live in one place.
+ * in with Appwrite themselves and send a short-lived Appwrite JWT in the
+ * `X-Refetch-JWT` header; the routes verify it and then run the same server
+ * code the website's server functions run, so the rules (rate limits,
+ * duplicates, counters, notifications) live in one place.
  *
  * This file holds the framework-free parts so they can be unit tested.
  */
@@ -41,12 +41,29 @@ export const submitInput = z.object({
   comment: z.string().trim().max(LIMITS.submissionNoteMax).optional(),
 })
 
+/**
+ * Header the apps send their Appwrite JWT in. Not `Authorization`: on Appwrite
+ * Cloud the edge executor overwrites that header with its own
+ * `Basic opr:<secret>` before the request reaches the site, so a Bearer token
+ * from the app never arrives.
+ */
+export const APP_JWT_HEADER = 'x-refetch-jwt'
+
+/** A JWT of plausible length (Appwrite JWTs are well under 4 KB), or null. */
+function plausibleJwt(token: string | null | undefined): string | null {
+  const value = token?.trim()
+  return value && value.length >= 16 && value.length <= 4096 && !/\s/.test(value) ? value : null
+}
+
+/** The app's JWT: `X-Refetch-JWT`, else `Authorization: Bearer` (local runs). */
+export function appToken(headers: Headers): string | null {
+  return plausibleJwt(headers.get(APP_JWT_HEADER)) ?? bearerToken(headers.get('authorization'))
+}
+
 /** The token from an `Authorization: Bearer <jwt>` header, or null. */
 export function bearerToken(header: string | null | undefined): string | null {
   const match = /^Bearer\s+(\S+)$/i.exec(header?.trim() ?? '')
-  const token = match?.[1]
-  // Appwrite JWTs are well under 4 KB; anything else is not one.
-  return token && token.length >= 16 && token.length <= 4096 ? token : null
+  return plausibleJwt(match?.[1])
 }
 
 /** HTTP status for a failed action, from its error code. */
