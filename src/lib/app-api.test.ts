@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
+  APP_JWT_HEADER,
   MAX_VOTE_LOOKUP,
+  appToken,
   bearerToken,
   commentInput,
   statusForFailure,
@@ -25,6 +27,33 @@ describe('bearerToken', () => {
     expect(bearerToken('Basic abc')).toBeNull()
     expect(bearerToken('Bearer short')).toBeNull()
     expect(bearerToken(`Bearer ${'x'.repeat(5000)}`)).toBeNull()
+  })
+})
+
+describe('appToken', () => {
+  const headers = (init: Record<string, string>) => new Headers(init)
+
+  it('reads the JWT from X-Refetch-JWT', () => {
+    expect(appToken(headers({ [APP_JWT_HEADER]: JWT }))).toBe(JWT)
+  })
+
+  // On Appwrite Cloud the edge executor overwrites Authorization with its own
+  // `Basic opr:<secret>` before the request reaches the site, so a Bearer
+  // token sent by the app never arrives. The custom header has to win.
+  it('ignores the executor-supplied Authorization when X-Refetch-JWT is set', () => {
+    expect(appToken(headers({ authorization: 'Basic b3ByOnNlY3JldA==', [APP_JWT_HEADER]: JWT }))).toBe(JWT)
+  })
+
+  it('falls back to a Bearer token (local runs without the proxy)', () => {
+    expect(appToken(headers({ authorization: `Bearer ${JWT}` }))).toBe(JWT)
+  })
+
+  it('rejects an executor Basic credential on its own', () => {
+    expect(appToken(headers({ authorization: 'Basic b3ByOnNlY3JldA==' }))).toBeNull()
+  })
+
+  it('rejects implausible tokens in the custom header', () => {
+    expect(appToken(headers({ [APP_JWT_HEADER]: 'short' }))).toBeNull()
   })
 })
 

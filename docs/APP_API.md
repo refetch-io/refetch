@@ -13,10 +13,15 @@ server functions call — nothing is duplicated.
 
 ## Auth
 
-Every route needs `Authorization: Bearer <Appwrite JWT>`. The app mints the JWT
-with `account.createJWT()`; the route verifies it with Appwrite (`account.get`
-as that user), the same check `establishSession` does for the website. A missing,
-expired or forged token gets `401 { "error": "Please sign in to continue.", "code": "unauthorized" }`.
+Every route needs the app's Appwrite JWT (minted with `account.createJWT()`) in
+the **`X-Refetch-JWT`** header. `Authorization: Bearer <jwt>` is accepted too,
+but only works without a proxy in front: on Appwrite Cloud the edge executor
+overwrites `Authorization` with its own `Basic opr:<secret>` credential before
+the request reaches the site, so the apps must use `X-Refetch-JWT`.
+
+The route verifies the JWT with Appwrite (`account.get` as that user), the
+same check `establishSession` does for the website. A missing, expired or
+forged token gets `401 { "error": "Please sign in to continue.", "code": "unauthorized" }`.
 
 ## Responses
 

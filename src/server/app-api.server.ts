@@ -1,7 +1,7 @@
 import { Account, Client } from 'node-appwrite'
 import type { z } from 'zod'
 import type { ActionResult, SessionUser } from '@/lib/types'
-import { bearerToken, toAppResponse, validationMessage } from '@/lib/app-api'
+import { appToken, toAppResponse, validationMessage } from '@/lib/app-api'
 import { getModeratorIds, getPublicConfig } from './env.server'
 import { MODERATOR_LABELS } from './session.server'
 
@@ -60,7 +60,7 @@ export async function handleAppRequest<S extends z.ZodType, T>(
   schema: S,
   action: (input: z.infer<S>, appUser: AppUser) => Promise<ActionResult<T>>,
 ): Promise<Response> {
-  const token = bearerToken(request.headers.get('authorization'))
+  const token = appToken(request.headers)
   if (!token) return UNAUTHORIZED.clone()
   const appUser = await verify(token)
   if (!appUser) return UNAUTHORIZED.clone()
