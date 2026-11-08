@@ -4,7 +4,12 @@ import { z } from 'zod'
 import type { ActionResult } from '@/lib/types'
 import { REPORT_NOTE_MAX, REPORT_REASON_VALUES, type ModerationItem } from '@/lib/reports'
 import { isValidId } from '@/lib/url'
-import { countModerationQueue, createReport, listModerationQueue, resolveReports } from '@/server/reports.server'
+import {
+  countModerationQueue,
+  createReport,
+  listModerationQueue,
+  resolveReports,
+} from '@/server/reports.server'
 import { getSessionUser } from '@/server/session.server'
 
 const id = z.string().refine(isValidId, 'Invalid id')
@@ -41,7 +46,7 @@ export const fetchModerationCount = createServerFn({ method: 'GET' }).handler(as
   return user?.moderator ? countModerationQueue() : 0
 })
 
-export const resolveReport =createServerFn({ method: 'POST' })
+export const resolveReport = createServerFn({ method: 'POST' })
   .validator(z.object({ resourceType, resourceId: id, action: z.enum(['dismiss', 'remove']) }))
   .handler(async ({ data }): Promise<ActionResult> => {
     const user = await getSessionUser({ fresh: true })

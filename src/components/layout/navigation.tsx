@@ -67,10 +67,7 @@ function SidebarChannels({ pathname }: { pathname: string }) {
         </h2>
       </div>
       {/* Negative margin + padding leaves room for focus rings inside the scroll clip. */}
-      <nav
-        aria-label="Channels"
-        className="-mx-2 -my-1 min-h-0 space-y-0.5 overflow-y-auto px-2 py-1"
-      >
+      <nav aria-label="Channels" className="-mx-2 -my-1 min-h-0 space-y-0.5 overflow-y-auto px-2 py-1">
         {list.map((channel) => {
           const active = pathname === `/channels/${channel.id}`
           return (
